@@ -46,6 +46,10 @@ import FormularioSupervision from "../components/FormularioSupervision.vue";
 import MapaVue from "../components/MapaVue.vue";
 import ClienteSupervision from "../components/ClienteSupervision.vue";
 import OrdenServicio from "../components/OrdenServicio.vue";
+import OrdenServicios from "../components/OrdenServicios.vue";
+import SolicitudesOrdenServicio from "../components/SolicitudesOrdenServicio.vue";
+import PieChar from "../components/PieChar.vue";
+import GraficosGerencia from "../components/GraficosGerencia.vue";
 
 
 
@@ -276,6 +280,26 @@ const routes = [
         path: "orden-servicio",
         name: "orden-servicio",
         component: OrdenServicio,
+      },
+      {
+        path: "orden-servicios/:id?",
+        name: "orden-servicios",
+        component: OrdenServicios,
+      },
+      {
+        path: "solicitudes-os",
+        name: "solicitudes-os",
+        component: SolicitudesOrdenServicio,
+      },
+      {
+        path: "piechar",
+        name: "piechar",
+        component: PieChar,
+      },
+      {
+        path: "graficos-gerencia",
+        name: "graficos-gerencia",
+        component: GraficosGerencia,
       },
      
     ],
