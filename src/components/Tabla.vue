@@ -227,7 +227,7 @@
             </div>
         </div>
         <div v-if="!sin_registros" class="table-responsive">
-            <table class="table align-middle table-bordered table-striped table-hover">
+            <table class="table align-middle table-bordered table-striped table-hover ">
                 <thead>
                     <tr>
                         <th v-if="ruta != '/navbar/reporteitems' && !empleados() && ruta != '/navbar/reportes' && ruta != '/navbar/trump' && ruta != '/navbar/procesosespeciales' && ruta != '/navbar/debida-diligencia/clientes' && ruta != '/navbar/correo-novedades-nomina' && ruta != '/navbar/cliente-supervision' && ruta != '/navbar/solicitudes-os'"
@@ -369,7 +369,7 @@
                             <div class="btn-group">
                                 <button type="button" class="btn"
                                     :style="'color:black;background-color:' + item.color_estado">{{
-            item.responsable_ingreso }}</button>
+            truncateOwner(item.responsable_ingreso, maxCaracteres ) }}</button>
                                 <button type="button" class="btn dropdown-toggle dropdown-toggle-split"
                                     v-if="permisos[20].autorizado" data-bs-toggle="dropdown" aria-expanded="false"
                                     :style="'color:black;background-color:' + item.color_estado"
@@ -586,8 +586,23 @@ export default {
             // return this.lista_estados_id[id];
             // return 'Estado'
         },
+        truncateOwner(text, maxLength) {
+            // if (!(id in this.lista_estados_id)) {
+            if ( text != null && text.length > maxLength) {
+                // console.log('dentro del if', this.lista_estados_id[id])
+                return text.substring(0, maxLength) + '...';
+                // return 'Estado'
+            } else {
+                return text;
+                // console.log('dentro del else', this.lista_estados_id[id])
+            }
+            // }
+            // console.log('por fuera del if', this.lista_estados_id[id])
+            // return this.lista_estados_id[id];
+            // return 'Estado'
+        },
         actualizaResponsable(item_id, index) {
-            this.$emit('actualizaResponsable', item_id, this.lista_encargados[index].nombre, this.currentUrl)
+            this.$emit('actualizaResponsable', item_id, this.lista_encargados[index].usuario_id,  this.lista_encargados[index].nombre, this.currentUrl)
             setTimeout(() => {
                 this.lista_encargados = [];
             }, 1000);

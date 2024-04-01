@@ -40,6 +40,12 @@ export const Alerts = {
           }
         });
     },
+    showAlertmasBoton(mensaje, icono) {
+      this.$swal({
+        icon: icono,
+        title: mensaje,
+      });
+    },
   },
   computed: {},
   created () {},

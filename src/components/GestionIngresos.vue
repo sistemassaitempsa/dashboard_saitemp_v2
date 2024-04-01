@@ -37,7 +37,7 @@
                             :registros="empresas_cliente" placeholder="Seleccione una opción" />
                     </div>
                     <div class="col">
-                        <label class="form-label">Dirección empresa</label>
+                        <label class="form-label">Dirección de presentación</label>
                         <input type="text" class="form-control" autocomplete="off" id="direccion_empresa"
                             aria-describedby="emailHelp" v-model="direccion_empresa"
                             @input="direccion_empresa = formatInputUpperCase($event.target.value)" />
@@ -155,19 +155,20 @@
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col">
+                    <!-- <div class="col">
                         <SearchList nombreCampo="Pais: *" @getPaises="getPaises" eventoCampo="getPaises"
                             nombreItem="nombre" :consulta="consulta_pais" :registros="paises"
                             @getDepartamentos="getDepartamentos" placeholder="Seleccione una opción" />
+                    </div> -->
+                    <div class="col">
+                        <SearchList nombreCampo="Departamento de prestación del servicio: *" nombreItem="nombre"
+                            eventoCampo="getDepartamentos" :consulta="consulta_departamento" :registros="departamentos"
+                            @getMunicipios="getMunicipios" placeholder="Seleccione una opción" />
                     </div>
                     <div class="col">
-                        <SearchList nombreCampo="Departamento: *" nombreItem="nombre" eventoCampo="getDepartamentos"
-                            :consulta="consulta_departamento" :registros="departamentos" @getMunicipios="getMunicipios"
-                            placeholder="Seleccione una opción" />
-                    </div>
-                    <div class="col">
-                        <SearchList nombreCampo="Ciudad: *" nombreItem="nombre" :registros="municipios" :ordenCampo="1"
-                            :consulta="consulta_municipio" @setMunicipios="setMunicipios" eventoCampo="setMunicipios"
+                        <SearchList nombreCampo="Ciudad de prestación del servicio: *" nombreItem="nombre"
+                            :registros="municipios" :ordenCampo="1" :consulta="consulta_municipio"
+                            @setMunicipios="setMunicipios" eventoCampo="setMunicipios"
                             placeholder="Seleccione una opción" />
                     </div>
                 </div>
@@ -203,7 +204,28 @@
                             @input="novedades_stradata = formatInputUpperCase($event.target.value)"></textarea>
                     </div>
                     <div class="col mb-3">
-                        <label class="form-label">Laboratorio:
+                        <SearchList nombreCampo="Departamento ubicación laboratorio médico: *" nombreItem="nombre"
+                            eventoCampo="getDepartamentos" :registros="departamentos" @getMunicipios="getMunicipios"
+                            :ordenCampo="2" placeholder="Seleccione una opción"
+                            :consulta="consulta_departamento_laboratorio" :valida_campo="false" />
+                    </div>
+                    <div class="col">
+                        <SearchList nombreCampo="Ciudad ubicación laboratorio médico: *" nombreItem="nombre"
+                            :registros="municipios" @setMunicipios="setMunicipios" eventoCampo="setMunicipios"
+                            :ordenCampo="2" placeholder="Seleccione una opción"
+                            :consulta="consulta_municipio_laboratorio" :valida_campo="false" />
+
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <SearchList nombreCampo="Laboratorio médico: *" nombreItem="nombre"
+                            :registros="laboratorios_medicos" @getLaboratorios="getLaboratorios"
+                            eventoCampo="getLaboratorios" placeholder="Seleccione una opción"
+                            :consulta="consulta_laboratorio" :valida_campo="false" />
+                    </div>
+                    <div class="col mb-3">
+                        <label class="form-label">Otro laboratorio:
                         </label>
                         <input type="text" class="form-control" autocomplete="off" id="exampleInputEmail1"
                             aria-describedby="emailHelp" v-model="laboratorio" />
@@ -221,7 +243,6 @@
                             {{ mensaje_error }}
                         </div>
                     </div>
-
                 </div>
                 <div class="row">
                     <div class="col mb-3">
@@ -291,18 +312,23 @@
                         </div>
                     </div>
                 </div>
-                <button v-if="$route.params.id != undefined" class="btn btn-success m-4" :disabled="deshabilitar_boton"
-                    type="button" @click="envioCorreo">Enviar formulario</button>
-                <div v-if="$route.params.id != undefined">
-                    <a :href="URL_API + 'api/v1/gestioningresospdf/' + this.descargarpdf + '/' + this.$route.params.id"
-                        target="_blank" class="white-text">
-                        <button type="button" class="btn btn-success">Descargar pdf</button>
-                    </a>
+                <div class="row">
+                    <div class="col"> <button v-if="$route.params.id != undefined" class="btn btn-success m-4"
+                            :disabled="deshabilitar_boton" type="button" @click="envioCorreo">Enviar formulario</button>
+                    </div>
+                    <div class="col">
+                        <div v-if="$route.params.id != undefined">
+                            <a :href="URL_API + 'api/v1/gestioningresospdf/null/' + this.$route.params.id"
+                                target="_blank" class="white-text">
+                                <button type="button" class="btn btn-success m-4">Descargar pdf</button>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="col"> <button type="button" v-if="$route.params.id != undefined"
+                            style="background-color:#D4AC0D;color:white" @click="agregarPendientes()" class="btn m-4">
+                            Añadir a tareas pendientes
+                        </button></div>
                 </div>
-                <button type="button" v-if="$route.params.id != undefined" style="background-color:#D4AC0D;color:white"
-                    @click="agregarPendientes()" class="btn">
-                    Añadir a tareas pendientes
-                </button>
             </div>
             <div class="row" style="text-align:left;clear:both;margin-top: 40px;">
                 <h5 @click="adjuntos = !adjuntos" style="cursor:pointer">Archivos adjuntos <i v-if="adjuntos"
@@ -311,6 +337,12 @@
             <h6 class="tituloseccion" v-if="adjuntos">Carga de archivos</h6>
             <div id="seccion" v-if="adjuntos">
                 <div class="row upload" v-for="item, index in fileInputsCount" :key="index">
+                    <div class="form-check col-1  m-0" v-if="$route.params.id != null">
+                        <input class="form-check-input m-0" type="checkbox" value=""
+                            @click="enviarArchivos(!carga_archivo[index], item.ruta, item.nombre)"
+                            v-model="carga_archivo[index]" :disabled="item.ruta == undefined" id="flexCheckDefault">
+                    </div>
+
                     <div class="col-2" v-if="$route.params.id != null">
                         <a :href="URL_API + item.ruta" target="_blank" rel="noopener noreferrer"><button type="button"
                                 :class="item.ruta != undefined ? 'btn btn-sm ver' : 'btn btn-sm btn-secondary'"><i
@@ -351,7 +383,8 @@
                         class="bi bi-chevron-down"></i><i v-if="!envio_correo" class="bi bi-chevron-compact-up"></i>
                 </h5>
             </div>
-            <SolicitudNovedadesNomina v-if="$route.params.id != undefined && envio_correo" :menu="menu" />
+            <SolicitudNovedadesNomina v-if="$route.params.id != undefined && envio_correo" :menu="menu"
+                :reenvio_correo="reenvio_correo" :adjuntos_candidato_string="adjuntos_candidato_string" />
 
             <div class="row" v-if="gestioningresocorreos.length > 0"
                 style="text-align:left;clear:both;margin-bottom: 40px;">
@@ -361,7 +394,49 @@
                 </h5>
             </div>
             <div id="seccion" v-if="historico_correos">
-                <div class="table-responsive">
+                <div class="correos" v-for="item, index in gestioningresocorreos" :key="index"
+                    style="margin-bottom: 20px; font-size: 1.05rem">
+
+                    <div class="row m-2">
+                        <b style="width: auto;">De: </b> {{ item.remitente }}
+                    </div>
+
+                    <div class="row m-2">
+                        <b style="width: auto;">Para: </b> {{ item.destinatario }}
+                    </div>
+
+                    <div class="row m-2">
+                        <b style="width: auto;">Con copia: </b> {{ item.con_copia == '' ? 'Sin datos' : item.con_copia
+                        }}
+                    </div>
+
+                    <div class="row m-2">
+                        <b style="width: auto;">Con copia oculta: </b> {{ item.con_copia_oculta == '' ? 'Sin datos' :
+            item.con_copia_oculta }}
+                    </div>
+
+                    <div class="row m-2">
+                        <b style="width: auto;">Asunto: </b> {{ item.asunto }}
+                    </div>
+
+                    <div class="row m-2" style="text-align: left; white-space: pre-line;">
+                        <b style="width: auto;">Mensaje: </b> {{ item.mensaje.replace(/&amp;nbsp;/g, '\n') }}
+                    </div>
+
+                    <div class="row m-2">
+                        <b style="width: auto;">Adjunto: </b> {{ item.adjunto }}
+                    </div>
+
+                    <div class="row m-2">
+                        <b style="width: auto;">Fecha envío: </b> {{ reformatearFecha(item.created_at) }}
+                    </div>
+                    <div class="row m-2">
+                        <button class="btn btn-sm btn-success" type="button" style="width: auto;"
+                            @click="reenviar(item)">Reenviar</button>
+                    </div>
+                    <hr>
+                </div>
+                <!-- <div class="table-responsive">
                     <table class="table table-striped table-hover table-bordered align-middle">
                         <thead>
                             <tr>
@@ -373,6 +448,8 @@
                                 <th scope="col">Asunto</th>
                                 <th scope="col">Mensaje</th>
                                 <th scope="col">Adjuntos</th>
+                                <th scope="col">Fecha envío</th>
+                                <th scope="col">Acciones</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -385,11 +462,14 @@
                                 <td>{{ item.asunto }}</td>
                                 <td>{{ item.mensaje }}</td>
                                 <td>{{ item.adjunto }}</td>
+                                <td>{{ reformatearFecha(item.created_at) }}</td>
+                                <td scope="col"><button class="btn btn-success" type="button"
+                                        @click="reenviar(item)">Reenviar</button></td>
                             </tr>
 
                         </tbody>
                     </table>
-                </div>
+                </div> -->
             </div>
         </form>
     </div>
@@ -497,6 +577,17 @@ export default {
             novedades_examenes: '',
             id_comparar: '',
             descargarpdf: null,
+            reenvio_correo: '',
+            carga_archivo: [],
+            adjuntos_candidato: [],
+            adjuntos_candidato_string: '',
+            laboratorios_medicos: [],
+            consulta_municipio_laboratorio: '',
+            municipio_laboratorio_id: '',
+            consulta_departamento_laboratorio: '',
+            departamento_laboratorio_id: '',
+            consulta_laboratorio: '',
+            laboratorio_medico_id: '',
         }
     },
     computed: {
@@ -525,12 +616,44 @@ export default {
         this.fileInputsCountCopia = [...this.fileInputsCount]
         this.scrollTop()
         this.getModulo()
+        this.getDepartamentos(43)
 
     },
     methods: {
+        enviarArchivos(booleano, ruta_archivo, nombre) {
+            var self = this
+            if (booleano) {
+                this.adjuntos_candidato.push({ nombre_archivo: nombre, ruta_archivo: ruta_archivo })
+            } else {
+                this.adjuntos_candidato.forEach(function (item, index) {
+                    if (item.nombre_archivo == nombre) {
+                        self.adjuntos_candidato.splice(index, 1)
+                    }
+                })
+            }
+            this.adjuntos_candidato_string = JSON.stringify(self.adjuntos_candidato)
+
+        },
+        reformatearFecha(fechaOriginal) {
+            const fechaHora = new Date(fechaOriginal);
+            const año = fechaHora.getFullYear();
+            const mes = (fechaHora.getMonth() + 1).toString().padStart(2, '0'); // Los meses son indexados desde 0
+            const dia = fechaHora.getDate().toString().padStart(2, '0');
+            const horas = fechaHora.getHours().toString().padStart(2, '0');
+            const minutos = fechaHora.getMinutes().toString().padStart(2, '0');
+            const segundos = fechaHora.getSeconds().toString().padStart(2, '0');
+            const fechaFormateada = `${dia}/${mes}/${año}  `;
+            const horaFormateada = `${horas}:${minutos}:${segundos}`;
+            return fechaFormateada + ' ' + horaFormateada;
+        },
+        reenviar(item) {
+            this.envio_correo = true
+            setTimeout(() => {
+                this.reenvio_correo = item
+            }, 1000);
+        },
         agregarPendientes() {
             var self = this
-            console.log(self.check)
             let config = self.configHeader();
             var check = []
             check.push(this.$route.params.id)
@@ -569,26 +692,29 @@ export default {
                 });
         },
         getIdentificacion(id_cliente) {
-            let self = this
-            let config = this.configHeader();
-            axios
-                .get(self.URL_API + "api/v1/consulta_id_trump/" + id_cliente, config)
-                .then(function (result) {
-                    if (result.data.bloqueado == 'Si') {
-                        document.getElementById('numero_identificacion').focus();
-                        self.numero_identificacion = ''
-                        self.showAlertmasBoton('Este candidato se encuentra en la lista trump', 'error');
-                    } else if (result.data.numero_identificacion != undefined && self.$route.params.id == undefined) {
-                        var fechaSinHora = new Date(result.data.fecha_radicado).toLocaleDateString();
-                        if (result.data.responsable_ingreso != null) {
-                            self.showAlertmasBoton('El número de identificación ya ha sido registrado en la fecha: \n ' + fechaSinHora + ' y actualmente tiene como responsable a ' + result.data.responsable_ingreso, 'error');
-                        } else {
-                            self.showAlertmasBoton('El número de identificación ya ha sido registrado en la fecha: \n ' + fechaSinHora + ' y actualmente no cuenta con ningun responsable asignado ', 'error');
-                        }
 
-                        return;
-                    }
-                });
+            let self = this
+            if (id_cliente) {
+                let config = this.configHeader();
+                axios
+                    .get(self.URL_API + "api/v1/consulta_id_trump/" + id_cliente, config)
+                    .then(function (result) {
+                        if (result.data.bloqueado == 'Si') {
+                            document.getElementById('numero_identificacion').focus();
+                            self.numero_identificacion = ''
+                            self.showAlertmasBoton('Este candidato se encuentra en la lista trump', 'error');
+                        } else if (result.data.numero_identificacion != undefined && self.$route.params.id == undefined) {
+                            var fechaSinHora = new Date(result.data.fecha_radicado).toLocaleDateString();
+                            if (result.data.responsable_ingreso != null) {
+                                self.showAlertmasBoton('El número de identificación ya ha sido registrado en la fecha: \n ' + fechaSinHora + ' y actualmente tiene como responsable a ' + result.data.responsable_ingreso, 'error');
+                            } else {
+                                self.showAlertmasBoton('El número de identificación ya ha sido registrado en la fecha: \n ' + fechaSinHora + ' y actualmente no cuenta con ningun responsable asignado ', 'error');
+                            }
+
+                            return;
+                        }
+                    });
+            }
         },
         valida_envioCorreo() {
             if (this.correo_empresa == null) {
@@ -734,25 +860,14 @@ export default {
                     self.paises = result.data
                 });
         },
-        getDepartamentos(item, ordenCampo, index) {
+        getDepartamentos(id) {
             let self = this;
-            this.setLabelPais(item, ordenCampo, index)
             let config = this.configHeader();
             axios
-                .get(self.URL_API + "api/v1/departamentos/" + item.id, config)
+                .get(self.URL_API + "api/v1/departamentos/" + id, config)
                 .then(function (result) {
                     self.departamentos = result.data
                 });
-        },
-        setLabelPais(item = null, campo = null) {
-            if (item != null) {
-                switch (campo) {
-                    case 1:
-                        this.consulta_pais = item.nombre
-                        this.pais_id = item.id
-                        break
-                }
-            }
         },
         getMunicipios(item, ordenCampo, index) {
             let self = this;
@@ -770,6 +885,9 @@ export default {
                     case 1:
                         this.consulta_departamento = item.nombre
                         break
+                    case 2:
+                        this.consulta_departamento_laboratorio = item.nombre
+                        break
                 }
             }
         },
@@ -780,12 +898,18 @@ export default {
                         this.municipio_id = item.id;
                         this.consulta_municipio = item.nombre
                         break
+                    case 2:
+                        this.municipio_laboratorio_id = item.id;
+                        this.consulta_municipio_laboratorio = item.nombre
+                        this.laboratorios_medicos = []
+                        break
                 }
             }
         },
         getLaboratorios(item = null) {
             if (item != null) {
-                console.log(item)
+                this.consulta_laboratorio = item.nombre
+                this.laboratorio_medico_id = item.id
             }
             let self = this;
             let config = this.configHeader();
@@ -828,6 +952,9 @@ export default {
                 .then(function (result) {
                     if (result.data.message == 'ok') {
                         self.guardarArchivos(result.data.registro_ingreso_id)
+                    } else {
+                        self.showAlert(result.data.message, result.data.status)
+                        self.loading = false
                     }
 
                 });
@@ -878,7 +1005,8 @@ export default {
                 direccion_empresa: this.direccion_empresa,
                 direccion_laboratorio: this.direccion_laboratorio,
                 recomendaciones_examen: this.recomendaciones_examen,
-                novedades_examenes: this.novedades_examenes
+                novedades_examenes: this.novedades_examenes,
+                laboratorio_medico_id: this.laboratorio_medico_id,
             }
         },
         cargarArchivo(event, index) {
@@ -1025,6 +1153,15 @@ export default {
             this.recomendaciones_examen = item.recomendaciones_examen
             this.novedades_examenes = item.novedades_examenes
 
+            if (item['laboratorios'][0] != undefined) {
+                this.departamento_laboratorio_id = item['laboratorios'][0].departamento_id
+                this.consulta_departamento_laboratorio = item['laboratorios'][0].departamento
+                this.municipio_laboratorio_id = item['laboratorios'][0].municipio_id
+                this.consulta_municipio_laboratorio = item['laboratorios'][0].municipio
+                this.consulta_laboratorio = item['laboratorios'][0].nombre
+                this.laboratorio_medico_id = item['laboratorios'][0].id
+            }
+
             this.getEncargados(null, item.estado_ingreso_id)
 
             this.fileInputsCount.forEach(function (item2, index) {
@@ -1075,8 +1212,8 @@ export default {
 
         },
         historicoCorreos() {
-            let self = this;
-            let config = this.configHeader();
+            var self = this;
+            var config = this.configHeader();
             axios
                 .get(self.URL_API + "api/v1/consultacorreo/" + self.menu_id + '/' + self.$route.params.id, config)
                 .then(function (result) {
@@ -1131,5 +1268,20 @@ label {
 h2 {
     font-family: "Montserrat", sans-serif;
     margin: 20px 0px 20px 0px;
+}
+
+.correos {
+    padding: 10px;
+    border-radius: 5px;
+}
+
+.correos:nth-child(odd) {
+    background-color: #f2f2f2;
+
+}
+
+.correos:hover {
+    background-color: #e8e7e7;
+
 }
 </style>
