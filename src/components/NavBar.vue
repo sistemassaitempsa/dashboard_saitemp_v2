@@ -458,4 +458,5 @@ export default {
   /*height: 100vh;  Altura del viewport */
   /* Puedes ajustar estas propiedades según tus necesidades */
 }
+
 </style>

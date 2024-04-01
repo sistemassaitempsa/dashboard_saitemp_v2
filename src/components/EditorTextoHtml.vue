@@ -25,6 +25,10 @@ export default {
             type: String,
             default: ''
         },
+        cuerpo_mensaje:{
+            type: String,
+            default: ''
+        },
 
     },
 
@@ -43,6 +47,9 @@ export default {
         },
         consulta() {
             this.content = this.consulta
+        },
+        cuerpo_mensaje() {
+            this.content = this.cuerpo_mensaje.replace(/&nbsp;/g, '\n')
         },
     },
     created() {

@@ -95,7 +95,8 @@
                     <div class="mb-3">
                         <label for="exampleInputEmail1" class="form-label">Descripción: *</label>
                         <br>
-                        <EditorTextoHtml :enviar_correo="enviar_correo" @valida_campos="valida_campos" />
+                        <EditorTextoHtml :enviar_correo="enviar_correo" @valida_campos="valida_campos"
+                            :cuerpo_mensaje="cuerpo_mensaje" />
                     </div>
                 </div>
                 <div class="row">
@@ -146,7 +147,9 @@ export default {
 
     mixins: [Token, Alerts],
     props: {
-        menu: []
+        menu: [],
+        reenvio_correo: {},
+        adjuntos_candidato_string:[]
     },
     data() {
         return {
@@ -176,6 +179,8 @@ export default {
             body: '',
             loading: false,
             menu_id: '',
+            cuerpo_mensaje: '',
+            adjuntos_candidato:[]
         }
     },
     computed: {
@@ -188,6 +193,12 @@ export default {
         },
         menu() {
             this.getModulo()
+        },
+        reenvio_correo() {
+            this.reenvio()
+        },
+        adjuntos_candidato_string(){
+           this.adjuntos_candidato = JSON.parse(this.adjuntos_candidato_string)
         }
     },
     mounted() {
@@ -197,6 +208,35 @@ export default {
         this.getModulo()
     },
     methods: {
+        reenvio() {
+            var self = this
+            this.correos = []
+            this.asunto = ''
+            this.body = ''
+            this.correos1 = []
+            this.correos2 = []
+
+            self.correos = self.reenvio_correo.destinatario.split(",")
+            self.asunto = self.reenvio_correo.asunto
+            self.cuerpo_mensaje = self.reenvio_correo.mensaje
+            if (self.reenvio_correo.con_copia.split(";")[0] != '' && self.reenvio_correo.con_copia.split(";").length >= 0) {
+                self.cc = true
+                self.correos1 = self.reenvio_correo.con_copia.split(",")
+
+            } else {
+                self.cc = false
+
+            }
+            if (self.reenvio_correo.con_copia_oculta.split(";")[0] != '' && self.reenvio_correo.con_copia_oculta.split(";").length >= 0) {
+                self.cco = true
+                self.correos2 = self.reenvio_correo.con_copia_oculta.split(",")
+
+            } else {
+                self.cco = false
+
+            }
+
+        },
         getModulo() {
             var self = this
             var ruta = self.$route.path.split("/")[1] + '/' + self.$route.path.split("/")[2]
@@ -204,7 +244,6 @@ export default {
                 item.opciones.forEach(element => {
                     if (element.url == ruta) {
                         self.menu_id = element.id
-                        self.historicoCorreos()
                     }
                 });
             })
@@ -228,6 +267,10 @@ export default {
 
             this.file.forEach(function (item, index) {
                 correo.append('archivo' + index, item)
+            })
+            
+            this.adjuntos_candidato.forEach(function (item, index) {
+                correo.append('adjunto_candidato['+index+']', item)
             })
 
 

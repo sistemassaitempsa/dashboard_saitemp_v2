@@ -78,11 +78,11 @@ export default {
         filtrando(boolean) {
             this.filtro_gestion_ingresos = boolean
         },
-        actualizaResponsable(item_id, responsable_ingreso, currenturl = null) {
+        actualizaResponsable(item_id, responsable_id, responsable_ingreso, currenturl = null) {
             let self = this;
             let config = this.configHeader();
             axios
-                .get(self.URL_API + "api/v1/actualizaResponsableingreso/" + item_id + '/' + responsable_ingreso, config)
+                .get(self.URL_API + "api/v1/actualizaResponsableingreso/" + item_id + '/' +responsable_id+ '/' +responsable_ingreso, config)
                 .then(function (result) {
                     self.estadoActualizado(currenturl)
                     self.showAlert(result.data.message, result.data.status);
