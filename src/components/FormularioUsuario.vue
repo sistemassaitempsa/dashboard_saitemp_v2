@@ -29,8 +29,8 @@
                             <div class="mb-3">
                                 <label class="form-label">Correo electrónico</label>
                                 <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="prueba"
-                                    v-model="usuario" autocomplete="off"
-                                    :disabled="roluserlogued == 'S. Administrador' || roluserlogued == 'Administrador' ? false : true" />
+                                    v-model="usuario" autocomplete="off" />
+                                    <!-- :disabled="roluserlogued == 'S. Administrador' || roluserlogued == 'Administrador' ? false : true" -->
                             </div>
                         </div>
                         <div class="col">
