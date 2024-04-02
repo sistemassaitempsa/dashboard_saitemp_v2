@@ -231,7 +231,7 @@
                 <thead>
                     <tr>
                         <th v-if="ruta != '/navbar/reporteitems' && !empleados() && ruta != '/navbar/reportes' && ruta != '/navbar/trump' && ruta != '/navbar/procesosespeciales' && ruta != '/navbar/debida-diligencia/clientes' && ruta != '/navbar/correo-novedades-nomina' && ruta != '/navbar/cliente-supervision' && ruta != '/navbar/solicitudes-os'"
-                            scope="col">Seleccionar</th>
+                            scope="col"><i class="bi bi-check-square"></i></th>
                         <th @click="sort(item, index + 1, (sorted = !sorted))" scope="col"
                             v-for="(item, index) in tabla2" :key="index"
                             :class="{ 'd-none': item.nombre === 'Estado contrato' }">
