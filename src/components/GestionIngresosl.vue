@@ -33,6 +33,7 @@ export default {
                 { nombre: "#", orden: "DESC" },
                 { nombre: "Fecha radicado", orden: "DESC", tipo: "fecha", calculado: 'false' },
                 { nombre: "Fecha ingreso", orden: "DESC", tipo: "fecha", calculado: 'false' },
+                { nombre: "Fecha exámen", orden: "DESC", tipo: "fecha", calculado: 'false' },
                 { nombre: "Estado", orden: "DESC", tipo: "texto", calculado: 'false' },
                 { nombre: "Responsable", orden: "DESC", tipo: "texto", calculado: 'false' },
                 { nombre: "Responsable anterior", orden: "DESC", tipo: "texto", calculado: 'false' },
@@ -82,7 +83,7 @@ export default {
             let self = this;
             let config = this.configHeader();
             axios
-                .get(self.URL_API + "api/v1/actualizaResponsableingreso/" + item_id + '/' +responsable_id+ '/' +responsable_ingreso, config)
+                .get(self.URL_API + "api/v1/actualizaResponsableingreso/" + item_id + '/' + responsable_id + '/' + responsable_ingreso, config)
                 .then(function (result) {
                     self.estadoActualizado(currenturl)
                     self.showAlert(result.data.message, result.data.status);
@@ -133,4 +134,6 @@ export default {
 };
 </script>
 
-<style scoped></style>
+<style scoped>
+
+</style>

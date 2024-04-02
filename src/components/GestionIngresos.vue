@@ -2,6 +2,15 @@
     <div class="container">
         <Loading :loading="loading" />
         <h2>Solicitud de servicio</h2>
+        <div @click="toggleDiv" :class="{ 'expandido': divExpandido }" class="pestaña" style="overflow-y: auto;">
+            <div v-if="!divExpandido">Seguimiento</div>
+            <div v-for="item, index in seguimiento" :key="index">
+                <div v-if="divExpandido" style="text-align: left;">{{ item.estado }}</div>
+                <div v-if="divExpandido" style="text-align: left;">{{ item.usuario }}</div>
+                <div v-if="divExpandido" style="text-align: left;">{{ reformatearFecha(item.created_at) }}</div>
+                <hr v-if="divExpandido">
+            </div>
+        </div>
         <form class="was-validated" @submit.prevent="save()">
             <h6 class="tituloseccion">Información general</h6>
             <div id="seccion">
@@ -53,7 +62,7 @@
 
                 </div>
                 <div class="row">
-                    <div class="col" v-if="tipo_servicio_id == 2">
+                    <!-- <div class="col" v-if="tipo_servicio_id == 2">
                         <label class="form-label">Número de contrataciones</label>
                         <input type="text" class="form-control" autocomplete="off" id="fecha_expedicion"
                             aria-describedby="emailHelp" v-model="numero_contrataciones"
@@ -61,8 +70,8 @@
                         <div class="invalid-feedback">
                             {{ mensaje_error }}
                         </div>
-                    </div>
-                    <div class="col" v-if="tipo_servicio_id == 3 || tipo_servicio_id == 4">
+                    </div> -->
+                    <!-- <div class="col" v-if="tipo_servicio_id == 3 || tipo_servicio_id == 4">
                         <label class="form-label">Número de vacantes</label>
                         <input type="text" class="form-control" autocomplete="off" id="fecha_expedicion"
                             aria-describedby="emailHelp" v-model="numero_vacantes"
@@ -70,7 +79,7 @@
                         <div class="invalid-feedback">
                             {{ mensaje_error }}
                         </div>
-                    </div>
+                    </div> -->
                     <div class="col mb-3" v-if="tipo_servicio_id == 3 || tipo_servicio_id == 4">
                         <label class="form-label">Citación entrevista: *
                         </label>
@@ -90,8 +99,8 @@
                     <div class="col mb-3" v-if="tipo_servicio_id == 3 || tipo_servicio_id == 4">
                         <label class="form-label">Informe selección: *
                         </label>
-                        <textarea name="" id="novedades" class="form-control" rows="1" v-model="informe_seleccion"
-                            @input="informe_seleccion = formatInputUpperCase($event.target.value)"></textarea>
+                        <textarea name="" id="novedades" class="form-control" rows="1"
+                            v-model="informe_seleccion"></textarea>
                     </div>
                 </div>
                 <div class="row">
@@ -118,7 +127,8 @@
                         <label class="form-label">Apellidos y nombres:
                         </label>
                         <input type="text" class="form-control" autocomplete="off" id="exampleInputEmail1"
-                            aria-describedby="emailHelp" v-model="nombres" />
+                            aria-describedby="emailHelp" v-model="nombres"
+                            @input="nombres = formatInputUpperCase($event.target.value)" />
                         <div class="invalid-feedback">
                             {{ mensaje_error }}
                         </div>
@@ -270,17 +280,17 @@
                 </div>
                 <div class="row">
                     <div class="col mb-3">
-                        <label class="form-label">Novedades:
-                        </label>
-                        <textarea name="" id="novedades" class="form-control" rows="1" v-model="novedades"
-                            @input="novedades = formatInputUpperCase($event.target.value)"></textarea>
-                    </div>
-                    <div class="col mb-3">
                         <label class="form-label">Novedades exámenes médicos:
                         </label>
                         <textarea name="" id="novedades_examenes" class="form-control" rows="1"
                             v-model="novedades_examenes"
                             @input="novedades_examenes = formatInputUpperCase($event.target.value)"></textarea>
+                    </div>
+                    <div class="col mb-3">
+                        <label class="form-label">Observaciones al servicio:
+                        </label>
+                        <textarea name="" id="novedades" class="form-control" rows="1" v-model="novedades"
+                            @input="novedades = formatInputUpperCase($event.target.value)"></textarea>
                     </div>
                     <div class="col mb-3">
                         <label class="form-label">Cambio fecha:
@@ -588,6 +598,8 @@ export default {
             departamento_laboratorio_id: '',
             consulta_laboratorio: '',
             laboratorio_medico_id: '',
+            divExpandido: false,
+            seguimiento: []
         }
     },
     computed: {
@@ -617,9 +629,22 @@ export default {
         this.scrollTop()
         this.getModulo()
         this.getDepartamentos(43)
+        this.getSeguimiento()
 
     },
     methods: {
+        // getSeguimiento(){
+        //     var self = this
+        //     let config = self.configHeader();
+        //     axios
+        //         .get(self.URL_API + "api/v1/formularioingresopendientes", check, config)
+        //         .then(function (result) {
+        //             self.showAlert(result.data.message, result.data.status);
+        //         });
+        // },
+        toggleDiv() {
+            this.divExpandido = !this.divExpandido;
+        },
         enviarArchivos(booleano, ruta_archivo, nombre) {
             var self = this
             if (booleano) {
@@ -1173,6 +1198,8 @@ export default {
                 })
 
             })
+
+            this.seguimiento = item.seguimiento
         },
         limpiarFormulario() {
             // this.fecha_ingreso = ''
@@ -1283,5 +1310,72 @@ h2 {
 .correos:hover {
     background-color: #e8e7e7;
 
+}
+
+.lineTime {
+    padding: 10px;
+    color: white;
+    background-attachment: fixed;
+    background-color: blueviolet;
+    position: absolute;
+    right: -9%;
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;
+    cursor: pointer;
+    text-align: left;
+    font-size: 0.9rem;
+}
+
+/* Estilos para la pestaña */
+.pestaña {
+    position: fixed;
+    top: 30%;
+    right: 0;
+    background-color: lightblue;
+    padding: 10px;
+    border-top-left-radius: 10px;
+    border-bottom-left-radius: 10px;
+    cursor: pointer;
+    z-index: 1000;
+    background: rgb(0, 107, 63);
+    color: white;
+    background: linear-gradient(95deg, rgba(0, 107, 63, 1) 4%, rgba(26, 150, 56, 1) 19%, rgba(48, 159, 128, 1) 45%, rgba(22, 119, 115, 1) 63%, rgba(4, 66, 105, 1) 88%);
+}
+
+/* Animación para expandir */
+@keyframes expandir {
+    from {
+        width: 0;
+    }
+
+    to {
+        width: 300px;
+    }
+}
+
+@keyframes contraer {
+    from {
+        width: 300px;
+    }
+
+    to {
+        width: 0;
+    }
+}
+
+/* Estilos cuando el div está expandido */
+.expandido {
+    animation: expandir 1s ease;
+    /* Animación para expandir */
+    width: 300px;
+    height: 300px;
+    /* Anchura del contenido expandido */
+}
+
+.pestaña:not(.expandido) {
+    animation: contraer 1s ease;
+    /* Animación para contraer */
+    overflow: hidden;
+    /* Ocultar el contenido al contraer */
 }
 </style>
