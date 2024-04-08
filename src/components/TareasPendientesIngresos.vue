@@ -35,7 +35,6 @@ export default {
                 { nombre: "Fecha ingreso", orden: "DESC", tipo: "fecha", calculado: 'false' },
                 { nombre: "Estado", orden: "DESC", tipo: "texto", calculado: 'false' },
                 { nombre: "Responsable", orden: "DESC", tipo: "texto", calculado: 'false' },
-                { nombre: "Responsable anterior", orden: "DESC", tipo: "texto", calculado: 'false' },
                 { nombre: "Número identificación", orden: "DESC", tipo: "texto", calculado: 'false' },
                 { nombre: "Nombre", orden: "DESC", tipo: "texto", calculado: 'false' },
                 { nombre: "Empresa cliente", orden: "DESC", tipo: "texto", calculado: 'false' },

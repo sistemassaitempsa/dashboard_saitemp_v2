@@ -115,7 +115,7 @@
                         <div class="btn-group" role="group" aria-label="Basic example">
                             <button type="button" class="btn adjunto"><i class="bi bi-file-earmark-check"></i> {{
             item.name
-                                }} {{ formatearPesoArchivo(item.size) }}</button>
+        }} {{ formatearPesoArchivo(item.size) }}</button>
                             <button type="button" @click="file.splice(index, 1)" class="btn btn-success"><i
                                     class="bi bi-x"></i></button>
                         </div>
@@ -149,7 +149,7 @@ export default {
     props: {
         menu: [],
         reenvio_correo: {},
-        adjuntos_candidato_string:[]
+        adjuntos_candidato_string: []
     },
     data() {
         return {
@@ -180,7 +180,7 @@ export default {
             loading: false,
             menu_id: '',
             cuerpo_mensaje: '',
-            adjuntos_candidato:[]
+            adjuntos_candidato: []
         }
     },
     computed: {
@@ -197,8 +197,8 @@ export default {
         reenvio_correo() {
             this.reenvio()
         },
-        adjuntos_candidato_string(){
-           this.adjuntos_candidato = JSON.parse(this.adjuntos_candidato_string)
+        adjuntos_candidato_string() {
+            this.adjuntos_candidato = JSON.parse(this.adjuntos_candidato_string)
         }
     },
     mounted() {
@@ -253,7 +253,7 @@ export default {
         },
         enviar() {
             let self = this;
-            this.loading = true
+            self.$emit('lanzarLoading',true)
             let config = this.configHeader();
             const correo = new FormData();
             correo.append('to', this.correos)
@@ -268,16 +268,16 @@ export default {
             this.file.forEach(function (item, index) {
                 correo.append('archivo' + index, item)
             })
-            
-            this.adjuntos_candidato.forEach(function (item, index) {
-                correo.append('adjunto_candidato['+index+']', item)
-            })
 
+            this.adjuntos_candidato.forEach(function (item, index) {
+                correo.append('adjunto_candidato[' + index + ']', item.ruta_archivo + '*' + item.nombre_archivo)
+            })
 
             axios
                 .post(self.URL_API + "api/v1/enviocorreo", correo, config)
                 .then(function (result) {
                     self.loading = false
+                    self.$emit('lanzarLoading',false)
                     self.showAlert(result.data.message, result.data.status);
                 });
         },

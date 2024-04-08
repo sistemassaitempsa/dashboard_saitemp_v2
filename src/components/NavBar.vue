@@ -90,7 +90,8 @@
         <hr>
       </div>
     </div>
-    <router-view :userlogued="userlogued" :menu="menu" @getMenu="getMenu" />
+    <router-view :class="{ 'ancho_componente': anchocomponente }" :userlogued="userlogued" :menu="menu"
+      @getMenu="getMenu" />
   </div>
 </template>
 <script>
@@ -118,20 +119,33 @@ export default {
       option: [],
       categoria_menu: [],
       menu_lateral: true,
+      anchocomponente: false,
+      ruta: ''
     };
   },
   watch: {
+    $route() {
+      this.validaAnchoTabla()
+    },
   },
   created() {
     this.urlExterna()
     this.userLogued()
     this.validaRuta()
-
+    this.validaAnchoTabla()
   },
   destroyed() {
     localStorage.removeItem("access_token");
   },
   methods: {
+    validaAnchoTabla() {
+      this.ruta = this.$route.path
+      if (this.ruta.includes('gestion-ingresosl') || this.ruta.includes('debida-diligencia/clientes') || this.ruta.includes('ingresos-pendientes')|| this.ruta.includes('correo-novedades-nomina')) {
+        this.anchocomponente = true
+      } else {
+        this.anchocomponente = false
+      }
+    },
     validaRuta() { // valida si el usuario tiene acceso a la ruta o menú consultado, incluir los módulos que no están en el menú
       var self = this
       var rutaAnterior = ''
@@ -459,4 +473,8 @@ export default {
   /* Puedes ajustar estas propiedades según tus necesidades */
 }
 
+.ancho_componente {
+  margin: 60px;
+  min-width: 95%;
+}
 </style>

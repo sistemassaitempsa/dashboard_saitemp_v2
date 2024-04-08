@@ -27,21 +27,23 @@ export default {
             show_table: false,
             datos: [],
             endpoint: 'formularioingreso',
-            endpointexport: 'formularioingreso',
+            endpointexport: 'exportaformularioingreso',
             URL_API: process.env.VUE_APP_URL_API,
             tabla: [
                 { nombre: "#", orden: "DESC" },
+                { nombre: "Radicado", orden: "DESC", tipo: "texto", calculado: 'false' },
                 { nombre: "Fecha radicado", orden: "DESC", tipo: "fecha", calculado: 'false' },
-                { nombre: "Fecha ingreso", orden: "DESC", tipo: "fecha", calculado: 'false' },
-                { nombre: "Estado", orden: "DESC", tipo: "texto", calculado: 'false' },
-                { nombre: "Responsable", orden: "DESC", tipo: "texto", calculado: 'false' },
-                { nombre: "Responsable anterior", orden: "DESC", tipo: "texto", calculado: 'false' },
                 { nombre: "Número identificación", orden: "DESC", tipo: "texto", calculado: 'false' },
-                { nombre: "Nombre", orden: "DESC", tipo: "texto", calculado: 'false' },
-                { nombre: "Empresa cliente", orden: "DESC", tipo: "texto", calculado: 'false' },
+                { nombre: "Nombre candidato", orden: "DESC", tipo: "texto", calculado: 'false' },
                 { nombre: "Cargo", orden: "DESC", tipo: "texto", calculado: 'false' },
+                { nombre: "Empresa usuaria", orden: "DESC", tipo: "texto", calculado: 'false' },
                 { nombre: "Ciudad", orden: "DESC", tipo: "texto", calculado: 'false' },
                 { nombre: "Laboratorio", orden: "DESC", tipo: "texto", calculado: 'false' },
+                { nombre: "Fecha exámen", orden: "DESC", tipo: "fecha", calculado: 'false' },
+                { nombre: "Fecha ingreso", orden: "DESC", tipo: "fecha", calculado: 'false' },
+                { nombre: "Estado vacante", orden: "DESC", tipo: "texto", calculado: 'false' },
+                { nombre: "Observaciones al servicio", orden: "DESC", tipo: "texto", calculado: 'false' },
+                { nombre: "Novedad en servicio", orden: "DESC", tipo: "texto", calculado: 'false' },
             ],
             ejecutivos_comerciales: [],
             listas: [],
@@ -82,7 +84,7 @@ export default {
             let self = this;
             let config = this.configHeader();
             axios
-                .get(self.URL_API + "api/v1/actualizaResponsableingreso/" + item_id + '/' +responsable_id+ '/' +responsable_ingreso, config)
+                .get(self.URL_API + "api/v1/actualizaResponsableingreso/" + item_id + '/' + responsable_id + '/' + responsable_ingreso, config)
                 .then(function (result) {
                     self.estadoActualizado(currenturl)
                     self.showAlert(result.data.message, result.data.status);

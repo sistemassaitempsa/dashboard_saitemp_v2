@@ -123,7 +123,7 @@ export default {
         },
         listaEnCadena(item) {
             if (item == '') {
-                this.$emit(this.eventoCampo,null)
+                this.$emit(this.eventoCampo, null)
             }
             switch (this.eventoCampo) {
                 case 'getPaises':
@@ -159,12 +159,18 @@ export default {
                 case 'getTipoArhivo':
                     this.$emit('setTipoArchivo', item, this.index)
                     break;
+                case 'getSubsidio':
+                    this.$emit('setSubsidio', item, this.ordenCampo, this.index)
+                    break;
+                case 'getVacante':
+                    this.$emit('setVacante', item, this.ordenCampo, this.index)
+                    break;
             }
         }
     }
 };
 </script>
-<style  scoped>
+<style scoped>
 label {
     float: left;
     margin: 20px 0px 5px 0px;
@@ -219,7 +225,7 @@ label {
     padding: 5px;
     cursor: pointer;
     border-radius: 5px;
-    color:black;
+    color: black;
 }
 
 #select1 #lista1:hover,
