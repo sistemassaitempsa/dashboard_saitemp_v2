@@ -35,7 +35,7 @@ export default {
         { nombre: "Nombre del comercial", orden: "DESC", tipo: "texto", calculado: 'false' },
         { nombre: "Teléfono cliente", orden: "DESC", tipo: "texto", calculado: 'false' },
         { nombre: "Fecha registro", orden: "DESC", tipo: "fecha", calculado: 'false' },
-        { nombre: "Estado contrato", orden: "DESC", tipo: "texto", calculado: 'true' },
+        { nombre: "Estado contrato", orden: "DESC", tipo: "texto", calculado: 'false' },
       ],
       ejecutivos_comerciales: [],
       listas: [],
