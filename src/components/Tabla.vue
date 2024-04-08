@@ -20,7 +20,7 @@
                     <label for="exampleFormControlInput1" class="form-label" style="float:left">Campo</label>
                     <select class="form-select form-select-sm" @change="tipoCampo2(indice_campos[index1], index1)"
                         v-model="indice_campos[index1]" aria-label="Default select example">
-                        <option v-for="item, index in tabla2" :key="index">{{ index == 0 ? 'Por favor seleccione un' +
+                        <option v-for="item, index in tabla3" :key="index">{{ index == 0 ? 'Por favor seleccione un' +
             ' campo' : item.nombre }}</option>
                     </select>
                 </div>
@@ -89,13 +89,13 @@
                         Realizar búsqueda
                     </button>
                 </div>
-                <!-- <div v-if="ruta == '/navbar/debida-diligencia/clientes' && this.campo_ != '' && this.operadores && this.valores_comparar || this.valores_comparar2"
+                <div v-if="ruta == '/navbar/gestion-ingresosl'"
                     class="col-xs-3 col-md-3">
-                    <button id="exportar" @click="exportar()" type="button" class="btn btn-success btn-sm">
-                        <a :href="URL_API + 'api/v1/' + endpointexport + '/' + base64consulta"
+                    <button id="exportar" type="button" class="btn btn-success btn-sm">
+                        <a :href="URL_API + 'api/v1/' + endpointexport + '/' + base64consultaingresos"
                             rel="noopener noreferrer">Exportar excel</a>
                     </button>
-                </div> -->
+                </div>
                 <div class="col-xs-3 col-md-3">
                     <button @click="getRegistros()" type="button" style="margin-top: 30px"
                         class="btn btn-success btn-sm">
@@ -246,9 +246,10 @@
                     <tr v-for="(item, index) in items_tabla2" :key="item.id">
                         <td
                             v-if="ruta != '/navbar/reporteitems' && !empleados() && ruta != '/navbar/reportes' && ruta != '/navbar/trump' && ruta != '/navbar/procesosespeciales' && ruta != '/navbar/debida-diligencia/clientes' && ruta != '/navbar/correo-novedades-nomina' && ruta != '/navbar/cliente-supervision' && ruta != '/navbar/solicitudes-os'">
-                            <div class="form-check form-check-inline">
-                                <input class="form-check-input" @change="(item.checked = !item.checked), clear()"
-                                    v-model="check" type="checkbox" :value="item.id" />
+                            <div class="form-check form-check-inline" style="margin: 0px;padding: 0px;">
+                                <input class="form-check-input" style="margin: 0px;padding: 0px;"
+                                    @change="(item.checked = !item.checked), clear()" v-model="check" type="checkbox"
+                                    :value="item.id" />
                             </div>
                         </td>
                         <td v-for="(item2) in campos2" :key="item2.id"
@@ -348,7 +349,7 @@
                                     :style="'color:black;background-color:' + item.color_estado">{{
             truncateText(item.estado_ingreso, maxCaracteres, item.id) }}</button>
                                 <button type="button" class="btn dropdown-toggle dropdown-toggle-split"
-                                    v-if="permisos[20].autorizado" data-bs-toggle="dropdown" aria-expanded="false"
+                                    v-if="permisos[23].autorizado" data-bs-toggle="dropdown" aria-expanded="false"
                                     :style="'color:black;background-color:' + item.color_estado">
                                     <span class="visually-hidden">Toggle Dropdown</span>
                                 </button>
@@ -369,9 +370,9 @@
                             <div class="btn-group">
                                 <button type="button" class="btn"
                                     :style="'color:black;background-color:' + item.color_estado">{{
-            truncateOwner(item.responsable_ingreso, maxCaracteres ) }}</button>
+            truncateOwner(item.responsable, maxCaracteres) }}</button>
                                 <button type="button" class="btn dropdown-toggle dropdown-toggle-split"
-                                    v-if="permisos[20].autorizado" data-bs-toggle="dropdown" aria-expanded="false"
+                                    v-if="permisos[23].autorizado" data-bs-toggle="dropdown" aria-expanded="false"
                                     :style="'color:black;background-color:' + item.color_estado"
                                     @click="getEncargados(item)">
                                     <span class="visually-hidden">Toggle Dropdown</span>
@@ -486,6 +487,7 @@ export default {
             URL_API: process.env.VUE_APP_URL_API,
             sorted: false,
             tabla2: [],
+            tabla3: this.tabla2,
             items_tabla2: [],
             campos2: [],
             sin_registros: true,
@@ -514,15 +516,17 @@ export default {
             listaItem: [],
             ruta: this.$route.path,
             base64consulta: '',
+            base64consultaingresos: '',
             sinregistros: 'No hay resgistros guardados',
             url: '',
             analista: [],
             loading: false,
-            columnaOculta: ['color_estado_firma', 'nombre_estado_firma', 'responsable_ingreso', 'estado_ingreso_id', 'color_estado'], // este array contiene los nombres de las columnas queno queremos que se muestren en la tabla
+            columnaOculta: ['color_estado_firma', 'nombre_estado_firma', 'responsable', 'estado_ingreso', 'estado_ingreso_id', 'color_estado'], // este array contiene los nombres de las columnas queno queremos que se muestren en la tabla
             maxCaracteres: 20,
             lista_estados_id: {},
             lista_encargados: [],
             filtro_gestion_ingresos: false,
+            exportar_ingresos:false
 
         };
     },
@@ -588,7 +592,7 @@ export default {
         },
         truncateOwner(text, maxLength) {
             // if (!(id in this.lista_estados_id)) {
-            if ( text != null && text.length > maxLength) {
+            if (text != null && text.length > maxLength) {
                 // console.log('dentro del if', this.lista_estados_id[id])
                 return text.substring(0, maxLength) + '...';
                 // return 'Estado'
@@ -602,7 +606,7 @@ export default {
             // return 'Estado'
         },
         actualizaResponsable(item_id, index) {
-            this.$emit('actualizaResponsable', item_id, this.lista_encargados[index].usuario_id,  this.lista_encargados[index].nombre, this.currentUrl)
+            this.$emit('actualizaResponsable', item_id, this.lista_encargados[index].usuario_id, this.lista_encargados[index].nombre, this.currentUrl)
             setTimeout(() => {
                 this.lista_encargados = [];
             }, 1000);
@@ -720,6 +724,7 @@ export default {
             let valores_comparar2 = JSON.stringify(this.valores_comparar2);
             let cadena = indice_campos + '/' + operadores + '/' + valores_comparar + '/' + valores_comparar2
             let base64 = (btoa(cadena))
+            this.base64consultaingresos = base64
             axios
                 .get(self.URL_API + "api/v1/" + self.endpoint + "filtro/" + base64, config)
                 .then(function (result) {
@@ -741,7 +746,7 @@ export default {
             })
         },
         tipoCampo2(campo, index1) {
-            this.tabla2.forEach((item, index) => {
+            this.tabla3.forEach((item, index) => {
                 if (item.nombre == campo) {
                     this.tipos_de_campo[index1] = item.tipo
                     this.campo_[index1] = this.campos2[index]
@@ -782,6 +787,9 @@ export default {
                 this.sin_registros = true
             }
             this.tabla2 = this.tabla; // Encabezados de la tabla
+            this.tabla3 = [...this.tabla2]
+            this.tabla3.push({ calculado: "false", nombre: "Estado", orden: "DESC", tipo: "texto" })
+            this.tabla3.push({ calculado: "false", nombre: "Responsable", orden: "DESC", tipo: "texto" })
             this.items_tabla2 = Object.values(datos.data.data); // lista de registros
             self.links = datos.data;
             self.siguiente = datos.data.links.length;
@@ -1206,4 +1214,15 @@ a {
 .d-none {
     display: none;
 }
+
+.table-container {
+    overflow-x: auto;
+    max-width: 100%;
+    position: relative;
+}
+
+/* elimina los saltos de linea en las celdas */
+/* .table {
+  width: max-content; 
+} */
 </style>

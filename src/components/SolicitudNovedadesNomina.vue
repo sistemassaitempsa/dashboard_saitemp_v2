@@ -253,7 +253,7 @@ export default {
         },
         enviar() {
             let self = this;
-            this.loading = true
+            self.$emit('lanzarLoading',true)
             let config = this.configHeader();
             const correo = new FormData();
             correo.append('to', this.correos)
@@ -277,6 +277,7 @@ export default {
                 .post(self.URL_API + "api/v1/enviocorreo", correo, config)
                 .then(function (result) {
                     self.loading = false
+                    self.$emit('lanzarLoading',false)
                     self.showAlert(result.data.message, result.data.status);
                 });
         },

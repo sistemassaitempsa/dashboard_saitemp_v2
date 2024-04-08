@@ -59,6 +59,7 @@ import GestionIngresos from "../components/GestionIngresos.vue";
 import GestionIngresosl from "../components/GestionIngresosl.vue";
 import ChatWhatsapp from "../components/ChatWhatsapp.vue";
 import TareasPendientesIngresos from "../components/TareasPendientesIngresos.vue";
+import CrmCliente from "../components/CrmCliente.vue";
 
 
 
@@ -359,6 +360,11 @@ const routes = [
         path: "ingresos-pendientes",
         name: "ingresos-pendientes",
         component: TareasPendientesIngresos,
+      },
+      {
+        path: "crm-intreraccion",
+        name: "crm-intreraccion",
+        component: CrmCliente,
       },
       // {
       //   path: "navbar/*",

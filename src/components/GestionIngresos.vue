@@ -94,6 +94,12 @@
                             nombreItem="nombre" :consulta="consulta_usuario" :registros="usuarios"
                             placeholder="Seleccione una opción" />
                     </div>
+                    <div class="col" v-if="tipo_servicio_id == 3 || tipo_servicio_id == 4">
+                        <SearchList nombreCampo="Estado vacante: " @getVacante="getVacante" eventoCampo="getVacante"
+                            @setVacante="setVacante" nombreItem="nombre" :consulta="consulta_vacante"
+                            :registros="afirmacionNegacion_vacante" :ordenCampo="1" :valida_campo="false"
+                            placeholder="Seleccione una opción" />
+                    </div>
                 </div>
                 <div class="row">
                     <div class="col mb-3" v-if="tipo_servicio_id == 3 || tipo_servicio_id == 4">
@@ -112,6 +118,24 @@
                             {{ mensaje_error }}
                         </div>
                     </div>
+                    <div class="col mb-3">
+                        <label class="form-label">Cambio fecha:
+                        </label>
+                        <input type="date" class="form-control" autocomplete="off" id="exampleInputEmail1"
+                            aria-describedby="emailHelp" v-model="cambio_fecha" />
+                        <div class="invalid-feedback">
+                            {{ mensaje_error }}
+                        </div>
+                    </div>
+                    <div class="col">
+                        <SearchList nombreCampo="Tipo de Identificación: *"
+                            @getTipoIdentificacion="getTipoIdentificacion" eventoCampo="getTipoIdentificacion"
+                            :ordenCampo="1" nombreItem="des_tip" @setTipoIdentificacion="setTipoIdentificacion"
+                            :registros="tiposIdentificacion" :consulta="consulta_tipo_identificacion"
+                            placeholder="Seleccione una opción" :valida_campo="false" />
+                    </div>
+                </div>
+                <div class="row">
                     <div class="col mb-3">
                         <label class="form-label">Número de
                             identificación: </label>
@@ -133,14 +157,23 @@
                             {{ mensaje_error }}
                         </div>
                     </div>
-                </div>
-                <div class="row">
                     <div class="col mb-3">
                         <label class="form-label">Número contacto:
                         </label>
                         <input type="text" class="form-control" autocomplete="off" id="exampleInputEmail1"
                             aria-describedby="emailHelp" v-model="celular_candidato"
                             @input="celular_candidato = validarNumero(celular_candidato)" />
+                        <div class="invalid-feedback">
+                            {{ mensaje_error }}
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col mb-3">
+                        <label class="form-label">Correo candidato:
+                        </label>
+                        <input type="text" class="form-control" autocomplete="off" id="exampleInputEmail1"
+                            aria-describedby="emailHelp" v-model="correo_candidato" />
                         <div class="invalid-feedback">
                             {{ mensaje_error }}
                         </div>
@@ -165,11 +198,12 @@
                     </div>
                 </div>
                 <div class="row">
-                    <!-- <div class="col">
-                        <SearchList nombreCampo="Pais: *" @getPaises="getPaises" eventoCampo="getPaises"
-                            nombreItem="nombre" :consulta="consulta_pais" :registros="paises"
-                            @getDepartamentos="getDepartamentos" placeholder="Seleccione una opción" />
-                    </div> -->
+                    <div class="col">
+                        <SearchList nombreCampo="¿Subsidio de transporte:? " @getSubsidio="getSubsidio"
+                            eventoCampo="getSubsidio" @setSubsidio="setSubsidio" nombreItem="nombre"
+                            :consulta="consulta_subsidio" :registros="afirmacionNegacion_bonos" :ordenCampo="1"
+                            :valida_campo="false" placeholder="Seleccione una opción" />
+                    </div>
                     <div class="col">
                         <SearchList nombreCampo="Departamento de prestación del servicio: *" nombreItem="nombre"
                             eventoCampo="getDepartamentos" :consulta="consulta_departamento" :registros="departamentos"
@@ -293,26 +327,6 @@
                             @input="novedades = formatInputUpperCase($event.target.value)"></textarea>
                     </div>
                     <div class="col mb-3">
-                        <label class="form-label">Cambio fecha:
-                        </label>
-                        <input type="datetime-local" class="form-control" autocomplete="off" id="exampleInputEmail1"
-                            aria-describedby="emailHelp" v-model="cambio_fecha" />
-                        <div class="invalid-feedback">
-                            {{ mensaje_error }}
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col mb-3">
-                        <label class="form-label">Correo candidato:
-                        </label>
-                        <input type="text" class="form-control" autocomplete="off" id="exampleInputEmail1"
-                            aria-describedby="emailHelp" v-model="correo_candidato" />
-                        <div class="invalid-feedback">
-                            {{ mensaje_error }}
-                        </div>
-                    </div>
-                    <div class="col mb-3">
                         <label class="form-label">Correo empresa:
                         </label>
                         <input type="text" class="form-control" autocomplete="off" id="exampleInputEmail1"
@@ -323,17 +337,60 @@
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col"> <button v-if="$route.params.id != undefined" class="btn btn-success m-4"
-                            :disabled="deshabilitar_boton" type="button" @click="envioCorreo">Enviar formulario</button>
-                    </div>
                     <div class="col">
-                        <div v-if="$route.params.id != undefined">
-                            <a :href="URL_API + 'api/v1/gestioningresospdf/null/' + this.$route.params.id"
-                                target="_blank" class="white-text">
-                                <button type="button" class="btn btn-success m-4">Descargar pdf</button>
-                            </a>
+                        <SearchList nombreCampo="Novedad en servicio: *" nombreItem="nombre"
+                            :registros="observaciones_estado" @getObservacionesEstado="getObservacionesEstado"
+                            eventoCampo="getObservacionesEstado" :ordenCampo="2" placeholder="Seleccione una opción"
+                            :consulta="consulta_observacion_estado" :valida_campo="false" />
+                    </div>
+                    <div class="col mb-3">
+                        <label class="form-label">Afectaciones al servicio:
+                        </label>
+                        <textarea name="" id="afectacion_servicio" class="form-control" rows="1"
+                            v-model="afectacion_servicio" placeholder="Solo para no conformidades"
+                            @input="afectacion_servicio = formatInputUpperCase($event.target.value)"></textarea>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col" style="margin:30px" v-if="permisos[23].autorizado">
+                        <div v-if="$route.params.id != undefined" class="btn-group" role="group"
+                            aria-label="Button group with nested dropdown">
+                            <div class="btn-group" role="group">
+                                <button type="button"
+                                    class="btn btn-md btn-success dropdown-toggle dropdown-toggle-split"
+                                    data-bs-toggle="dropdown" aria-expanded="false">
+                                    Enviar
+                                </button>
+                                <ul class="dropdown-menu">
+                                    <li><a class="dropdown-item" @click.prevent="envioCorreo(1)">
+                                            Enviar orden de servicio</a></li>
+                                    <li><a class="dropdown-item" @click.prevent="envioCorreo(2)">
+                                            Enviar informe de seleccion</a></li>
+                                </ul>
+                            </div>
                         </div>
                     </div>
+
+                    <div class="col" style="margin:30px" v-if="permisos[23].autorizado">
+                        <div v-if="$route.params.id != undefined" class="btn-group" role="group"
+                            aria-label="Button group with nested dropdown">
+                            <div class="btn-group" role="group">
+                                <button type="button"
+                                    class="btn btn-md btn-success dropdown-toggle dropdown-toggle-split"
+                                    data-bs-toggle="dropdown" aria-expanded="false">
+                                    Descargar
+                                </button>
+                                <ul class="dropdown-menu">
+                                    <li><a class="dropdown-item" href="#" @click.prevent="descargarInforme(1)">Descargar
+                                            orden
+                                            de servicio</a></li>
+                                    <li><a class="dropdown-item" href="#" @click.prevent="descargarInforme(2)">Descargar
+                                            informe de seleccion</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
                     <div class="col"> <button type="button" v-if="$route.params.id != undefined"
                             style="background-color:#D4AC0D;color:white" @click="agregarPendientes()" class="btn m-4">
                             Añadir a tareas pendientes
@@ -386,7 +443,8 @@
                     </div>
                 </div>
             </div>
-            <button class="btn btn-success m-4" :disabled="deshabilitar_boton" type="submit">Guardar formulario</button>
+            <button v-if="permisos[23].autorizado" class="btn btn-success m-4" :disabled="deshabilitar_boton"
+                type="submit">Guardar formulario</button>
             <div class="row" v-if="$route.params.id != undefined"
                 style="text-align:left;clear:both;margin-bottom: 40px;">
                 <h5 @click="envio_correo = !envio_correo" style="cursor:pointer">Envío correo <i v-if="envio_correo"
@@ -394,7 +452,8 @@
                 </h5>
             </div>
             <SolicitudNovedadesNomina v-if="$route.params.id != undefined && envio_correo" :menu="menu"
-                :reenvio_correo="reenvio_correo" :adjuntos_candidato_string="adjuntos_candidato_string" />
+                :reenvio_correo="reenvio_correo" :adjuntos_candidato_string="adjuntos_candidato_string"
+                @lanzarLoading="lanzarLoading" />
 
             <div class="row" v-if="gestioningresocorreos.length > 0"
                 style="text-align:left;clear:both;margin-bottom: 40px;">
@@ -404,7 +463,7 @@
                 </h5>
             </div>
             <div id="seccion" v-if="historico_correos">
-                <div class="correos" v-for="item, index in gestioningresocorreos" :key="index"
+                <!-- <div class="correos" v-for="item, index in gestioningresocorreos" :key="index"
                     style="margin-bottom: 20px; font-size: 1.05rem">
 
                     <div class="row m-2">
@@ -445,8 +504,8 @@
                             @click="reenviar(item)">Reenviar</button>
                     </div>
                     <hr>
-                </div>
-                <!-- <div class="table-responsive">
+                </div> -->
+                <div class="table-responsive">
                     <table class="table table-striped table-hover table-bordered align-middle">
                         <thead>
                             <tr>
@@ -479,7 +538,7 @@
 
                         </tbody>
                     </table>
-                </div> -->
+                </div>
             </div>
         </form>
     </div>
@@ -493,6 +552,7 @@ import SearchList from './SearchList.vue';
 import SolicitudNovedadesNomina from './SolicitudNovedadesNomina.vue';
 import { Alerts } from '../Mixins/Alerts.js';
 import { Scroll } from '../Mixins/Scroll.js';
+import { Permisos } from '../Mixins/Permisos.js';
 
 export default {
     components: {
@@ -500,7 +560,7 @@ export default {
         Loading,
         SolicitudNovedadesNomina
     },
-    mixins: [Token, Alerts, Scroll],
+    mixins: [Token, Alerts, Scroll, Permisos],
     props: {
         menu: []
     },
@@ -599,7 +659,18 @@ export default {
             consulta_laboratorio: '',
             laboratorio_medico_id: '',
             divExpandido: false,
-            seguimiento: []
+            seguimiento: [],
+            consulta_subsidio: '',
+            consulta_vacante: '',
+            afirmacionNegacion_bonos: '',
+            afirmacionNegacion_vacante: '',
+            tiposIdentificacion: [],
+            consulta_tipo_identificacion: '',
+            tipo_identificacion: '',
+            idSeleccionado: '',
+            consulta_observacion_estado: '',
+            observaciones_estado: [],
+            afectacion_servicio: ''
         }
     },
     computed: {
@@ -629,19 +700,77 @@ export default {
         this.scrollTop()
         this.getModulo()
         this.getDepartamentos(43)
-        this.getSeguimiento()
 
     },
     methods: {
-        // getSeguimiento(){
-        //     var self = this
-        //     let config = self.configHeader();
-        //     axios
-        //         .get(self.URL_API + "api/v1/formularioingresopendientes", check, config)
-        //         .then(function (result) {
-        //             self.showAlert(result.data.message, result.data.status);
-        //         });
-        // },
+        getObservacionesEstado(item = null) {
+            if (item != null) {
+                this.consulta_observacion_estado = item.nombre
+            }
+            let self = this;
+            let config = this.configHeader();
+            axios
+                .get(self.URL_API + "api/v1/observacionestado", config)
+                .then(function (result) {
+                    self.observaciones_estado = result.data
+                });
+
+        },
+        descargarInforme(id) {
+            this.idSeleccionado = id;
+            if (this.$route.params.id !== undefined) {
+                const urlDescarga = this.URL_API + 'api/v1/gestioningresospdf/null/' + this.$route.params.id + '/' + this.idSeleccionado;
+                window.open(urlDescarga, '_blank');
+            }
+        },
+        getSubsidio() {
+            this.afirmacionNegacion_bonos = [{ id: '1', nombre: 'Si' }, { id: '0', nombre: 'No' }]
+        },
+        setSubsidio(item, campo) {
+            if (item != null) {
+                switch (campo) {
+                    case 1:
+                        this.consulta_subsidio = item.nombre
+                        break
+                }
+            }
+        },
+        getVacante() {
+            this.afirmacionNegacion_vacante = [{ id: '1', nombre: 'Abierto' }, { id: '0', nombre: 'Cerrado' }]
+        },
+        setVacante(item, campo) {
+            if (item != null) {
+                switch (campo) {
+                    case 1:
+                        this.consulta_vacante = item.nombre
+                        break
+                }
+            }
+        },
+        getTipoIdentificacion() {
+            if (this.tiposIdentificacion == '') {
+                let self = this;
+                let config = this.configHeader();
+                axios
+                    .get(self.URL_API + "api/v1/tipodocumentolista", config)
+                    .then(function (result) {
+                        self.tiposIdentificacion = result.data
+                    });
+            }
+        },
+        setTipoIdentificacion(item = null, campo = null) {
+            if (item != null) {
+                switch (campo) {
+                    case 1:
+                        this.tipo_identificacion = item.cod_tip;
+                        this.consulta_tipo_identificacion = item.des_tip
+                        break
+                }
+            }
+        },
+        lanzarLoading(loading) {
+            this.loading = loading
+        },
         toggleDiv() {
             this.divExpandido = !this.divExpandido;
         },
@@ -700,16 +829,17 @@ export default {
                 });
             })
         },
-        envioCorreo() {
+        envioCorreo(id) {
             let self = this;
             if (this.valida_envioCorreo()) {
                 return
             }
+            this.idSeleccionado = id;
             this.loading = true
             this.scrollTop()
             let config = this.configHeader();
             axios
-                .get(self.URL_API + "api/v1/gestioningresospdf/" + self.menu_id + '/' + self.$route.params.id, config)
+                .get(self.URL_API + "api/v1/gestioningresospdf/" + self.menu_id + '/' + self.$route.params.id + '/' + this.idSeleccionado, config)
                 .then(function (result) {
                     // self.estados_ingreso = result.data
                     self.showAlert(result.data.message, result.data.status)
@@ -1032,6 +1162,11 @@ export default {
                 recomendaciones_examen: this.recomendaciones_examen,
                 novedades_examenes: this.novedades_examenes,
                 laboratorio_medico_id: this.laboratorio_medico_id,
+                consulta_subsidio: this.consulta_subsidio,
+                consulta_vacante: this.consulta_vacante,
+                tipo_identificacion: this.tipo_identificacion,
+                afectacion_servicio: this.afectacion_servicio,
+                consulta_observacion_estado: this.consulta_observacion_estado
             }
         },
         cargarArchivo(event, index) {
@@ -1155,6 +1290,7 @@ export default {
             this.consulta_departamento = item.departamento
             this.pais_id = item.pais_id
             this.consulta_pais = item.pais
+            this.responsable_ingreso_id = item.responsable_id
             this.responsable = item.responsable_ingreso
             this.estado = item.estado_ingreso
             this.fecha_radicado = item.fecha_radicado
@@ -1177,6 +1313,13 @@ export default {
             this.direccion_laboratorio = item.direccion_laboratorio
             this.recomendaciones_examen = item.recomendaciones_examen
             this.novedades_examenes = item.novedades_examenes
+            this.consulta_subsidio = item.subsidio_transporte
+            this.consulta_vacante = item.estado_vacante
+            this.consulta_tipo_identificacion = item.tipo_identificacion
+            this.consulta_encargado = item.responsable_ingreso
+            this.tipo_identificacion = item.tipo_identificacion_id
+            this.afectacion_servicio = item.afectacion_servicio
+            this.consulta_observacion_estado = item.observacion_estado
 
             if (item['laboratorios'][0] != undefined) {
                 this.departamento_laboratorio_id = item['laboratorios'][0].departamento_id
@@ -1235,6 +1378,8 @@ export default {
             this.celular_candidato = ''
             this.recomendaciones_examen = ''
             this.novedades_examenes = ''
+            this.afectacion_servicio = ''
+            this.consulta_observacion_estado = ''
             this.getArchivosIngreso()
 
         },
