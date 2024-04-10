@@ -89,8 +89,7 @@
                         Realizar búsqueda
                     </button>
                 </div>
-                <div v-if="ruta == '/navbar/gestion-ingresosl'"
-                    class="col-xs-3 col-md-3">
+                <div v-if="ruta == '/navbar/gestion-ingresosl'" class="col-xs-3 col-md-3">
                     <button id="exportar" type="button" class="btn btn-success btn-sm">
                         <a :href="URL_API + 'api/v1/' + endpointexport + '/' + base64consultaingresos"
                             rel="noopener noreferrer">Exportar excel</a>
@@ -186,11 +185,32 @@
                 </div>
             </div>
         </div>
+        <div class="row" v-if="!sin_registros && items_tabla2.length > 0" style="clear: both;">
+            <div class="col-3 mb-3">
+                <label for="exampleInputEmail1" style="float:left" class="form-label"> Búsqueda por documento</label>
+                <input type="text" class="form-control form-control-sm" autocomplete="off" id="exampleInputEmail2"
+                    aria-describedby="emailHelp" v-model="numero_documento_candidato" />
+            </div>
+            <div v-if="!sin_registros && items_tabla2.length > 0 && ruta == '/navbar/gestion-ingresosl' && numero_documento_candidato != ''"
+                class="col-xs-3 col-md-3">
+                <button type="button" style="margin-top: 35px;" @click="buscarDocumentoLista()"
+                    class="btn btn-success btn-sm">
+                    Buscar
+                </button>
+            </div>
+            <div v-if="!sin_registros && items_tabla2.length > 0 && ruta == '/navbar/gestion-ingresosl' && busqueda_por_documento == true"
+                class="col-xs-3 col-md-3">
+                <button type="button" style="margin-top: 35px;" @click="getRegistros(), busqueda_por_documento = false"
+                    class="btn btn-success btn-sm">
+                    Borrar búsqueda
+                </button>
+            </div>
+        </div>
         <div v-if="!sin_registros && items_tabla2.length > 0" class="row" style="clear: both;">
             <div v-if="ruta != '/navbar/procesosespeciales'" class="col-xs-3 col-md-3">
                 <label for="exampleFormControlInput1" class="form-label" style="float:left">Cantidad de registros a
                     listar</label>
-                <select class="form-select form-select-sm" @change="getRegistros()" v-model="cantidad"
+                <select class="form-select form-select-sm" @change="verificarConsultaFiltro()" v-model="cantidad"
                     aria-label="Default select example">
                     <option>10</option>
                     <option v-if="links.total > 10">20</option>
@@ -526,7 +546,10 @@ export default {
             lista_estados_id: {},
             lista_encargados: [],
             filtro_gestion_ingresos: false,
-            exportar_ingresos:false
+            exportar_ingresos: false,
+            pagina_filtro: '',
+            numero_documento_candidato: '',
+            busqueda_por_documento: false,
 
         };
     },
@@ -549,12 +572,24 @@ export default {
         },
         filtro_gestion_ingresos() {
             var self = this
-            if (self.filtro_gestion_ingresos) {
+            if (self.filtro_gestion_ingresos && !self.busqueda_por_documento) {
                 this.interval = setInterval(() => {
                     self.filtrar2(); // Llama a la función que quieres ejecutar cada 30 segundos
                 }, 30000);
             } else {
                 clearInterval(this.interval)
+            }
+        },
+        busqueda_por_documento() {
+            var self = this
+            console.log('prueba 1')
+            if (self.busqueda_por_documento && !self.filtro_gestion_ingresos) {
+                this.interval2 = setInterval(() => {
+                    console.log('prueba 2')
+                    self.buscarDocumentoLista(); // Llama a la función que quieres ejecutar cada 30 segundos
+                }, 30000);
+            } else {
+                clearInterval(this.interval2)
             }
         }
     },
@@ -726,7 +761,7 @@ export default {
             let base64 = (btoa(cadena))
             this.base64consultaingresos = base64
             axios
-                .get(self.URL_API + "api/v1/" + self.endpoint + "filtro/" + base64, config)
+                .get(self.URL_API + "api/v1/" + self.endpoint + "filtro/" + base64 + '/' + this.cantidad, config)
                 .then(function (result) {
                     self.loading = false
                     self.currentUrl = result.data.first_page_url
@@ -927,7 +962,6 @@ export default {
         },
         agregarPendientes() {
             var self = this
-            console.log(self.check)
             let config = self.configHeader();
             axios
                 .post(self.URL_API + "api/v1/" + self.endpoint + "pendientes", self.check, config)
@@ -977,6 +1011,13 @@ export default {
                     }
                 });
         },
+        verificarConsultaFiltro() {
+            if (this.filtro_gestion_ingresos == true) {
+                this.filtrar2();
+            } else {
+                this.getRegistros();
+            }
+        },
         getRegistros() {
             let self = this;
             this.scrollTop()
@@ -1024,6 +1065,7 @@ export default {
         },
         pagination(pag) {
             this.loading = true
+            this.$emit('filtrando', false, pag)
             if (pag != null) {
                 let self = this;
                 let config = this.configHeader();
@@ -1089,7 +1131,6 @@ export default {
             this.$router.push({ name: 'gestion-ingresos', params: { id: item.id } })
         },
         exportFormularioDD() {
-            // console.log(item)
             let self = this;
             let config = this.configHeader();
             axios
@@ -1097,7 +1138,20 @@ export default {
                 .then(function (result) {
                     console.log(result.data)
                 });
-        }
+        },
+        buscarDocumentoLista() {
+            var self = this;
+            self.loading = true
+            self.busqueda_por_documento = true
+            var config = this.configHeader();
+            axios
+                .get(self.URL_API + "api/v1/buscardocumentolistai/" + self.numero_documento_candidato, config)
+                .then(function (result) {
+                    self.llenarTabla(result)
+                    self.loading = false
+
+                });
+        },
     },
 };
 </script>
