@@ -19,7 +19,7 @@
         <div v-if="hover && registros.length > 0" id="select1" @mouseleave="hover = false">
             <div id="lista1" v-for="(item, index) in registrosFilter" :key="index"
                 @click="registro = nombreItems(item), retornoValorCampo(item), hover = !hover, filterResults('', registros, 'registros'), listaEnCadena(item)">
-                {{ nombreItems(item) }}
+                {{ nombreItems(item).replace('null','') }}
                 <!-- {{ item.nom_pai != null ? item.nom_pai: item.nom_dep != null? item.nom_dep: item.nom_ciu != null ? item.nom_ciu: '' }} -->
             </div>
         </div>

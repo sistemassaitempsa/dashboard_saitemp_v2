@@ -49,7 +49,8 @@ export default {
             listas: [],
             estados_ingreso: [],
             first_page_url: '',
-            filtro_gestion_ingresos: false
+            filtro_gestion_ingresos: false,
+            pagina_filtro: ''
         }
     },
     computed: {
@@ -68,16 +69,17 @@ export default {
         var self = this
         this.interval = setInterval(() => {
             if (!self.filtro_gestion_ingresos) {
-                self.getItems(); // Llama a la función que quieres ejecutar cada 30 segundos
+                self.getItems(this.pagina_filtro); // Llama a la función que quieres ejecutar cada 30 segundos
             }
-        }, 30000);
+        }, 300000);
 
     },
     destroyed() {
         clearInterval(this.interval);
     },
     methods: {
-        filtrando(boolean) {
+        filtrando(boolean, url) {
+            this.pagina_filtro = url
             this.filtro_gestion_ingresos = boolean
         },
         actualizaResponsable(item_id, responsable_id, responsable_ingreso, currenturl = null) {
@@ -90,15 +92,23 @@ export default {
                     self.showAlert(result.data.message, result.data.status);
                 });
         },
-        getItems() {
+        getItems(url = null) {
             let self = this;
             let config = this.configHeader();
-            axios
-                .get(self.URL_API + "api/v1/formularioingreso/" + 50, config)
-                .then(function (result) {
+            if (url != null && url != '') {
+                axios.get(url, config).then(function (result) {
                     self.first_page_url = result.data.first_page_url.replace("\"");
                     self.datos = result;
                 });
+            } else {
+                axios
+                    .get(self.URL_API + "api/v1/formularioingreso/" + 50, config)
+                    .then(function (result) {
+                        self.first_page_url = result.data.first_page_url.replace("\"");
+                        self.datos = result;
+                    });
+            }
+
         },
         getEstadosIngreso() {
             let self = this;
