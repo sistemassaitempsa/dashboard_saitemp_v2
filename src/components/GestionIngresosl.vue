@@ -44,6 +44,7 @@ export default {
                 { nombre: "Estado vacante", orden: "DESC", tipo: "texto", calculado: 'false' },
                 { nombre: "Observaciones al servicio", orden: "DESC", tipo: "texto", calculado: 'false' },
                 { nombre: "Novedad en servicio", orden: "DESC", tipo: "texto", calculado: 'false' },
+                { nombre: "Profesional", orden: "DESC", tipo: "texto", calculado: 'false' },
             ],
             ejecutivos_comerciales: [],
             listas: [],

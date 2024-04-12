@@ -7,7 +7,8 @@
             </div>
             <div class="col-8">
                 <h5>SAGRILAFT</h5>
-                <h5>Sistema de Autocontrol y Gestión del Riesgo Integral de Lavado de Activos y Financiación del Terrorismo
+                <h5>Sistema de Autocontrol y Gestión del Riesgo Integral de Lavado de Activos y Financiación del
+                    Terrorismo
                     FORMATO ÚNICO DE VINCULACIÓN DE CONTRAPARTES</h5>
             </div>
             <div class="col-2">
@@ -63,11 +64,11 @@
                             :consulta="consulta_tipo_persona" placeholder="Seleccione una opción" />
                     </div>
                     <div class="col">
-                        <SearchList nombreCampo="Tipo de Identificación: *" @getTipoIdentificacion="getTipoIdentificacion"
-                            eventoCampo="getTipoIdentificacion" :ordenCampo="1" nombreItem="des_tip"
-                            @setTipoIdentificacion="setTipoIdentificacion" :registros="tiposIdentificacion"
-                            :consulta="consulta_tipo_identificacion" placeholder="Seleccione una opción"
-                            :disabled="!persona_natural" />
+                        <SearchList nombreCampo="Tipo de Identificación: *"
+                            @getTipoIdentificacion="getTipoIdentificacion" eventoCampo="getTipoIdentificacion"
+                            :ordenCampo="1" nombreItem="des_tip" @setTipoIdentificacion="setTipoIdentificacion"
+                            :registros="tiposIdentificacion" :consulta="consulta_tipo_identificacion"
+                            placeholder="Seleccione una opción" :disabled="!persona_natural" />
                     </div>
                     <div class="col mb-3">
                         <label class="form-label">Número de
@@ -85,17 +86,18 @@
                     <div class="col mb-3">
                         <label class="form-label">Fecha de expedición: *</label>
                         <input type="date" class="form-control" autocomplete="off" id="fecha_expedicion"
-                            aria-describedby="emailHelp" v-model="fecha_expedicion" :disabled="!persona_natural" required />
+                            aria-describedby="emailHelp" v-model="fecha_expedicion" :disabled="!persona_natural"
+                            required />
                         <div class="invalid-feedback">
                             {{ mensaje_error }}
                         </div>
                     </div>
                     <div class="col mb-3">
                         <label class="form-label">NIT: *</label>
-                        <input type="text" class="form-control" autocomplete="off" id="exampleInputEmail1" maxlength="20"
-                            aria-describedby="emailHelp" v-model="nit" :disabled="!persona_juridica"
-                            @input="nit = validarNumero(nit), calcularDigitoVerificacion(nit)" @blur="getCliente(nit, 2)"
-                            required />
+                        <input type="text" class="form-control" autocomplete="off" id="exampleInputEmail1"
+                            maxlength="20" aria-describedby="emailHelp" v-model="nit" :disabled="!persona_juridica"
+                            @input="nit = validarNumero(nit), calcularDigitoVerificacion(nit)"
+                            @blur="getCliente(nit, 2)" required />
                         <div class="invalid-feedback">
                             {{ mensaje_error }}
                         </div>
@@ -109,7 +111,8 @@
                 <div class="row">
                     <div class="col mb-3">
                         <label class="form-label">{{ persona_natural ? 'Nombre completo' : 'Razón social' }}: *</label>
-                        <textarea class="form-control" required name="" id="razon_social" rows="1" v-model="razon_social"
+                        <textarea class="form-control" required name="" id="razon_social" rows="1"
+                            v-model="razon_social"
                             :placeholder="persona_natural ? 'Apellidos Nombres' : 'Nombre completo empresa'"
                             @input="razon_social = formatInputUpperCase($event.target.value)"></textarea>
                         <div class="invalid-feedback">
@@ -147,19 +150,19 @@
                     <div class="col mb-3">
                         <SearchTable nombreCampo="Actividad ciiu: *" eventoCampo="setActividadesCiiu"
                             @setActividadesCiiu="setActividadesCiiu" endpoint="actividadciiu/filetr"
-                            :consulta="consulta_actvidad_ciiu" :nombreItem="campos_actividad_ciiu" :datos="actividades_ciiu"
-                            placeholder="Seleccione una opción" />
+                            :consulta="consulta_actvidad_ciiu" :nombreItem="campos_actividad_ciiu"
+                            :datos="actividades_ciiu" placeholder="Seleccione una opción" />
                     </div>
                     <div class="col mb-3">
-                        <SearchList nombreCampo="Estrato socio económico (ubicación empresa): *" @getEstratos="getEstratos"
-                            eventoCampo="getEstratos" :consulta="consulta_estrato" nombreItem="nombre" :registros="estratos"
-                            placeholder="Seleccione una opción" />
+                        <SearchList nombreCampo="Estrato socio económico (ubicación empresa): *"
+                            @getEstratos="getEstratos" eventoCampo="getEstratos" :consulta="consulta_estrato"
+                            nombreItem="nombre" :registros="estratos" placeholder="Seleccione una opción" />
                     </div>
                 </div>
                 <div class="row">
                     <div class="col">
-                        <SearchList nombreCampo="Pais: *" @getPaises="getPaises" eventoCampo="getPaises" nombreItem="nombre"
-                            :consulta="consulta_pais" :registros="paises" :ordenCampo="1"
+                        <SearchList nombreCampo="Pais: *" @getPaises="getPaises" eventoCampo="getPaises"
+                            nombreItem="nombre" :consulta="consulta_pais" :registros="paises" :ordenCampo="1"
                             @getDepartamentos="getDepartamentos" placeholder="Seleccione una opción" />
                     </div>
                     <div class="col">
@@ -177,8 +180,8 @@
                     <div class="col mb-3">
                         <label class="form-label">Dirección de la empresa: *
                         </label>
-                        <input type="text" class="form-control" autocomplete="off" id="exampleInputEmail1" maxlength="100"
-                            @input="direccion_empresa = formatInputUpperCase($event.target.value)"
+                        <input type="text" class="form-control" autocomplete="off" id="exampleInputEmail1"
+                            maxlength="100" @input="direccion_empresa = formatInputUpperCase($event.target.value)"
                             aria-describedby="emailHelp" v-model="direccion_empresa" required />
                         <div class="invalid-feedback">
                             {{ mensaje_error }}
@@ -187,8 +190,8 @@
                     <div class="col mb-3">
                         <label class="form-label">Persona contacto empresa: *
                         </label>
-                        <input type="text" class="form-control" autocomplete="off" id="exampleInputEmail1" maxlength="150"
-                            @input="contacto_empresa = formatInputUpperCase($event.target.value)"
+                        <input type="text" class="form-control" autocomplete="off" id="exampleInputEmail1"
+                            maxlength="150" @input="contacto_empresa = formatInputUpperCase($event.target.value)"
                             aria-describedby="emailHelp" v-model="contacto_empresa" required />
                         <div class="invalid-feedback">
                             {{ mensaje_error }}
@@ -197,7 +200,8 @@
                     <div class="col mb-3">
                         <label class="form-label">Correo electrónico: *
                         </label>
-                        <input type="text" class="form-control" autocomplete="off" id="exampleInputEmail1" maxlength="200"
+                        <input type="text" class="form-control" autocomplete="off" id="exampleInputEmail1"
+                            maxlength="200"
                             @input="correo_electronico_empresa = formatInputUpperCase($event.target.value)"
                             aria-describedby="emailHelp" v-model="correo_electronico_empresa" required />
                         <div class="invalid-feedback">
@@ -209,8 +213,8 @@
                     <div class="col mb-3">
                         <label class="form-label">Teléfono empresa: *
                         </label>
-                        <input type="text" class="form-control" autocomplete="off" id="exampleInputEmail1" maxlength="20"
-                            aria-describedby="emailHelp" v-model="telefono_empresa"
+                        <input type="text" class="form-control" autocomplete="off" id="exampleInputEmail1"
+                            maxlength="20" aria-describedby="emailHelp" v-model="telefono_empresa"
                             @input="telefono_empresa = validarNumero(telefono_empresa)" required />
                         <div class="invalid-feedback">
                             {{ mensaje_error }}
@@ -219,8 +223,8 @@
                     <div class="col mb-3">
                         <label class="form-label">Número celular: *
                         </label>
-                        <input type="text" class="form-control" autocomplete="off" id="exampleInputEmail1" maxlength="20"
-                            aria-describedby="emailHelp" v-model="celular_empresa"
+                        <input type="text" class="form-control" autocomplete="off" id="exampleInputEmail1"
+                            maxlength="20" aria-describedby="emailHelp" v-model="celular_empresa"
                             @input="celular_empresa = validarNumero(celular_empresa)" required />
                         <div class="invalid-feedback">
                             {{ mensaje_error }}
@@ -237,9 +241,9 @@
                     <div class="col mb-3">
                         <label class="form-label">Otra ¿Cuál?:
                         </label>
-                        <input type="text" class="form-control" autocomplete="off" id="exampleInputEmail1" maxlength="150"
-                            @input="otra_cual = formatInputUpperCase($event.target.value)" aria-describedby="emailHelp"
-                            v-model="otra_cual" />
+                        <input type="text" class="form-control" autocomplete="off" id="exampleInputEmail1"
+                            maxlength="150" @input="otra_cual = formatInputUpperCase($event.target.value)"
+                            aria-describedby="emailHelp" v-model="otra_cual" />
                     </div>
                     <div class="col">
                         <SearchList nombreCampo="Periodicidad de pago: *" nombreItem="nombre"
@@ -250,8 +254,8 @@
                     <div class="col mb-3">
                         <label class="form-label">Plazo pago (días): *
                         </label>
-                        <input type="text" class="form-control" autocomplete="off" id="exampleInputEmail1" maxlength="50"
-                            aria-describedby="emailHelp" v-model="plazo_pago"
+                        <input type="text" class="form-control" autocomplete="off" id="exampleInputEmail1"
+                            maxlength="50" aria-describedby="emailHelp" v-model="plazo_pago"
                             @input="plazo_pago = validarNumero(plazo_pago)" required />
                         <div class="invalid-feedback">
                             {{ mensaje_error }}
@@ -260,9 +264,10 @@
                 </div>
                 <div class="row">
                     <div class="col">
-                        <SearchList nombreCampo="Pais prestación servicio: *" @getPaises="getPaises" eventoCampo="getPaises"
-                            nombreItem="nombre" :consulta="consulta_pais_prestacion_servicio" :ordenCampo="2"
-                            :registros="paises" @getDepartamentos="getDepartamentos" placeholder="Seleccione una opción" />
+                        <SearchList nombreCampo="Pais prestación servicio: *" @getPaises="getPaises"
+                            eventoCampo="getPaises" nombreItem="nombre" :consulta="consulta_pais_prestacion_servicio"
+                            :ordenCampo="2" :registros="paises" @getDepartamentos="getDepartamentos"
+                            placeholder="Seleccione una opción" />
                     </div>
                     <div class="col">
                         <SearchList nombreCampo="Departamento prestación servicio: *" nombreItem="nombre"
@@ -271,17 +276,18 @@
                             placeholder="Seleccione una opción" />
                     </div>
                     <div class="col">
-                        <SearchList nombreCampo="Ciudad prestación servicio: *" nombreItem="nombre" :registros="municipios"
-                            :consulta="consulta_municipio_prestacion_servicio" @setMunicipios="setMunicipios"
-                            eventoCampo="setMunicipios" :ordenCampo="2" placeholder="Seleccione una opción" />
+                        <SearchList nombreCampo="Ciudad prestación servicio: *" nombreItem="nombre"
+                            :registros="municipios" :consulta="consulta_municipio_prestacion_servicio"
+                            @setMunicipios="setMunicipios" eventoCampo="setMunicipios" :ordenCampo="2"
+                            placeholder="Seleccione una opción" />
                     </div>
                 </div>
                 <div class="row" v-if="tipo_cliente == 1">
                     <div class="col mb-3">
                         <label class="form-label">AIU negociado: *
                         </label>
-                        <input type="text" class="form-control" autocomplete="off" id="exampleInputEmail1" maxlength="50"
-                            aria-describedby="emailHelp" v-model="aiu_negociado" required />
+                        <input type="text" class="form-control" autocomplete="off" id="exampleInputEmail1"
+                            maxlength="50" aria-describedby="emailHelp" v-model="aiu_negociado" required />
                         <div class="invalid-feedback">
                             {{ mensaje_error }}
                         </div>
@@ -289,7 +295,8 @@
                     <div class="col">
                         <SearchList nombreCampo="Ejecutivo comercial: *" nombreItem="nom_ven"
                             :registros="ejecutivos_comerciales" :consulta="consulta_ejecutivo_comercial"
-                            eventoCampo="getEjecutivos_comerciales" @getEjecutivos_comerciales="getEjecutivos_comerciales"
+                            eventoCampo="getEjecutivos_comerciales"
+                            @getEjecutivos_comerciales="getEjecutivos_comerciales"
                             placeholder="Seleccione una opción" />
                     </div>
                     <div class="col mb-3">
@@ -325,15 +332,15 @@
                         <SearchList nombreCampo="¿Es empresa del exterior radicada en colombia?: *"
                             eventoCampo="getAfirmacionNegacion" nombreItem="nombre" :registros="afirmacionNegacion"
                             :ordenCampo="6" :consulta="consulta_empresa_exterior"
-                            @getAfirmacionNegacion="getAfirmacionNegacion" @setAfirmacionNegacion="setAfirmacionNegacion"
-                            placeholder="Seleccionar" />
+                            @getAfirmacionNegacion="getAfirmacionNegacion"
+                            @setAfirmacionNegacion="setAfirmacionNegacion" placeholder="Seleccionar" />
                     </div>
                     <div class="col-4">
                         <SearchList nombreCampo="¿Tiene vinculos con alguna empresa activa en saitemp?: *"
                             eventoCampo="getAfirmacionNegacion" nombreItem="nombre" :registros="afirmacionNegacion"
                             :ordenCampo="7" :consulta="consulta_vinculos_empresa"
-                            @getAfirmacionNegacion="getAfirmacionNegacion" @setAfirmacionNegacion="setAfirmacionNegacion"
-                            placeholder="Seleccionar" />
+                            @getAfirmacionNegacion="getAfirmacionNegacion"
+                            @setAfirmacionNegacion="setAfirmacionNegacion" placeholder="Seleccionar" />
                     </div>
                     <div class="col-4">
                         <div class="col mb-3">
@@ -341,7 +348,8 @@
                             </label>
                             <input type="text" class="form-control" autocomplete="off" id="exampleInputEmail1"
                                 maxlength="50" aria-describedby="emailHelp" v-model="numero_empleados_directos"
-                                @input="numero_empleados_directos = validarNumero(numero_empleados_directos)" required />
+                                @input="numero_empleados_directos = validarNumero(numero_empleados_directos)"
+                                required />
                             <div class="invalid-feedback">
                                 {{ mensaje_error }}
                             </div>
@@ -353,15 +361,15 @@
                         <SearchList nombreCampo="¿Actualmente tienen personal vinculado con empresa temporal?: *"
                             eventoCampo="getAfirmacionNegacion" nombreItem="nombre" :registros="afirmacionNegacion"
                             :ordenCampo="8" :consulta="consulta_personal_vinculado_temporal"
-                            @getAfirmacionNegacion="getAfirmacionNegacion" @setAfirmacionNegacion="setAfirmacionNegacion"
-                            placeholder="Seleccionar" />
+                            @getAfirmacionNegacion="getAfirmacionNegacion"
+                            @setAfirmacionNegacion="setAfirmacionNegacion" placeholder="Seleccionar" />
                     </div>
                     <div class="col-4">
                         <SearchList nombreCampo="¿Se realizó la visita presencial a las instalaciones del cliente?: *"
                             eventoCampo="getAfirmacionNegacion" nombreItem="nombre" :registros="afirmacionNegacion"
                             :ordenCampo="9" :consulta="consulta_visita_presencial"
-                            @getAfirmacionNegacion="getAfirmacionNegacion" @setAfirmacionNegacion="setAfirmacionNegacion"
-                            placeholder="Seleccionar" />
+                            @getAfirmacionNegacion="getAfirmacionNegacion"
+                            @setAfirmacionNegacion="setAfirmacionNegacion" placeholder="Seleccionar" />
                     </div>
                 </div>
             </div>
@@ -381,8 +389,8 @@
                     <div class="col mb-3">
                         <label class="form-label" style="color: black;">Cargo del contacto:
                         </label>
-                        <input type="text" class="form-control" autocomplete="off" id="exampleInputEmail1" maxlength="200"
-                            @input="contratacion_cargo = formatInputUpperCase($event.target.value)"
+                        <input type="text" class="form-control" autocomplete="off" id="exampleInputEmail1"
+                            maxlength="200" @input="contratacion_cargo = formatInputUpperCase($event.target.value)"
                             aria-describedby="emailHelp" v-model="contratacion_cargo" />
                         <div class="invalid-feedback">
                             {{ mensaje_error }}
@@ -393,8 +401,8 @@
                     <div class="col mb-3">
                         <label class="form-label" style="color: black;">Teléfono del contacto:
                         </label>
-                        <input type="text" class="form-control" autocomplete="off" id="exampleInputEmail1" maxlength="20"
-                            aria-describedby="emailHelp" v-model="contratacion_telefono"
+                        <input type="text" class="form-control" autocomplete="off" id="exampleInputEmail1"
+                            maxlength="20" aria-describedby="emailHelp" v-model="contratacion_telefono"
                             @input="contratacion_telefono = validarNumero(contratacion_telefono)" />
                         <div class="invalid-feedback">
                             {{ mensaje_error }}
@@ -403,8 +411,8 @@
                     <div class="col mb-3">
                         <label class="form-label" style="color: black;">Número celular del contacto:
                         </label>
-                        <input type="text" class="form-control" autocomplete="off" id="exampleInputEmail1" maxlength="20"
-                            aria-describedby="emailHelp" v-model="contratacion_celular"
+                        <input type="text" class="form-control" autocomplete="off" id="exampleInputEmail1"
+                            maxlength="20" aria-describedby="emailHelp" v-model="contratacion_celular"
                             @input="contratacion_celular = validarNumero(contratacion_celular)" />
                         <div class="invalid-feedback">
                             {{ mensaje_error }}
@@ -413,7 +421,8 @@
                 </div>
                 <div class="row">
                     <div class="col-6 mb-3">
-                        <label class="form-label" style="color: black;">Hora de ingreso del personal primer día: </label>
+                        <label class="form-label" style="color: black;">Hora de ingreso del personal primer día:
+                        </label>
                         <input type="time" class="form-control" autocomplete="off" aria-describedby="emailHelp"
                             id="hora_ingreso" v-model="contratacion_hora_ingreso" />
                         <div class="invalid-feedback">
@@ -421,18 +430,21 @@
                         </div>
                     </div>
                     <div class="col mb-3">
-                        <label class="form-label" style="color: black;">¿Hasta que horas se debe confirmar el ingreso del
+                        <label class="form-label" style="color: black;">¿Hasta que horas se debe confirmar el ingreso
+                            del
                             personal?
                         </label>
-                        <input type="time" class="form-control" autocomplete="off" id="exampleInputEmail1" maxlength="150"
-                            aria-describedby="emailHelp" v-model="contratacion_confirma_ingreso" />
+                        <input type="time" class="form-control" autocomplete="off" id="exampleInputEmail1"
+                            maxlength="150" aria-describedby="emailHelp" v-model="contratacion_confirma_ingreso" />
                     </div>
                 </div>
                 <div class="row">
                     <div class="col mb-3">
-                        <label class="form-label" style="color: black;">Correo electrónico notificación ingreso personal:
+                        <label class="form-label" style="color: black;">Correo electrónico notificación ingreso
+                            personal:
                         </label>
-                        <input type="text" class="form-control" autocomplete="off" id="exampleInputEmail1" maxlength="200"
+                        <input type="text" class="form-control" autocomplete="off" id="exampleInputEmail1"
+                            maxlength="200"
                             @input="contratacion_correo_electronico = formatInputUpperCase($event.target.value)"
                             aria-describedby="emailHelp" v-model="contratacion_correo_electronico" />
                         <div class="invalid-feedback">
@@ -453,8 +465,7 @@
                         <!-- :valida_campo="otros_si_agregados.length > 0 ? false : true" -->
                         <SearchList nombreCampo="Otro si solicitados: *" eventoCampo="getOtroSi" nombreItem="nombre"
                             :registros="otros_si" :ordenCampo="8" :consulta="consulta_contratacion_otrosi"
-                            @getOtroSi="getOtroSi" placeholder="Seleccionar"
-                            :valida_campo="false" />
+                            @getOtroSi="getOtroSi" placeholder="Seleccionar" :valida_campo="false" />
                     </div>
                 </div>
                 <div class="row">
@@ -464,8 +475,8 @@
                             <div class="mb-3" style="padding:10px;border: solid #D5DBDB 0.5px;border-radius:10px">
                                 <button type="button" style="margin:10px 10px 5px 10px" id="btnMenu" class="btn btn-sm"
                                     data-bs-toggle="button" v-for="item, index in otros_si_agregados" :key="index">{{
-                                        item.nombre
-                                    }}
+            item.nombre
+        }}
                                     <i class="bi bi-x" @click="otros_si_agregados.splice(index, 1)"></i></button>
                             </div>
                         </div>
@@ -476,29 +487,34 @@
                         <SearchList nombreCampo="¿Necesita carnet de manipulación de alimentos?: *"
                             eventoCampo="getAfirmacionNegacion" nombreItem="nombre" :registros="afirmacionNegacion"
                             :ordenCampo="17" :consulta="consulta_contratacion_carnet_alimentos"
-                            @getAfirmacionNegacion="getAfirmacionNegacion" @setAfirmacionNegacion="setAfirmacionNegacion"
-                            placeholder="Seleccionar" :valida_campo="false"/>
+                            @getAfirmacionNegacion="getAfirmacionNegacion"
+                            @setAfirmacionNegacion="setAfirmacionNegacion" placeholder="Seleccionar"
+                            :valida_campo="false" />
                     </div>
                     <div class="col">
                         <SearchList nombreCampo="¿se require carnet corporativo con espedificaciones distintas?: *"
                             eventoCampo="getAfirmacionNegacion" nombreItem="nombre" :registros="afirmacionNegacion"
                             :ordenCampo="22" :consulta="consulta_contratacion_carnet"
-                            @getAfirmacionNegacion="getAfirmacionNegacion" @setAfirmacionNegacion="setAfirmacionNegacion"
-                            placeholder="Seleccionar" :valida_campo="false"/>
+                            @getAfirmacionNegacion="getAfirmacionNegacion"
+                            @setAfirmacionNegacion="setAfirmacionNegacion" placeholder="Seleccionar"
+                            :valida_campo="false" />
                     </div>
                 </div>
                 <div class="row">
                     <div class="col">
-                        <SearchList nombreCampo="¿Se requieren tallas de uniformes?: *" eventoCampo="getAfirmacionNegacion"
-                            nombreItem="nombre" :registros="afirmacionNegacion" :ordenCampo="18"
-                            :consulta="consulta_contratacion_talla_uniforme" @getAfirmacionNegacion="getAfirmacionNegacion"
-                            @setAfirmacionNegacion="setAfirmacionNegacion" placeholder="Seleccionar" :valida_campo="false"/>
+                        <SearchList nombreCampo="¿Se requieren tallas de uniformes?: *"
+                            eventoCampo="getAfirmacionNegacion" nombreItem="nombre" :registros="afirmacionNegacion"
+                            :ordenCampo="18" :consulta="consulta_contratacion_talla_uniforme"
+                            @getAfirmacionNegacion="getAfirmacionNegacion"
+                            @setAfirmacionNegacion="setAfirmacionNegacion" placeholder="Seleccionar"
+                            :valida_campo="false" />
                     </div>
                     <div class="col">
                         <SearchList nombreCampo="¿Empresa suministra transporte?: *" eventoCampo="getAfirmacionNegacion"
                             nombreItem="nombre" :registros="afirmacionNegacion" :ordenCampo="19"
                             :consulta="consulta_contratacion_transporte" @getAfirmacionNegacion="getAfirmacionNegacion"
-                            @setAfirmacionNegacion="setAfirmacionNegacion" placeholder="Seleccionar" :valida_campo="false"/>
+                            @setAfirmacionNegacion="setAfirmacionNegacion" placeholder="Seleccionar"
+                            :valida_campo="false" />
                     </div>
                 </div>
                 <div class="row">
@@ -506,15 +522,16 @@
                         <SearchList nombreCampo="¿La empresa suministra alimentación?: *"
                             eventoCampo="getAfirmacionNegacion" nombreItem="nombre" :registros="afirmacionNegacion"
                             :ordenCampo="20" :consulta="consulta_contratacion_alimentacion"
-                            @getAfirmacionNegacion="getAfirmacionNegacion" @setAfirmacionNegacion="setAfirmacionNegacion"
-                            placeholder="Seleccionar" :valida_campo="false"/>
+                            @getAfirmacionNegacion="getAfirmacionNegacion"
+                            @setAfirmacionNegacion="setAfirmacionNegacion" placeholder="Seleccionar"
+                            :valida_campo="false" />
                     </div>
                     <div class="col">
                         <!-- :valida_campo="bancos_agregados.length > 0 ? false : true" -->
-                        <SearchList nombreCampo="Seleccione el banco: *" eventoCampo="getConvenioBanco" nombreItem="nombre"
-                            :registros="convenio_bancos" :ordenCampo="8" :consulta="consulta_contratacion_bancos"
-                            @getConvenioBanco="getConvenioBanco" placeholder="Seleccionar"
-                            :valida_campo="false" />
+                        <SearchList nombreCampo="Seleccione el banco: *" eventoCampo="getConvenioBanco"
+                            nombreItem="nombre" :registros="convenio_bancos" :ordenCampo="8"
+                            :consulta="consulta_contratacion_bancos" @getConvenioBanco="getConvenioBanco"
+                            placeholder="Seleccionar" :valida_campo="false" />
                     </div>
                 </div>
                 <div class="row">
@@ -524,8 +541,8 @@
                             <div class="mb-3" style="padding:10px;border: solid #D5DBDB 0.5px;border-radius:10px">
                                 <button type="button" style="margin:10px 10px 5px 10px" id="btnMenu" class="btn btn-sm"
                                     data-bs-toggle="button" v-for="item, index in bancos_agregados" :key="index">{{
-                                        item.nombre
-                                    }}
+            item.nombre
+        }}
                                     <i class="bi bi-x" @click="bancos_agregados.splice(index, 1)"></i></button>
                             </div>
                         </div>
@@ -535,15 +552,16 @@
                     <div class="col">
                         <SearchList nombreCampo="¿Realiza pago en efectivo?: *" eventoCampo="getAfirmacionNegacion"
                             nombreItem="nombre" :registros="afirmacionNegacion" :ordenCampo="21"
-                            :consulta="consulta_contratacion_pago_efectivo" @getAfirmacionNegacion="getAfirmacionNegacion"
-                            @setAfirmacionNegacion="setAfirmacionNegacion" placeholder="Seleccionar" :valida_campo="false"/>
+                            :consulta="consulta_contratacion_pago_efectivo"
+                            @getAfirmacionNegacion="getAfirmacionNegacion"
+                            @setAfirmacionNegacion="setAfirmacionNegacion" placeholder="Seleccionar"
+                            :valida_campo="false" />
                     </div>
                     <div class="col">
                         <!-- :valida_campo="tipos_contratos_agregados.length > 0 ? false : true" -->
                         <SearchList nombreCampo="Tipo de contrato: *" eventoCampo="getTipoContrato" nombreItem="nombre"
                             :registros="tipos_contrato" :ordenCampo="8" :consulta="consulta_contratacion_tipo_contrato"
-                            @getTipoContrato="getTipoContrato" placeholder="Seleccionar"
-                            :valida_campo="false" />
+                            @getTipoContrato="getTipoContrato" placeholder="Seleccionar" :valida_campo="false" />
                     </div>
                 </div>
                 <div class="row">
@@ -552,9 +570,10 @@
                             <span>Tipos de contrato</span>
                             <div class="mb-3" style="padding:10px;border: solid #D5DBDB 0.5px;border-radius:10px">
                                 <button type="button" style="margin:10px 10px 5px 10px" id="btnMenu" class="btn btn-sm"
-                                    data-bs-toggle="button" v-for="item, index in tipos_contratos_agregados" :key="index">{{
-                                        item.nombre
-                                    }}
+                                    data-bs-toggle="button" v-for="item, index in tipos_contratos_agregados"
+                                    :key="index">{{
+            item.nombre
+        }}
                                     <i class="bi bi-x" @click="tipos_contratos_agregados.splice(index, 1)"></i></button>
                             </div>
                         </div>
@@ -565,14 +584,15 @@
                         <SearchList nombreCampo="¿La empresa paga los días 31?: *" eventoCampo="getAfirmacionNegacion"
                             nombreItem="nombre" :registros="afirmacionNegacion" :ordenCampo="23"
                             :consulta="consulta_contratacion_pago_31" @getAfirmacionNegacion="getAfirmacionNegacion"
-                            @setAfirmacionNegacion="setAfirmacionNegacion" placeholder="Seleccionar" :valida_campo="false"/>
+                            @setAfirmacionNegacion="setAfirmacionNegacion" placeholder="Seleccionar"
+                            :valida_campo="false" />
                     </div>
                     <div class="col">
                         <!-- :consulta="consulta_pais_rl[index]" -->
                         <SearchList nombreCampo="Pais ubicación laboratorio médico: *" @getPaises="getPaises"
                             eventoCampo="getPaises" nombreItem="nombre" :registros="paises"
                             @getDepartamentos="getDepartamentos" :ordenCampo="4" placeholder="Seleccione una opción"
-                            :consulta="consulta_pais_laboratorio" :valida_campo="false"/>
+                            :consulta="consulta_pais_laboratorio" :valida_campo="false" />
 
                     </div>
                 </div>
@@ -582,7 +602,7 @@
                         <SearchList nombreCampo="Departamento ubicación laboratorio médico: *" nombreItem="nombre"
                             eventoCampo="getDepartamentos" :registros="departamentos" @getMunicipios="getMunicipios"
                             :ordenCampo="4" placeholder="Seleccione una opción"
-                            :consulta="consulta_departamento_laboratorio" :valida_campo="false"/>
+                            :consulta="consulta_departamento_laboratorio" :valida_campo="false" />
                     </div>
                     <div class="col">
                         <!-- :consulta="consulta_municipio_rl[index]" -->
@@ -599,8 +619,7 @@
                         <!-- :consulta="consulta_municipio_rl[index]" -->
                         <SearchList nombreCampo="Laboratorio médico: *" nombreItem="nombre"
                             :registros="laboratorios_medicos" @getLaboratorios="getLaboratorios"
-                            eventoCampo="getLaboratorios" placeholder="Seleccione una opción"
-                            :valida_campo="false" />
+                            eventoCampo="getLaboratorios" placeholder="Seleccione una opción" :valida_campo="false" />
 
                     </div>
                     <div class="col mb-3">
@@ -621,8 +640,8 @@
                                 <button type="button" style="margin:10px 10px 5px 10px" id="btnMenu" class="btn btn-sm"
                                     data-bs-toggle="button" v-for="item, index in laboratorios_medicos_agregados"
                                     :key="index">{{
-                                        item.nombre
-                                    }}
+            item.nombre
+        }}
                                     <i class="bi bi-x"
                                         @click="laboratorios_medicos_agregados.splice(index, 1)"></i></button>
                             </div>
@@ -636,8 +655,8 @@
                     <div class="col-4 mb-3">
                         <label class="form-label">Contacto: *
                         </label>
-                        <input type="text" class="form-control" autocomplete="off" id="exampleInputEmail1" maxlength="50"
-                            aria-describedby="emailHelp" v-model="facturacion_contacto"
+                        <input type="text" class="form-control" autocomplete="off" id="exampleInputEmail1"
+                            maxlength="50" aria-describedby="emailHelp" v-model="facturacion_contacto"
                             @input="facturacion_contacto = formatInputUpperCase($event.target.value)" required />
                         <div class="invalid-feedback">
                             {{ mensaje_error }}
@@ -646,8 +665,8 @@
                     <div class="col-4 mb-3">
                         <label class="form-label">Cargo: *
                         </label>
-                        <input type="text" class="form-control" autocomplete="off" id="exampleInputEmail1" maxlength="50"
-                            aria-describedby="emailHelp" v-model="facturacion_cargo"
+                        <input type="text" class="form-control" autocomplete="off" id="exampleInputEmail1"
+                            maxlength="50" aria-describedby="emailHelp" v-model="facturacion_cargo"
                             @input="facturacion_cargo = formatInputUpperCase($event.target.value)" required />
                         <div class="invalid-feedback">
                             {{ mensaje_error }}
@@ -656,8 +675,8 @@
                     <div class="col-4 mb-3">
                         <label class="form-label">Teléfono: *
                         </label>
-                        <input type="text" class="form-control" autocomplete="off" id="exampleInputEmail1" maxlength="50"
-                            aria-describedby="emailHelp" v-model="facturacion_telefono"
+                        <input type="text" class="form-control" autocomplete="off" id="exampleInputEmail1"
+                            maxlength="50" aria-describedby="emailHelp" v-model="facturacion_telefono"
                             @input="facturacion_telefono = validarNumero(facturacion_telefono)" required />
                         <div class="invalid-feedback">
                             {{ mensaje_error }}
@@ -668,8 +687,8 @@
                     <div class="col-4 mb-3">
                         <label class="form-label">Celular: *
                         </label>
-                        <input type="text" class="form-control" autocomplete="off" id="exampleInputEmail1" maxlength="50"
-                            aria-describedby="emailHelp" v-model="facturacion_celular"
+                        <input type="text" class="form-control" autocomplete="off" id="exampleInputEmail1"
+                            maxlength="50" aria-describedby="emailHelp" v-model="facturacion_celular"
                             @input="facturacion_celular = validarNumero(facturacion_celular)" required />
                         <div class="invalid-feedback">
                             {{ mensaje_error }}
@@ -678,8 +697,8 @@
                     <div class="col-4 mb-3">
                         <label class="form-label">Correo electrónico: *
                         </label>
-                        <input type="text" class="form-control" autocomplete="off" id="exampleInputEmail1" maxlength="50"
-                            aria-describedby="emailHelp" v-model="facturacion_correo"
+                        <input type="text" class="form-control" autocomplete="off" id="exampleInputEmail1"
+                            maxlength="50" aria-describedby="emailHelp" v-model="facturacion_correo"
                             @input="facturacion_correo = formatInputUpperCase($event.target.value)" required />
                         <div class="invalid-feedback">
                             {{ mensaje_error }}
@@ -688,8 +707,8 @@
                     <div class="col-4 mb-3">
                         <label class="form-label">Factura única o por CECO: *
                         </label>
-                        <input type="text" class="form-control" autocomplete="off" id="exampleInputEmail1" maxlength="50"
-                            aria-describedby="emailHelp" v-model="facturacion_factura"
+                        <input type="text" class="form-control" autocomplete="off" id="exampleInputEmail1"
+                            maxlength="50" aria-describedby="emailHelp" v-model="facturacion_factura"
                             @input="facturacion_factura = formatInputUpperCase($event.target.value)" required />
                         <div class="invalid-feedback">
                             {{ mensaje_error }}
@@ -700,8 +719,8 @@
                     <div class="col-4 mb-3">
                         <label class="form-label">Fecha de corte para recibir las facturas: *
                         </label>
-                        <input type="text" class="form-control" autocomplete="off" id="exampleInputEmail1" maxlength="50"
-                            aria-describedby="emailHelp" v-model="facturacion_fecha_corte" required
+                        <input type="text" class="form-control" autocomplete="off" id="exampleInputEmail1"
+                            maxlength="50" aria-describedby="emailHelp" v-model="facturacion_fecha_corte" required
                             @input="facturacion_fecha_corte = formatInputUpperCase($event.target.value)" />
                         <div class="invalid-feedback">
                             {{ mensaje_error }}
@@ -710,9 +729,10 @@
                     <div class="col-4 mb-3">
                         <label class="form-label">Persona encargada de recibir la factura: *
                         </label>
-                        <input type="text" class="form-control" autocomplete="off" id="exampleInputEmail1" maxlength="50"
-                            aria-describedby="emailHelp" v-model="facturacion_encargado_factura"
-                            @input="facturacion_encargado_factura = formatInputUpperCase($event.target.value)" required />
+                        <input type="text" class="form-control" autocomplete="off" id="exampleInputEmail1"
+                            maxlength="50" aria-describedby="emailHelp" v-model="facturacion_encargado_factura"
+                            @input="facturacion_encargado_factura = formatInputUpperCase($event.target.value)"
+                            required />
                         <div class="invalid-feedback">
                             {{ mensaje_error }}
                         </div>
@@ -797,8 +817,8 @@
                         </div>
                         <div class="col-4">
                             <SearchList nombreCampo="Accidentalidad: *" eventoCampo="getNivelAccidentalidad"
-                                nombreItem="nombre" :registros="nivelesAccidentalidad" :consulta="consulta_accidentalidad"
-                                @getNivelAccidentalidad="getNivelAccidentalidad"
+                                nombreItem="nombre" :registros="nivelesAccidentalidad"
+                                :consulta="consulta_accidentalidad" @getNivelAccidentalidad="getNivelAccidentalidad"
                                 @setAfirmacionNegacion="setAfirmacionNegacion" placeholder="Seleccionar" />
                         </div>
                     </div>
@@ -873,7 +893,7 @@
                                         v-model="elementos_epp[index]">
                                     <label class="form-check-label" for="inlineCheckbox1"
                                         style="margin:0px;padding:0px;color:black">{{
-                                            item.nombre }}</label>
+            item.nombre }}</label>
                                 </div>
                             </div>
                         </div>
@@ -882,7 +902,8 @@
                     <div class="row" id="contenedor-select" v-for="item, index in cargos2" :key="item.id">
                         <div class="row">
                             <div class="col">
-                                <label class="form-check-label" for="flexSwitchCheckChecked">Por favor seleccione si el tipo
+                                <label class="form-check-label" for="flexSwitchCheckChecked">Por favor seleccione si el
+                                    tipo
                                     de
                                     cargo:</label>
                             </div>
@@ -909,8 +930,8 @@
                         </div>
                         <div class="col">
                             <SearchList nombreItem="nombre" :registros="arry_subcategoria_cargos[index]"
-                                :consulta="consulta_subcategoria_cargos[index]" eventoCampo="getListaCargos" :index="index"
-                                @getListaCargos="getListaCargos" placeholder="Seleccionar" />
+                                :consulta="consulta_subcategoria_cargos[index]" eventoCampo="getListaCargos"
+                                :index="index" @getListaCargos="getListaCargos" placeholder="Seleccionar" />
                         </div>
                         <div class="col">
                             <SearchList nombreItem="nombre" :registros="array_lista_cargos[index]"
@@ -920,8 +941,8 @@
                         </div>
                         <div class="col">
                             <SearchList eventoCampo="getRiesgosLaborales2" :index="index" nombreItem="nombre"
-                                :registros="riesgos" @getRiesgosLaborales2="getRiesgosLaborales2" placeholder="Seleccionar"
-                                :consulta="consulta_riesgo_laboral[index]" />
+                                :registros="riesgos" @getRiesgosLaborales2="getRiesgosLaborales2"
+                                placeholder="Seleccionar" :consulta="consulta_riesgo_laboral[index]" />
                         </div>
                         <div class="row">
                             <label for="exampleInputEmail1" class="form-label">Funciones del cargo:</label>
@@ -939,8 +960,9 @@
                             <div class="col">
                                 <div class="col-12 lista-multiple">
                                     <button style="margin:5px" class="btn btn-success btn-sm"
-                                        v-for="(item, index) in array_lista_examenes[index]" :key="index" type="button">{{
-                                            item.nombre }}</button>
+                                        v-for="(item, index) in array_lista_examenes[index]" :key="index"
+                                        type="button">{{
+            item.nombre }}</button>
                                 </div>
                             </div>
                         </div>
@@ -967,7 +989,8 @@
                 <div class="row upload" v-for="item, index in fileInputsCount" :key="index">
                     <div class="col-2" v-if="$route.params.id != null">
                         <a :href="URL_API + item.ruta" target="_blank" rel="noopener noreferrer"><button type="button"
-                                class="btn btn-sm ver"><i class="bi bi-eye"> ver</i></button></a>
+                                :class="item.ruta != undefined ? 'btn btn-sm ver' : 'btn btn-sm btn-secondary'"><i
+                                    class="bi bi-eye"> ver</i></button></a>
                     </div>
                     <div class="col">
                         <div class="mb-3">
@@ -1082,14 +1105,15 @@
                             <span id="validate"
                                 v-if="item.identificacion == '' && item.tipo_identificacion != '' && item.tipo_identificacion.trim() != '0'"
                                 class="error">{{
-                                    validaCamposDinamicos(index) }}</span><span v-else>{{ validaCamposDinamicos(index, 1)
-    }}</span>
+            validaCamposDinamicos(index) }}</span><span v-else>{{ validaCamposDinamicos(index, 1)
+                                }}</span>
                         </div>
                         <div class="col mb-3">
                             <label for="exampleInputEmail1" class="form-label">Número celular:</label>
                             <input type="text" class="form-control" autocomplete="off" id="exampleInputEmail1"
                                 aria-describedby="emailHelp" v-model="item.telefono"
-                                @input="item.telefono = validarNumero(item.telefono)" :required="campo_dinamico[index]" />
+                                @input="item.telefono = validarNumero(item.telefono)"
+                                :required="campo_dinamico[index]" />
                             <span id="validate"
                                 v-if="item.telefono === '' && item.tipo_identificacion != '' && item.tipo_identificacion.trim() != '0'"
                                 class="error">{{ validaCamposDinamicos(index)
@@ -1112,9 +1136,10 @@
                                 }}</span><span v-else>{{ validaCamposDinamicos(index, 1) }}</span>
                         </div>
                         <div class="col">
-                            <SearchList nombreCampo="Pais de expedición: *" @getPaises="getPaises" eventoCampo="getPaises"
-                                nombreItem="nombre" :registros="paises" @getDepartamentos="getDepartamentos" :ordenCampo="3"
-                                :index="index" placeholder="Seleccione una opción" :consulta="consulta_pais_rl[index]" />
+                            <SearchList nombreCampo="Pais de expedición: *" @getPaises="getPaises"
+                                eventoCampo="getPaises" nombreItem="nombre" :registros="paises"
+                                @getDepartamentos="getDepartamentos" :ordenCampo="3" :index="index"
+                                placeholder="Seleccione una opción" :consulta="consulta_pais_rl[index]" />
 
                         </div>
                         <div class="col mb-3">
@@ -1124,9 +1149,10 @@
                                 :consulta="consulta_departamento_rl[index]" />
                         </div>
                         <div class="col">
-                            <SearchList nombreCampo="Ciudad de expedición: *" nombreItem="nombre" :registros="municipios"
-                                @setMunicipios="setMunicipios" eventoCampo="setMunicipios" :ordenCampo="3" :index="index"
-                                placeholder="Seleccione una opción" :consulta="consulta_municipio_rl[index]" />
+                            <SearchList nombreCampo="Ciudad de expedición: *" nombreItem="nombre"
+                                :registros="municipios" @setMunicipios="setMunicipios" eventoCampo="setMunicipios"
+                                :ordenCampo="3" :index="index" placeholder="Seleccione una opción"
+                                :consulta="consulta_municipio_rl[index]" />
                             <span id="validate"
                                 v-if="item.municipio_id === '' && item.tipo_identificacion != '' && item.tipo_identificacion.trim() != '0'"
                                 class="error">{{ mensaje_error }}</span>
@@ -1177,9 +1203,9 @@
                                 aria-describedby="emailHelp" v-model="item.nombre" />
                         </div>
                         <div class="col">
-                            <SearchList @getTipoIdentificacion="getTipoIdentificacion" eventoCampo="getTipoIdentificacion"
-                                @setTipoIdentificacion="setTipoIdentificacion" nombreItem="des_tip"
-                                :registros="tiposIdentificacion" :ordenCampo="4" :index="index"
+                            <SearchList @getTipoIdentificacion="getTipoIdentificacion"
+                                eventoCampo="getTipoIdentificacion" @setTipoIdentificacion="setTipoIdentificacion"
+                                nombreItem="des_tip" :registros="tiposIdentificacion" :ordenCampo="4" :index="index"
                                 :consulta="consulta_tipo_identificacion_miembros_junta[index]"
                                 placeholder="Seleccione una opción" />
                         </div>
@@ -1189,7 +1215,8 @@
                                 @input="item.identificacion = validarNumero(item.identificacion)" />
                         </div>
                         <div class="col-1 trash">
-                            <i class="bi bi-trash-fill" v-if="index > 0" @click="deleteDynamic(miembros_Junta, index)"></i>
+                            <i class="bi bi-trash-fill" v-if="index > 0"
+                                @click="deleteDynamic(miembros_Junta, index)"></i>
                         </div>
                     </div>
                     <span id="clasificador" @click="agregarMiembrosJunta()" style="cursor: pointer"><i
@@ -1204,12 +1231,14 @@
                     <div class="col">
                         <SearchList nombreCampo="Responsable de Impuestos a las Ventas: *" nombreItem="nombre"
                             @getAfirmacionNegacion="getAfirmacionNegacion" eventoCampo="getAfirmacionNegacion"
-                            :registros="afirmacionNegacion" @setAfirmacionNegacion="setAfirmacionNegacion" :ordenCampo="1"
-                            :consulta="consulta_responsable_impuesto_ventas" placeholder="Seleccione una opción" />
+                            :registros="afirmacionNegacion" @setAfirmacionNegacion="setAfirmacionNegacion"
+                            :ordenCampo="1" :consulta="consulta_responsable_impuesto_ventas"
+                            placeholder="Seleccione una opción" />
                     </div>
                     <div class="col">
                         <label for="exampleInputEmail1" class="form-label">Correo para factura electrónica: *</label>
-                        <input type="text" class="form-control" autocomplete="off" id="exampleInputEmail1" maxlength="200"
+                        <input type="text" class="form-control" autocomplete="off" id="exampleInputEmail1"
+                            maxlength="200"
                             @input="correo_factura_electronica = formatInputUpperCase($event.target.value)"
                             aria-describedby="emailHelp" v-model="correo_factura_electronica" required />
                         <div class="invalid-feedback">
@@ -1253,7 +1282,8 @@
                 <div class="row">
                     <div class="col mb-3">
                         <label for="exampleInputEmail1" class="form-label">Nombre completo:</label>
-                        <input type="text" class="form-control" autocomplete="off" id="exampleInputEmail1" maxlength="100"
+                        <input type="text" class="form-control" autocomplete="off" id="exampleInputEmail1"
+                            maxlength="100"
                             @input="nombre_completo_contador = formatInputUpperCase($event.target.value)"
                             aria-describedby="emailHelp" v-model="nombre_completo_contador"
                             :required="nombre_completo_contador == '' && tipo_identificacion_contador != '' && tipo_identificacion_contador.trim() != '0'" />
@@ -1262,7 +1292,8 @@
                             class="error">{{ mensaje_error }}</span>
                     </div>
                     <div class="col">
-                        <SearchList nombreCampo="Tipo de Identificación: *" @getTipoIdentificacion="getTipoIdentificacion"
+                        <SearchList nombreCampo="Tipo de Identificación: *"
+                            @getTipoIdentificacion="getTipoIdentificacion"
                             @setTipoIdentificacion="setTipoIdentificacion" eventoCampo="getTipoIdentificacion"
                             :consulta="consulta_contador" nombreItem="des_tip" :ordenCampo="5"
                             :registros="tiposIdentificacion" placeholder="Seleccione una opción"
@@ -1270,8 +1301,8 @@
                     </div>
                     <div class="col mb-3">
                         <label for="exampleInputEmail1" class="form-label">Identificación:</label>
-                        <input type="text" class="form-control" autocomplete="off" id="exampleInputEmail1" maxlength="20"
-                            aria-describedby="emailHelp" v-model="identificacion_contador"
+                        <input type="text" class="form-control" autocomplete="off" id="exampleInputEmail1"
+                            maxlength="20" aria-describedby="emailHelp" v-model="identificacion_contador"
                             @input="identificacion_contador = validarNumero(identificacion_contador)"
                             :required="identificacion_contador == '' && tipo_identificacion_contador != '' && tipo_identificacion_contador.trim() != '0'" />
                         <span id="validate"
@@ -1296,7 +1327,8 @@
                     <div class="col mb-3">
                         <label for="exampleInputEmail1" class="form-label">Nombre completo:
                         </label>
-                        <input type="text" class="form-control" autocomplete="off" id="exampleInputEmail1" maxlength="100"
+                        <input type="text" class="form-control" autocomplete="off" id="exampleInputEmail1"
+                            maxlength="100"
                             @input="nombre_completo_tesorero = formatInputUpperCase($event.target.value)"
                             aria-describedby="emailHelp" v-model="nombre_completo_tesorero" />
                     </div>
@@ -1412,7 +1444,7 @@
                             :consulta="consulta_operacion_moneda_extranjera" :registros="afirmacionNegacion"
                             @setAfirmacionNegacion="setAfirmacionNegacion" :orden-campo="3" placeholder="Seleccionar" />
                         <span id="validate" v-if="operaciones_modena_extranjera == ''" class="error">{{
-                            mensaje_error }}</span>
+            mensaje_error }}</span>
                     </div>
                     <div class="col">
                         <SearchList nombreCampo="¿Que operaciones?: *"
@@ -1429,8 +1461,9 @@
                     <div class="row">
                         <div class="col">
                             <SearchList nombreCampo="Banco" @getBancos="getBancos" eventoCampo="getBancos"
-                                @setBanco="setBanco" :ordenCampo="1" :index="index" nombreItem="nom_ban" :registros="bancos"
-                                placeholder="Seleccione una opción" :consulta="consulta_banco_rb[index]" />
+                                @setBanco="setBanco" :ordenCampo="1" :index="index" nombreItem="nom_ban"
+                                :registros="bancos" placeholder="Seleccione una opción"
+                                :consulta="consulta_banco_rb[index]" />
                         </div>
                         <div class="col mb-3">
                             <label for="exampleInputEmail1" class="form-label">Número de cuenta:</label>
@@ -1445,8 +1478,8 @@
                         </div>
                         <div class="col">
                             <SearchList nombreCampo="Tipo cuenta" @getTipoCuentaBancos="getTipoCuentaBancos"
-                                @setTipoCuentaBancos="setTipoCuentaBancos" eventoCampo="getTipoCuentaBancos" :ordenCampo="1"
-                                :index="index" nombreItem="nombre" :registros="tipos_cuenta_bancos"
+                                @setTipoCuentaBancos="setTipoCuentaBancos" eventoCampo="getTipoCuentaBancos"
+                                :ordenCampo="1" :index="index" nombreItem="nombre" :registros="tipos_cuenta_bancos"
                                 placeholder="Seleccione una opción" :consulta="consulta_tipo_cuenta_banco_rb[index]" />
                         </div>
                         <div class="col-1 trash">
@@ -1459,7 +1492,8 @@
                             <label for="exampleInputEmail1" class="form-label">Sucursal:</label>
                             <input type="text" class="form-control" autocomplete="off" id="exampleInputEmail1"
                                 maxlength="100" @input="item.sucursal = formatInputUpperCase($event.target.value)"
-                                aria-describedby="emailHelp" v-model="item.sucursal" :required="campo_dinamico[index]" />
+                                aria-describedby="emailHelp" v-model="item.sucursal"
+                                :required="campo_dinamico[index]" />
                             <span id="validate"
                                 v-if="item.sucursal == '' && referencias_bancarias[index].banco_id != '' && referencias_bancarias[index].banco_id.trim() != '0'"
                                 class="error">{{ validaCamposDinamicos(index)
@@ -1469,7 +1503,8 @@
                             <label for="exampleInputEmail1" class="form-label">Teléfono:</label>
                             <input type="text" class="form-control" autocomplete="off" id="exampleInputEmail1"
                                 maxlength="20" aria-describedby="emailHelp" v-model="item.telefono"
-                                @input="item.telefono = validarNumero(item.telefono)" :required="campo_dinamico[index]" />
+                                @input="item.telefono = validarNumero(item.telefono)"
+                                :required="campo_dinamico[index]" />
                             <span id="validate"
                                 v-if="item.telefono == '' && referencias_bancarias[index].banco_id != '' && referencias_bancarias[index].banco_id.trim() != '0'"
                                 class="error">{{ validaCamposDinamicos(index)
@@ -1479,7 +1514,8 @@
                             <label for="exampleInputEmail1" class="form-label">Contacto:</label>
                             <input type="text" class="form-control" autocomplete="off" id="exampleInputEmail1"
                                 maxlength="100" @input="item.contacto = formatInputUpperCase($event.target.value)"
-                                aria-describedby="emailHelp" v-model="item.contacto" :required="campo_dinamico[index]" />
+                                aria-describedby="emailHelp" v-model="item.contacto"
+                                :required="campo_dinamico[index]" />
                             <span id="validate"
                                 v-if="item.contacto == '' && referencias_bancarias[index].banco_id != '' && referencias_bancarias[index].banco_id.trim() != '0'"
                                 class="error">{{ validaCamposDinamicos(index)
@@ -1566,9 +1602,9 @@
                 <div class="row" v-for="item, index in personas_expuestas" :key="item.id">
                     <div class="col">
                         <label for="exampleInputEmail1" class="form-label">Nombres y apelldos:</label>
-                        <input type="text" class="form-control" autocomplete="off" id="exampleInputEmail1" maxlength="100"
-                            @input="item.nombre = formatInputUpperCase($event.target.value)" aria-describedby="emailHelp"
-                            v-model="item.nombre"
+                        <input type="text" class="form-control" autocomplete="off" id="exampleInputEmail1"
+                            maxlength="100" @input="item.nombre = formatInputUpperCase($event.target.value)"
+                            aria-describedby="emailHelp" v-model="item.nombre"
                             :required="item.nombre == '' && item.tipo_identificacion_id != '' && item.tipo_identificacion_id.trim() != '0'" />
                         <span id="validate"
                             v-if="item.nombre == '' && personas_expuestas[index].tipo_identificacion_id != '' && personas_expuestas[index].tipo_identificacion_id.trim() != '0'"
@@ -1576,15 +1612,16 @@
                             }}</span><span v-else>{{ validaCamposDinamicos(index, 1) }}</span>
                     </div>
                     <div class="col">
-                        <SearchList nombreCampo="Tipo de Identificación: *" @getTipoIdentificacion="getTipoIdentificacion"
+                        <SearchList nombreCampo="Tipo de Identificación: *"
+                            @getTipoIdentificacion="getTipoIdentificacion"
                             @setTipoIdentificacion="setTipoIdentificacion" eventoCampo="getTipoIdentificacion"
                             nombreItem="des_tip" :ordenCampo="6" :index="index" :registros="tiposIdentificacion"
                             placeholder="Seleccione una opción" :consulta="consultas_personas_expuestas[index]" />
                     </div>
                     <div class="col">
                         <label for="exampleInputEmail1" class="form-label">Número de identificacion:</label>
-                        <input type="text" class="form-control" autocomplete="off" id="exampleInputEmail1" maxlength="20"
-                            aria-describedby="emailHelp" v-model="item.identificacion"
+                        <input type="text" class="form-control" autocomplete="off" id="exampleInputEmail1"
+                            maxlength="20" aria-describedby="emailHelp" v-model="item.identificacion"
                             @input="item.identificacion = validarNumero(item.identificacion)"
                             :required="campo_dinamico[index]" />
                         <span id="validate"
@@ -1594,8 +1631,8 @@
                     </div>
                     <div class="col">
                         <label for="exampleInputEmail1" class="form-label">Parentesco:</label>
-                        <input type="text" class="form-control" autocomplete="off" id="exampleInputEmail1" maxlength="50"
-                            @input="item.parentesco = formatInputUpperCase($event.target.value)"
+                        <input type="text" class="form-control" autocomplete="off" id="exampleInputEmail1"
+                            maxlength="50" @input="item.parentesco = formatInputUpperCase($event.target.value)"
                             aria-describedby="emailHelp" v-model="item.parentesco" :required="campo_dinamico[index]" />
                         <span id="validate"
                             v-if="item.parentesco == '' && personas_expuestas[index].tipo_identificacion_id != '' && personas_expuestas[index].tipo_identificacion_id.trim() != '0'"
@@ -1603,7 +1640,8 @@
                             }}</span><span v-else>{{ validaCamposDinamicos(index, 1) }}</span>
                     </div>
                     <div class="col-1 trash">
-                        <i class="bi bi-trash-fill" v-if="index > 0" @click="deleteDynamic(personas_expuestas, index)"></i>
+                        <i class="bi bi-trash-fill" v-if="index > 0"
+                            @click="deleteDynamic(personas_expuestas, index)"></i>
                     </div>
                 </div>
                 <span id="clasificador" @click="agregarPersonasExpuestas()" style="cursor: pointer"><i
@@ -1615,8 +1653,10 @@
             <div id="seccion">
                 <div class="row">
                     <p>Quien suscribe la presente solicitud obrando en nombre propio y/o en representación legal de la
-                        persona jurídica que represento, de manera voluntaria y dando certeza de que todo lo aquí consignado
-                        es cierto, veraz y verificable, realizo la siguiente declaración de fuente de bienes y/o fondos, con
+                        persona jurídica que represento, de manera voluntaria y dando certeza de que todo lo aquí
+                        consignado
+                        es cierto, veraz y verificable, realizo la siguiente declaración de fuente de bienes y/o fondos,
+                        con
                         el propósito de dar cumplimiento a lo señalado al respecto a las normas legales vigentes y
                         concordantes.</p>
                     <ul>
@@ -1627,7 +1667,8 @@
                         <li>
                             <p>B. Que los recursos que se entreguen de mi parte en desarrollo de cualquiera de las
                                 relaciones contractuales que tenga con los destinatarios de la presente declaración,
-                                provienen de mi patrimonio y/o de la sociedad que represento y no de terceros, y se derivan
+                                provienen de mi patrimonio y/o de la sociedad que represento y no de terceros, y se
+                                derivan
                                 de las siguientes fuentes: (detalle de la actividad o negocio del que provienen los
                                 recursos)</p>
                         </li>
@@ -1639,20 +1680,22 @@
                     </div>
                     <div class="col mb-3">
                         <label for="exampleInputEmail1" class="form-label">Otra ¿Cuál?:</label>
-                        <input type="text" class="form-control" autocomplete="off" id="exampleInputEmail1" maxlength="100"
-                            @input="otro_tipo_origen_fondos = formatInputUpperCase($event.target.value)"
+                        <input type="text" class="form-control" autocomplete="off" id="exampleInputEmail1"
+                            maxlength="100" @input="otro_tipo_origen_fondos = formatInputUpperCase($event.target.value)"
                             aria-describedby="emailHelp" v-model="otro_tipo_origen_fondos" />
                     </div>
                     <ul>
                         <li>
-                            <p>C. Declaro que los recursos no provienen de ninguna actividad ilícita de las contempladas en
+                            <p>C. Declaro que los recursos no provienen de ninguna actividad ilícita de las contempladas
+                                en
                                 el Código Penal Colombiano o en cualquier norma que lo modifique o adicione.</p>
                         </li>
                         <li>
                             <p>D. No se admitirá que terceros efectúen depósitos a mis cuentas y/o de la Entidad que
                                 represento con fondos provenientes de las actividades ilícitas contempladas en el Código
                                 penal Colombiano o en cualquier norma que lo modifique, sustituya o adicione, ni se
-                                efectuarán transacciones destinadas a tales actividades o a favor de personas relacionadas
+                                efectuarán transacciones destinadas a tales actividades o a favor de personas
+                                relacionadas
                                 con las mismas</p>
                         </li>
                         <li>
@@ -1683,55 +1726,77 @@
                             @setAfirmacionNegacion="setAfirmacionNegacion" :ordenCampo="4"
                             placeholder="Seleccione una opción" :consulta="consulta_origen_manejo_efectivo" />
                     </div>
-                    <p>En nombre propio y/o de mi representado, declaro que no estoy impedido para realizar cualquier tipo
+                    <p>En nombre propio y/o de mi representado, declaro que no estoy impedido para realizar cualquier
+                        tipo
                         de operación y que conozco y acepto las normas que regulan el comercio colombiano y me obligo a
-                        cumplirlas. Conozco y acepto los riesgos que puedan presentarse frente a las instrucciones y órdenes
+                        cumplirlas. Conozco y acepto los riesgos que puedan presentarse frente a las instrucciones y
+                        órdenes
                         que imparta, derivados de la utilización de los medios y canales de distribución de productos y
                         servicios, tales como Internet, correos electrónicos u otros mecanismos similares, mensajería
                         instantánea, teléfono, fax, medios digitales entre otros.
-                        Autorizo a realizar los traslados de recursos y/o valores, previo cumplimiento de los procedimientos
+                        Autorizo a realizar los traslados de recursos y/o valores, previo cumplimiento de los
+                        procedimientos
                         establecidos por la entidad; así mismo, autorizo la realización de transferencias bancarias y
                         conozco los riesgos de su utilización.
                         Conozco y acepto las políticas establecidas para todos los productos ofrecidos, incluyendo los
-                        servicios de Internet. Bajo la gravedad de juramento manifiesto que todos los datos acá consignados,
-                        incluidos los números de identificación tributaria, son ciertos, que la información que adjunto es
-                        veraz, fidedigna, completa y verificable y autorizo su verificación ante cualquier persona natural o
-                        jurídica, pública o privada, sin limitación alguna, desde ahora y mientras subsista alguna relación
+                        servicios de Internet. Bajo la gravedad de juramento manifiesto que todos los datos acá
+                        consignados,
+                        incluidos los números de identificación tributaria, son ciertos, que la información que adjunto
+                        es
+                        veraz, fidedigna, completa y verificable y autorizo su verificación ante cualquier persona
+                        natural o
+                        jurídica, pública o privada, sin limitación alguna, desde ahora y mientras subsista alguna
+                        relación
                         comercial y que toda declaración falsa o inexacta podrá ser sancionada, por las autoridades de
                         conformidad con la legislación aplicable.
                         Me comprometo a actualizar la información y documentación de acuerdo con la solicitud que se me
-                        haga, a proporcionar toda la información adicional y de apoyo que sea necesaria y requerida, por lo
-                        menos cada año y cada vez que se presenten modificaciones respecto de cualquiera de mis datos, esto
+                        haga, a proporcionar toda la información adicional y de apoyo que sea necesaria y requerida, por
+                        lo
+                        menos cada año y cada vez que se presenten modificaciones respecto de cualquiera de mis datos,
+                        esto
                         con el fin de dar cumplimiento a la normatividad vigente para el efecto, y por tanto, autorizo,
-                        entre otras, a reportar la información fiscal, a verificar la autenticidad de mis firmas y de mis
+                        entre otras, a reportar la información fiscal, a verificar la autenticidad de mis firmas y de
+                        mis
                         ordenantes y/o a validar los poderes y facultades de mis representantes. A su vez declaro que
                         asumiré la responsabilidad civil, administrativa y/o penal derivada de cualquier información
                         errónea, falsa o inexacta que llegaré a suministrar o que dejare de suministrar oportunamente.
-                        De igual forma, declaro que resarciré a La empresa por cualquier multa, perdida o daño que pudiera
+                        De igual forma, declaro que resarciré a La empresa por cualquier multa, perdida o daño que
+                        pudiera
                         llegar a sufrir como consecuencia de la inexactitud o falsedad de dicha información
                         Autorizo a La empresa a suministrar la información contenida ente documento, al igual que sus
                         anexos, a las autoridades administrativas y gubernamentales correspondientes, incluidas las
-                        autoridades de mi país de residencia o de nacionalidad, de conformidad con la regulación vigente,
+                        autoridades de mi país de residencia o de nacionalidad, de conformidad con la regulación
+                        vigente,
                         entre ellos, los Convenios Internacionales firmados por Colombia.
-                        Manifiesto que yo y/o la empresa que represento y sus empleados conocen bien las normas referentes a
-                        la prevención del Lavado de Activos y Financiación del Terrorismo, todos aportamos con el fin de no
+                        Manifiesto que yo y/o la empresa que represento y sus empleados conocen bien las normas
+                        referentes a
+                        la prevención del Lavado de Activos y Financiación del Terrorismo, todos aportamos con el fin de
+                        no
                         ser cómplices de la violación de las normas de esta ley. Igualmente, que no he pertenecido ni
-                        pertenezco a ningún tipo de grupos ilegales al margen de la Ley, no les he auxiliado o colaborado en
+                        pertenezco a ningún tipo de grupos ilegales al margen de la Ley, no les he auxiliado o
+                        colaborado en
                         el desarrollo de sus actividades ilícitas, como tampoco he realizado actividades de lavados de
-                        activos en Colombia o fuera de ella y que los bienes que conforman mi patrimonio han sido adquiridos
+                        activos en Colombia o fuera de ella y que los bienes que conforman mi patrimonio han sido
+                        adquiridos
                         por vías legales en desarrollo de mi profesión o actividad.
                         De la misma manera, declaro que no tengo vínculos de parentesco con personas que estén o hayan
-                        estado incluidas en listas públicas como sospechosos de Lavado de Activos/Financiación de terrorismo
+                        estado incluidas en listas públicas como sospechosos de Lavado de Activos/Financiación de
+                        terrorismo
                         o las empresas de las cuales sean accionistas, o que desarrollen o hayan desarrollado, apoyado o
                         financiado cualquiera de las actividades descritas en el párrafo precedente.
                         Todos los datos aquí consignados y los documentos anexos a él, son ciertos, la información que
                         adjunto es veraz y verificable, y autorizo su verificación ante cualquier persona natural o
-                        jurídica, privada o pública, sin limitación alguna, desde ahora y mientras subsista alguna relación
-                        comercial con cualquiera de las entidades que pertenezcan a SAITEMP S.A. o con quien represente sus
-                        derechos, y me comprometo a actualizar la información y/o documentación al menos una vez cada 2 años
-                        o cada vez que se me indique. Así mismo, autorizo a SAITEMP S.A., o a quien represente sus derechos,
+                        jurídica, privada o pública, sin limitación alguna, desde ahora y mientras subsista alguna
+                        relación
+                        comercial con cualquiera de las entidades que pertenezcan a SAITEMP S.A. o con quien represente
+                        sus
+                        derechos, y me comprometo a actualizar la información y/o documentación al menos una vez cada 2
+                        años
+                        o cada vez que se me indique. Así mismo, autorizo a SAITEMP S.A., o a quien represente sus
+                        derechos,
                         en forma permanente e irrevocable, para que con fines estadísticos y de información financiera o
-                        comercial, consulte, informe, reporte, procese o divulgue, a las entidades de consulta de bases de
+                        comercial, consulte, informe, reporte, procese o divulgue, a las entidades de consulta de bases
+                        de
                         datos o Centrales de Información y Riesgo, todo lo referente a mi comportamiento como cliente en
                         general.</p>
                 </div>
@@ -1740,27 +1805,39 @@
             <div id="seccion">
                 <div class="row">
                     <p>La Sociedad SAITEMP S.A., en cumplimiento de lo definido por la Ley 1581 de 2012, el decreto
-                        reglamentario 1377 de 2013 y nuestra política de protección de datos personales, le informan que los
-                        datos personales que usted suministre en cualquiera de nuestros establecimientos en desarrollo de
+                        reglamentario 1377 de 2013 y nuestra política de protección de datos personales, le informan que
+                        los
+                        datos personales que usted suministre en cualquiera de nuestros establecimientos en desarrollo
+                        de
                         cualquier operación comercial, serán tratados mediante el uso y mantenimiento de medidas de
-                        seguridad técnicas, físicas y administrativas a fin de impedir que terceros no autorizados accedan a
+                        seguridad técnicas, físicas y administrativas a fin de impedir que terceros no autorizados
+                        accedan a
                         los mismos, lo anterior de conformidad con lo establecido en la ley.
-                        El responsable del tratamiento de sus datos personales es SAITEMP S.A. sociedad legalmente existente
-                        de acuerdo con la leyes Colombianas, domiciliado en la ciudad de MEDELLÍN, en la CALLE 51 # 49-11
+                        El responsable del tratamiento de sus datos personales es SAITEMP S.A. sociedad legalmente
+                        existente
+                        de acuerdo con la leyes Colombianas, domiciliado en la ciudad de MEDELLÍN, en la CALLE 51 #
+                        49-11
                         PISO 10, quien recogerá dichos datos a través de sus diferentes canales y serán usados para a)
-                        Ofrecer o informarle productos b) Para hacerle llegar información publicitaria sobre promociones c)
+                        Ofrecer o informarle productos b) Para hacerle llegar información publicitaria sobre promociones
+                        c)
                         Atender o formalizar cualquier solicitud relacionada con nuestro objeto social e) Controles
                         estadísticos sobre proveedores, clientes f) Establecer rotación de los empleados.
                         Usted podrá ejercer los derechos que la ley prevé, siguiendo los procedimientos establecidos en
-                        nuestras políticas y procedimientos de Protección de datos Personales publicados en la página web de
-                        la empresa, http://www.saitempsa.com, o solicitando la información que requiera a través de nuestro
+                        nuestras políticas y procedimientos de Protección de datos Personales publicados en la página
+                        web de
+                        la empresa, http://www.saitempsa.com, o solicitando la información que requiera a través de
+                        nuestro
                         correo misdatos@saitempsa.com o llamando al teléfono: (4) 4485744
-                        Tenga en cuenta que el ejercicio de sus derechos no es requisito previo ni impide el ejercicio de
-                        otros derechos y que cualquier modificación al presente aviso le será avisado a través de nuestra
+                        Tenga en cuenta que el ejercicio de sus derechos no es requisito previo ni impide el ejercicio
+                        de
+                        otros derechos y que cualquier modificación al presente aviso le será avisado a través de
+                        nuestra
                         página Web.
                         Leído lo anterior, autorizo de manera previa, explicita e inequívoca a la sociedad SAITEMP S.A.,
-                        para el tratamiento de los datos personales suministrados por mi persona para las finalidades aquí
-                        establecidas. Declaro que soy el titular de la información reportada en este formato para autorizar
+                        para el tratamiento de los datos personales suministrados por mi persona para las finalidades
+                        aquí
+                        establecidas. Declaro que soy el titular de la información reportada en este formato para
+                        autorizar
                         el tratamiento de datos personales y que la he suministrado de forma voluntaria y es completa,
                         veraz, exacta y verídica.</p>
                     <div style="display: flex;">
@@ -1821,7 +1898,7 @@
                             <ul class="dropdown-menu">
                                 <li v-for="item, index in razon_social_cliente" :key="index"><a class="dropdown-item"
                                         style="cursor:pointer" @click="eliminarItem(item)">{{
-                                            item.nombre }}</a></li>
+            item.nombre }}</a></li>
                             </ul>
                         </div>
                     </div>
@@ -2167,7 +2244,7 @@ export default {
             tipos_contrato: [],
             tipos_contratos_agregados: [],
             laboratorios_medicos_agregados: [],
-            contratacion_observacion:'',
+            contratacion_observacion: '',
             consulta_contratacion_carnet: '',
             contratacion_carnet_id: '',
             consulta_contratacion_carnet_alimentos: '',
@@ -2764,7 +2841,6 @@ export default {
             this.file[index] = file;
         },
         deleteFile(index) {
-            console.log('prueba')
             this.file.splice(index, 1)
             document.getElementById("seleccionArchivos" + index).value = ''
 
@@ -3075,13 +3151,14 @@ export default {
             }
 
         },
-        getTipoArchivo(id) {
+        getTipoArchivo(id, item = null) {
             let self = this;
             let config = this.configHeader();
             axios
                 .get(self.URL_API + "api/v1/tipoarchivo/" + id, config)
                 .then(function (result) {
                     self.fileInputsCount = result.data
+                    self.llenarFormulario(item)
                 });
 
         },
@@ -4337,7 +4414,7 @@ export default {
             this.registroCliente.otros_si_agregados = this.otros_si_agregados
             this.registroCliente.bancos_agregados = this.bancos_agregados
             this.registroCliente.tipos_contratos_agregados = this.tipos_contratos_agregados
-            
+
         },
         consultaFormulario(id) {
             let self = this;
@@ -4345,8 +4422,12 @@ export default {
             axios
                 .get(self.URL_API + "api/v1/formulariocliente/" + id, config)
                 .then(function (result) {
-                    self.llenarFormulario(result.data)
-                    self.loading = false
+                    if (result.data.tipo_cliente_id == 1) {
+                        self.getTipoArchivo(result.data.tipo_cliente_id, result.data)
+                    } else {
+                        self.getTipoArchivo(result.data.tipo_proveedor_id, result.data)
+                    }
+                    // self.llenarFormulario(result.data)
                     document.body.style.overflow = 'auto';
                 });
         },
@@ -4365,18 +4446,18 @@ export default {
         llenarFormularioGuardado(item = null) {
             var self = this
             this.cliente_existe = false
-            if (item.numero_identificacion != '') {
-                this.getCliente(item.numero_identificacion, 1)
-            } if (item.nit != '') {
-                this.getCliente(item.nit, 2)
-            }
-            if (item.tipo_cliente_id != '') {
-                if (item.tipo_cliente_id == 1) {
-                    this.getTipoArchivo(item.tipo_cliente_id)
-                } else {
-                    this.getTipoArchivo(item.tipo_proveedor_id)
-                }
-            }
+            // if (item.numero_identificacion != '') {
+            //     this.getCliente(item.numero_identificacion, 1)
+            // } if (item.nit != '') {
+            //     this.getCliente(item.nit, 2)
+            // }
+            // if (item.tipo_cliente_id != '') {
+            //     if (item.tipo_cliente_id == 1) {
+            //         this.getTipoArchivo(item.tipo_cliente_id)
+            //     } else {
+            //         this.getTipoArchivo(item.tipo_proveedor_id)
+            //     }
+            // }
             if (item.codigo_ciiu_id != '') {
                 this.getActividadesCiiu(item.codigo_ciiu_id)
             }
@@ -4626,8 +4707,15 @@ export default {
 
         llenarFormulario(item = null) {
             try {
-
                 let self = this
+                this.fileInputsCount.forEach(function (item2, index) {
+                    item.documentos_adjuntos.forEach(function (item3) {
+                        if (item2.id == item3.tipo_documento_id) {
+                            self.fileInputsCount[index].ruta = item3.ruta
+                        }
+                    })
+
+                })
                 this.getActividadesCiiu(item.codigo_ciiu_id)
                 this.operacion = item.operacion_id
                 this.consulta_operacion = item.tipo_operacion
@@ -4817,9 +4905,9 @@ export default {
                     this.persona_juridica = true
                 }
 
-                if (item.documentos_adjuntos.length > 0) {
-                    this.fileInputsCount = item.documentos_adjuntos
-                }
+                // if (item.documentos_adjuntos.length > 0) {
+                //     this.fileInputsCount = item.documentos_adjuntos
+                // }
 
                 item.documentos_adjuntos.forEach(function (item) {
                     self.convertFile(item.ruta)
@@ -4921,6 +5009,7 @@ export default {
                     this.tipo_origen_fondo = item.origen_fondos.tipo_origen_fondos_id
                     this.otro_tipo_origen_fondos = item.origen_fondos.otro_origen
                 }
+                this.loading = false
 
             } catch (error) {
                 console.log(error)
