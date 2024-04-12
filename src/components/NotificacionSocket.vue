@@ -31,7 +31,7 @@ export default {
 
     },
     mounted() {
-        this.socket('channel', 'EventoPrueba')
+        this.socket('channel', 'EventoPrueba2')
     },
     created() {
         if (localStorage.getItem("pila") != '') {

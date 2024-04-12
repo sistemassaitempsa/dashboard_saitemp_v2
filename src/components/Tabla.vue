@@ -185,7 +185,8 @@
                 </div>
             </div>
         </div>
-        <div class="row" v-if="!sin_registros && items_tabla2.length > 0" style="clear: both;">
+        <div class="row" v-if="!sin_registros && items_tabla2.length > 0 && ruta == '/navbar/gestion-ingresosl'"
+            style="clear: both;">
             <div class="col-3 mb-3">
                 <label for="exampleInputEmail1" style="float:left" class="form-label"> Búsqueda por documento</label>
                 <input type="text" class="form-control form-control-sm" autocomplete="off" id="exampleInputEmail2"
@@ -221,7 +222,7 @@
                     <option v-if="links.total > 1000">500</option>
                 </select>
             </div>
-            <div v-if="ruta != '/navbar/reporteitems' && !empleados() && ruta != '/navbar/reportes' && ruta != '/navbar/procesosespeciales' && ruta != '/navbar/debida-diligencia/clientes' && ruta != '/navbar/correo-novedades-nomina' && ruta != '/navbar/cliente-supervision' && ruta != '/navbar/solicitudes-os' && ruta != '/navbar/gestion-ingresosl'"
+            <div v-if="ruta != '/navbar/reporteitems' && !empleados() && ruta != '/navbar/reportes' && ruta != '/navbar/procesosespeciales' && ruta != '/navbar/debida-diligencia/clientes' && ruta != '/navbar/correo-novedades-nomina' && ruta != '/navbar/cliente-supervision' && ruta != '/navbar/solicitudes-os'"
                 class="col-xs-3 col-md-3">
                 <button type="button" style="margin-top: 35px" @click="selectAll((select_all = !select_all))"
                     class="btn btn-success btn-sm">
@@ -585,7 +586,6 @@ export default {
             console.log('prueba 1')
             if (self.busqueda_por_documento && !self.filtro_gestion_ingresos) {
                 this.interval2 = setInterval(() => {
-                    console.log('prueba 2')
                     self.buscarDocumentoLista(); // Llama a la función que quieres ejecutar cada 30 segundos
                 }, 30000);
             } else {

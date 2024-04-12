@@ -31,6 +31,7 @@ export const Permisos = {
         {alias: 'P27', autorizado: false},
         {alias: 'P28', autorizado: false},
         {alias: 'P29', autorizado: false},
+        {alias: 'P30', autorizado: false},
       ],
     };
   },

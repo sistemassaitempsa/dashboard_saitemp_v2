@@ -1,5 +1,6 @@
 <template>
   <div class="container">
+    <!-- <NotificacionesSocket /> -->
     <h2>Debida diligencia clientes</h2>
     <Tabla :datos="datos" :tabla="tabla" :userlogued="userlogued" :endpoint="endpoint" :listas="listas"
       :endpointexport="endpointexport" :estados_firma="estados_firma" @actualizaEstado="actualizaEstado" />
@@ -10,10 +11,12 @@ import Tabla from './Tabla.vue'
 import axios from 'axios'
 import { Token } from '../Mixins/Token.js'
 import { Alerts } from '../Mixins/Alerts.js';
+// import NotificacionesSocket from './NotificacionSocket.vue'
 export default {
 
   components: {
-    Tabla
+    Tabla,
+    // NotificacionesSocket
   },
   mixins: [Token, Alerts],
   props: {
@@ -40,7 +43,7 @@ export default {
       ejecutivos_comerciales: [],
       listas: [],
       estados_firma: [],
-      first_page_url:'',
+      first_page_url: '',
     }
   },
   computed: {
@@ -88,7 +91,7 @@ export default {
         });
     },
     estadoActualizado(currentUrl) {
-      if(currentUrl == null || currentUrl == ''){
+      if (currentUrl == null || currentUrl == '') {
         currentUrl = this.first_page_url.replace("\"");
       }
       let self = this;
@@ -121,7 +124,7 @@ export default {
   }
 };
 </script>
-<style >
+<style>
 h2 {
   font-family: "Montserrat", sans-serif;
   margin: 20px 0px 20px 0px;
