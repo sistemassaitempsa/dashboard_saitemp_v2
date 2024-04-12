@@ -6,7 +6,7 @@
             <div v-if="!divExpandido">Seguimiento</div>
             <div v-for="item, index in seguimiento" :key="index">
                 <div v-if="divExpandido" style="text-align: left;">{{ item.estado }}</div>
-                <div v-if="divExpandido" style="text-align: left;">{{ item.usuario }}</div>
+                <div v-if="divExpandido" style="text-align: left;">{{ item.usuario.replace('null', '') }}</div>
                 <div v-if="divExpandido" style="text-align: left;">{{ reformatearFecha(item.created_at) }}</div>
                 <hr v-if="divExpandido">
             </div>
@@ -14,20 +14,6 @@
         <form class="was-validated" @submit.prevent="save()">
             <!-- <h6 class="tituloseccion">Información general</h6> -->
             <div id="seccion">
-                <div class="row">
-                    <div class="col-3 mb-3">
-                        <label for="exampleInputEmail1" style="float:left" class="form-label"> Búsqueda por
-                            documento</label>
-                        <input type="text" class="form-control form-control-sm" autocomplete="off"
-                            id="exampleInputEmail2" aria-describedby="emailHelp" v-model="numero_documento_candidato" />
-                    </div>
-                    <div class="col-xs-3 col-md-3 mt-3">
-                        <button type="button" style="margin-top: 35px;" @click="buscarDocumentoFormulario()"
-                            class="btn btn-success btn-sm">
-                            Buscar
-                        </button>
-                    </div>
-                </div>
                 <div class="row" v-if="$route.params.id != undefined">
                     <h6 style="text-align: left;">Radicado: {{ radicado }}</h6>
                 </div>
@@ -55,8 +41,7 @@
                     <div class="col">
                         <SearchList nombreCampo="Empresa usuaria: *" @getEmpresasCliente="getEmpresasCliente"
                             eventoCampo="getEmpresasCliente" nombreItem="nombre" :consulta="consulta_empresa_cliente"
-                            :registros="empresas_cliente" placeholder="Seleccione una opción"
-                            :disabled="bloquea_campos && consulta_empresa_cliente != null && !permisos[25].autorizado"  />
+                            :registros="empresas_cliente" placeholder="Seleccione una opción" />
                     </div>
                     <div class="col">
                         <label class="form-label">Dirección de presentación</label>
@@ -154,9 +139,8 @@
                             identificación: </label>
                         <input type="text" class="form-control" autocomplete="off" id="numero_identificacion"
                             aria-describedby="emailHelp" v-model="numero_identificacion"
-                            @input="numero_identificacion = validarNumero(numero_identificacion), userInput_numero_documento = true"
-                            @blur="getIdentificacion(numero_identificacion)"
-                            :disabled="bloquea_campos && numero_identificacion != null && !permisos[25].autorizado && !userInput_numero_documento" />
+                            @input="numero_identificacion = validarNumero(numero_identificacion)"
+                            @blur="getIdentificacion(numero_identificacion)" />
                         <div class="invalid-feedback">
                             {{ mensaje_error }}
                         </div>
@@ -166,8 +150,7 @@
                         </label>
                         <input type="text" class="form-control" autocomplete="off" id="exampleInputEmail1"
                             aria-describedby="emailHelp" v-model="nombres"
-                            @input="nombres = formatInputUpperCase($event.target.value), userInput_nombres = true"
-                            :disabled="bloquea_campos && nombres != null && !permisos[25].autorizado && !userInput_nombres" />
+                            @input="nombres = formatInputUpperCase($event.target.value)" />
                         <div class="invalid-feedback">
                             {{ mensaje_error }}
                         </div>
@@ -398,11 +381,9 @@
                                 </button>
                                 <ul class="dropdown-menu">
                                     <li><a class="dropdown-item" @click.prevent="envioCorreo(1)">
-                                            Enviar solicitud cliente</a></li>
+                                            Enviar orden de servicio</a></li>
                                     <li><a class="dropdown-item" @click.prevent="envioCorreo(2)">
                                             Enviar informe de seleccion</a></li>
-                                    <li><a class="dropdown-item" @click.prevent="envioCorreo(3)">
-                                            Enviar citación laboratorio</a></li>
                                 </ul>
                             </div>
                         </div>
@@ -710,10 +691,7 @@ export default {
             afectacion_servicio: '',
             correo_laboratorio: '',
             contacto_empresa: '',
-            numero_documento_candidato: '',
-            bloquea_campos: false,
-            userInput_nombres: false,
-            userInput_numero_documento: false
+            numero_documento_candidato: ''
         }
     },
     computed: {
@@ -915,7 +893,8 @@ export default {
             }
         },
         valida_envioCorreo() {
-            if (this.correo_empresa == null && this.correo_laboratorio == null) {
+            if (this.correo_empresa == null) {
+                document.getElementById('validacorreo').focus();
                 this.showAlert('Para enviar el correo debe diligenciar por lo menos el correo de la empresa y guardar el formulario', 'error');
                 return true;
             }
@@ -1312,7 +1291,6 @@ export default {
         },
         llenarFormulario(item) {
             let self = this
-            self.bloquea_campos = true
             this.fecha_ingreso = item.fecha_ingreso
             this.numero_identificacion = item.numero_identificacion
             this.nombres = item.nombre_completo
@@ -1392,7 +1370,6 @@ export default {
             this.seguimiento = item.seguimiento
         },
         limpiarFormulario() {
-            this.bloquea_campos = false
             // this.fecha_ingreso = ''
             this.numero_identificacion = ''
             this.nombres = ''
@@ -1449,9 +1426,6 @@ export default {
                 .get(self.URL_API + "api/v1/buscardocumentoformularioi/" + self.numero_documento_candidato, config)
                 .then(function (result) {
                     self.llenarFormulario(result.data)
-                    const rutaActual = self.$route;
-                    const nuevosParametros = { ...rutaActual.params, id: result.data.id };
-                    self.$router.replace({ ...rutaActual, params: nuevosParametros });
                 });
         },
 
