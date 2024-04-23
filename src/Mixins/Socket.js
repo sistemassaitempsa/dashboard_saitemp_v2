@@ -11,17 +11,22 @@ export const Socket = {
     socket (chanell, event) {
       let self = this;
       window.Echo.channel (chanell).listen (event, e => {
+        console.log (e);
         if (self.pila_notificaciones.length > 0) {
           self.pila_notificaciones.forEach (function (item) {
             item.visible = 'hidden';
           });
         }
         self.pila_notificaciones.push ({
-          message: e.message,
+          message: e.message.mensaje,
+          componente: e.message.componente,
           class: 'notificacion animate__animated animate__fadeInRight',
           visible: 'visible',
         });
-        localStorage.setItem("pila_notificaciones", JSON.stringify(self.pila_notificaciones));
+        localStorage.setItem (
+          'pila_notificaciones',
+          JSON.stringify (self.pila_notificaciones)
+        );
         const audio = new Audio (this.audioPath);
         audio.play ();
       });
