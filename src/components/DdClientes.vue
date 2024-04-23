@@ -1,22 +1,22 @@
 <template>
   <div class="container">
-    <!-- <NotificacionesSocket /> -->
+    <NotificacionesSocket />
     <h2>Debida diligencia clientes</h2>
     <Tabla :datos="datos" :tabla="tabla" :userlogued="userlogued" :endpoint="endpoint" :listas="listas"
       :endpointexport="endpointexport" :estados_firma="estados_firma" @actualizaEstado="actualizaEstado" />
   </div>
 </template>
 <script>
-import Tabla from './Tabla.vue'
 import axios from 'axios'
+import Tabla from './Tabla.vue'
 import { Token } from '../Mixins/Token.js'
 import { Alerts } from '../Mixins/Alerts.js';
-// import NotificacionesSocket from './NotificacionSocket.vue'
+import NotificacionesSocket from './NotificacionSocket.vue'
 export default {
 
   components: {
     Tabla,
-    // NotificacionesSocket
+    NotificacionesSocket
   },
   mixins: [Token, Alerts],
   props: {

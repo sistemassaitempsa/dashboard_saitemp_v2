@@ -14,7 +14,7 @@
         <form class="was-validated" @submit.prevent="save()">
             <!-- <h6 class="tituloseccion">Información general</h6> -->
             <div id="seccion">
-                <div class="row">
+                <div class="row" v-if="$route.path != '/navbar/gestion-ingresosl'">
                     <div class="col-3 mb-3">
                         <label for="exampleInputEmail1" style="float:left" class="form-label"> Búsqueda por
                             documento</label>
@@ -28,7 +28,7 @@
                         </button>
                     </div>
                 </div>
-                <div class="row" v-if="$route.params.id != undefined">
+                <div class="row" v-if="$route.params.id != undefined || $route.path == '/navbar/gestion-ingresosl'">
                     <h6 style="text-align: left;">Radicado: {{ radicado }}</h6>
                 </div>
                 <div class="row">
@@ -56,7 +56,7 @@
                         <SearchList nombreCampo="Empresa usuaria: *" @getEmpresasCliente="getEmpresasCliente"
                             eventoCampo="getEmpresasCliente" nombreItem="nombre" :consulta="consulta_empresa_cliente"
                             :registros="empresas_cliente" placeholder="Seleccione una opción"
-                            :disabled="bloquea_campos && consulta_empresa_cliente != null && !permisos[25].autorizado"  />
+                            :disabled="bloquea_campos && consulta_empresa_cliente != null && !permisos[25].autorizado" />
                     </div>
                     <div class="col">
                         <label class="form-label">Dirección de presentación</label>
@@ -447,18 +447,18 @@
                             v-model="carga_archivo[index]" :disabled="item.ruta == undefined" id="flexCheckDefault">
                     </div>
 
-                    <div class="col-2" v-if="$route.params.id != null">
+                    <div class="col" v-if="$route.params.id != null || $route.path == '/navbar/gestion-ingresosl'">
                         <a :href="URL_API + item.ruta" target="_blank" rel="noopener noreferrer"><button type="button"
                                 :class="item.ruta != undefined ? 'btn btn-sm ver' : 'btn btn-sm btn-secondary'"><i
                                     class="bi bi-eye"> ver</i></button></a>
                     </div>
-                    <div class="col">
+                    <div class="col-3">
                         <div class="mb-3">
                             <textarea class="form-control" id="exampleFormControlTextarea1" rows="1" :disabled="true"
                                 v-model="item.nombre"></textarea>
                         </div>
                     </div>
-                    <div class="col">
+                    <div class="col-3">
                         <div class="input-group">
                             <input type="file" class="form-control" :id="'seleccionArchivos' + index"
                                 :accept="fileInputsCount[index].tipo_archivo" @change="cargarArchivo($event, index)"
@@ -472,16 +472,21 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col">
+                    <div class="col-3">
                         <div class="mb-3">
                             <textarea class="form-control" id="exampleFormControlTextarea1"
                                 v-model="observacion_archivo[index]"></textarea>
                         </div>
                     </div>
+                    <div class="col" v-if="$route.path != '/navbar/gestion-ingresosl'">
+                        <button type="button" @click="messageDelete(item)"
+                            :class="item.ruta != undefined ? 'btn btn-sm eliminar' : 'btn btn-sm btn-secondary d-none'"><i
+                                class="bi bi-trash"></i></button>
+                    </div>
                 </div>
             </div>
-            <button v-if="permisos[23].autorizado" class="btn btn-success m-4" :disabled="deshabilitar_boton"
-                type="submit">Guardar formulario</button>
+            <button v-if="permisos[23].autorizado && $route.path != '/navbar/gestion-ingresosl'"
+                class="btn btn-success m-4" :disabled="deshabilitar_boton" type="submit">Guardar formulario</button>
             <div class="row" v-if="$route.params.id != undefined"
                 style="text-align:left;clear:both;margin-bottom: 40px;">
                 <h5 @click="envio_correo = !envio_correo" style="cursor:pointer">Envío correo <i v-if="envio_correo"
@@ -599,7 +604,11 @@ export default {
     },
     mixins: [Token, Alerts, Scroll, Permisos],
     props: {
-        menu: []
+        menu: [],
+        id_registro: {
+            type: Number,
+            default: 0
+        }
     },
     data() {
         return {
@@ -727,6 +736,11 @@ export default {
         },
         menu() {
             this.getModulo()
+        },
+        id_registro() {
+            this.scrollTop()
+            this.loading = true
+            this.getArchivosIngreso()
         }
     },
     mounted() {
@@ -746,6 +760,34 @@ export default {
 
     },
     methods: {
+        messageDelete(item) {
+            let self = this;
+            var title = "Estas seguro de elimiar el resgistro?";
+            this.$swal
+                .fire({
+                    title: title,
+                    text: 'Esta operación no se puede revertir!',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Si, eliminar!',
+                })
+                .then(result => {
+                    if (result.isConfirmed) {
+                        self.eliminarDocumento(item);
+                    }
+                });
+        },
+        eliminarDocumento(item) {
+            let self = this;
+            let config = this.configHeader();
+            axios
+                .delete(self.URL_API + "api/v1/eliminararchivosingreso/" + this.$route.params.id + '/' + item.id, config)
+                .then(function (result) {
+                    self.showAlert(result.data.message, result.data.status);
+                });
+        },
         getObservacionesEstado(item = null) {
             if (item != null) {
                 this.consulta_observacion_estado = item.nombre
@@ -862,15 +904,17 @@ export default {
         },
         getModulo() {
             var self = this
-            var ruta = self.$route.path.split("/")[1] + '/' + self.$route.path.split("/")[2]
-            this.menu.forEach(function (item) {
-                item.opciones.forEach(element => {
-                    if (element.url == ruta) {
-                        self.menu_id = element.id
-                        self.historicoCorreos()
-                    }
-                });
-            })
+            if (self.$route.path != '/navbar/gestion-ingresosl') {
+                var ruta = self.$route.path.split("/")[1] + '/' + self.$route.path.split("/")[2]
+                this.menu.forEach(function (item) {
+                    item.opciones.forEach(element => {
+                        if (element.url == ruta) {
+                            self.menu_id = element.id
+                            self.historicoCorreos()
+                        }
+                    });
+                })
+            }
         },
         envioCorreo(id) {
             let self = this;
@@ -921,9 +965,11 @@ export default {
             }
         },
         combinacionGuardado(event) {
-            if (event.ctrlKey && event.key.toLowerCase() === 's') {
-                event.preventDefault();
-                this.save();
+            if (this.$route.path != '/navbar/gestion-ingresosl') {
+                if (event.ctrlKey && event.key.toLowerCase() === 's') {
+                    event.preventDefault();
+                    this.save();
+                }
             }
         },
         getEstadosIngreso(item = null) {
@@ -945,7 +991,7 @@ export default {
         },
         getEncargados(item = null, id = null) {
             if (item != null) {
-                this.encargado_id = item.id
+                this.encargado_id = item.usuario_id
                 this.consulta_encargado = item.nombre
             }
             if (id != null) {
@@ -1021,6 +1067,9 @@ export default {
                     }
                     self.fileInputsCount = result.data
                     self.id_cliente = self.$route.params.id
+                    if (self.id_registro != 0) {
+                        self.id_cliente = self.id_registro
+                    }
                     if (self.id_cliente != undefined) {
                         self.getRegistroIngreso(self.id_cliente)
                     }
@@ -1157,6 +1206,10 @@ export default {
                 });
         },
         validaCampo() {
+            if (this.consulta_encargado == '') {
+                this.showAlert('Debe diligenciar el campo de responsable para guardar el formulario', 'error')
+                return true
+            }
             if (this.empresa_cliente_id == '') {
                 this.showAlert('Debe diligenciar el campo de empresa cliente para guardar el formulario', 'error')
                 return true
@@ -1210,7 +1263,8 @@ export default {
                 afectacion_servicio: this.afectacion_servicio,
                 consulta_observacion_estado: this.consulta_observacion_estado,
                 correo_laboratorio: this.correo_laboratorio,
-                contacto_empresa: this.contacto_empresa
+                contacto_empresa: this.contacto_empresa,
+                encargado_id: this.encargado_id
             }
         },
         cargarArchivo(event, index) {
@@ -1267,7 +1321,6 @@ export default {
                 .get(self.URL_API + "api/v1/formularioingresobyid/" + id_cliente, config)
                 .then(function (result) {
                     self.llenarFormulario(result.data)
-                    self.loading = false
                     self.scrollAuto()
 
                 });
@@ -1311,7 +1364,7 @@ export default {
 
         },
         llenarFormulario(item) {
-            let self = this
+            var self = this
             self.bloquea_campos = true
             this.fecha_ingreso = item.fecha_ingreso
             this.numero_identificacion = item.numero_identificacion
@@ -1367,6 +1420,7 @@ export default {
             this.consulta_observacion_estado = item.observacion_estado
             this.correo_laboratorio = item.correo_laboratorio
             this.contacto_empresa = item.contacto_empresa
+            this.encargado_id = item.responsable_id
 
             if (item['laboratorios'][0] != undefined) {
                 this.departamento_laboratorio_id = item['laboratorios'][0].departamento_id
@@ -1390,6 +1444,7 @@ export default {
             })
 
             this.seguimiento = item.seguimiento
+            this.loading = false
         },
         limpiarFormulario() {
             this.bloquea_campos = false
@@ -1496,6 +1551,11 @@ label {
 
 .ver {
     background-color: #006b3f;
+    color: white;
+}
+
+.eliminar {
+    background-color: #dc3545;
     color: white;
 }
 

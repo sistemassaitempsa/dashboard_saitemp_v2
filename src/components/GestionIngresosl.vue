@@ -1,5 +1,6 @@
 <template>
     <div class="container">
+        <NotificacionesSocket />
         <h2>Registro de ingresos</h2>
         <Tabla :datos="datos" :tabla="tabla" :userlogued="userlogued" :endpoint="endpoint" :listas="listas"
             :endpointexport="endpointexport" :estados_ingreso="estados_ingreso" @actualizaEstado="actualizaEstado"
@@ -12,9 +13,11 @@ import Tabla from './Tabla.vue'
 import axios from 'axios'
 import { Token } from '../Mixins/Token.js'
 import { Alerts } from '../Mixins/Alerts.js';
+import NotificacionesSocket from './NotificacionSocket.vue'
 export default {
     components: {
-        Tabla
+        Tabla,
+        NotificacionesSocket
     },
     mixins: [Token, Alerts],
     props: {
