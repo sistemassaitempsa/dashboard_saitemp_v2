@@ -9,7 +9,7 @@
                 </h5>
             </div>
         </div>
-        <div v-if="items_tabla2.length > 1 && filtroComponente()" class="row" style="text-align:left;clear:both">
+        <div v-if="items_tabla2.length > 0 && filtroComponente()" class="row" style="text-align:left;clear:both">
             <span @click="filtros = !filtros" style="cursor:pointer">Filtro avanzado de búsqueda <i v-if="filtros"
                     class="bi bi-chevron-down"></i><i v-if="!filtros" class="bi bi-chevron-compact-up"></i></span>
         </div>
@@ -95,6 +95,12 @@
                             rel="noopener noreferrer">Exportar excel</a>
                     </button>
                 </div>
+                <!-- <div class="form-check col-xs-3 col-md-3 d-flex mt-3">
+                    <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+                    <label class="form-check-label" for="flexCheckDefault">
+                        Guardar filtro
+                    </label>
+                </div> -->
                 <div class="col-xs-3 col-md-3">
                     <button @click="getRegistros()" type="button" style="margin-top: 30px"
                         class="btn btn-success btn-sm">
@@ -229,13 +235,22 @@
                     Seleccionar todo
                 </button>
             </div>
-            <div v-if="check.length > 0 && ruta != '/navbar/gestion-ingresosl'" class="col-xs-3 col-md-3">
+            <!-- <div v-if="ruta != '/navbar/reporteitems' && !empleados() && ruta != '/navbar/reportes' && ruta != '/navbar/procesosespeciales' && ruta != '/navbar/debida-diligencia/clientes' && ruta != '/navbar/correo-novedades-nomina' && ruta != '/navbar/cliente-supervision' && ruta != '/navbar/solicitudes-os'"
+                class="col-xs-3 col-md-3">
+                <button type="button" style="margin-top: 35px" @click="selectAll((select_all = !select_all))"
+                    class="btn btn-success btn-sm">
+                    Seleccionar todo
+                </button>
+            </div> -->
+            <div v-if="check.length > 0 && ruta != '/navbar/gestion-ingresosl' && ruta != '/navbar/crm-seguimiento'"
+                class="col-xs-3 col-md-3">
                 <button type="button" style="margin-top: 35px; background-color:#E74C3C;color:white"
                     @click="masiveDeleteMessage()" class="btn btn-sm">
                     Eliminar seleccionados
                 </button>
             </div>
-            <div v-else-if="check.length > 0 && ruta == '/navbar/gestion-ingresosl'" class="col-xs-3 col-md-3">
+            <div v-else-if="ruta == '/navbar/gestion-ingresosl' && check.length > 0 || ruta == '/navbar/crm-seguimiento' && check.length > 0"
+                class="col-xs-3 col-md-3">
                 <button type="button" style="margin-top: 35px; background-color:#D4AC0D;color:white"
                     @click="agregarPendientes()" class="btn btn-sm">
                     Añadir a tareas pendientes
@@ -253,6 +268,7 @@
                     <tr>
                         <th v-if="ruta != '/navbar/reporteitems' && !empleados() && ruta != '/navbar/reportes' && ruta != '/navbar/trump' && ruta != '/navbar/procesosespeciales' && ruta != '/navbar/debida-diligencia/clientes' && ruta != '/navbar/correo-novedades-nomina' && ruta != '/navbar/cliente-supervision' && ruta != '/navbar/solicitudes-os'"
                             scope="col"><i class="bi bi-check-square"></i></th>
+                        <th v-if="ruta == '/navbar/gestion-ingresosl'">Ver registro</th>
                         <th @click="sort(item, index + 1, (sorted = !sorted))" scope="col"
                             v-for="(item, index) in tabla2" :key="index"
                             :class="{ 'd-none': item.nombre === 'Estado contrato' }">
@@ -271,6 +287,32 @@
                                 <input class="form-check-input" style="margin: 0px;padding: 0px;"
                                     @change="(item.checked = !item.checked), clear()" v-model="check" type="checkbox"
                                     :value="item.id" />
+                            </div>
+                        </td>
+                        <!-- <td v-if="ruta == '/navbar/gestion-ingresosl'">
+                            <button type="button" class="btn btn-success btn-sm " @click="verOrdenIngreso(item)"
+                                v-if="item.nombre != 'S. Administrador'">
+                                <i class="bi bi-eye"></i>
+                            </button>
+                        </td> -->
+                        <td v-if="ruta == '/navbar/gestion-ingresosl'">
+                            <div class="dropdown">
+                                <button class="btn btn-success dropdown-toggle" type="button" data-bs-toggle="dropdown"
+                                    aria-expanded="false">
+                                    <i class="bi bi-eye"> </i>
+                                </button>
+                                <ul class="dropdown-menu">
+                                    <li><a style="color:black; cursor: pointer;" class="dropdown-item"
+                                            @click="verOrdenIngreso(item)">Formulario</a></li>
+                                    <li>
+                                        <a style="color:black; cursor: pointer;" class="dropdown-item"
+                                            data-bs-toggle="modal" data-bs-target="#exampleModal"
+                                            @click="id_flotante = item.id">
+                                            Flotante
+                                        </a>
+                                    </li>
+
+                                </ul>
                             </div>
                         </td>
                         <td v-for="(item2) in campos2" :key="item2.id"
@@ -328,9 +370,14 @@
                                 Ver registro
                             </button>
                         </td>
-                        <td v-if="ruta == '/navbar/gestion-ingresosl' || ruta == '/navbar/ingresos-pendientes'">
+                        <td v-if="ruta == '/navbar/ingresos-pendientes'">
                             <button type="button" class="btn btn-success btn-sm " @click="verOrdenIngreso(item)"
                                 v-if="item.nombre != 'S. Administrador'">
+                                Ver registro
+                            </button>
+                        </td>
+                        <td v-if="ruta == '/navbar/crm-seguimiento' || ruta == '/navbar/crm-pendientes'">
+                            <button type="button" class="btn btn-success btn-sm " @click="verRegistroCrm(item)">
                                 Ver registro
                             </button>
                         </td>
@@ -438,6 +485,26 @@
                     </ul>
                 </nav>
             </div>
+            <FlotanteFormularioIngreso :id_flotante="id_flotante" />
+            <!-- Modal -->
+            <!-- <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+                aria-hidden="true">
+                <div class="modal-dialog modal-xl">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h1 class="modal-title fs-5" id="exampleModalLabel">Modal title</h1>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            ...
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <button type="button" class="btn btn-primary">Save changes</button>
+                        </div>
+                    </div>
+                </div>
+            </div> -->
         </div>
         <div v-else>
             <div v-if="spinner">
@@ -459,6 +526,7 @@ import Vue from 'vue';
 import axios from 'axios'
 import Modal from './Modal.vue'
 import ConsultaContrato from './ConsultaContrato.vue'
+import FlotanteFormularioIngreso from './FlotanteFormularioIngreso.vue'
 import { Alerts } from '../Mixins/Alerts.js';
 import { Token } from '../Mixins/Token.js';
 import { Permisos } from '../Mixins/Permisos.js';
@@ -468,7 +536,8 @@ export default {
     components: {
         Modal,
         ConsultaContrato,
-        Loading
+        Loading,
+        FlotanteFormularioIngreso
     },
     mixins: [Token, Alerts, Permisos, Scroll],
     props: {
@@ -551,6 +620,7 @@ export default {
             pagina_filtro: '',
             numero_documento_candidato: '',
             busqueda_por_documento: false,
+            id_flotante: 0,
 
         };
     },
@@ -673,7 +743,6 @@ export default {
 
         },
         filtroComponente() {
-
             if (this.ruta.includes('costos')) {
                 return true
             }
@@ -693,6 +762,9 @@ export default {
                 return true
             }
             else if (this.ruta.includes('gestion-ingresosl')) {
+                return true
+            }
+            else if (this.ruta.includes('crm-seguimiento')) {
                 return true
             }
         },
@@ -967,7 +1039,7 @@ export default {
                 .post(self.URL_API + "api/v1/" + self.endpoint + "pendientes", self.check, config)
                 .then(function (result) {
                     self.showAlert(result.data.message, result.data.status);
-                    self.getRegistros();
+                    // self.getRegistros();
                     if (result.data.status == "success") {
                         self.check = [];
                         self.select_all = false;
@@ -1129,6 +1201,9 @@ export default {
         },
         verOrdenIngreso(item) {
             this.$router.push({ name: 'gestion-ingresos', params: { id: item.id } })
+        },
+        verRegistroCrm(item) {
+            this.$router.push({ name: 'crm-intreraccion', params: { id: item.id } })
         },
         exportFormularioDD() {
             let self = this;

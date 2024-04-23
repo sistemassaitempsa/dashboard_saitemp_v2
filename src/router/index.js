@@ -61,6 +61,8 @@ import GestionIngresosM from "../components/GestionIngresosM.vue";
 import ChatWhatsapp from "../components/ChatWhatsapp.vue";
 import TareasPendientesIngresos from "../components/TareasPendientesIngresos.vue";
 import CrmCliente from "../components/CrmCliente.vue";
+import CrmSeguimiento from "../components/CrmSeguimiento.vue";
+import PendientesCrm from "../components/PendientesCrm.vue";
 
 
 
@@ -368,9 +370,19 @@ const routes = [
         component: TareasPendientesIngresos,
       },
       {
-        path: "crm-intreraccion",
+        path: "crm-intreraccion/:id?",
         name: "crm-intreraccion",
         component: CrmCliente,
+      },
+      {
+        path: "crm-seguimiento",
+        name: "crm-seguimiento",
+        component: CrmSeguimiento,
+      },
+      {
+        path: "crm-pendientes",
+        name: "crm-pendientes",
+        component: PendientesCrm,
       },
       // {
       //   path: "navbar/*",
