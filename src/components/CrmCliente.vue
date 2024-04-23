@@ -108,7 +108,8 @@
                     <div class="col mb-3">
                         <SearchList nombreCampo="Estado *" @getEstadoCierreCrm="getEstadoCierreCrm"
                             eventoCampo="getEstadoCierreCrm" nombreItem="nombre" :registros="estados_cierre"
-                            placeholder="Seleccione una opción" :consulta="consulta_estado_cierre" />
+                            placeholder="Seleccione una opción" :consulta="consulta_estado_cierre" 
+                            :disabled="$route.params.id != undefined && fecha_cierre != undefined" />
                     </div>
                     <div class="col mb-3">
                         <SearchList nombreCampo="PQRSF *" @getPQRSF="getPQRSF" eventoCampo="getPQRSF"
@@ -126,7 +127,7 @@
                         <SearchList nombreCampo="Cierra la PQRSF *" @getUsuarios="getUsuarios" eventoCampo="getUsuarios"
                             nombreItem="nombre" :registros="usuarios" placeholder="Seleccione una opción"
                             :consulta="consulta_cierra_pqrsf"
-                            :disabled="$route.params.id != undefined && consulta_cierra_pqrsf != null" :index="2" />
+                            :disabled="$route.params.id != undefined && consulta_cierra_pqrsf != null && fecha_cierre != undefined" :index="2" />
                     </div>
                 </div>
                 <div class="row">
@@ -342,7 +343,6 @@ export default {
             axios
                 .post(url, form, config)
                 .then(function (result) {
-                    // self.sedes = result.data
                     self.showAlert(result.data.message, result.data.status)
                     const rutaActual = self.$route;
                     const nuevosParametros = { ...rutaActual.params, id: result.data.id };
