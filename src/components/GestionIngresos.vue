@@ -974,6 +974,7 @@ export default {
         },
         getEstadosIngreso(item = null) {
             if (item != null) {
+                this.consulta_responsable_ingreso = ''
                 this.estado_ingreso_id = item.id
                 this.consulta_estado_ingreso = item.nombre
                 this.consulta_encargado = ''
@@ -993,6 +994,7 @@ export default {
             if (item != null) {
                 this.encargado_id = item.usuario_id
                 this.consulta_encargado = item.nombre
+                this.consulta_responsable_ingreso = item.nombre
             }
             if (id != null) {
                 let self = this;
