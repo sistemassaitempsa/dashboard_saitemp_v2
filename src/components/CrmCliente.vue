@@ -50,12 +50,14 @@
                     <div class="col mb-3">
                         <SearchList nombreCampo="Solicitante *" @getSolicitanteCrm="getSolicitanteCrm"
                             eventoCampo="getSolicitanteCrm" nombreItem="nombre" :registros="solicitantes"
-                            placeholder="Seleccione una opción" :consulta="consulta_solicitante" :disabled="$route.params.id != undefined"/>
+                            placeholder="Seleccione una opción" :consulta="consulta_solicitante"
+                            :disabled="$route.params.id != undefined" />
                     </div>
                     <div class="col mb-3">
                         <SearchList nombreCampo="Tipo de atención *" @getInteracciones="getInteracciones"
                             eventoCampo="getInteracciones" nombreItem="nombre" :registros="respuestas_interaccion"
-                            placeholder="Seleccione una opción" :consulta="consulta_interaccion" :disabled="$route.params.id != undefined"/>
+                            placeholder="Seleccione una opción" :consulta="consulta_interaccion"
+                            :disabled="$route.params.id != undefined" />
                     </div>
                 </div>
                 <div class="row">
@@ -63,7 +65,8 @@
                         <label class="form-label">Nombre / razón social:
                         </label>
                         <input type="text" class="form-control" autocomplete="off" id="exampleInputEmail1"
-                            aria-describedby="emailHelp" v-model="nombre_contacto" required :disabled="$route.params.id != undefined" />
+                            aria-describedby="emailHelp" v-model="nombre_contacto" required
+                            :disabled="$route.params.id != undefined" />
                         <div class="invalid-feedback">
                             {{ mensaje_error }}
                         </div>
@@ -72,7 +75,8 @@
                         <label class="form-label">Nit / número de documento:
                         </label>
                         <input type="text" class="form-control" autocomplete="off" id="exampleInputEmail1"
-                            aria-describedby="emailHelp" v-model="nit_documento" required :disabled="$route.params.id != undefined"/>
+                            aria-describedby="emailHelp" v-model="nit_documento" required
+                            :disabled="$route.params.id != undefined" />
                         <div class="invalid-feedback">
                             {{ mensaje_error }}
                         </div>
@@ -83,7 +87,8 @@
                         <label class="form-label">Telefono de contacto:
                         </label>
                         <input type="text" class="form-control" autocomplete="off" id="exampleInputEmail1"
-                            aria-describedby="emailHelp" v-model="telefono_contacto" required :disabled="$route.params.id != undefined"/>
+                            aria-describedby="emailHelp" v-model="telefono_contacto" required
+                            :disabled="$route.params.id != undefined" />
                         <div class="invalid-feedback">
                             {{ mensaje_error }}
                         </div>
@@ -92,7 +97,8 @@
                         <label class="form-label">Correo de contacto:
                         </label>
                         <input type="text" class="form-control" autocomplete="off" id="exampleInputEmail1"
-                            aria-describedby="emailHelp" v-model="correo_contacto" required :disabled="$route.params.id != undefined" />
+                            aria-describedby="emailHelp" v-model="correo_contacto" required
+                            :disabled="$route.params.id != undefined" />
                         <div class="invalid-feedback">
                             {{ mensaje_error }}
                         </div>
@@ -102,19 +108,56 @@
                     <div class="col mb-3">
                         <SearchList nombreCampo="Estado *" @getEstadoCierreCrm="getEstadoCierreCrm"
                             eventoCampo="getEstadoCierreCrm" nombreItem="nombre" :registros="estados_cierre"
-                            placeholder="Seleccione una opción" :consulta="consulta_estado_cierre" />
+                            placeholder="Seleccione una opción" :consulta="consulta_estado_cierre" 
+                            :disabled="$route.params.id != undefined && fecha_cierre != undefined" />
                     </div>
                     <div class="col mb-3">
                         <SearchList nombreCampo="PQRSF *" @getPQRSF="getPQRSF" eventoCampo="getPQRSF"
                             nombreItem="nombre" :registros="lista_pqrsf" placeholder="Seleccione una opción"
-                            :consulta="consulta_pqrsf" :disabled="$route.params.id != undefined"/>
+                            :consulta="consulta_pqrsf" :disabled="$route.params.id != undefined" />
                     </div>
+                </div>
+                <div class="row">
+                    <div class="col-6 mb-3">
+                        <SearchList nombreCampo="Responsable *" @getUsuarios="getUsuarios" eventoCampo="getUsuarios"
+                            nombreItem="nombre" :registros="usuarios" placeholder="Seleccione una opción"
+                            :consulta="consulta_responsable" :disabled="$route.params.id != undefined" :index="1" />
+                    </div>
+                    <div class="col-6 mb-3" v-if="estado_cierre_id == 2 && $route.params.id != undefined || estado_cierre_id == 2 && $route.params.id == undefined">
+                        <SearchList nombreCampo="Cierra la PQRSF *" @getUsuarios="getUsuarios" eventoCampo="getUsuarios"
+                            nombreItem="nombre" :registros="usuarios" placeholder="Seleccione una opción"
+                            :consulta="consulta_cierra_pqrsf"
+                            :disabled="$route.params.id != undefined && consulta_cierra_pqrsf != null && fecha_cierre != undefined" :index="2" />
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-6 mb-3" v-if="$route.params.id != undefined">
+                        <label class="form-label">Crea PQRSF:
+                        </label>
+                        <input type="text" class="form-control" autocomplete="off" id="exampleInputEmail1"
+                            aria-describedby="emailHelp" v-model="crea_pqrsf" required
+                            :disabled="$route.params.id != undefined" />
+                        <div class="invalid-feedback">
+                            {{ mensaje_error }}
+                        </div>
+                    </div>
+                    <!-- <div class="col mb-3" v-if="$route.params.id != undefined">
+                        <label class="form-label">Cierra PQRSF:
+                        </label>
+                        <input type="text" class="form-control" autocomplete="off" id="exampleInputEmail1"
+                            aria-describedby="emailHelp" v-model="cierra_pqrsf" required
+                            :disabled="$route.params.id != undefined" />
+                        <div class="invalid-feedback">
+                            {{ mensaje_error }}
+                        </div>
+                    </div> -->
                 </div>
                 <div class="row">
                     <div class="col mb-3">
                         <label class="form-label">Observación: *</label>
                         <textarea class="form-control" required name="" id="razon_social" rows="10"
-                            v-model="observacion" placeholder="Observación" :disabled="$route.params.id != undefined"></textarea>
+                            v-model="observacion" placeholder="Observación"
+                            :disabled="$route.params.id != undefined"></textarea>
                         <div class="invalid-feedback">
                             {{ mensaje_error }}
                         </div>
@@ -171,14 +214,20 @@ export default {
             lista_pqrsf: [],
             consulta_pqrsf: '',
             pqrsf_id: '',
-            id_registro: ''
+            id_registro: '',
+            crea_pqrsf: '',
+            cierra_pqrsf_id: '',
+            consulta_cierra_pqrsf: '',
+            responsable_id: '',
+            consulta_responsable: '',
+            usuarios: []
         }
     },
     computed: {
 
     },
     watch: {
-        $route(){
+        $route() {
             this.limpiarFormulario()
         }
     },
@@ -210,6 +259,9 @@ export default {
             this.fecha_cierre = ''
             this.pqrsf_id = ''
             this.consulta_pqrsf = ''
+            this.crea_pqrsf = ''
+            this.consulta_cierra_pqrsf = ''
+            this.consulta_responsable = ''
             let currentRoute = { ...this.$route };
             delete currentRoute.params.id;
             this.$router.replace(currentRoute);
@@ -243,6 +295,9 @@ export default {
             this.nit_documento = item.nit_documento
             this.pqrsf_id = item.pqrsf_id
             this.consulta_pqrsf = item.pqrsf
+            this.crea_pqrsf = item.creacion_pqrsf
+            this.consulta_cierra_pqrsf = item.cierre_pqrsf
+            this.consulta_responsable = item.responsable
             this.fecha_radicado = this.formatearFecha(item.created_at)
             this.fecha_cierre = this.formatearFecha(item.fecha_cerrado)
             this.loading = false
@@ -273,7 +328,10 @@ export default {
                 estado_id: this.estado_cierre_id,
                 observacion: this.observacion,
                 nit_documento: this.nit_documento,
-                pqrsf_id: this.pqrsf_id
+                pqrsf_id: this.pqrsf_id,
+                creacion_pqrsf: this.crea_pqrsf,
+                cierre_pqrsf: this.consulta_cierra_pqrsf,
+                responsable: this.consulta_responsable
             }
             var id = this.$route.params.id
             var url = ''
@@ -282,11 +340,9 @@ export default {
             } else {
                 url = self.URL_API + "api/v1/seguimientocrm"
             }
-            console.log(form)
             axios
                 .post(url, form, config)
                 .then(function (result) {
-                    // self.sedes = result.data
                     self.showAlert(result.data.message, result.data.status)
                     const rutaActual = self.$route;
                     const nuevosParametros = { ...rutaActual.params, id: result.data.id };
@@ -351,6 +407,10 @@ export default {
             if (item != null) {
                 this.estado_cierre_id = item.id
                 this.consulta_estado_cierre_id = item.nombre
+                if (item.id == 1) {
+                    this.cierra_pqrsf_id = ''
+                    this.consulta_cierra_pqrsf = ''
+                }
             }
             let config = this.configHeader();
             axios
@@ -371,6 +431,29 @@ export default {
                 .then(function (result) {
                     self.lista_pqrsf = result.data
                 });
+        },
+        getUsuarios(item = null, index = null) {
+            if (item != null) {
+                switch (index) {
+                    case 1:
+                        this.responsable_id = item.id;
+                        this.consulta_responsable = item.nombre
+                        break
+                    case 2:
+                        this.cierra_pqrsf_id = item.id
+                        this.consulta_cierra_pqrsf = item.nombre
+                        break
+                }
+            }
+
+            let self = this;
+            let config = this.configHeader();
+            axios
+                .get(self.URL_API + "api/v1/userslist", config)
+                .then(function (result) {
+                    self.usuarios = result.data
+                });
+
         },
     }
 };

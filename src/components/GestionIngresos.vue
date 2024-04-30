@@ -48,7 +48,7 @@
                     <div class="col">
                         <SearchList nombreCampo="Responsable: " @getEncargados="getEncargados"
                             eventoCampo="getEncargados" nombreItem="nombre" :consulta="consulta_responsable_ingreso"
-                            :registros="lista_encargados" placeholder="Seleccione una opción" />
+                            :registros="lista_encargados" placeholder="Seleccione una opción" :valida_campo="false" />
                     </div>
                 </div>
                 <div class="row">
@@ -97,7 +97,7 @@
                         <label class="form-label">Citación entrevista: *
                         </label>
                         <input type="datetime-local" class="form-control" autocomplete="off" id="exampleInputEmail1"
-                            aria-describedby="emailHelp" v-model="citacion_entrevista" />
+                            aria-describedby="emailHelp" v-model="citacion_entrevista" required/>
                         <div class="invalid-feedback">
                             {{ mensaje_error }}
                         </div>
@@ -372,18 +372,24 @@
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col">
+                    <div class="col-4">
                         <SearchList nombreCampo="Novedad en servicio: *" nombreItem="nombre"
                             :registros="observaciones_estado" @getObservacionesEstado="getObservacionesEstado"
                             eventoCampo="getObservacionesEstado" :ordenCampo="2" placeholder="Seleccione una opción"
                             :consulta="consulta_observacion_estado" :valida_campo="false" />
                     </div>
-                    <div class="col mb-3">
+                    <div class="col mb-3" v-if="consulta_observacion_estado == 'Servicio no conforme'">
                         <label class="form-label">Afectaciones al servicio:
                         </label>
                         <textarea name="" id="afectacion_servicio" class="form-control" rows="1"
                             v-model="afectacion_servicio" placeholder="Solo para no conformidades"
                             @input="afectacion_servicio = formatInputUpperCase($event.target.value)"></textarea>
+                    </div>
+                    <div class="col" v-if="consulta_observacion_estado == 'Servicio no conforme'">
+                        <SearchList nombreCampo="Corregir por: " @getEncargadosCorregir="getEncargadosCorregir"
+                            eventoCampo="getEncargadosCorregir" nombreItem="nombre"
+                            :consulta="consulta_responsable_corregir" :registros="lista_encargados_corregir"
+                            placeholder="Seleccione una opción" :valida_campo="false" />
                     </div>
                 </div>
                 <div class="row">
@@ -423,6 +429,10 @@
                                             de servicio</a></li>
                                     <li><a class="dropdown-item" href="#" @click.prevent="descargarInforme(2)">Descargar
                                             informe de seleccion</a></li>
+                                    <li><a class="dropdown-item" href="#" @click.prevent="descargarInforme(3)">Descargar
+                                            citación laboratorio</a></li>
+                                    <li><a class="dropdown-item" href="#" @click.prevent="descargarInforme(4)">Descargar
+                                            citación candidato</a></li>
                                 </ul>
                             </div>
                         </div>
@@ -722,7 +732,10 @@ export default {
             numero_documento_candidato: '',
             bloquea_campos: false,
             userInput_nombres: false,
-            userInput_numero_documento: false
+            userInput_numero_documento: false,
+            consulta_responsable_corregir: '',
+            consulta_encargado_corregir: '',
+            lista_encargados_corregir: '',
         }
     },
     computed: {
@@ -946,12 +959,16 @@ export default {
                             self.numero_identificacion = ''
                             self.showAlertmasBoton('Este candidato se encuentra en la lista trump', 'error');
                         } else if (result.data.numero_identificacion != undefined && self.$route.params.id == undefined) {
-                            var fechaSinHora = new Date(result.data.fecha_radicado).toLocaleDateString();
+                            // var fechaSinHora = new Date(result.data.fecha_radicado).toLocaleDateString();
                             if (result.data.responsable_ingreso != null) {
-                                self.showAlertmasBoton('El número de identificación ya ha sido registrado en la fecha: \n ' + fechaSinHora + ' y actualmente tiene como responsable a ' + result.data.responsable_ingreso, 'error');
-                            } else {
-                                self.showAlertmasBoton('El número de identificación ya ha sido registrado en la fecha: \n ' + fechaSinHora + ' y actualmente no cuenta con ningun responsable asignado ', 'error');
-                            }
+                                // self.showAlertmasBoton('El número de identificación ya ha sido registrado en la fecha: \n ' + fechaSinHora + ' y actualmente tiene como responsable a ' + result.data.responsable_ingreso, 'error');
+                                document.getElementById('numero_identificacion').focus();
+                                self.numero_identificacion = ''
+                                self.showAlertmasBoton('Este candidato ya se encuentra registrado', 'error');
+                            } 
+                            // else {
+                            //     self.showAlertmasBoton('El número de identificación ya ha sido registrado en la fecha: \n ' + fechaSinHora + ' y actualmente no cuenta con ningun responsable asignado ', 'error');
+                            // }
 
                             return;
                         }
@@ -974,11 +991,14 @@ export default {
         },
         getEstadosIngreso(item = null) {
             if (item != null) {
+                this.consulta_responsable_ingreso = ''
                 this.estado_ingreso_id = item.id
                 this.consulta_estado_ingreso = item.nombre
                 this.consulta_encargado = ''
                 this.encargado_id = ''
                 this.lista_encargados = []
+                this.lista_encargados_corregir = []
+                this.consulta_encargado_corregir = ''
                 this.getEncargados(null, item.id)
             }
             let self = this;
@@ -989,10 +1009,25 @@ export default {
                     self.estados_ingreso = result.data
                 });
         },
+        getEncargadosCorregir(item = null) {
+            if (item != null) {
+                this.encargado_id = item.id
+                this.consulta_encargado_corregir = item.nombre
+            }
+            let self = this;
+            let config = this.configHeader();
+            axios
+                .get(self.URL_API + "api/v1/responsableingresos/" + 12, config)
+                .then(function (result) {
+                    self.lista_encargados_corregir = result.data
+                });
+
+        },
         getEncargados(item = null, id = null) {
             if (item != null) {
                 this.encargado_id = item.usuario_id
                 this.consulta_encargado = item.nombre
+                this.consulta_responsable_ingreso = item.nombre
             }
             if (id != null) {
                 let self = this;
@@ -1206,10 +1241,10 @@ export default {
                 });
         },
         validaCampo() {
-            if (this.consulta_encargado == '') {
-                this.showAlert('Debe diligenciar el campo de responsable para guardar el formulario', 'error')
-                return true
-            }
+            // if (this.consulta_encargado == '') {
+            //     this.showAlert('Debe diligenciar el campo de responsable para guardar el formulario', 'error')
+            //     return true
+            // }
             if (this.empresa_cliente_id == '') {
                 this.showAlert('Debe diligenciar el campo de empresa cliente para guardar el formulario', 'error')
                 return true
@@ -1264,7 +1299,8 @@ export default {
                 consulta_observacion_estado: this.consulta_observacion_estado,
                 correo_laboratorio: this.correo_laboratorio,
                 contacto_empresa: this.contacto_empresa,
-                encargado_id: this.encargado_id
+                encargado_id: this.encargado_id,
+                consulta_encargado_corregir: this.consulta_encargado_corregir,
             }
         },
         cargarArchivo(event, index) {
@@ -1421,6 +1457,8 @@ export default {
             this.correo_laboratorio = item.correo_laboratorio
             this.contacto_empresa = item.contacto_empresa
             this.encargado_id = item.responsable_id
+            this.consulta_responsable_corregir = item.responsable_corregir
+
 
             if (item['laboratorios'][0] != undefined) {
                 this.departamento_laboratorio_id = item['laboratorios'][0].departamento_id
