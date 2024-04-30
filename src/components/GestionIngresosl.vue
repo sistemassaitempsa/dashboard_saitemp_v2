@@ -48,6 +48,8 @@ export default {
                 { nombre: "Observaciones al servicio", orden: "DESC", tipo: "texto", calculado: 'false' },
                 { nombre: "Novedad en servicio", orden: "DESC", tipo: "texto", calculado: 'false' },
                 { nombre: "Profesional", orden: "DESC", tipo: "texto", calculado: 'false' },
+                // { nombre: "Citación entrevista", orden: "DESC", tipo: "texto", calculado: 'false' },
+                { nombre: "Tipo servicio", orden: "DESC", tipo: "texto", calculado: 'false' },
             ],
             ejecutivos_comerciales: [],
             listas: [],
