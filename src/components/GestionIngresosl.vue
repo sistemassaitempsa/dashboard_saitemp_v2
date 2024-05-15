@@ -50,6 +50,8 @@ export default {
                 { nombre: "Profesional", orden: "DESC", tipo: "texto", calculado: 'false' },
                 // { nombre: "Citación entrevista", orden: "DESC", tipo: "texto", calculado: 'false' },
                 { nombre: "Tipo servicio", orden: "DESC", tipo: "texto", calculado: 'false' },
+                { nombre: "Afectaciones al servicio", orden: "DESC", tipo: "texto", calculado: 'false' },
+                { nombre: "Corregir por", orden: "DESC", tipo: "texto", calculado: 'false' },
             ],
             ejecutivos_comerciales: [],
             listas: [],
