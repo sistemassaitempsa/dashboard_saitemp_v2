@@ -63,6 +63,7 @@ import TareasPendientesIngresos from "../components/TareasPendientesIngresos.vue
 import CrmCliente from "../components/CrmCliente.vue";
 import CrmSeguimiento from "../components/CrmSeguimiento.vue";
 import PendientesCrm from "../components/PendientesCrm.vue";
+import IndicadoresSeya from "../components/IndicadoresSeya.vue";
 
 
 
@@ -383,6 +384,11 @@ const routes = [
         path: "crm-pendientes",
         name: "crm-pendientes",
         component: PendientesCrm,
+      },
+      {
+        path: "indicadores-seya",
+        name: "indicadores-seya",
+        component: IndicadoresSeya,
       },
       // {
       //   path: "navbar/*",

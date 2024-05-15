@@ -21,7 +21,7 @@
                     <select class="form-select form-select-sm" @change="tipoCampo2(indice_campos[index1], index1)"
                         v-model="indice_campos[index1]" aria-label="Default select example">
                         <option v-for="item, index in tabla3" :key="index">{{ index == 0 ? 'Por favor seleccione un' +
-            ' campo' : item.nombre }}</option>
+                            ' campo' : item.nombre }}</option>
                     </select>
                 </div>
                 <div class="col-xs-3 col-md-3">
@@ -44,8 +44,8 @@
                 <div v-if="tipos_de_campo[index1] == 'fecha'" class="col-xs-3 col-md-3">
                     <div class="mb-3">
                         <label for="exampleInputEmail1" style="float:left" class="form-label">{{ operadores[index1] !=
-            'Entre' ?
-            'Fecha' : 'Fecha inicial' }}</label>
+                            'Entre' ?
+                            'Fecha' : 'Fecha inicial' }}</label>
                         <input type="date" class="form-control form-control-sm" id="exampleInputEmail2"
                             aria-describedby="emailHelp" v-model="valores_comparar[index1]" />
                     </div>
@@ -60,8 +60,8 @@
                     </div>
                     <div v-if="calculados[index1] == 'false'" class="mb-3">
                         <label for="exampleInputEmail1" style="float:left" class="form-label">{{ operadores[index1] !=
-            'Entre' ?
-            'Valor' : 'Valor inicial' }}</label>
+                            'Entre' ?
+                            'Valor' : 'Valor inicial' }}</label>
                         <input type="text" class="form-control form-control-sm" autocomplete="off"
                             id="exampleInputEmail2" aria-describedby="emailHelp" v-model="valores_comparar[index1]" />
                     </div>
@@ -85,7 +85,7 @@
             </div>
             <div class="row">
                 <div class="col-xs-3 col-md-3">
-                    <button @click="filtrar2()" type="button" style="margin-top: 30px" class="btn btn-success btn-sm">
+                    <button @click="filtrar2(false)" type="button" style="margin-top: 30px" class="btn btn-success btn-sm">
                         Realizar búsqueda
                     </button>
                 </div>
@@ -116,7 +116,7 @@
                 <select class="form-select form-select-sm" @change="tipoCampo(indice_campo)" v-model="indice_campo"
                     aria-label="Default select example">
                     <option v-for="item, index in tabla2" :key="index">{{ index == 0 ? 'Por favor seleccione un' +
-            ' campo' : item.nombre }}</option>
+                        ' campo' : item.nombre }}</option>
                 </select>
             </div>
             <div class="col-xs-3 col-md-3">
@@ -136,7 +136,7 @@
             <div v-if="tipo_de_campo == 'fecha'" class="col-xs-3 col-md-3">
                 <div class="mb-3">
                     <label for="exampleInputEmail1" style="float:left" class="form-label">{{ operador != 'Entre' ?
-            'Fecha' : 'Fecha inicial' }}</label>
+                        'Fecha' : 'Fecha inicial' }}</label>
                     <input type="date" class="form-control form-control-sm" id="exampleInputEmail2"
                         aria-describedby="emailHelp" v-model="valor_comparar" />
                 </div>
@@ -151,7 +151,7 @@
                 </div>
                 <div v-if="calculado == 'false'" class="mb-3">
                     <label for="exampleInputEmail1" style="float:left" class="form-label">{{ operador != 'Entre' ?
-            'Valor' : 'Valor inicial' }}</label>
+                        'Valor' : 'Valor inicial' }}</label>
                     <input type="text" class="form-control form-control-sm" autocomplete="off" id="exampleInputEmail2"
                         aria-describedby="emailHelp" v-model="valor_comparar" />
                 </div>
@@ -318,10 +318,10 @@
                         <td v-for="(item2) in campos2" :key="item2.id"
                             :style="{ display: shouldDisplayColumn(item2) ? 'table-cell' : 'none' }"
                             style="text-align:justify">{{ item2 == 'id' ? index +
-            1 : item[item2] ==
-                null ? 'Sin datos' : item2.includes('sal_bas') ?
-            formatCurrency(item[item2]) : item[item2].includes('000000Z') ? fecha(item[item2]) :
-                item[item2] }}
+                                1 : item[item2] ==
+                                    null ? 'Sin datos' : item2.includes('sal_bas') ?
+                                formatCurrency(item[item2]) : item[item2].includes('000000Z') ? fecha(item[item2]) :
+                                    item[item2] }}
                         </td>
                         <!-- <td @click="getAnalista(item['analista'].split('-')[1])" style="color:rgb(9, 107, 22);text-decoration: underline; cursor: pointer;">{{ item['analista'].split('-')[0] }}</td> -->
                         <td v-if="empleados() && !isNaN(search)">
@@ -391,7 +391,7 @@
                             <div class="btn-group">
                                 <button type="button" class="btn"
                                     :style="'color:black;background-color:' + item.color_estado_firma">{{
-            item.nombre_estado_firma }}</button>
+                                        item.nombre_estado_firma }}</button>
                                 <button type="button" class="btn dropdown-toggle dropdown-toggle-split"
                                     v-if="permisos[20].autorizado" data-bs-toggle="dropdown" aria-expanded="false"
                                     :style="'color:black;background-color:' + item.color_estado_firma">
@@ -400,7 +400,7 @@
                                 <ul class="dropdown-menu">
                                     <li style="cursor:pointer;" v-for="item2, index in estados_firma" :key="index"> <a
                                             class="dropdown-item" @click="actualizaEstado(item.id, item2.id)">{{
-            item2.nombre }}</a></li>
+                                                item2.nombre }}</a></li>
                                     <li>
                                         <hr class="dropdown-divider">
                                     </li>
@@ -415,7 +415,7 @@
                             <div class="btn-group">
                                 <button type="button" class="btn"
                                     :style="'color:black;background-color:' + item.color_estado">{{
-            truncateText(item.estado_ingreso, maxCaracteres, item.id) }}</button>
+                                        truncateText(item.estado_ingreso, maxCaracteres, item.id) }}</button>
                                 <button type="button" class="btn dropdown-toggle dropdown-toggle-split"
                                     v-if="permisos[23].autorizado" data-bs-toggle="dropdown" aria-expanded="false"
                                     :style="'color:black;background-color:' + item.color_estado">
@@ -424,7 +424,7 @@
                                 <ul class="dropdown-menu">
                                     <li style="cursor:pointer;" v-for="item2, index in estados_ingreso" :key="index"> <a
                                             class="dropdown-item" @click="actualizaEstado(item.id, item2.id)">{{
-            item2.nombre }}</a></li>
+                                                item2.nombre }}</a></li>
                                     <!-- <li>
                                         <hr class="dropdown-divider">
                                     </li>
@@ -438,7 +438,7 @@
                             <div class="btn-group">
                                 <button type="button" class="btn"
                                     :style="'color:black;background-color:' + item.color_estado">{{
-            truncateOwner(item.responsable, maxCaracteres) }}</button>
+                                        truncateOwner(item.responsable, maxCaracteres) }}</button>
                                 <button type="button" class="btn dropdown-toggle dropdown-toggle-split"
                                     v-if="permisos[23].autorizado" data-bs-toggle="dropdown" aria-expanded="false"
                                     :style="'color:black;background-color:' + item.color_estado"
@@ -448,7 +448,7 @@
                                 <ul class="dropdown-menu">
                                     <li style="cursor:pointer;" v-for="item2, index in lista_encargados" :key="index">
                                         <a class="dropdown-item" @click="actualizaResponsable(item.id, index)">{{
-            item2.nombre }}</a>
+                                            item2.nombre }}</a>
                                     </li>
                                 </ul>
                             </div>
@@ -471,15 +471,15 @@
                     <ul class="pagination">
                         <li class="page-item">
                             <a :style="item.active == true
-            ? 'background-color:#d06519'
-            : 'background-color:#21618C'
-            " class="page-link" v-for="(item, index) in links.links" :key="index"
+                                ? 'background-color:#d06519'
+                                : 'background-color:#21618C'
+                                " class="page-link" v-for="(item, index) in links.links" :key="index"
                                 @click="pagination(item.url), currentUrl = item.url, goScroll('up')">{{
-                                index == 0
-                                ? "Anterior"
-                                : index == siguiente - 1
-                                ? "siguiente"
-                                : item.label
+                                    index == 0
+                                        ? "Anterior"
+                                        : index == siguiente - 1
+                                            ? "siguiente"
+                                            : item.label
                                 }}</a>
                         </li>
                     </ul>
@@ -645,7 +645,7 @@ export default {
             var self = this
             if (self.filtro_gestion_ingresos && !self.busqueda_por_documento) {
                 this.interval = setInterval(() => {
-                    self.filtrar2(); // Llama a la función que quieres ejecutar cada 30 segundos
+                    self.filtrar2(true); // Llama a la función que quieres ejecutar cada 30 segundos
                 }, 30000);
             } else {
                 clearInterval(this.interval)
@@ -653,7 +653,6 @@ export default {
         },
         busqueda_por_documento() {
             var self = this
-            console.log('prueba 1')
             if (self.busqueda_por_documento && !self.filtro_gestion_ingresos) {
                 this.interval2 = setInterval(() => {
                     self.buscarDocumentoLista(); // Llama a la función que quieres ejecutar cada 30 segundos
@@ -797,7 +796,7 @@ export default {
                     self.llenarTabla(result)
                 });
         },
-        filtrar2() {
+        filtrar2(filtrando = null) {
             let self = this;
             this.filtro_gestion_ingresos = true
             this.$emit('filtrando', true)
@@ -807,38 +806,44 @@ export default {
                 this.loading = true
             }
             let config = self.configHeader();
-            const longitud = this.campo_.length;
-            for (let i = longitud - 1; i >= 0; i--) {
-                if (
-                    this.campo_[i] === undefined ||
-                    this.operadores[i] === undefined ||
-                    this.valores_comparar[i] === undefined ||
-                    this.campo_[i] === '' ||
-                    this.operadores[i] === '' ||
-                    this.valores_comparar[i] === ''
-                ) {
-                    Vue.set(this.campo_, i, undefined);
-                    Vue.set(this.operadores, i, undefined);
-                    Vue.set(this.valores_comparar, i, undefined);
-                    Vue.set(this.valores_comparar2, i, undefined);
-                    Vue.set(this.indice_campos, i, undefined);
-                }
-            }
-
-            let indice_campos = JSON.stringify(this.campo_);
-            let operadores = JSON.stringify(this.operadores);
-            let valores_comparar = JSON.stringify(this.valores_comparar);
-            let valores_comparar2 = JSON.stringify(this.valores_comparar2);
-            let cadena = indice_campos + '/' + operadores + '/' + valores_comparar + '/' + valores_comparar2
-            let base64 = (btoa(cadena))
-            this.base64consultaingresos = base64
-            axios
-                .get(self.URL_API + "api/v1/" + self.endpoint + "filtro/" + base64 + '/' + this.cantidad, config)
-                .then(function (result) {
-                    self.loading = false
-                    self.currentUrl = result.data.first_page_url
+            if (filtrando === true) {
+                axios.get(self.currentUrl, config).then(function (result) {
                     self.llenarTabla(result)
                 });
+            } else {
+                const longitud = this.campo_.length;
+                for (let i = longitud - 1; i >= 0; i--) {
+                    if (
+                        this.campo_[i] === undefined ||
+                        this.operadores[i] === undefined ||
+                        this.valores_comparar[i] === undefined ||
+                        this.campo_[i] === '' ||
+                        this.operadores[i] === '' ||
+                        this.valores_comparar[i] === ''
+                    ) {
+                        Vue.set(this.campo_, i, undefined);
+                        Vue.set(this.operadores, i, undefined);
+                        Vue.set(this.valores_comparar, i, undefined);
+                        Vue.set(this.valores_comparar2, i, undefined);
+                        Vue.set(this.indice_campos, i, undefined);
+                    }
+                }
+
+                let indice_campos = JSON.stringify(this.campo_);
+                let operadores = JSON.stringify(this.operadores);
+                let valores_comparar = JSON.stringify(this.valores_comparar);
+                let valores_comparar2 = JSON.stringify(this.valores_comparar2);
+                let cadena = indice_campos + '/' + operadores + '/' + valores_comparar + '/' + valores_comparar2
+                let base64 = (btoa(cadena))
+                this.base64consultaingresos = base64
+                axios
+                    .get(self.URL_API + "api/v1/" + self.endpoint + "filtro/" + base64 + '/' + this.cantidad, config)
+                    .then(function (result) {
+                        self.loading = false
+                        self.currentUrl = result.data.first_page_url
+                        self.llenarTabla(result)
+                    });
+            }
         },
         tipoCampo(campo) {
             this.tabla2.forEach((item, index) => {
