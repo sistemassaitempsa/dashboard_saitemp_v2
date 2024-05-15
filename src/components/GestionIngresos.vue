@@ -97,7 +97,7 @@
                         <label class="form-label">Citación entrevista: *
                         </label>
                         <input type="datetime-local" class="form-control" autocomplete="off" id="exampleInputEmail1"
-                            aria-describedby="emailHelp" v-model="citacion_entrevista" required/>
+                            aria-describedby="emailHelp" v-model="citacion_entrevista" />
                         <div class="invalid-feedback">
                             {{ mensaje_error }}
                         </div>
@@ -385,11 +385,22 @@
                             v-model="afectacion_servicio" placeholder="Solo para no conformidades"
                             @input="afectacion_servicio = formatInputUpperCase($event.target.value)"></textarea>
                     </div>
-                    <div class="col" v-if="consulta_observacion_estado == 'Servicio no conforme'">
+                </div>
+                <div class="row">
+                    <div class="col-6" v-if="consulta_observacion_estado == 'Servicio no conforme'">
                         <SearchList nombreCampo="Corregir por: " @getEncargadosCorregir="getEncargadosCorregir"
                             eventoCampo="getEncargadosCorregir" nombreItem="nombre"
                             :consulta="consulta_responsable_corregir" :registros="lista_encargados_corregir"
                             placeholder="Seleccione una opción" :valida_campo="false" />
+                    </div>
+                    <div class="col-6" v-if="no_conformidad != null && no_conformidad != ''">
+                        <label class="form-label">No conformidad hora limite:</label>
+                        <div class="input-group">
+                            <input type="text" class="form-control" autocomplete="off" id="exampleInputEmail1"
+                                aria-describedby="emailHelp" v-model="no_conformidad"
+                                :disabled="bloquea_campos && no_conformidad != null && no_conformidad != ''" />
+                            <button class="btn btn-success" type="button" @click="actualizarNc()">Limpiar campo</button>
+                        </div>
                     </div>
                 </div>
                 <div class="row">
@@ -736,6 +747,10 @@ export default {
             consulta_responsable_corregir: '',
             consulta_encargado_corregir: '',
             lista_encargados_corregir: '',
+            no_conformidad: '',
+            variableX: '',
+            hora: '',
+
         }
     },
     computed: {
@@ -770,6 +785,8 @@ export default {
         this.scrollTop()
         this.getModulo()
         this.getDepartamentos(43)
+        this.consultahora()
+
 
     },
     methods: {
@@ -947,7 +964,6 @@ export default {
                 });
         },
         getIdentificacion(id_cliente) {
-
             let self = this
             if (id_cliente) {
                 let config = this.configHeader();
@@ -958,14 +974,18 @@ export default {
                             document.getElementById('numero_identificacion').focus();
                             self.numero_identificacion = ''
                             self.showAlertmasBoton('Este candidato se encuentra en la lista trump', 'error');
-                        } else if (result.data.numero_identificacion != undefined && self.$route.params.id == undefined) {
+                        }
+                        else if (result.data.estado_ingreso_id == 17 || result.data.estado_ingreso_id == 12 && result.data.responsable_id == 502) {
+                            self.showAlertmasBoton('Este candidato es apto para activar o ingresar', 'success');
+                        }
+                        else if (result.data.numero_identificacion != undefined && self.$route.params.id == undefined) {
                             // var fechaSinHora = new Date(result.data.fecha_radicado).toLocaleDateString();
                             if (result.data.responsable_ingreso != null) {
                                 // self.showAlertmasBoton('El número de identificación ya ha sido registrado en la fecha: \n ' + fechaSinHora + ' y actualmente tiene como responsable a ' + result.data.responsable_ingreso, 'error');
                                 document.getElementById('numero_identificacion').focus();
                                 self.numero_identificacion = ''
                                 self.showAlertmasBoton('Este candidato ya se encuentra registrado', 'error');
-                            } 
+                            }
                             // else {
                             //     self.showAlertmasBoton('El número de identificación ya ha sido registrado en la fecha: \n ' + fechaSinHora + ' y actualmente no cuenta con ningun responsable asignado ', 'error');
                             // }
@@ -1207,7 +1227,7 @@ export default {
             const formattedValue = value.toUpperCase();
             return formattedValue;
         },
-        save() {
+        save(ignorarvalidacion = false) {
             let self = this
             self.loading = true
             self.scrollTop()
@@ -1216,6 +1236,10 @@ export default {
                 this.deshabilitar_boton = false;
             }, 3000);
             if (this.validaCampo()) {
+                this.loading = false
+                return
+            }
+            if (!ignorarvalidacion && this.ValidaHora()) {
                 this.loading = false
                 return
             }
@@ -1239,7 +1263,83 @@ export default {
                     }
 
                 });
+            this.variableX = ''
         },
+        consultahora() {
+            let self = this;
+            let config = this.configHeader();
+            axios
+                .get(self.URL_API + "api/v1/hora/" + self.$route.params.id, config)
+                .then(function (result) {
+                    self.hora = result.data
+                });
+        },
+        ValidaHora() {
+            let self = this
+            if (self.hora == 1) {
+                if (self.estado_ingreso_id == 1 || self.estado_ingreso_id == 12) {
+                    this.confirmationMessage('¿Está seguro de guardar el formulario fuera de la hora limite?, si es asi este registro quedara con una no conformidad', 'Si', 'No')
+                    return true
+                }
+            }
+        },
+        confirmationMessage(title, btnConfirm, btnDenied) {
+            let self = this
+            this.$swal({
+                icon: 'warning',
+                title: title,
+                showDenyButton: true,
+                showCancelButton: false,
+                confirmButtonText: btnConfirm,
+                denyButtonText: btnDenied,
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    self.variableX = 1
+                    const ignorarvalidacion = true;
+                    self.save(ignorarvalidacion)
+                } else if (result.isDenied) {
+                    self.showAlert('Accion cancelada', 'info')
+                }
+            })
+        },
+        confirmationMessage2(title, btnConfirm, btnDenied) {
+            let self = this
+            this.$swal({
+                icon: 'warning',
+                title: title,
+                showDenyButton: true,
+                showCancelButton: false,
+                confirmButtonText: btnConfirm,
+                denyButtonText: btnDenied,
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    const ignorarvalidacion2 = true;
+                    self.actualizarNc(ignorarvalidacion2)
+                } else if (result.isDenied) {
+                    self.showAlert('Accion cancelada', 'info')
+                }
+            })
+        },
+        validaBorrarNc() {
+            this.confirmationMessage2('¿Estas seguro de borrar la no conformidad?', 'Si', 'No')
+            return true
+        },
+        actualizarNc(ignorarvalidacion2 = false) {
+            let self = this
+            if (!ignorarvalidacion2 && this.validaBorrarNc()) {
+                this.loading = false
+                return
+            }
+            let config = this.configHeader();
+            axios
+                .post(self.URL_API + "api/v1/borrar_nc/" + self.$route.params.id, config)
+                .then(function (result) {
+                    // self.estadoActualizado(currenturl)
+                    self.showAlert(result.data.message, result.data.status);
+                });
+            this.no_conformidad = ''
+        },
+
         validaCampo() {
             // if (this.consulta_encargado == '') {
             //     this.showAlert('Debe diligenciar el campo de responsable para guardar el formulario', 'error')
@@ -1301,6 +1401,9 @@ export default {
                 contacto_empresa: this.contacto_empresa,
                 encargado_id: this.encargado_id,
                 consulta_encargado_corregir: this.consulta_encargado_corregir,
+                no_conformidad: this.no_conformidad,
+                variableX: this.variableX,
+
             }
         },
         cargarArchivo(event, index) {
@@ -1458,6 +1561,7 @@ export default {
             this.contacto_empresa = item.contacto_empresa
             this.encargado_id = item.responsable_id
             this.consulta_responsable_corregir = item.responsable_corregir
+            this.no_conformidad = item.nc_hora_cierre
 
 
             if (item['laboratorios'][0] != undefined) {
