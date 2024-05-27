@@ -2,13 +2,31 @@
     <div class="container">
         <Loading :loading="loading" />
         <h2>Solicitud de servicio</h2>
-        <div @click="toggleDiv" :class="{ 'expandido': divExpandido }" class="pestaña" style="overflow-y: auto;">
-            <div v-if="!divExpandido">Seguimiento</div>
+        <div @click="toggleDiv"
+            :class="{ 'expandido': divExpandido, 'pestaña': !divExpandido, 'pestaña3': divExpandido }" class="pestaña"
+            style="overflow-y: auto;">
+            <div v-if="!divExpandido">Seguimiento guardado</div>
             <div v-for="item, index in seguimiento" :key="index">
                 <div v-if="divExpandido" style="text-align: left;">{{ item.estado }}</div>
                 <div v-if="divExpandido" style="text-align: left;">{{ item.usuario }}</div>
                 <div v-if="divExpandido" style="text-align: left;">{{ reformatearFecha(item.created_at) }}</div>
                 <hr v-if="divExpandido">
+            </div>
+        </div>
+        <div @click="toggleDiv2"
+            :class="{ 'expandido2': divExpandido2, 'pestaña': !divExpandido2, 'pestaña2': divExpandido2 }"
+            class="pestaña2" style="overflow-y: auto;">
+            <div v-if="!divExpandido2">Seguimiento estados</div>
+            <div v-for="item, index in seguimiento_estados" :key="index">
+                <div v-if="divExpandido2" style="text-align: left;">{{ item.estado_ingreso_final }}</div>
+                <div v-if="divExpandido2" style="text-align: left;">{{ item.responsable_final.replace('null', '') }}
+                </div>
+                <div v-if="divExpandido2" style="text-align: left; margin: 5px;"><i style="font-size: 1.5rem"
+                        class="bi bi-arrow-up-circle"></i> Fecha: {{ reformatearFecha(item.created_at) }}</div>
+                <div v-if="divExpandido2" style="text-align: left;">{{ item.estado_ingreso_inicial }}</div>
+                <div v-if="divExpandido2" style="text-align: left;">{{ item.responsable_inicial.replace('null', '') }}
+                </div>
+                <hr v-if="divExpandido2">
             </div>
         </div>
         <form class="was-validated" @submit.prevent="save()">
@@ -131,15 +149,15 @@
                             {{ mensaje_error }}
                         </div>
                     </div>
-                    <div class="col mb-3">
+                    <!-- <div class="col mb-3">
                         <label class="form-label">Cambio fecha:
                         </label>
                         <input type="date" class="form-control" autocomplete="off" id="exampleInputEmail1"
-                            aria-describedby="emailHelp" v-model="cambio_fecha" />
+                            aria-describedby="emailHelp" v-model="cambio_fecha" disabled />
                         <div class="invalid-feedback">
                             {{ mensaje_error }}
                         </div>
-                    </div>
+                    </div> -->
                     <div class="col">
                         <SearchList nombreCampo="Tipo de Identificación: *"
                             @getTipoIdentificacion="getTipoIdentificacion" eventoCampo="getTipoIdentificacion"
@@ -147,8 +165,6 @@
                             :registros="tiposIdentificacion" :consulta="consulta_tipo_identificacion"
                             placeholder="Seleccione una opción" :valida_campo="false" />
                     </div>
-                </div>
-                <div class="row">
                     <div class="col mb-3">
                         <label class="form-label">Número de
                             identificación: </label>
@@ -161,6 +177,9 @@
                             {{ mensaje_error }}
                         </div>
                     </div>
+                </div>
+                <div class="row">
+
                     <div class="col mb-3">
                         <label class="form-label">Apellidos y nombres:
                         </label>
@@ -182,8 +201,6 @@
                             {{ mensaje_error }}
                         </div>
                     </div>
-                </div>
-                <div class="row">
                     <div class="col mb-3">
                         <label class="form-label">Correo candidato:
                         </label>
@@ -193,6 +210,9 @@
                             {{ mensaje_error }}
                         </div>
                     </div>
+                </div>
+                <div class="row">
+
                     <div class="col mb-3">
                         <label class="form-label">Cargo:
                         </label>
@@ -212,14 +232,15 @@
                             {{ mensaje_error }}
                         </div>
                     </div>
-                </div>
-                <div class="row">
                     <div class="col">
                         <SearchList nombreCampo="¿Subsidio de transporte:? " @getSubsidio="getSubsidio"
                             eventoCampo="getSubsidio" @setSubsidio="setSubsidio" nombreItem="nombre"
                             :consulta="consulta_subsidio" :registros="afirmacionNegacion_bonos" :ordenCampo="1"
                             :valida_campo="false" placeholder="Seleccione una opción" />
                     </div>
+                </div>
+                <div class="row">
+
                     <div class="col">
                         <SearchList nombreCampo="Departamento de prestación del servicio: *" nombreItem="nombre"
                             eventoCampo="getDepartamentos" :consulta="consulta_departamento" :registros="departamentos"
@@ -231,9 +252,6 @@
                             @setMunicipios="setMunicipios" eventoCampo="setMunicipios"
                             placeholder="Seleccione una opción" />
                     </div>
-                </div>
-                <div class="row">
-
                     <div class="col mb-3">
                         <label class="form-label">EPS:
                         </label>
@@ -244,6 +262,8 @@
                             {{ mensaje_error }}
                         </div>
                     </div>
+                </div>
+                <div class="row">
                     <div class="col">
                         <SearchList nombreCampo="AFP: *" @getAFP="getAFP" eventoCampo="getAFP" nombreItem="nombre"
                             :consulta="consulta_afp" :registros="lista_afp" :ordenCampo="1" :valida_campo="false"
@@ -255,8 +275,6 @@
                             nombreItem="nombre" :consulta="consulta_stradata" :registros="afirmacionNegacion"
                             :ordenCampo="1" :valida_campo="false" placeholder="Seleccione una opción" />
                     </div>
-                </div>
-                <div class="row">
                     <div class="col mb-3">
                         <label class="form-label">Novedades stradata:
                         </label>
@@ -264,6 +282,8 @@
                             v-model="novedades_stradata"
                             @input="novedades_stradata = formatInputUpperCase($event.target.value)"></textarea>
                     </div>
+                </div>
+                <div class="row">
                     <div class="col mb-3">
                         <SearchList nombreCampo="Departamento ubicación laboratorio médico: *" nombreItem="nombre"
                             eventoCampo="getDepartamentos" :registros="departamentos" @getMunicipios="getMunicipios"
@@ -275,16 +295,15 @@
                             :registros="municipios" @setMunicipios="setMunicipios" eventoCampo="setMunicipios"
                             :ordenCampo="2" placeholder="Seleccione una opción"
                             :consulta="consulta_municipio_laboratorio" :valida_campo="false" />
-
                     </div>
-                </div>
-                <div class="row">
                     <div class="col">
                         <SearchList nombreCampo="Laboratorio médico: *" nombreItem="nombre"
                             :registros="laboratorios_medicos" @getLaboratorios="getLaboratorios"
                             eventoCampo="getLaboratorios" placeholder="Seleccione una opción"
                             :consulta="consulta_laboratorio" :valida_campo="false" />
                     </div>
+                </div>
+                <div class="row">
                     <div class="col mb-3">
                         <label class="form-label">Otro laboratorio:
                         </label>
@@ -305,14 +324,14 @@
                             {{ mensaje_error }}
                         </div>
                     </div>
-                </div>
-                <div class="row">
                     <div class="col mb-3">
                         <label class="form-label">Correo laboratorio:
                         </label>
                         <textarea name="" id="examenes" class="form-control" rows="1"
                             v-model="correo_laboratorio"></textarea>
                     </div>
+                </div>
+                <div class="row">
                     <div class="col mb-3">
                         <label class="form-label">Exámenes:
                         </label>
@@ -328,8 +347,6 @@
                             {{ mensaje_error }}
                         </div>
                     </div>
-                </div>
-                <div class="row">
                     <div class="col mb-3">
                         <label class="form-label">Recomendaciones exámenes:
                         </label>
@@ -337,6 +354,8 @@
                             v-model="recomendaciones_examen"
                             @input="recomendaciones_examen = formatInputUpperCase($event.target.value)"></textarea>
                     </div>
+                </div>
+                <div class="row">
                     <div class="col mb-3">
                         <label class="form-label">Novedades exámenes médicos:
                         </label>
@@ -372,13 +391,13 @@
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-4">
+                    <div class="col-6">
                         <SearchList nombreCampo="Novedad en servicio: *" nombreItem="nombre"
                             :registros="observaciones_estado" @getObservacionesEstado="getObservacionesEstado"
                             eventoCampo="getObservacionesEstado" :ordenCampo="2" placeholder="Seleccione una opción"
                             :consulta="consulta_observacion_estado" :valida_campo="false" />
                     </div>
-                    <div class="col mb-3" v-if="consulta_observacion_estado == 'Servicio no conforme'">
+                    <div class="col mb-6" v-if="consulta_observacion_estado == 'Servicio no conforme'">
                         <label class="form-label">Afectaciones al servicio:
                         </label>
                         <textarea name="" id="afectacion_servicio" class="form-control" rows="1"
@@ -399,7 +418,8 @@
                             <input type="text" class="form-control" autocomplete="off" id="exampleInputEmail1"
                                 aria-describedby="emailHelp" v-model="no_conformidad"
                                 :disabled="bloquea_campos && no_conformidad != null && no_conformidad != ''" />
-                            <button class="btn btn-success" type="button" @click="actualizarNc()">Limpiar campo</button>
+                            <button v-if="permisos[27].autorizado" class="btn btn-success" type="button"
+                                @click="actualizarNc()">Limpiar campo</button>
                         </div>
                     </div>
                 </div>
@@ -691,7 +711,7 @@ export default {
             consulta_usuario: '',
             usuario_id: '',
             informe_seleccion: '',
-            cambio_fecha: '',
+            // cambio_fecha: '',
             radicado: '',
             estados_ingreso: '',
             estado_ingreso_id: '',
@@ -726,7 +746,9 @@ export default {
             consulta_laboratorio: '',
             laboratorio_medico_id: '',
             divExpandido: false,
+            divExpandido2: false,
             seguimiento: [],
+            seguimiento_estados: [],
             consulta_subsidio: '',
             consulta_vacante: '',
             afirmacionNegacion_bonos: '',
@@ -888,6 +910,11 @@ export default {
         },
         toggleDiv() {
             this.divExpandido = !this.divExpandido;
+            this.divExpandido2 = false;
+        },
+        toggleDiv2() {
+            this.divExpandido2 = !this.divExpandido2;
+            this.divExpandido = false;
         },
         enviarArchivos(booleano, ruta_archivo, nombre) {
             var self = this
@@ -1381,7 +1408,7 @@ export default {
                 citacion_entrevista: this.citacion_entrevista,
                 profesional: this.consulta_usuario,
                 informe_seleccion: this.informe_seleccion,
-                cambio_fecha: this.cambio_fecha,
+                // cambio_fecha: this.cambio_fecha,
                 consulta_encargado: this.consulta_encargado,
                 estado_id: this.estado_ingreso_id,
                 novedades_stradata: this.novedades_stradata,
@@ -1534,7 +1561,7 @@ export default {
             this.tipo_servicio_id = item.tipo_servicio_id
             this.consulta_tipo_servicio = item.nombre_servicio
             this.numero_vacantes = item.numero_vacantes
-            this.cambio_fecha = item.cambio_fecha
+            // this.cambio_fecha = item.cambio_fecha
             this.numero_contrataciones = item.numero_contrataciones
             this.citacion_entrevista = item.citacion_entrevista
             this.consulta_usuario = item.profesional
@@ -1586,6 +1613,7 @@ export default {
             })
 
             this.seguimiento = item.seguimiento
+            this.seguimiento_estados = item.seguimiento_estados
             this.loading = false
         },
         limpiarFormulario() {
@@ -1751,6 +1779,36 @@ h2 {
     background: linear-gradient(95deg, rgba(0, 107, 63, 1) 4%, rgba(26, 150, 56, 1) 19%, rgba(48, 159, 128, 1) 45%, rgba(22, 119, 115, 1) 63%, rgba(4, 66, 105, 1) 88%);
 }
 
+.pestaña2 {
+    position: fixed;
+    top: 37%;
+    right: 0;
+    background-color: lightblue;
+    padding: 10px;
+    border-top-left-radius: 10px;
+    border-bottom-left-radius: 10px;
+    cursor: pointer;
+    z-index: 1000;
+    background: rgb(0, 107, 63);
+    color: white;
+    background: linear-gradient(95deg, rgba(0, 107, 63, 1) 4%, rgba(26, 150, 56, 1) 19%, rgba(48, 159, 128, 1) 45%, rgba(22, 119, 115, 1) 63%, rgba(4, 66, 105, 1) 88%);
+}
+
+.pestaña3 {
+    position: fixed;
+    top: 45%;
+    right: 0;
+    background-color: lightblue;
+    padding: 10px;
+    border-top-left-radius: 10px;
+    border-bottom-left-radius: 10px;
+    cursor: pointer;
+    z-index: 1000;
+    background: rgb(0, 107, 63);
+    color: white;
+    background: linear-gradient(95deg, rgba(0, 107, 63, 1) 4%, rgba(26, 150, 56, 1) 19%, rgba(48, 159, 128, 1) 45%, rgba(22, 119, 115, 1) 63%, rgba(4, 66, 105, 1) 88%);
+}
+
 /* Animación para expandir */
 @keyframes expandir {
     from {
@@ -1772,6 +1830,28 @@ h2 {
     }
 }
 
+
+/* Animación para expandir */
+@keyframes expandir2 {
+    from {
+        width: 0;
+    }
+
+    to {
+        width: 300px;
+    }
+}
+
+@keyframes contraer2 {
+    from {
+        width: 300px;
+    }
+
+    to {
+        width: 0;
+    }
+}
+
 /* Estilos cuando el div está expandido */
 .expandido {
     animation: expandir 1s ease;
@@ -1783,6 +1863,22 @@ h2 {
 
 .pestaña:not(.expandido) {
     animation: contraer 1s ease;
+    /* Animación para contraer */
+    overflow: hidden;
+    /* Ocultar el contenido al contraer */
+}
+
+/* Estilos cuando el div está expandido */
+.expandido2 {
+    animation: expandir2 1s ease;
+    /* Animación para expandir */
+    width: 300px;
+    height: 300px;
+    /* Anchura del contenido expandido */
+}
+
+.pestaña2:not(.expandido2) {
+    animation: contraer2 1s ease;
     /* Animación para contraer */
     overflow: hidden;
     /* Ocultar el contenido al contraer */
