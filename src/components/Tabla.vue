@@ -485,7 +485,7 @@
                     </ul>
                 </nav>
             </div>
-            <FlotanteFormularioIngreso :id_flotante="id_flotante" />
+            <FlotanteFormularioIngreso v-if="$route.path.includes('gestion-ingresosl')" :id_flotante="id_flotante" />
             <!-- Modal -->
             <!-- <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel"
                 aria-hidden="true">

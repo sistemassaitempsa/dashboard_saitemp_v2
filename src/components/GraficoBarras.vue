@@ -64,11 +64,14 @@ export default {
     },
     watch: {
         datosS: function () {
+            console.log('prueba')
             var datos = JSON.parse(this.datosS)
+            console.log(datos)
             this.llenarGraficoMultiple(datos)
             this.loading = true
         },
         datosA: function () {
+            console.log('prueba')
             this.llenarGrafico(this.datosA)
             this.loading = true
         },

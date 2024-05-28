@@ -5,37 +5,74 @@
             <div class="col">
                 <GraficoBarras @graficoCargado="graficoCargado" :labels_x="labels_x" :items="label_dataset"
                     :datosA="cargos_mes" :index="1" />
-                <span  v-if="char1">Ordenes de servicio radicadas por cada mes del año.</span>
+                <span v-if="char1">Ordenes de servicio radicadas por mes del año.</span>
+                <select v-if="char1" class="form-select form-select-sm"
+                    style="margin-bottom: 30px;margin-top: 10px;width: 40%;" v-model="anio_radicado"
+                    @change="getRadicadosMes(anio_radicado)" aria-label="Default select example">
+                    <option selected>Seleccione una opción</option>
+                    <option>2024</option>
+                    <!-- <option>2023</option>
+                    <option>2022</option> -->
+                </select>
             </div>
             <div class="col">
-                <GraficoBarras  @graficoCargado="graficoCargado" :labels_x="labels_x" :items="estados_cargo" :datosS="cantidad_vacantes_estado" :index="2"/>
+                <GraficoBarras @graficoCargado="graficoCargado" :labels_x="labels_x" :items="estados_cargo"
+                    :datosS="cantidad_vacantes_tipo_servicio" :index="2" />
                 <span v-if="char2">Cantidad de estados para todos los cargos registrados por cada mes del año.</span>
+                <select v-if="char1" class="form-select form-select-sm"
+                    style="margin-bottom: 30px;margin-top: 10px;width: 40%;" v-model="anio_tipo_servicio"
+                    @change="getCantidadVacantesesTipoServicio(anio_tipo_servicio)" aria-label="Default select example">
+                    <option selected>Seleccione una opción</option>
+                    <option>2024</option>
+                    <!-- <option>2023</option>
+                    <option>2022</option> -->
+                </select>
             </div>
         </div>
         <div class="row">
             <div :class="!expandido ? 'col-6' : 'col-12'">
-                <GraficoBarras  @graficoCargado="graficoCargado" :labels_x="labels_x" :items="label1" :datosA="cantidad_vacantes"  :index="3" />
-                <span v-if="char3">Cantidad de vacantes en todos los cargos registrados por cada mes del año.</span>
+                <GraficoBarras @graficoCargado="graficoCargado" :labels_x="labels_x" :items="label1"
+                    :datosA="cantidad_vacantes" :index="3" />
+                <span v-if="char3">Cantidad de vacantes ocupadas por cada mes del año.</span>
             </div>
             <div class="col">
-                <GraficoBarras  @graficoCargado="graficoCargado" :labels_x="labels_x" :items="label2" :datosA="hojas_vida"  :index="4"/>
-                <span v-if="char4">Cantidad de hojas de vida enviadas en todos los cargos registrados por cada mes del año.</span>
+                <GraficoBarras @graficoCargado="graficoCargado" :labels_x="labels_x" :items="label2"
+                    :datosA="hojas_vida" :index="4" />
+                <span v-if="char4">Cantidad de hojas de vida enviadas en todos los cargos registrados por cada mes del
+                    año.</span>
+            </div>
+        </div>
+        <div class="row">
+            <div :class="expandido ? 'col-6' : 'col-12'">
+                <GraficoBarras @graficoCargado="graficoCargado" :labels_x="estadosseya" :items="label1"
+                    :datosA="cantidad_vacantes" :index="3" />
+                <span v-if="char3">Cantidad de vacantes ocupadas por cada mes del año.</span>
+            </div>
+        </div>
+        <div class="row">
+            <div :class="expandido ? 'col-6' : 'col-12'">
+                <GraficoBarras @graficoCargado="graficoCargado" :labels_x="labels_x" :items="label1"
+                    :datosA="cantidad_vacantes" :index="3" />
+                <span v-if="char3">Cantidad de vacantes ocupadas por cada mes del año.</span>
             </div>
         </div>
         <div class="row">
             <div class="col">
-                <GraficoBarras  @graficoCargado="graficoCargado" :labels_x="labels_x" :items="items" :datosS="vacantes_cargos_hojasVida"  :index="5" />
-                <span v-if="char5">Comparativa por cantidad entre cargos registrados, vacantes dispibles y hojas de vida enviadas por
+                <GraficoBarras @graficoCargado="graficoCargado" :labels_x="labels_x" :items="items"
+                    :datosS="vacantes_cargos_hojasVida" :index="5" />
+                <span v-if="char5">Comparativa por cantidad entre cargos registrados, vacantes dispibles y hojas de vida
+                    enviadas por
                     cada mes de año.</span>
             </div>
             <div class="col">
-                <GraficoBarras  @graficoCargado="graficoCargado" :labels_x="labels_x" :items="items2" :datosA="vacantes_efectivas"  :index="6"/>
+                <GraficoBarras @graficoCargado="graficoCargado" :labels_x="labels_x" :items="items2"
+                    :datosA="vacantes_efectivas" :index="6" />
                 <span v-if="char6">Cantidad de vacantes ocupadas por cada mes de año.</span>
             </div>
         </div>
         <div class="row">
             <div class="col-6">
-                <DoughnutChar  @graficoCargado="graficoCargado" :datos="todos_cargos"  :index="7" />
+                <DoughnutChar @graficoCargado="graficoCargado" :datos="todos_cargos" :index="7" />
                 <span v-if="char7">Nombre de los cargos registrados con la cantidad de vacantes solicitadas.</span>
             </div>
         </div>
@@ -63,8 +100,9 @@ export default {
             URL_API: process.env.VUE_APP_URL_API,
             label_dataset: ['Radicados por mes'],
             label2: ['Hojas de vida enviadas por mes'],
-            label1: ['Cantidad de vacantes por mes'],
+            label1: ['Cantidad de vacantes ocupadas por mes'],
             labels_x: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
+            estadosseya: [],
             todos_cargos: [],
             cargos: [],
             cargos_mes: [],
@@ -75,17 +113,19 @@ export default {
             items2: ['VACANTES OCUPADAS'],
             comparativa: [],
             vacantes_cargos_hojasVida: '',
-            cantidad_vacantes_estado: '',
+            cantidad_vacantes_tipo_servicio: '',
             estados_cargo: [],
             vacantes_efectivas: [],
-            char1:false,
-            char2:false,
-            char3:false,
-            char4:false,
-            char5:false,
-            char6:false,
-            char7:false,
+            char1: false,
+            char2: false,
+            char3: false,
+            char4: false,
+            char5: false,
+            char6: false,
+            char7: false,
             loading: true,
+            anio_radicado: '',
+            anio_tipo_servicio: '',
         }
     },
     computed: {
@@ -95,20 +135,26 @@ export default {
 
     },
     mounted() {
-        this.getCargosMes()
+        this.getEstadosSeya()
+        this.getRadicadosMes()
         this.getHojasVidaMes()
-        this.getCantidadVacantesMes()
+        this.getCantidadVacantesOcupadasMes()
         this.getCargos()
         this.getCargosVacantesHojasVida()
-        this.cantidadvacantesestado()
+        this.getCantidadVacantesesTipoServicio()
         this.vacantesEfectivas()
     },
     methods: {
-        getCargosMes() {
+        getRadicadosMes(anio = null) {
+            const fechaActual = new Date();
+            const anioactual = fechaActual.getFullYear();
+            if (anio == null) {
+                anio = anioactual
+            }
             let self = this;
             let config = this.configHeader();
             axios
-                .get(self.URL_API + "api/v1/ordenserviciochar/" + '2024', config)
+                .get(self.URL_API + "api/v1/ordenserviciochar/" + anio, config)
                 .then(function (result) {
                     Object.values(result.data).forEach(function (item) {
                         self.cargos_mes.push(item)
@@ -126,17 +172,29 @@ export default {
                     })
                 });
         },
-        getCantidadVacantesMes() {
+        getCantidadVacantesOcupadasMes() {
             let self = this;
             let config = this.configHeader();
             axios
-                .get(self.URL_API + "api/v1/ordenserviciocargocantidadchar/" + '2023', config)
+                .get(self.URL_API + "api/v1/vacantesocupadas/" + '2024', config)
                 .then(function (result) {
                     Object.values(result.data).forEach(function (item) {
                         self.cantidad_vacantes.push(item)
                     })
                 });
         },
+        getEstadosSeya() {
+            let self = this;
+            let config = this.configHeader();
+            axios
+                .get(self.URL_API + "api/v1/estadosseya", config)
+                .then(function (result) {
+                    Object.values(result.data).forEach(function (item) {
+                        self.estadosseya.push(item.nombre)
+                    })
+                });
+        },
+
         getCargos() {
             let self = this;
             let config = this.configHeader();
@@ -168,12 +226,17 @@ export default {
                     self.vacantes_efectivas = Object.values(result.data)
                 });
         },
-        cantidadvacantesestado() {
+        getCantidadVacantesesTipoServicio(anio = null) {
+            const fechaActual = new Date();
+            const anioactual = fechaActual.getFullYear();
+            if (anio == null) {
+                anio = anioactual
+            }
             let self = this;
             var array = []
             let config = this.configHeader();
             axios
-                .get(self.URL_API + "api/v1/cantidadvacantesestado/" + '2023', config)
+                .get(self.URL_API + "api/v1/cantidadvacantestiposervicio/" + anio, config)
                 .then(function (result) {
                     result.data.forEach(function (item, index) {
                         if (index == 0) {
@@ -182,7 +245,7 @@ export default {
                             array.push(Object.values(item))
                         }
                     })
-                    self.cantidad_vacantes_estado = JSON.stringify(array)
+                    self.cantidad_vacantes_tipo_servicio = JSON.stringify(array)
                 });
         },
         graficoCargado(cargado, index) {
@@ -209,7 +272,7 @@ export default {
                 case 7:
                     this.char7 = cargado
                     break;
-            
+
                 default:
                     break;
             }
@@ -232,13 +295,13 @@ span {
     float: left;
     display: block;
     padding: 15px;
-    transition-duration: 500ms;
+    /* transition-duration: 500ms; */
 }
 
-span:hover {
+/* span:hover {
     font-size: 1.5rem;
     cursor: pointer;
     transition-duration: 500ms;
     font-weight: 100;
-}
+} */
 </style>
