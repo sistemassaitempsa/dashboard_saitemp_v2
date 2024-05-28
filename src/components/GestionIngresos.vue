@@ -196,7 +196,7 @@
                         </label>
                         <input type="text" class="form-control" autocomplete="off" id="exampleInputEmail1"
                             aria-describedby="emailHelp" v-model="celular_candidato"
-                            @input="celular_candidato = validarNumero(celular_candidato)" />
+                            @input="celular_candidato = validarNumero2(celular_candidato)" />
                         <div class="invalid-feedback">
                             {{ mensaje_error }}
                         </div>
@@ -395,14 +395,16 @@
                         <SearchList nombreCampo="Novedad en servicio: *" nombreItem="nombre"
                             :registros="observaciones_estado" @getObservacionesEstado="getObservacionesEstado"
                             eventoCampo="getObservacionesEstado" :ordenCampo="2" placeholder="Seleccione una opción"
-                            :consulta="consulta_observacion_estado" :valida_campo="false" />
+                            :consulta="consulta_observacion_estado" :valida_campo="false"
+                            :disabled="bloquea_campos && !permisos[26].autorizado" />
                     </div>
                     <div class="col mb-6" v-if="consulta_observacion_estado == 'Servicio no conforme'">
                         <label class="form-label">Afectaciones al servicio:
                         </label>
                         <textarea name="" id="afectacion_servicio" class="form-control" rows="1"
                             v-model="afectacion_servicio" placeholder="Solo para no conformidades"
-                            @input="afectacion_servicio = formatInputUpperCase($event.target.value)"></textarea>
+                            @input="afectacion_servicio = formatInputUpperCase($event.target.value)"
+                            :disabled="bloquea_campos && !permisos[26].autorizado"></textarea>
                     </div>
                 </div>
                 <div class="row">
@@ -410,7 +412,8 @@
                         <SearchList nombreCampo="Corregir por: " @getEncargadosCorregir="getEncargadosCorregir"
                             eventoCampo="getEncargadosCorregir" nombreItem="nombre"
                             :consulta="consulta_responsable_corregir" :registros="lista_encargados_corregir"
-                            placeholder="Seleccione una opción" :valida_campo="false" />
+                            placeholder="Seleccione una opción" :valida_campo="false"
+                            :disabled="bloquea_campos && !permisos[26].autorizado" />
                     </div>
                     <div class="col-6" v-if="no_conformidad != null && no_conformidad != ''">
                         <label class="form-label">No conformidad hora limite:</label>
@@ -1000,25 +1003,16 @@ export default {
                         if (result.data.bloqueado == 'Si') {
                             document.getElementById('numero_identificacion').focus();
                             self.numero_identificacion = ''
-                            self.showAlertmasBoton('Este candidato se encuentra en la lista trump', 'error');
+                            self.showAlertmasBoton(result.data.message, result.data.status);
+                        } else if (result.data.apto == 1) {
+                            self.showAlertmasBoton(result.data.message, result.data.status);
                         }
-                        else if (result.data.estado_ingreso_id == 17 || result.data.estado_ingreso_id == 12 && result.data.responsable_id == 502) {
-                            self.showAlertmasBoton('Este candidato es apto para activar o ingresar', 'success');
+                        else if (result.data.no_apto == 2 && self.$route.params.id == undefined) {
+                            document.getElementById('numero_identificacion').focus();
+                            self.numero_identificacion = ''
+                            self.showAlertmasBoton(result.data.message, result.data.status);
                         }
-                        else if (result.data.numero_identificacion != undefined && self.$route.params.id == undefined) {
-                            // var fechaSinHora = new Date(result.data.fecha_radicado).toLocaleDateString();
-                            if (result.data.responsable_ingreso != null) {
-                                // self.showAlertmasBoton('El número de identificación ya ha sido registrado en la fecha: \n ' + fechaSinHora + ' y actualmente tiene como responsable a ' + result.data.responsable_ingreso, 'error');
-                                document.getElementById('numero_identificacion').focus();
-                                self.numero_identificacion = ''
-                                self.showAlertmasBoton('Este candidato ya se encuentra registrado', 'error');
-                            }
-                            // else {
-                            //     self.showAlertmasBoton('El número de identificación ya ha sido registrado en la fecha: \n ' + fechaSinHora + ' y actualmente no cuenta con ningun responsable asignado ', 'error');
-                            // }
-
-                            return;
-                        }
+                        return;
                     });
             }
         },
@@ -1250,6 +1244,9 @@ export default {
         validarNumero(valor) {
             return valor.replace(/\D/g, "");
         },
+        validarNumero2(valor) {
+            return valor.replace(/[^0-9-\s]/g, "");
+        },
         formatInputUpperCase(value) {
             const formattedValue = value.toUpperCase();
             return formattedValue;
@@ -1296,7 +1293,7 @@ export default {
             let self = this;
             let config = this.configHeader();
             axios
-                .get(self.URL_API + "api/v1/hora/" + self.$route.params.id, config)
+                .get(self.URL_API + "api/v1/hora", config)
                 .then(function (result) {
                     self.hora = result.data
                 });
@@ -1304,13 +1301,13 @@ export default {
         ValidaHora() {
             let self = this
             if (self.hora == 1) {
-                if (self.estado_ingreso_id == 1 || self.estado_ingreso_id == 12) {
-                    this.confirmationMessage('¿Está seguro de guardar el formulario fuera de la hora limite?, si es asi este registro quedara con una no conformidad', 'Si', 'No')
+                if (self.estado_ingreso_id == 1 || self.estado_ingreso_id == 33 || self.estado_ingreso_id == 9 || self.estado_ingreso_id == 5) {
+                    this.confirmationMessage('¿Está seguro de guardar el formulario fuera de la hora limite?, si es asi este registro quedara con una no conformidad', 'Si', 'No', 1)
                     return true
                 }
             }
         },
-        confirmationMessage(title, btnConfirm, btnDenied) {
+        confirmationMessage(title, btnConfirm, btnDenied, validacion) {
             let self = this
             this.$swal({
                 icon: 'warning',
@@ -1321,34 +1318,21 @@ export default {
                 denyButtonText: btnDenied,
             }).then((result) => {
                 if (result.isConfirmed) {
-                    self.variableX = 1
-                    const ignorarvalidacion = true;
-                    self.save(ignorarvalidacion)
-                } else if (result.isDenied) {
-                    self.showAlert('Accion cancelada', 'info')
-                }
-            })
-        },
-        confirmationMessage2(title, btnConfirm, btnDenied) {
-            let self = this
-            this.$swal({
-                icon: 'warning',
-                title: title,
-                showDenyButton: true,
-                showCancelButton: false,
-                confirmButtonText: btnConfirm,
-                denyButtonText: btnDenied,
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    const ignorarvalidacion2 = true;
-                    self.actualizarNc(ignorarvalidacion2)
+                    if (validacion == 1) {
+                        self.variableX = 1
+                        const ignorarvalidacion = true;
+                        self.save(ignorarvalidacion)
+                    } else {
+                        const ignorarvalidacion2 = true;
+                        self.actualizarNc(ignorarvalidacion2)
+                    }
                 } else if (result.isDenied) {
                     self.showAlert('Accion cancelada', 'info')
                 }
             })
         },
         validaBorrarNc() {
-            this.confirmationMessage2('¿Estas seguro de borrar la no conformidad?', 'Si', 'No')
+            this.confirmationMessage('¿Estas seguro de borrar la no conformidad?', 'Si', 'No', 2)
             return true
         },
         actualizarNc(ignorarvalidacion2 = false) {

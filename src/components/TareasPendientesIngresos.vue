@@ -61,13 +61,7 @@ export default {
     created() {
         this.getItems()
         this.getEstadosIngreso()
-
-        var self = this
-        this.interval = setInterval(() => {
-            if (!self.filtro_gestion_ingresos) {
-                self.getItems(); // Llama a la función que quieres ejecutar cada 30 segundos
-            }
-        }, 30000);
+        this.getItems()
 
     },
     destroyed() {
@@ -81,7 +75,7 @@ export default {
             let self = this;
             let config = this.configHeader();
             axios
-                .get(self.URL_API + "api/v1/actualizaResponsableingreso/" + item_id + '/' +responsable_id+ '/' + responsable_ingreso, config)
+                .get(self.URL_API + "api/v1/actualizaResponsableingreso/" + item_id + '/' + responsable_id + '/' + responsable_ingreso, config)
                 .then(function (result) {
                     self.estadoActualizado(currenturl)
                     self.showAlert(result.data.message, result.data.status);
