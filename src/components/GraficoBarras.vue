@@ -42,9 +42,9 @@ export default {
             default: '',
             type: []
         },
-        index:{
+        index: {
             type: Number,
-            default:0
+            default: 0
 
         }
     },
@@ -55,8 +55,9 @@ export default {
             datos2: [],
             grafico: {},
             options: {
-                responsive: true
-            }
+                responsive: true,
+                barThickness: 10,
+            },
         }
     },
     computed: {
@@ -64,14 +65,14 @@ export default {
     },
     watch: {
         datosS: function () {
-            console.log('prueba')
+            // console.log('prueba')
             var datos = JSON.parse(this.datosS)
-            console.log(datos)
+            // console.log(datos)
             this.llenarGraficoMultiple(datos)
             this.loading = true
         },
         datosA: function () {
-            console.log('prueba')
+            // console.log('prueba')
             this.llenarGrafico(this.datosA)
             this.loading = true
         },
@@ -80,12 +81,14 @@ export default {
         }
     },
     mounted() {
+        this.renderChart(this.chartData, this.options);
     },
     methods: {
         llenarGrafico(datos) {
             let self = this
             this.data.labels = this.labels_x
             var color = ''
+            // var item = self.items.length <= 1 ? self.items[0]:[]
             self.data.datasets = []
             color = self.getRandomColor()
             self.data.datasets.push(
@@ -98,6 +101,16 @@ export default {
 
                 }
             )
+            // console.log(self.items.length)
+            // if (self.items.length >= 0) {
+            //     console.log(self.data.datasets[0].label)
+            // self.items.forEach(function (item) {
+            //     self.data.datasets[0].label.push(item)
+            //     console.log(self.data.datasets[0])
+            //     console.log(item)
+            // })
+            // .label: self.items[0],
+            // }
         },
         llenarGraficoMultiple(datos) {
             let self = this
@@ -147,8 +160,8 @@ export default {
             const randomColorIndex = Math.floor(Math.random() * uniqueColorsArray.length);
             return uniqueColorsArray[randomColorIndex];
         },
-        graficosCargados(){
-            this.$emit('graficoCargado',this.loading, this.index)
+        graficosCargados() {
+            this.$emit('graficoCargado', this.loading, this.index)
         }
 
     }
