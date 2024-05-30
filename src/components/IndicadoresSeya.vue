@@ -3,60 +3,58 @@
         <Loading :loading="loading" />
         <div class="row">
             <div class="col">
-                <GraficoBarras @graficoCargado="graficoCargado" :labels_x="labels_x" :items="label_dataset"
-                    :datosA="cargos_mes" :index="1" />
-                <span v-if="char1">Ordenes de servicio radicadas por mes del año.</span>
-                <select v-if="char1" class="form-select form-select-sm"
+                <GraficoBarras @graficoCargado="graficoCargado" :labels_x="labels_x" :items="radicados_mes"
+                    :datosS="cargos_mes" :index="1" />
+                <span v-if="char2">Cantidad de estados para todos los cargos registrados por cada mes del año.</span>
+                <!-- <select v-if="char1" class="form-select form-select-sm"
                     style="margin-bottom: 30px;margin-top: 10px;width: 40%;" v-model="anio_radicado"
                     @change="getRadicadosMes(anio_radicado)" aria-label="Default select example">
                     <option selected>Seleccione una opción</option>
                     <option>2024</option>
-                    <!-- <option>2023</option>
-                    <option>2022</option> -->
-                </select>
+
+                </select> -->
             </div>
             <div class="col">
                 <GraficoBarras @graficoCargado="graficoCargado" :labels_x="labels_x" :items="estados_cargo"
                     :datosS="cantidad_vacantes_tipo_servicio" :index="2" />
                 <span v-if="char2">Cantidad de estados para todos los cargos registrados por cada mes del año.</span>
-                <select v-if="char1" class="form-select form-select-sm"
+                <!-- <select v-if="char1" class="form-select form-select-sm"
                     style="margin-bottom: 30px;margin-top: 10px;width: 40%;" v-model="anio_tipo_servicio"
                     @change="getCantidadVacantesesTipoServicio(anio_tipo_servicio)" aria-label="Default select example">
                     <option selected>Seleccione una opción</option>
                     <option>2024</option>
-                    <!-- <option>2023</option>
-                    <option>2022</option> -->
-                </select>
+
+                </select> -->
             </div>
         </div>
         <div class="row">
             <div :class="!expandido ? 'col-6' : 'col-12'">
-                <GraficoBarras @graficoCargado="graficoCargado" :labels_x="labels_x" :items="label1"
-                    :datosA="cantidad_vacantes" :index="3" />
+                <GraficoBarras @graficoCargado="graficoCargado" :labels_x="labels_x" :items="vacantes_ocupadas"
+                    :datosS="cantidad_vacantes" :index="3" />
                 <span v-if="char3">Cantidad de vacantes ocupadas por cada mes del año.</span>
             </div>
-            <div class="col">
+            <!-- <div class="col">
                 <GraficoBarras @graficoCargado="graficoCargado" :labels_x="labels_x" :items="label2"
                     :datosA="hojas_vida" :index="4" />
                 <span v-if="char4">Cantidad de hojas de vida enviadas en todos los cargos registrados por cada mes del
                     año.</span>
-            </div>
+            </div> -->
         </div>
         <div class="row">
             <div :class="expandido ? 'col-6' : 'col-12'">
-                <GraficoBarras @graficoCargado="graficoCargado" :labels_x="estadosseya" :items="label1"
-                    :datosA="cantidad_vacantes" :index="3" />
+                <GraficoBarras @graficoCargado="graficoCargado" :labels_x="estados" :items="estados"
+                    :datosS="registros_estado" :index="4" />
                 <span v-if="char3">Cantidad de vacantes ocupadas por cada mes del año.</span>
             </div>
         </div>
-        <div class="row">
+        <!-- <div class="row">
             <div :class="expandido ? 'col-6' : 'col-12'">
                 <GraficoBarras @graficoCargado="graficoCargado" :labels_x="labels_x" :items="label1"
                     :datosA="cantidad_vacantes" :index="3" />
                 <span v-if="char3">Cantidad de vacantes ocupadas por cada mes del año.</span>
             </div>
-        </div>
-        <div class="row">
+        </div> -->
+        <!-- <div class="row">
             <div class="col">
                 <GraficoBarras @graficoCargado="graficoCargado" :labels_x="labels_x" :items="items"
                     :datosS="vacantes_cargos_hojasVida" :index="5" />
@@ -69,25 +67,25 @@
                     :datosA="vacantes_efectivas" :index="6" />
                 <span v-if="char6">Cantidad de vacantes ocupadas por cada mes de año.</span>
             </div>
-        </div>
-        <div class="row">
+        </div> -->
+        <!-- <div class="row">
             <div class="col-6">
                 <DoughnutChar @graficoCargado="graficoCargado" :datos="todos_cargos" :index="7" />
                 <span v-if="char7">Nombre de los cargos registrados con la cantidad de vacantes solicitadas.</span>
             </div>
-        </div>
+        </div> -->
     </div>
 </template>
 <script>
 import axios from 'axios'
 import { Token } from '../Mixins/Token.js';
-import DoughnutChar from './DoughnutChar.vue';
+// import DoughnutChar from './DoughnutChar.vue';
 import GraficoBarras from './GraficoBarras.vue';
 import Loading from './Loading.vue'
 export default {
     name: '',
     components: {
-        DoughnutChar,
+        // DoughnutChar,
         GraficoBarras,
         Loading,
     },
@@ -105,9 +103,10 @@ export default {
             estadosseya: [],
             todos_cargos: [],
             cargos: [],
-            cargos_mes: [],
+            cargos_mes: '',
             hojas_vida: [],
-            cantidad_vacantes: [],
+            cantidad_vacantes: '',
+            cantidad_estados: [],
             expandido: false,
             items: ['CARGOS', 'VACANTES', 'HOJAS DE VIDA ENV.'],
             items2: ['VACANTES OCUPADAS'],
@@ -126,6 +125,10 @@ export default {
             loading: true,
             anio_radicado: '',
             anio_tipo_servicio: '',
+            vacantes_ocupadas: [],
+            radicados_mes: [],
+            estados: [],
+            registros_estado: ''
         }
     },
     computed: {
@@ -152,13 +155,22 @@ export default {
                 anio = anioactual
             }
             let self = this;
+            var array = []
             let config = this.configHeader();
             axios
                 .get(self.URL_API + "api/v1/ordenserviciochar/" + anio, config)
                 .then(function (result) {
-                    Object.values(result.data).forEach(function (item) {
-                        self.cargos_mes.push(item)
+                    // Object.values(result.data).forEach(function (item) {
+                    //     self.cargos_mes.push(item)
+                    // })
+                    result.data.forEach(function (item, index) {
+                        if (index == 0) {
+                            self.radicados_mes = Object.values(item['nombres'])
+                        } else {
+                            array.push(Object.values(item))
+                        }
                     })
+                    self.cargos_mes = JSON.stringify(array)
                 });
         },
         getHojasVidaMes() {
@@ -174,24 +186,40 @@ export default {
         },
         getCantidadVacantesOcupadasMes() {
             let self = this;
+            var array = []
             let config = this.configHeader();
             axios
                 .get(self.URL_API + "api/v1/vacantesocupadas/" + '2024', config)
                 .then(function (result) {
-                    Object.values(result.data).forEach(function (item) {
-                        self.cantidad_vacantes.push(item)
+                    result.data.forEach(function (item, index) {
+                        if (index == 0) {
+                            self.vacantes_ocupadas = Object.values(item['nombres'])
+                        } else {
+                            array.push(Object.values(item))
+                        }
                     })
+                    self.cantidad_vacantes = JSON.stringify(array)
                 });
         },
         getEstadosSeya() {
             let self = this;
+            var array = []
             let config = this.configHeader();
             axios
                 .get(self.URL_API + "api/v1/estadosseya", config)
                 .then(function (result) {
-                    Object.values(result.data).forEach(function (item) {
-                        self.estadosseya.push(item.nombre)
+                    // result.data.forEach(function (item) {
+                    //     self.estadosseya.push(item.estado)
+                    //     self.cantidad_estados.push(item.total)
+                    // })
+                    result.data.forEach(function (item, index) {
+                        if (index == 0) {
+                            self.estados = Object.values(item['nombres'])
+                        } else {
+                            array.push(Object.values(item))
+                        }
                     })
+                    self.registros_estado = JSON.stringify(array)
                 });
         },
 
