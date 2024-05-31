@@ -56,7 +56,7 @@ export default {
             grafico: {},
             options: {
                 responsive: true,
-                barThickness: 10,
+                // barThickness: 10,
             },
         }
     },
@@ -65,14 +65,11 @@ export default {
     },
     watch: {
         datosS: function () {
-            // console.log('prueba')
             var datos = JSON.parse(this.datosS)
-            // console.log(datos)
             this.llenarGraficoMultiple(datos)
             this.loading = true
         },
         datosA: function () {
-            // console.log('prueba')
             this.llenarGrafico(this.datosA)
             this.loading = true
         },
@@ -81,14 +78,13 @@ export default {
         }
     },
     mounted() {
-        this.renderChart(this.chartData, this.options);
+
     },
     methods: {
         llenarGrafico(datos) {
             let self = this
             this.data.labels = this.labels_x
             var color = ''
-            // var item = self.items.length <= 1 ? self.items[0]:[]
             self.data.datasets = []
             color = self.getRandomColor()
             self.data.datasets.push(
@@ -101,16 +97,6 @@ export default {
 
                 }
             )
-            // console.log(self.items.length)
-            // if (self.items.length >= 0) {
-            //     console.log(self.data.datasets[0].label)
-            // self.items.forEach(function (item) {
-            //     self.data.datasets[0].label.push(item)
-            //     console.log(self.data.datasets[0])
-            //     console.log(item)
-            // })
-            // .label: self.items[0],
-            // }
         },
         llenarGraficoMultiple(datos) {
             let self = this
