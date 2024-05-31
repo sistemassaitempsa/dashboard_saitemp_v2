@@ -33,11 +33,6 @@
                 <GraficoBarras @graficoCargado="graficoCargado" :labels_x="labels_x" :items="vacantes_ocupadas"
                     :datosS="cantidad_vacantes" :index="3" />
             </div>
-            <!-- <div :class="!expandido ? 'col-6' : 'col-12'">
-                <span v-if="char3">Cantidad de vacantes efectivas por cada mes del año.</span>
-                <GraficosBarrasApiladas @graficoCargado="graficoCargado" :labels_x="labels_x" :items="vacantes_ocupadas"
-                    :datosS="cantidad_vacantes" :index="3" />
-            </div> -->
             <!-- <div class="col">
                 <GraficoBarras @graficoCargado="graficoCargado" :labels_x="labels_x" :items="label2"
                     :datosA="hojas_vida" :index="4" />
@@ -74,6 +69,13 @@
             </div>
         </div> -->
         <div class="row">
+            <div class="col-12">
+                <span v-if="char3">Cantidad de vacantes efectivas por cada mes del año.</span>
+                <GraficoBarrasApiladas @graficoCargado="graficoCargado" :labels_x="labels_x" :items="vacantes_ocupadas"
+                    :datosS="cantidad_vacantes" :index="3" />
+            </div>
+        </div>
+        <div class="row">
             <div class="col-6">
                 <span>Numero de radicados por estado.</span>
                 <DoughnutChar @graficoCargado="graficoCargado" :datos="radicados_estados" :index="7" />
@@ -90,14 +92,14 @@ import axios from 'axios'
 import { Token } from '../Mixins/Token.js';
 import DoughnutChar from './DoughnutChar.vue';
 import GraficoBarras from './GraficoBarras.vue';
-// import GraficosBarrasApiladas from './GraficosBarrasApiladas.vue';
+import GraficoBarrasApiladas from './GraficoBarrasApiladas.vue';
 import Loading from './Loading.vue'
 export default {
     name: '',
     components: {
         DoughnutChar,
         GraficoBarras,
-        // GraficosBarrasApiladas,
+        GraficoBarrasApiladas,
         Loading,
     },
     mixins: [Token],
@@ -152,6 +154,7 @@ export default {
     mounted() {
         this.getResgistrosporestado()
         this.getRegistrosporresponsable()
+        this.getEstadosApilados()
         this.getRadicadosMes()
         this.getHojasVidaMes()
         this.getCantidadVacantesOcupadasMes()
@@ -230,6 +233,16 @@ export default {
                 .get(self.URL_API + "api/v1/registrosporresponsable", config)
                 .then(function (result) {
                     self.radicados_responsable.push(result.data)
+                });
+        },
+        getEstadosApilados() {
+            let self = this;
+            let config = this.configHeader();
+            axios
+                .get(self.URL_API + "api/v1/estadosapilados", config)
+                .then(function (result) {
+                    // self.radicados_responsable.push(result.data)
+                    console.log(result.data)
                 });
         },
 
