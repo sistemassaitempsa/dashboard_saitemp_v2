@@ -70,9 +70,9 @@
         </div> -->
         <div class="row">
             <div class="col-12">
-                <span v-if="char3">Cantidad de vacantes efectivas por cada mes del año.</span>
-                <GraficoBarrasApiladas @graficoCargado="graficoCargado" :labels_x="labels_x" :items="vacantes_ocupadas"
-                    :datosS="cantidad_vacantes" :index="3" />
+                <span v-if="char3">Cantidad de registros por estado y responsable.</span>
+                <GraficoBarrasApiladas @graficoCargado="graficoCargado" :labels_x="responsable_estado"
+                     :datosS="registros_estado" :index="3" />
             </div>
         </div>
         <div class="row">
@@ -142,7 +142,8 @@ export default {
             vacantes_ocupadas: [],
             radicados_mes: [],
             estados: [],
-            registros_estado: ''
+            registros_estado: '',
+            responsable_estado: []
         }
     },
     computed: {
@@ -241,8 +242,10 @@ export default {
             axios
                 .get(self.URL_API + "api/v1/estadosapilados", config)
                 .then(function (result) {
+                    self.responsable_estado = result.data.responsables
+                    self.registros_estado = JSON.stringify(result.data.data)
                     // self.radicados_responsable.push(result.data)
-                    console.log(result.data)
+                    // console.log(result.data)
                 });
         },
 
