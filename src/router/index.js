@@ -386,8 +386,8 @@ const routes = [
         component: PendientesCrm,
       },
       {
-        path: "indicadores-seya",
-        name: "indicadores-seya",
+        path: "indicadores-seiya",
+        name: "indicadores-seiya",
         component: IndicadoresSeya,
       },
       // {
