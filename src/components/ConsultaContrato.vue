@@ -55,7 +55,7 @@ export default {
             let self = this
             this.form1 = [
                 { titulo1: 'Razón social:', respuesta1: '', titulo2: 'NIT:', respuesta2: '' },
-                { titulo1: 'Representante Legal:', respuesta1: '', titulo2: 'C.C:', respuesta2: '' },
+                { titulo1: 'Representante Legal:', respuesta1: '', titulo2: '', respuesta2: '' },
                 { titulo1: 'Departamento:', respuesta1: '', titulo2: 'Ciudad:', respuesta2: '' },
                 { titulo1: 'Dirección:', respuesta1: '', titulo2: 'Actividad Económica:', respuesta2: '' },
                 { titulo1: 'Nombre de contacto::', respuesta1: '', titulo2: 'Celular:', respuesta2: '' },

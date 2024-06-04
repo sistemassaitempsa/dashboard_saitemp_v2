@@ -42,6 +42,7 @@ export default {
                 { nombre: "Empresa usuaria", orden: "DESC", tipo: "texto", calculado: 'false' },
                 { nombre: "Ciudad", orden: "DESC", tipo: "texto", calculado: 'false' },
                 { nombre: "Laboratorio", orden: "DESC", tipo: "texto", calculado: 'false' },
+                { nombre: "Otro laboratorio", orden: "DESC", tipo: "texto", calculado: 'false' },
                 { nombre: "Fecha exámen", orden: "DESC", tipo: "fecha", calculado: 'false' },
                 { nombre: "Fecha ingreso", orden: "DESC", tipo: "fecha", calculado: 'false' },
                 { nombre: "Estado vacante", orden: "DESC", tipo: "texto", calculado: 'false' },

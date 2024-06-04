@@ -42,9 +42,9 @@ export default {
             default: '',
             type: []
         },
-        index:{
+        index: {
             type: Number,
-            default:0
+            default: 0
 
         }
     },
@@ -55,8 +55,9 @@ export default {
             datos2: [],
             grafico: {},
             options: {
-                responsive: true
-            }
+                responsive: true,
+                // barThickness: 10,
+            },
         }
     },
     computed: {
@@ -77,6 +78,7 @@ export default {
         }
     },
     mounted() {
+
     },
     methods: {
         llenarGrafico(datos) {
@@ -144,8 +146,8 @@ export default {
             const randomColorIndex = Math.floor(Math.random() * uniqueColorsArray.length);
             return uniqueColorsArray[randomColorIndex];
         },
-        graficosCargados(){
-            this.$emit('graficoCargado',this.loading, this.index)
+        graficosCargados() {
+            this.$emit('graficoCargado', this.loading, this.index)
         }
 
     }

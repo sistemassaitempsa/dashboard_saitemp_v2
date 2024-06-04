@@ -140,7 +140,7 @@ export default {
   methods: {
     validaAnchoTabla() {
       this.ruta = this.$route.path
-      if (this.ruta.includes('gestion-ingresosl') || this.ruta.includes('debida-diligencia/clientes') || this.ruta.includes('ingresos-pendientes')|| this.ruta.includes('correo-novedades-nomina') || this.ruta.includes('crm-seguimiento') || this.ruta.includes('crm-pendientes')) {
+      if (this.ruta.includes('gestion-ingresosl') || this.ruta.includes('debida-diligencia/clientes') || this.ruta.includes('ingresos-pendientes')|| this.ruta.includes('correo-novedades-nomina') || this.ruta.includes('crm-seguimiento') || this.ruta.includes('crm-pendientes') || this.ruta.includes('indicadores-seiya')) {
         this.anchocomponente = true
       } else {
         this.anchocomponente = false
