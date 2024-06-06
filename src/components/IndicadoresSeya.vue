@@ -28,11 +28,16 @@
             </div>
         </div>
         <div class="row">
-            <div :class="!expandido ? 'col-6' : 'col-12'">
+            <!-- <div :class="!expandido ? 'col-6' : 'col-12'">
                 <span v-if="char3">Cantidad de vacantes efectivas por cada mes del año.</span>
-                <GraficoBarras @graficoCargado="graficoCargado" :labels_x="labels_x" :items="vacantes_ocupadas"
+                <GraficoBarras @graficoCargado="graficoCargado" :labels_x="labels_x"
                     :datosS="cantidad_vacantes" :index="3" />
             </div>
+            <div class="col">
+                <span v-if="char3">Cantidad de registros por estado y responsable.</span>
+                <GraficoBarrasApiladas @graficoCargado="graficoCargado" :labels_x="tipo_servicio_apilado_labels"
+                    :datosS="tipo_servicio_apilado" :index="3" />
+            </div> -->
             <!-- <div class="col">
                 <GraficoBarras @graficoCargado="graficoCargado" :labels_x="labels_x" :items="label2"
                     :datosA="hojas_vida" :index="4" />
@@ -72,7 +77,7 @@
             <div class="col-12">
                 <span v-if="char3">Cantidad de registros por estado y responsable.</span>
                 <GraficoBarrasApiladas @graficoCargado="graficoCargado" :labels_x="responsable_estado"
-                     :datosS="registros_estado" :index="3" />
+                    :datosS="registros_estado" :index="3" />
             </div>
         </div>
         <div class="row">
@@ -143,7 +148,9 @@ export default {
             radicados_mes: [],
             estados: [],
             registros_estado: '',
-            responsable_estado: []
+            responsable_estado: [],
+            tipo_servicio_apilado_labels: [],
+            tipo_servicio_apilado: '',
         }
     },
     computed: {
@@ -162,7 +169,8 @@ export default {
         this.getCargos()
         this.getCargosVacantesHojasVida()
         this.getCantidadVacantesesTipoServicio()
-        this.vacantesEfectivas()
+        // this.getVacantesOcupadasTipoServicio()
+        // this.vacantesEfectivas()
     },
     methods: {
         getRadicadosMes(anio = null) {
@@ -300,6 +308,23 @@ export default {
                         }
                     })
                     self.cantidad_vacantes_tipo_servicio = JSON.stringify(array)
+                });
+        },
+        getVacantesOcupadasTipoServicio() {
+            // const fechaActual = new Date();
+            // const anioactual = fechaActual.getFullYear();
+            // if (anio == null) {
+            //     anio = anioactual
+            // }
+            let self = this;
+            // var array = []
+            let config = this.configHeader();
+            axios
+                .get(self.URL_API + "api/v1/vacantesOcupadasTipoServicio", config)
+                .then(function (result) {
+                    self.tipo_servicio_apilado_labels = result.data.labels
+                    self.tipo_servicio_apilado = JSON.stringify(result.data.data)
+
                 });
         },
         graficoCargado(cargado, index) {
