@@ -46,6 +46,14 @@
                         </button>
                     </div>
                 </div>
+                <div class="row" v-if="$route.path == '/navbar/gestion-ingresos'">
+                    <div class="col-3 mb-3">
+                        <label for="exampleInputEmail1" style="float:left" class="form-label"> Replicar
+                            formulario</label>
+                        <input type="text" class="form-control form-control-sm" autocomplete="off"
+                            id="exampleInputEmail2" aria-describedby="emailHelp" v-model="replica" @input="replica = validarNumero(replica)" maxlength="2" />
+                    </div>
+                </div>
                 <div class="row" v-if="$route.params.id != undefined || $route.path == '/navbar/gestion-ingresosl'">
                     <h6 style="text-align: left;">Radicado: {{ radicado }}</h6>
                 </div>
@@ -66,7 +74,7 @@
                     <div class="col">
                         <SearchList nombreCampo="Responsable: " @getEncargados="getEncargados"
                             eventoCampo="getEncargados" nombreItem="nombre" :consulta="consulta_responsable_ingreso"
-                            :registros="lista_encargados" placeholder="Seleccione una opción" :valida_campo="false" />
+                            :registros="lista_encargados" placeholder="Seleccione una opción" :valida_campo="replica > 1" />
                     </div>
                 </div>
                 <div class="row">
@@ -411,7 +419,7 @@
                     <div class="col-6" v-if="consulta_observacion_estado == 'Servicio no conforme'">
                         <SearchList nombreCampo="Corregir por: " @getEncargadosCorregir="getEncargadosCorregir"
                             eventoCampo="getEncargadosCorregir" nombreItem="nombre"
-                            :consulta="consulta_responsable_corregir" :registros="lista_encargados_corregir"
+                            :consulta="consulta_encargado_corregir" :registros="lista_encargados_corregir"
                             placeholder="Seleccione una opción" :valida_campo="false"
                             :disabled="bloquea_campos && !permisos[26].autorizado" />
                     </div>
@@ -769,12 +777,12 @@ export default {
             bloquea_campos: false,
             userInput_nombres: false,
             userInput_numero_documento: false,
-            consulta_responsable_corregir: '',
             consulta_encargado_corregir: '',
             lista_encargados_corregir: '',
             no_conformidad: '',
             variableX: '',
             hora: '',
+            replica:'',
 
         }
     },
@@ -1039,7 +1047,6 @@ export default {
                 this.encargado_id = ''
                 this.lista_encargados = []
                 this.lista_encargados_corregir = []
-                this.consulta_encargado_corregir = ''
                 this.getEncargados(null, item.id)
             }
             let self = this;
@@ -1414,6 +1421,7 @@ export default {
                 consulta_encargado_corregir: this.consulta_encargado_corregir,
                 no_conformidad: this.no_conformidad,
                 variableX: this.variableX,
+                replica: this.replica
 
             }
         },
@@ -1440,14 +1448,16 @@ export default {
                 if (self.fileInputsCount[index].tipo_documento_id != undefined) {
                     document.append('id' + index, self.fileInputsCount[index].tipo_documento_id)
                     document.append('observacion' + index, self.observacion_archivo[index])
+                    document.append('formulario' + index, registro_ingreso_id)
                 } else {
                     document.append('id' + index, self.fileInputsCount[index].id)
                     document.append('observacion' + index, self.observacion_archivo[index])
+                    document.append('formulario' + index, registro_ingreso_id)
                 }
             })
             if (bandera <= 0) {
                 axios
-                    .post(self.URL_API + "api/v1/formularioingreso/doc/" + registro_ingreso_id, document, config)
+                    .post(self.URL_API + "api/v1/formularioingresodoc", document, config)
                     .then(function (result) {
                         self.loading = false
                         self.showAlert(result.data.message, result.data.status)
@@ -1571,7 +1581,7 @@ export default {
             this.correo_laboratorio = item.correo_laboratorio
             this.contacto_empresa = item.contacto_empresa
             this.encargado_id = item.responsable_id
-            this.consulta_responsable_corregir = item.responsable_corregir
+            this.consulta_encargado_corregir = item.responsable_corregir
             this.no_conformidad = item.nc_hora_cierre
 
 
