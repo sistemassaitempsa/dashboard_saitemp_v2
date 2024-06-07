@@ -51,7 +51,8 @@
                         <label for="exampleInputEmail1" style="float:left" class="form-label"> Replicar
                             formulario</label>
                         <input type="text" class="form-control form-control-sm" autocomplete="off"
-                            id="exampleInputEmail2" aria-describedby="emailHelp" v-model="replica" @input="replica = validarNumero(replica)" maxlength="2" />
+                            id="exampleInputEmail2" aria-describedby="emailHelp" v-model="replica"
+                            @input="replica = validarNumero(replica)" placeholder="Número de veces a replicar" maxlength="2" />
                     </div>
                 </div>
                 <div class="row" v-if="$route.params.id != undefined || $route.path == '/navbar/gestion-ingresosl'">
@@ -74,7 +75,8 @@
                     <div class="col">
                         <SearchList nombreCampo="Responsable: " @getEncargados="getEncargados"
                             eventoCampo="getEncargados" nombreItem="nombre" :consulta="consulta_responsable_ingreso"
-                            :registros="lista_encargados" placeholder="Seleccione una opción" :valida_campo="replica > 1" />
+                            :registros="lista_encargados" placeholder="Seleccione una opción"
+                            :valida_campo="replica > 1" />
                     </div>
                 </div>
                 <div class="row">
@@ -782,7 +784,7 @@ export default {
             no_conformidad: '',
             variableX: '',
             hora: '',
-            replica:'',
+            replica: '',
 
         }
     },
@@ -1612,11 +1614,11 @@ export default {
         },
         limpiarFormulario() {
             this.bloquea_campos = false
-            // this.fecha_ingreso = ''
+            this.fecha_ingreso = ''
             this.numero_identificacion = ''
             this.nombres = ''
-            // this.empresa_cliente_id = ''
-            // this.consulta_empresa_cliente = ''
+            this.empresa_cliente_id = ''
+            this.consulta_empresa_cliente = ''
             this.cargo = ''
             this.salario = ''
             // this.pais_id = ''
@@ -1635,8 +1637,8 @@ export default {
             this.examenes = ''
             this.fecha_examen = ''
             this.consulta_responsable_ingreso = ''
-            // this.consulta_estado_ingreso = ''
-            // this.estado_ingreso_id = ''
+            this.consulta_estado_ingreso = ''
+            this.estado_ingreso_id = ''
             this.novedades_stradata = ''
             this.correo_candidato = ''
             this.correo_empresa = ''
@@ -1649,6 +1651,11 @@ export default {
             this.consulta_observacion_estado = ''
             this.correo_laboratorio = ''
             this.contacto_empresa = ''
+            this.consulta_subsidio = ''
+            this.consulta_tipo_servicio = ''
+            this.tipo_servicio_id = ''
+            this.tipo_identificacion = ''
+            this.consulta_tipo_identificacion = ''
             this.getArchivosIngreso()
 
         },
