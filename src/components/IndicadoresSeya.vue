@@ -27,7 +27,7 @@
                 </select> -->
             </div>
         </div>
-        <div class="row">
+        <!-- <div class="row"> -->
             <!-- <div :class="!expandido ? 'col-6' : 'col-12'">
                 <span v-if="char3">Cantidad de vacantes efectivas por cada mes del año.</span>
                 <GraficoBarras @graficoCargado="graficoCargado" :labels_x="labels_x"
@@ -44,7 +44,7 @@
                 <span v-if="char4">Cantidad de hojas de vida enviadas en todos los cargos registrados por cada mes del
                     año.</span>
             </div> -->
-        </div>
+        <!-- </div> -->
         <!-- <div class="row">
             <div :class="expandido ? 'col-6' : 'col-12'">
                 <GraficoBarras @graficoCargado="graficoCargado" :labels_x="estados" :items="estados"
