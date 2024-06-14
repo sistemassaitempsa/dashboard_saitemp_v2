@@ -2856,11 +2856,11 @@ export default {
                     bandera++
                 }
                 document.append('documento' + index, item)
-                if (self.fileInputsCount[index].tipo_documento_id != undefined) {
-                    document.append('id' + index, self.fileInputsCount[index].tipo_documento_id)
-                } else {
+                // if (self.fileInputsCount[index].tipo_documento_id != undefined) {
+                //     document.append('id' + index, self.fileInputsCount[index].tipo_documento_id)
+                // } else {
                     document.append('id' + index, self.fileInputsCount[index].id)
-                }
+                // }
             })
             if (bandera <= 0) {
                 axios

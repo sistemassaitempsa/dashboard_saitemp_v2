@@ -6,73 +6,30 @@
                 <span v-if="char2">Cantidad de radicados por cada mes del año.</span>
                 <GraficoBarras @graficoCargado="graficoCargado" :labels_x="labels_x" :items="radicados_mes"
                     :datosS="cargos_mes" :index="1" />
-                <!-- <select v-if="char1" class="form-select form-select-sm"
-                    style="margin-bottom: 30px;margin-top: 10px;width: 40%;" v-model="anio_radicado"
-                    @change="getRadicadosMes(anio_radicado)" aria-label="Default select example">
-                    <option selected>Seleccione una opción</option>
-                    <option>2024</option>
-
-                </select> -->
             </div>
             <div class="col">
                 <span v-if="char2">Cantidad de radicados por tipo de servicio por cada mes del año.</span>
                 <GraficoBarras @graficoCargado="graficoCargado" :labels_x="labels_x" :items="estados_cargo"
                     :datosS="cantidad_vacantes_tipo_servicio" :index="2" />
-                <!-- <select v-if="char1" class="form-select form-select-sm"
-                    style="margin-bottom: 30px;margin-top: 10px;width: 40%;" v-model="anio_tipo_servicio"
-                    @change="getCantidadVacantesesTipoServicio(anio_tipo_servicio)" aria-label="Default select example">
-                    <option selected>Seleccione una opción</option>
-                    <option>2024</option>
-
-                </select> -->
             </div>
         </div>
         <div class="row">
             <div :class="!expandido ? 'col-6' : 'col-12'">
-                <span v-if="char3">Cantidad de vacantes efectivas por cada mes del año.</span>
+                <span v-if="char3">Cantidad de contrataciones efectivas por cada mes del año.</span>
                 <GraficoBarras @graficoCargado="graficoCargado" :labels_x="labels_x" :items="vacantes_ocupadas"
                     :datosS="cantidad_vacantes" :index="3" />
             </div>
-            <!-- <div class="col">
-                <GraficoBarras @graficoCargado="graficoCargado" :labels_x="labels_x" :items="label2"
-                    :datosA="hojas_vida" :index="4" />
-                <span v-if="char4">Cantidad de hojas de vida enviadas en todos los cargos registrados por cada mes del
-                    año.</span>
-            </div> -->
+            <div :class="!expandido ? 'col-6' : 'col-12'">
+                <span v-if="char3">Cantidad de ingreso de empleados por cada mes del año. (Estimado)</span>
+                <GraficoBarras @graficoCargado="graficoCargado" :labels_x="labels_x" :items="ingresos_empleados"
+                    :datosS="cantidad_ingresos_empleados" :index="3" />
+            </div>
         </div>
-        <!-- <div class="row">
-            <div :class="expandido ? 'col-6' : 'col-12'">
-                <GraficoBarras @graficoCargado="graficoCargado" :labels_x="estados" :items="estados"
-                    :datosS="registros_estado" :index="4" />
-                <span v-if="char3">Cantidad de vacantes ocupadas por cada mes del año.</span>
-            </div>
-        </div> -->
-        <!-- <div class="row">
-            <div :class="expandido ? 'col-6' : 'col-12'">
-                <GraficoBarras @graficoCargado="graficoCargado" :labels_x="labels_x" :items="label1"
-                    :datosA="cantidad_vacantes" :index="3" />
-                <span v-if="char3">Cantidad de vacantes ocupadas por cada mes del año.</span>
-            </div>
-        </div> -->
-        <!-- <div class="row">
-            <div class="col">
-                <GraficoBarras @graficoCargado="graficoCargado" :labels_x="labels_x" :items="items"
-                    :datosS="vacantes_cargos_hojasVida" :index="5" />
-                <span v-if="char5">Comparativa por cantidad entre cargos registrados, vacantes dispibles y hojas de vida
-                    enviadas por
-                    cada mes de año.</span>
-            </div>
-            <div class="col">
-                <GraficoBarras @graficoCargado="graficoCargado" :labels_x="labels_x" :items="items2"
-                    :datosA="vacantes_efectivas" :index="6" />
-                <span v-if="char6">Cantidad de vacantes ocupadas por cada mes de año.</span>
-            </div>
-        </div> -->
         <div class="row">
             <div class="col-12">
                 <span v-if="char3">Cantidad de registros por estado y responsable.</span>
                 <GraficoBarrasApiladas @graficoCargado="graficoCargado" :labels_x="responsable_estado"
-                     :datosS="registros_estado" :index="3" />
+                    :datosS="registros_estado" :index="3" />
             </div>
         </div>
         <div class="row">
@@ -143,7 +100,11 @@ export default {
             radicados_mes: [],
             estados: [],
             registros_estado: '',
-            responsable_estado: []
+            responsable_estado: [],
+            tipo_servicio_apilado_labels: [],
+            tipo_servicio_apilado: '',
+            cantidad_ingresos_empleados: '',
+            ingresos_empleados: [],
         }
     },
     computed: {
@@ -159,9 +120,11 @@ export default {
         this.getRadicadosMes()
         this.getHojasVidaMes()
         this.getCantidadVacantesOcupadasMes()
+        this.getCantidadIngresoEmpleados()
         this.getCargos()
         this.getCargosVacantesHojasVida()
         this.getCantidadVacantesesTipoServicio()
+        this.getVacantesOcupadasTipoServicio()
         this.vacantesEfectivas()
     },
     methods: {
@@ -216,6 +179,23 @@ export default {
                         }
                     })
                     self.cantidad_vacantes = JSON.stringify(array)
+                });
+        },
+        getCantidadIngresoEmpleados() {
+            let self = this;
+            var array = []
+            let config = this.configHeader();
+            axios
+                .get(self.URL_API + "api/v1/ingresoempledosmes/" + '2024', config)
+                .then(function (result) {
+                    result.data.forEach(function (item, index) {
+                        if (index == 0) {
+                            self.ingresos_empleados = Object.values(item['nombres'])
+                        } else {
+                            array.push(Object.values(item))
+                        }
+                    })
+                    self.cantidad_ingresos_empleados = JSON.stringify(array)
                 });
         },
         getResgistrosporestado() {
@@ -300,6 +280,23 @@ export default {
                         }
                     })
                     self.cantidad_vacantes_tipo_servicio = JSON.stringify(array)
+                });
+        },
+        getVacantesOcupadasTipoServicio() {
+            // const fechaActual = new Date();
+            // const anioactual = fechaActual.getFullYear();
+            // if (anio == null) {
+            //     anio = anioactual
+            // }
+            let self = this;
+            // var array = []
+            let config = this.configHeader();
+            axios
+                .get(self.URL_API + "api/v1/vacantesOcupadasTipoServicio", config)
+                .then(function (result) {
+                    self.tipo_servicio_apilado_labels = result.data.labels
+                    self.tipo_servicio_apilado = JSON.stringify(result.data.data)
+
                 });
         },
         graficoCargado(cargado, index) {

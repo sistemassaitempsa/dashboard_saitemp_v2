@@ -63,7 +63,7 @@ export default {
           y: {
             stacked: true,
             beginAtZero: true,
-            max: 2000,
+            // max: 2000,
             ticks: {
               stepSize: 500
             },
@@ -103,6 +103,7 @@ export default {
       //   };
       // });
       let self = this
+      this.data.labels = []
       this.data.labels = this.labels_x
       var color = ''
       self.data.datasets = []

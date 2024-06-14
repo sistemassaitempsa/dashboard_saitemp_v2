@@ -22,48 +22,29 @@
     : 'collapse navbar-collapse'
     " id="navbarNav">
           <ul class="navbar-nav">
-            <!-- <li id="menucolapsed" class="nav-item" @click="collapese">
-              <router-link class="nav-link active" to="/noticias">Noticias</router-link>
-            </li> -->
-            <!-- <li id="menucolapsed" class="nav-item" @click="collapese">
-              <router-link class="nav-link active" to="/destacadas">Noticias destacadas</router-link>
-            </li> -->
-            <li class="nav-item" @click="collapese">
+            <li class="nav-item" @click="collapese" :style="actualizacion ? 'padding-top: 15px' : ''">
               <router-link class="nav-link active" to="">{{ saludo }}
                 {{ userlogued.nombres }}</router-link>
             </li>
+            <li>
+              <CuentaRegresiva @timeElapsed="actualizacion = false" />
+            </li>
             <li class="nav-item contrasena" id="menu-lateral" @click="ocultarMenu(), collapese()">
-              <!-- <router-link class="nav-link active" to="/"> -->
               <i :class="menu_lateral ? 'bi bi-text-indent-right' : 'bi bi-text-indent-left'"></i> {{ menu_lateral ?
     'Ocultar menú lateral' : 'Mostrar menú lateral' }}
-              <!-- </router-link> -->
             </li>
-            <li class="nav-item contrasena" id="contrasena" @click="actualizar()">
-              <!-- <router-link class="nav-link active" to="/"> -->
+            <li class="nav-item contrasena" :style="actualizacion ? 'padding-top: 15px' : ''" id="contrasena"
+              @click="actualizar()">
               <i class="bi bi-person-circle"></i> Editar usuario
-              <!-- </router-link> -->
             </li>
-            <!-- @click="logout" -->
-            <li class="nav-item logout" id="logout" @click="logout">
-              <!-- <router-link class="nav-link active" to="/"> -->
+            <li class="nav-item logout" :style="actualizacion ? 'padding-top: 15px' : ''" id="logout" @click="logout">
               <i class="bi bi-box-arrow-left"></i> Cerrar sesión
-              <!-- </router-link> -->
             </li>
           </ul>
         </div>
       </div>
     </nav>
-    <!-- <div v-bind:class="!expand ? 'aside' : 'aside2'"> -->
     <div class="aside">
-      <!-- <div id="item-menu" v-for="(item, index) in menu" :key="index">
-        <router-link v-if="item.urlExterna == '0'" class="nav-link active"
-          :to="item.url != '' ? '/' + item.url : '/navbar'">
-          <i :class="item.icon"></i><span>{{ item.nombre == 'rol' ? 'Rol: ' + userlogued.rol : item.nombre }}</span>
-        </router-link>
-        <a v-else :href="item.url" target="_blank" rel="noopener noreferrer" style="color:white; text-decoration:none"><i
-            :class="item.icon"></i> <span>{{ item.nombre }}</span></a>
-        <hr>
-      </div> -->
       <div class="accordion-item" v-for="(item, index) in menu" :key="index">
         <h2 class="accordion-header" :id="'flush-heading' + option[index]">
           <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
@@ -98,11 +79,14 @@
 /* eslint-disable */
 import axios from "axios";
 import { Token } from '../Mixins/Token'
+import { Alerts } from "@/Mixins/Alerts";
+import CuentaRegresiva from '../components/CuentaRegresiva'
 export default {
   components: {
     name: 'Navbar',
+    CuentaRegresiva
   },
-  mixins: [Token],
+  mixins: [Token, Alerts],
   data() {
     return {
       username: "",
@@ -120,7 +104,14 @@ export default {
       categoria_menu: [],
       menu_lateral: true,
       anchocomponente: false,
-      ruta: ''
+      ruta: '',
+      labelscountdown: {
+        days: 'Días',
+        hours: 'Horas',
+        minutes: 'Minutos',
+        seconds: 'Segundos',
+      },
+      actualizacion: true,
     };
   },
   watch: {
@@ -140,7 +131,7 @@ export default {
   methods: {
     validaAnchoTabla() {
       this.ruta = this.$route.path
-      if (this.ruta.includes('gestion-ingresosl') || this.ruta.includes('debida-diligencia/clientes') || this.ruta.includes('ingresos-pendientes')|| this.ruta.includes('correo-novedades-nomina') || this.ruta.includes('crm-seguimiento') || this.ruta.includes('crm-pendientes') || this.ruta.includes('indicadores-seiya')) {
+      if (this.ruta.includes('gestion-ingresosl') || this.ruta.includes('debida-diligencia/clientes') || this.ruta.includes('ingresos-pendientes') || this.ruta.includes('correo-novedades-nomina') || this.ruta.includes('crm-seguimiento') || this.ruta.includes('crm-pendientes') || this.ruta.includes('indicadores-seiya')) {
         this.anchocomponente = true
       } else {
         this.anchocomponente = false
