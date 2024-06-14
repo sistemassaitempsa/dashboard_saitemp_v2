@@ -1462,6 +1462,7 @@ export default {
                     .post(self.URL_API + "api/v1/formularioingresodoc", document, config)
                     .then(function (result) {
                         self.loading = false
+                        self.file = []
                         self.showAlert(result.data.message, result.data.status)
                         self.limpiarFormulario()
                     });
@@ -1472,6 +1473,7 @@ export default {
                     .delete(self.URL_API + "api/v1/formularioingreso/" + registro_ingreso_id, config)
                     .then(function (result) {
                         self.loading = false
+                        self.file = []
                         self.showAlert(result.data.message, result.data.status)
                     });
             }

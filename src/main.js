@@ -11,6 +11,8 @@ import 'sweetalert2/dist/sweetalert2.min.css';
 //encriptación
 import VueCryptojs from 'vue-cryptojs'
 
+import FlipCountdown from 'vue2-flip-countdown';
+
 Vue.use(VueCryptojs)
 
 Vue.use(VueAxios, axios)
@@ -18,6 +20,7 @@ Vue.use(VueSweetalert2);
 Vue.use(VueClipboard)
 Vue.use(VueSignature);
 Vue.config.productionTip = false
+Vue.component('flip-countdown', FlipCountdown);
 
 import Echo from "laravel-echo"
 window.Pusher = require('pusher-js');
