@@ -886,7 +886,7 @@ export default {
             }
         },
         getVacante() {
-            this.afirmacionNegacion_vacante = [{ id: '1', nombre: 'Abierto' }, { id: '0', nombre: 'Cerrado' }]
+            this.afirmacionNegacion_vacante = [{ id: '1', nombre: 'Abierto' }, { id: '0', nombre: 'Cerrado' },{ id: '2', nombre: 'Cancelado' }]
         },
         setVacante(item, campo) {
             if (item != null) {
@@ -1596,6 +1596,13 @@ export default {
                 this.consulta_municipio_laboratorio = item['laboratorios'][0].municipio
                 this.consulta_laboratorio = item['laboratorios'][0].nombre
                 this.laboratorio_medico_id = item['laboratorios'][0].id
+            }else{
+                this.departamento_laboratorio_id = ''
+                this.consulta_departamento_laboratorio = ''
+                this.municipio_laboratorio_id = ''
+                this.consulta_municipio_laboratorio = ''
+                this.consulta_laboratorio = ''
+                this.laboratorio_medico_id = ''
             }
 
             this.getEncargados(null, item.estado_ingreso_id)
