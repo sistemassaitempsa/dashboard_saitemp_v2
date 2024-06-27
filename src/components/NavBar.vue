@@ -71,6 +71,7 @@
         <hr>
       </div>
     </div>
+    <ModalPrincipal @actualizacion="actualizacion = true" :modal="actualizacion"/>
     <router-view :class="{ 'ancho_componente': anchocomponente }" :userlogued="userlogued" :menu="menu"
       @getMenu="getMenu" />
   </div>
@@ -81,10 +82,12 @@ import axios from "axios";
 import { Token } from '../Mixins/Token'
 import { Alerts } from "@/Mixins/Alerts";
 import CuentaRegresiva from '../components/CuentaRegresiva'
+import ModalPrincipal from '../components/ModalPrincipal'
 export default {
   components: {
     name: 'Navbar',
-    CuentaRegresiva
+    CuentaRegresiva,
+    ModalPrincipal
   },
   mixins: [Token, Alerts],
   data() {

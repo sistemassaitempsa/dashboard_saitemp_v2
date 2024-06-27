@@ -9,13 +9,14 @@
                     <div class="row">
                         <div class="col-sm-12 col-md-6">
                             <label class="form-label">Fecha y hora:</label>
-                            <input type="datetime-local" class="form-control" autocomplete="off" id="exampleInput1"
+                            <input type="datetime-local" class="form-control" autocomplete="off" id="exampleInput0"
                                 aria-describedby="emailHelp" v-model="fecha" disabled />
                         </div>
                         <div class="col-sm-12 col-md-6">
                             <label class="form-label">Asunto:</label>
                             <input type="text" class="form-control" autocomplete="off" id="exampleInput1"
-                                @input="descripcion = formatInput($event.target.value)" v-model="descripcion" required />
+                                @input="descripcion = formatInput($event.target.value)" v-model="descripcion"
+                                required />
                         </div>
                     </div>
                     <div class="row">
@@ -27,8 +28,8 @@
                         <div class="col-sm-12 col-md-6 mb-3">
                             <label class="form-label">Persona contactada: *</label>
                             <input type="text" class="form-control" autocomplete="off" id="exampleInput3"
-                                @input="contacto = formatInputCamelCase($event.target.value)" aria-describedby="emailHelp"
-                                v-model="contacto" required />
+                                @input="contacto = formatInputCamelCase($event.target.value)"
+                                aria-describedby="emailHelp" v-model="contacto" required />
                             <div class="invalid-feedback">
                                 {{ mensaje_error }}
                             </div>
@@ -58,8 +59,8 @@
                         </div>
                         <div class="col-sm-12 col-md-6">
                             <SearchList nombreCampo="Ciudad: *" nombreItem="nombre" :registros="municipios"
-                                :consulta="consulta_municipio" @setMunicipios="setMunicipios" eventoCampo="setMunicipios"
-                                :ordenCampo="1" placeholder="Seleccione una opción" />
+                                :consulta="consulta_municipio" @setMunicipios="setMunicipios"
+                                eventoCampo="setMunicipios" :ordenCampo="1" placeholder="Seleccione una opción" />
                         </div>
                     </div>
                     <div class="row">
@@ -94,7 +95,7 @@
                                 </div>
                             </div>
                             <div class="col-sm-4 col-md-4">
-                                <textarea name="" style="width: 100%;padding: 5px;border-radius: 5px;" id=""
+                                <textarea name="" style="width: 100%;padding: 5px;border-radius: 5px;" :id="index3"
                                     v-model="observacionesepp[index3]" placeholder="Observaciones"></textarea>
                             </div>
                         </div>
@@ -104,8 +105,8 @@
                                 <div class="input-group mb-3">
                                     <input class="form-control" type="file" accept="image/*"
                                         @change="cargarArchivo($event, index)" id="formFileMultiple" multiple required>
-                                    <span style="cursor: pointer" class="input-group-text" @click="quitarAdjuntos(index)"
-                                        id="basic-addon1">Quitar imágenes</span>
+                                    <span style="cursor: pointer" class="input-group-text"
+                                        @click="quitarAdjuntos(index)" id="basic-addon1">Quitar imágenes</span>
                                 </div>
                             </div>
                             <div class="botones" v-for="item2, index2 in observaciones[index].file" :key="index2">
@@ -126,8 +127,8 @@
                                     <button type="button" class="btn adjunto"><i class="bi bi-file-earmark-check"></i>
                                         {{ item2.name | truncate(10, '...')
                                         }} {{ formatearPesoArchivo(item2.size) }}</button>
-                                    <button type="button" @click="item['file'].splice(index2, 1)" class="btn btn-success"><i
-                                            class="bi bi-x"></i></button>
+                                    <button type="button" @click="item['file'].splice(index2, 1)"
+                                        class="btn btn-success"><i class="bi bi-x"></i></button>
                                 </div>
                             </div>
                             <div class="row editor" v-if="$route.params.id == undefined">
@@ -153,14 +154,14 @@
                 <div class="row">
                     <div class="col-sm-12 col-md-6 mb-3">
                         <label for="exampleFormControlInput1" class="form-label">Firma *:</label>
-                        <div v-if="$route.params.id != undefined" class="imagen_firma"><img :src="imagen_firma_supervisor"
-                                alt=""></div>
+                        <div v-if="$route.params.id != undefined" class="imagen_firma"><img
+                                :src="imagen_firma_supervisor" alt=""></div>
                         <div v-else class="input-group mb-3">
-                            <span class="input-group-text" id="basic-addon1"><i class="bi bi-pen" style="cursor:pointer"
+                            <span class="input-group-text" id="basic-addon2"><i class="bi bi-pen" style="cursor:pointer"
                                     @click="signature('firma_supervisor')"></i></span>
                             <input type="password" disabled class="form-control" placeholder="" aria-label="firma"
                                 v-model="firma_supervisor" aria-describedby="basic-addon1">
-                            <span class="input-group-text" id="basic-addon1"><i class="bi bi-x-circle"
+                            <span class="input-group-text" id="basic-addon3"><i class="bi bi-x-circle"
                                     style="cursor:pointer" @click="firma_supervisor = ''"></i></span>
                         </div>
                         <FirmaDigital class="tochpad" v-if="show_pad1" @firma="firma" :signed="signed" />
@@ -175,11 +176,11 @@
                         <div v-if="$route.params.id != undefined" class="imagen_firma"><img
                                 :src="imagen_firma_persona_contactada" alt=""></div>
                         <div v-else class="input-group mb-3">
-                            <span class="input-group-text" id="basic-addon1"><i class="bi bi-pen" style="cursor:pointer"
+                            <span class="input-group-text" id="basic-addon4"><i class="bi bi-pen" style="cursor:pointer"
                                     @click="signature('firma_persona_contactada')"></i></span>
                             <input type="password" disabled class="form-control" placeholder="" aria-label="firma"
                                 v-model="firma_persona_contactada" aria-describedby="basic-addon1">
-                            <span class="input-group-text" id="basic-addon1"><i class="bi bi-x-circle"
+                            <span class="input-group-text" id="basic-addon5"><i class="bi bi-x-circle"
                                     style="cursor:pointer" @click="firma_persona_contactada = ''"></i></span>
                         </div>
                         <FirmaDigital class="tochpad" v-if="show_pad2" @firma="firma" :signed="signed" />
@@ -313,6 +314,7 @@ export default {
         }
     },
     created() {
+        // var self = this
         this.urlExterna()
         this.getEstadosConcepto()
         this.urlExterna()
@@ -331,10 +333,18 @@ export default {
             this.consultaFormulario(this.$route.params.id)
         }
         this.idPfd()
+        // this.$watch(
+        //     () => this.$route.path,
+        //     (newPath, oldPath) => {
+        //         if (oldPath.split("/").length == 4) {
+        //             self.radios()
+        //         }
+        //     }
+        // );
 
     },
     methods: {
-        coordenadas(item){
+        coordenadas(item) {
             console.log(item)
         },
         async geolocal() {
@@ -572,9 +582,29 @@ export default {
                 .get(self.URL_API + "api/v1/conceptosformulario", config)
                 .then(function (result) {
                     self.conceptos = result.data
-                    self.concepto_estado_formulario = new Array(self.conceptos.length)
+                    self.radios()
                     self.scrollAuto()
                 });
+        },
+        radios() {
+            var self = this
+            if (self.$route.params.id != undefined) {
+                self.concepto_estado_formulario = new Array(self.conceptos.length)
+            } else {
+                self.conceptos.forEach(function (item) {
+                    self.concepto_estado_formulario.push({ concepto_id: item.concepto_id, estado_concepto_id: 4 })
+                })
+                setTimeout(() => {
+                    for (let i = 0; i < self.conceptos.length; i++) {
+                        for (let j = 0; j < self.estados_concepto.length; j++) {
+                            const refName = `checkbox${i.toString()}${j.toString()}`;
+                            if (j == 3) {
+                                self.$refs[refName][0].checked = true
+                            }
+                        }
+                    }
+                }, 600);
+            }
         },
         getElementosPP() {
             let self = this;

@@ -6,7 +6,7 @@
                 <span class="input-group-text" id="basic-addon3"><i class="bi bi-search"></i></span>
                 <input type="text" @focus="consultaEndPoint()" @click="hover = !hover" @keyup="hover = true"
                     autocomplete="off" @input="filterResults(registro, registros, 'registros')" class="form-control"
-                    id="exampleInputEmail2" :placeholder="placeholder" aria-describedby="emailHelp" v-model="registro"
+                    id="exampleInputEmail" :placeholder="placeholder" aria-describedby="emailHelp" v-model="registro"
                     :disabled="disabled" :required="valida_campo" />
                 <span class="input-group-text"
                     style="cursor:pointer; border-top-right-radius:5px;border-bottom-right-radius:5px"

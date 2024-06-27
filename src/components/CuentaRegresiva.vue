@@ -11,13 +11,14 @@
 import axios from "axios";
 import { Token } from '../Mixins/Token'
 import { Alerts } from "@/Mixins/Alerts";
+import { Socket } from '../Mixins/Socket.js';
 
 export default {
     name: '',
     components: {
 
     },
-    mixins: [Token, Alerts],
+    mixins: [Token, Alerts, Socket],
     props: {
 
     },
@@ -33,14 +34,10 @@ export default {
             actualizacion: false,
             deadline: '',
             mensaje_navbar: '',
-            mensaje_navbar2: '',
-            mensaje_popup: '',
-            icono_popup: '',
             estilo_span: '',
             estilo_contador: '',
             tamano_contador: '',
             tamano_texto_contador: '',
-            tiempo_espera:''
         }
     },
     computed: {
@@ -50,7 +47,12 @@ export default {
 
     },
     mounted() {
+        var self = this
         this.actualizacionprogramada()
+        window.Echo.channel('channel')
+            .listen('TiempoActualizacion', (e) => {
+                self.llenarContador(e.message)
+            });
     },
     methods: {
         actualizacionprogramada() {
@@ -59,31 +61,25 @@ export default {
             axios
                 .get(self.URL_API + 'api/v1/actualizacionprogramada', config)
                 .then(function (result) {
-                    self.actualizacion = result.data.visible == '1' ? true : false
-                    self.deadline = result.data.fecha_hora
-                    self.mensaje_navbar = result.data.mensaje_navbar
-                    self.mensaje_navbar2 = result.data.mensaje_navbar2
-                    self.mensaje_popup = result.data.mensaje_popup
-                    self.icono_popup = result.data.icono_popup
-                    self.estilo_span = result.data.estilo_span
-                    self.estilo_contador = result.data.estilo_contador
-                    self.tamano_contador = result.data.tamano_contador
-                    self.tamano_texto_contador = result.data.tamano_texto_contador
-                    self.tiempo_espera = result.data.tiempo_espera
+                    self.llenarContador(result.data)
 
                 })
         },
+        llenarContador(result) {
+            this.actualizacion = result.visible == '1' ? true : false
+            this.deadline = result.fecha_hora
+            this.mensaje_navbar = result.mensaje_navbar
+            this.estilo_span = result.estilo_span
+            this.estilo_contador = result.estilo_contador
+            this.tamano_contador = result.tamano_contador
+            this.tamano_texto_contador = result.tamano_texto_contador
+        },
         timeElapsedHandler() {
             var self = this
-            this.mensaje_navbar = this.mensaje_navbar2
-            setTimeout(() => {
-                self.actualizacion = false
-                self.$emit('timeElapsed', false)
-            }, parseInt(self.tiempo_espera)*1000);
-            this.showAlertConfirm(self.mensaje_popup, self.icono_popup)
+            self.actualizacion = false
+            self.$emit('timeElapsed', false)
         },
     }
 };
 </script>
-<style lang='' scoped>
-</style>
+<style scoped></style>
