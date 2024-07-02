@@ -592,7 +592,7 @@ export default {
                 self.concepto_estado_formulario = new Array(self.conceptos.length)
             } else {
                 self.conceptos.forEach(function (item) {
-                    self.concepto_estado_formulario.push({ concepto_id: item.concepto_id, estado_concepto_id: 4 })
+                    self.concepto_estado_formulario.push({ concepto: item.concepto_id, estado: 4 })
                 })
                 setTimeout(() => {
                     for (let i = 0; i < self.conceptos.length; i++) {

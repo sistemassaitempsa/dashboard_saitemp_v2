@@ -54,11 +54,13 @@ export default {
                 const modalElement = document.getElementById('openModal');
                 modalElement.style.opacity = '0';
                 modalElement.style.pointerEvents = 'none';
-                window.location.reload();
+                if (message.actualiza_pagina == 1) {
+                    window.location.reload();
+                }
 
             }
             else if (message.visible == 1) {
-                this.showModal()
+                this.showModal(message)
             }
         },
         actualizacionprogramada() {
@@ -68,7 +70,7 @@ export default {
                 .get(self.URL_API + 'api/v1/modalprincipal', config)
                 .then(function (result) {
                     if (result.data.visible == 1) {
-                        self.showModal(result)
+                        self.showModal(result.data)
                     }
 
                 })
@@ -80,14 +82,15 @@ export default {
                 .post(self.URL_API + 'api/v1/showmodalprincipal/1', config)
                 .then(function (result) {
                     if (result.data.visible == 1) {
-                        self.showModal(result)
+                        self.showModal(result.data)
                     }
 
                 })
         },
         showModal(result) {
-            this.titulo = result.data.titulo
-            this.contenido = result.data.contenido
+            console.log(result)
+            this.titulo = result.titulo
+            this.contenido = result.contenido
             const modalElement = document.getElementById('openModal');
             modalElement.style.opacity = '1';
             modalElement.style.pointerEvents = 'auto';
