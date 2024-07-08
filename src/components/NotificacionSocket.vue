@@ -21,7 +21,7 @@ export default {
     data() {
         return {
             mensaje_notificacion: '',
-            animacion: false
+            animacion: false,
         }
     },
     computed: {
@@ -31,7 +31,7 @@ export default {
 
     },
     mounted() {
-        this.socket('channel', 'EventoPrueba2')
+        this.socket('channel', 'NotificacionesPush')
     },
     created() {
         if (localStorage.getItem("pila") != '') {
@@ -40,14 +40,16 @@ export default {
     },
     methods: {
         eliminarNotificacion(index) {
-            this.pila_notificaciones[index].class = 'notificacion animate__animated animate__fadeOutRight'
-            if (this.pila_notificaciones.length > 1) {
-                this.pila_notificaciones[this.pila_notificaciones.length - 2].visible = 'visible'
-                this.pila_notificaciones[this.pila_notificaciones.length - 2].class = 'notificacion animate__animated animate__fadeInRight'
+            var self = this
+            self.pila_notificaciones[index].class = 'notificacion animate__animated animate__fadeOutRight'
+            if (self.pila_notificaciones.length > 1) {
+                self.pila_notificaciones[self.pila_notificaciones.length - 2].visible = 'visible'
+                self.pila_notificaciones[self.pila_notificaciones.length - 2].class = 'notificacion animate__animated animate__fadeInRight'
             }
             setTimeout(() => {
-                this.pila_notificaciones.splice(index, 1)
-                localStorage.setItem("pila", JSON.stringify(this.pila_notificaciones));
+                console.log(index)
+                self.pila_notificaciones.splice(index, 1)
+                localStorage.setItem("pila", JSON.stringify(self.pila_notificaciones));
             }, 1000);
         },
     }

@@ -61,6 +61,7 @@ export default ({
         .then(function (result) {
           if (result.data.access_token != undefined) {
             localStorage.setItem("access_token", result.data.access_token);
+            localStorage.setItem("marca_temporalnc", result.data.marca);
             self.$router.push("/navbar/estadistica");
           }
           else if (result.data.status == "error") {

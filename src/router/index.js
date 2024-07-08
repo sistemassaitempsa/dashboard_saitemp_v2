@@ -64,6 +64,7 @@ import CrmCliente from "../components/CrmCliente.vue";
 import CrmSeguimiento from "../components/CrmSeguimiento.vue";
 import PendientesCrm from "../components/PendientesCrm.vue";
 import IndicadoresSeya from "../components/IndicadoresSeya.vue";
+import Calendario from "../components/Calendario.vue";
 
 
 
@@ -389,6 +390,11 @@ const routes = [
         path: "indicadores-seiya",
         name: "indicadores-seiya",
         component: IndicadoresSeya,
+      },
+      {
+        path: "calendario",
+        name: "calendario",
+        component: Calendario,
       },
       // {
       //   path: "navbar/*",

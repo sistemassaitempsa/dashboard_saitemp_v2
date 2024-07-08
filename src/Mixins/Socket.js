@@ -1,5 +1,3 @@
-// Mixin para mostrar una ventana modal superpuesta, si viene un parametro en true
-// se oculta la barra de desplazamiento
 export const Socket = {
   data () {
     return {
@@ -9,27 +7,33 @@ export const Socket = {
   },
   methods: {
     socket (chanell, event) {
-      let self = this;
       window.Echo.channel (chanell).listen (event, e => {
-        console.log (e);
-        if (self.pila_notificaciones.length > 0) {
-          self.pila_notificaciones.forEach (function (item) {
-            item.visible = 'hidden';
-          });
+        if (e.message.marca_temporal != localStorage.getItem ('marca_temporalnc')) {
+          console.log (e.message.marca_temporal);
         }
-        self.pila_notificaciones.push ({
+        if (this.pila_notificaciones != null) {
+          if (Array.isArray (this.pila_notificaciones)) {
+            this.pila_notificaciones.forEach (item => {
+              item.visible = 'hidden';
+            });
+          } else {
+            this.pila_notificaciones = [];
+          }
+        } else {
+          this.pila_notificaciones = [];
+        }
+        this.pila_notificaciones.push ({
           message: e.message.mensaje,
-          componente: e.message.componente,
           class: 'notificacion animate__animated animate__fadeInRight',
           visible: 'visible',
         });
         localStorage.setItem (
-          'pila_notificaciones',
-          JSON.stringify (self.pila_notificaciones)
+          'pila',
+          JSON.stringify (this.pila_notificaciones)
         );
         const audio = new Audio (this.audioPath);
         audio.play ();
       });
     },
   },
-}; // MiMixin.js
+};
