@@ -1,5 +1,6 @@
 <template>
   <div v-if="autoriced">
+    <NotificacionesSocket />
     <nav class="navbar navbar-expand-lg navbar-dark gradient-background" style=" heigth: 100px">
       <div class="container-fluid">
         <a class="navbar-brand" href="">
@@ -71,7 +72,7 @@
         <hr>
       </div>
     </div>
-    <ModalPrincipal @actualizacion="actualizacion = true" :modal="actualizacion"/>
+    <ModalPrincipal @actualizacion="actualizacion = true" :modal="actualizacion" />
     <router-view :class="{ 'ancho_componente': anchocomponente }" :userlogued="userlogued" :menu="menu"
       @getMenu="getMenu" />
   </div>
@@ -83,11 +84,13 @@ import { Token } from '../Mixins/Token'
 import { Alerts } from "@/Mixins/Alerts";
 import CuentaRegresiva from '../components/CuentaRegresiva'
 import ModalPrincipal from '../components/ModalPrincipal'
+import NotificacionesSocket from './NotificacionSocket.vue'
 export default {
   components: {
     name: 'Navbar',
     CuentaRegresiva,
-    ModalPrincipal
+    ModalPrincipal,
+    NotificacionesSocket
   },
   mixins: [Token, Alerts],
   data() {
@@ -121,6 +124,8 @@ export default {
     $route() {
       this.validaAnchoTabla()
     },
+  },
+  mounted() {
   },
   created() {
     this.urlExterna()
