@@ -65,6 +65,7 @@ import CrmSeguimiento from "../components/CrmSeguimiento.vue";
 import PendientesCrm from "../components/PendientesCrm.vue";
 import IndicadoresSeya from "../components/IndicadoresSeya.vue";
 import Calendario from "../components/Calendario.vue";
+import GestionRiesgos from '../components/GestionRiesgos.vue';
 
 
 
@@ -395,6 +396,11 @@ const routes = [
         path: "calendario",
         name: "calendario",
         component: Calendario,
+      },
+      {
+        path: "gestionRiesgos",
+        name: "gestionRiesgos",
+        component: GestionRiesgos,
       },
       // {
       //   path: "navbar/*",
