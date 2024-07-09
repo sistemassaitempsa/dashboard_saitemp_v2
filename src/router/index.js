@@ -398,8 +398,8 @@ const routes = [
         component: Calendario,
       },
       {
-        path: "gestionRiesgos",
-        name: "gestionRiesgos",
+        path: "gestionriesgos",
+        name: "gestionriesgos",
         component: GestionRiesgos,
       },
       // {
