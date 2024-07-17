@@ -381,6 +381,11 @@
                                 Ver registro
                             </button>
                         </td>
+                        <td v-if="ruta == '/navbar/lista-riesgos'">
+                            <button type="button" class="btn btn-success btn-sm " @click="verRegistroRiesgo(item)">
+                                Ver registro
+                            </button>
+                        </td>
                         <td v-if="ruta == '/navbar/debida-diligencia/clientes' && permisos[0].autorizado">
                             <!-- <button type="button" class="btn btn-success btn-sm " @click="$refs.consultaContrato.consulta()"> -->
                             <ConsultaContrato :item="item" />
@@ -1209,6 +1214,9 @@ export default {
         },
         verRegistroCrm(item) {
             this.$router.push({ name: 'crm-intreraccion', params: { id: item.id } })
+        },
+        verRegistroRiesgo(item) {
+            this.$router.push({ name: 'gestionriesgos', params: { id: item.id } })
         },
         exportFormularioDD() {
             let self = this;
