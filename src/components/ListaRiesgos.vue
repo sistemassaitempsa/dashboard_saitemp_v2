@@ -1,20 +1,15 @@
 <template>
   <div>
     <div class="container">
-      <NotificacionesSocket />
+      <!-- <NotificacionesSocket /> -->
       <h2>Lista riesgos</h2>
       <Tabla
         :datos="datos"
         :tabla="tabla"
-        :userlogued="userlogued"
         :endpoint="endpoint"
-        :listas="listas"
         :endpointexport="endpointexport"
-        :estados_ingreso="estados_ingreso"
-        @actualizaEstado="actualizaEstado"
-        @actualizaResponsable="actualizaResponsable"
-        @filtrando="filtrando"
-      />
+        />
+        <!-- @filtrando="filtrando" -->
     </div>
   </div>
 </template>
@@ -32,8 +27,8 @@ export default {
     return {
       URL_API: process.env.VUE_APP_URL_API,
       show_table: false,
-      endpoint: "formularioingreso",
-      endpointexport: "exportaformularioingreso",
+      endpoint: "matrizriesgo",
+      endpointexport: "exportamatrizriesgo",
       datos: [],
       tabla: [
         { nombre: "#", orden: "DESC" },
@@ -43,6 +38,121 @@ export default {
           tipo: "texto",
           calculado: "false",
         },
+        {
+          nombre: "Tipo proceso",
+          orden: "DESC",
+          tipo: "texto",
+          calculado: "false",
+        },
+        {
+          nombre: "Nombre proceso",
+          orden: "DESC",
+          tipo: "texto",
+          calculado: "false",
+        },
+        {
+          nombre: "Nombre riesgo",
+          orden: "DESC",
+          tipo: "texto",
+          calculado: "false",
+        },
+        {
+          nombre: "Oportunidad",
+          orden: "DESC",
+          tipo: "texto",
+          calculado: "false",
+        },
+        {
+          nombre: "Causa",
+          orden: "DESC",
+          tipo: "texto",
+          calculado: "false",
+        },
+        {
+          nombre: "Plan de acción",
+          orden: "DESC",
+          tipo: "texto",
+          calculado: "false",
+        },
+        {
+          nombre: "Concecuencia",
+          orden: "DESC",
+          tipo: "texto",
+          calculado: "false",
+        },
+        {
+          nombre: "Efecto",
+          orden: "DESC",
+          tipo: "texto",
+          calculado: "false",
+        },
+        {
+          nombre: "Amenaza",
+          orden: "DESC",
+          tipo: "texto",
+          calculado: "false",
+        },
+        {
+          nombre: "Oportunidad 2",
+          orden: "DESC",
+          tipo: "texto",
+          calculado: "false",
+        },
+        {
+          nombre: "Amenaza Impacto*probabilidad",
+          orden: "DESC",
+          tipo: "texto",
+          calculado: "false",
+        },
+        {
+          nombre: "Amenaza Nivel de riesgo",
+          orden: "DESC",
+          tipo: "texto",
+          calculado: "false",
+        },
+        {
+          nombre: "Amenaza Tratamiento",
+          orden: "DESC",
+          tipo: "texto",
+          calculado: "false",
+        },
+        {
+          nombre: "Oportunidad Impacto*probabilidad",
+          orden: "DESC",
+          tipo: "texto",
+          calculado: "false",
+        },
+        {
+          nombre: "Oportunidad Nivel de riesgo",
+          orden: "DESC",
+          tipo: "texto",
+          calculado: "false",
+        },
+        {
+          nombre: "Oportunidad Tratamiento",
+          orden: "DESC",
+          tipo: "texto",
+          calculado: "false",
+        },
+        {
+          nombre: "Amenaza resultado control",
+          orden: "DESC",
+          tipo: "texto",
+          calculado: "false",
+        },
+        {
+          nombre: "Oportunidad resultado control",
+          orden: "DESC",
+          tipo: "texto",
+          calculado: "false",
+        },
+        {
+          nombre: "Responsable",
+          orden: "DESC",
+          tipo: "texto",
+          calculado: "false",
+        },
+        
       ],
       filtro_gestion_ingresos: false,
     };

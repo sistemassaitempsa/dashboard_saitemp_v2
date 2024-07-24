@@ -120,7 +120,6 @@
             <input
               type="text"
               class="form-control"
-              autocomplete="off"
               id="exampleInputEmail1"
               aria-describedby="emailHelp"
               v-model="numero_identificacion"
@@ -143,7 +142,6 @@
             <input
               type="date"
               class="form-control"
-              autocomplete="off"
               id="fecha_expedicion"
               aria-describedby="emailHelp"
               v-model="fecha_expedicion"
@@ -159,7 +157,6 @@
             <input
               type="text"
               class="form-control"
-              autocomplete="off"
               id="exampleInputEmail1"
               maxlength="20"
               aria-describedby="emailHelp"
@@ -180,7 +177,6 @@
             <input
               type="text"
               class="form-control"
-              autocomplete="off"
               id="exampleInputEmail1"
               maxlength="6"
               aria-describedby="emailHelp"
@@ -218,7 +214,6 @@
             <input
               type="date"
               class="form-control"
-              autocomplete="off"
               aria-describedby="emailHelp"
               id="fecha_constitucion"
               v-model="fecha_constitucion"
@@ -235,7 +230,6 @@
             <input
               type="text"
               class="form-control"
-              autocomplete="off"
               id="exampleInputEmail1"
               maxlength="6"
               aria-describedby="emailHelp"
@@ -331,7 +325,6 @@
             <input
               type="text"
               class="form-control"
-              autocomplete="off"
               id="exampleInputEmail1"
               maxlength="100"
               @input="
@@ -350,7 +343,6 @@
             <input
               type="text"
               class="form-control"
-              autocomplete="off"
               id="exampleInputEmail1"
               maxlength="150"
               @input="
@@ -369,7 +361,6 @@
             <input
               type="text"
               class="form-control"
-              autocomplete="off"
               id="exampleInputEmail1"
               maxlength="200"
               @input="
@@ -392,7 +383,6 @@
             <input
               type="text"
               class="form-control"
-              autocomplete="off"
               id="exampleInputEmail1"
               maxlength="20"
               aria-describedby="emailHelp"
@@ -409,7 +399,6 @@
             <input
               type="text"
               class="form-control"
-              autocomplete="off"
               id="exampleInputEmail1"
               maxlength="20"
               aria-describedby="emailHelp"
@@ -439,7 +428,6 @@
             <input
               type="text"
               class="form-control"
-              autocomplete="off"
               id="exampleInputEmail1"
               maxlength="150"
               @input="otra_cual = formatInputUpperCase($event.target.value)"
@@ -463,7 +451,6 @@
             <input
               type="text"
               class="form-control"
-              autocomplete="off"
               id="exampleInputEmail1"
               maxlength="50"
               aria-describedby="emailHelp"
@@ -521,7 +508,6 @@
             <input
               type="text"
               class="form-control"
-              autocomplete="off"
               id="exampleInputEmail1"
               maxlength="50"
               aria-describedby="emailHelp"
@@ -632,7 +618,6 @@
               <input
                 type="text"
                 class="form-control"
-                autocomplete="off"
                 id="exampleInputEmail1"
                 maxlength="50"
                 aria-describedby="emailHelp"
@@ -689,7 +674,6 @@
             <input
               type="text"
               class="form-control"
-              autocomplete="off"
               id="exampleInputEmail1"
               @input="
                 contratacion_contacto = formatInputUpperCase(
@@ -710,7 +694,6 @@
             <input
               type="text"
               class="form-control"
-              autocomplete="off"
               id="exampleInputEmail1"
               maxlength="200"
               @input="
@@ -732,7 +715,6 @@
             <input
               type="text"
               class="form-control"
-              autocomplete="off"
               id="exampleInputEmail1"
               maxlength="20"
               aria-describedby="emailHelp"
@@ -752,7 +734,6 @@
             <input
               type="text"
               class="form-control"
-              autocomplete="off"
               id="exampleInputEmail1"
               maxlength="20"
               aria-describedby="emailHelp"
@@ -774,7 +755,6 @@
             <input
               type="time"
               class="form-control"
-              autocomplete="off"
               aria-describedby="emailHelp"
               id="hora_ingreso"
               v-model="contratacion_hora_ingreso"
@@ -790,7 +770,6 @@
             <input
               type="time"
               class="form-control"
-              autocomplete="off"
               id="exampleInputEmail1"
               maxlength="150"
               aria-describedby="emailHelp"
@@ -806,7 +785,6 @@
             <input
               type="text"
               class="form-control"
-              autocomplete="off"
               id="exampleInputEmail1"
               maxlength="200"
               @input="
@@ -824,7 +802,7 @@
           <!-- <div class="col mb-3">
                         <label class="form-label" style="color: black;">Correo de confirmación de ingresos del personal:
                         </label>
-                        <input type="text" class="form-control" autocomplete="off" id="exampleInputEmail1" maxlength="200"
+                        <input type="text" class="form-control" id="exampleInputEmail1" maxlength="200"
                             @input="contratacion_correo_ingresos = formatInputUpperCase($event.target.value)"
                             aria-describedby="emailHelp" v-model="contratacion_correo_ingresos" required />
                         <div class="invalid-feedback">
@@ -1194,7 +1172,6 @@
             <input
               type="text"
               class="form-control"
-              autocomplete="off"
               id="exampleInputEmail1"
               maxlength="50"
               aria-describedby="emailHelp"
@@ -1213,7 +1190,6 @@
             <input
               type="text"
               class="form-control"
-              autocomplete="off"
               id="exampleInputEmail1"
               maxlength="50"
               aria-describedby="emailHelp"
@@ -1232,7 +1208,6 @@
             <input
               type="text"
               class="form-control"
-              autocomplete="off"
               id="exampleInputEmail1"
               maxlength="50"
               aria-describedby="emailHelp"
@@ -1253,7 +1228,6 @@
             <input
               type="text"
               class="form-control"
-              autocomplete="off"
               id="exampleInputEmail1"
               maxlength="50"
               aria-describedby="emailHelp"
@@ -1270,7 +1244,6 @@
             <input
               type="text"
               class="form-control"
-              autocomplete="off"
               id="exampleInputEmail1"
               maxlength="50"
               aria-describedby="emailHelp"
@@ -1289,7 +1262,6 @@
             <input
               type="text"
               class="form-control"
-              autocomplete="off"
               id="exampleInputEmail1"
               maxlength="50"
               aria-describedby="emailHelp"
@@ -1312,7 +1284,6 @@
             <input
               type="text"
               class="form-control"
-              autocomplete="off"
               id="exampleInputEmail1"
               maxlength="50"
               aria-describedby="emailHelp"
@@ -1335,7 +1306,6 @@
             <input
               type="text"
               class="form-control"
-              autocomplete="off"
               id="exampleInputEmail1"
               maxlength="50"
               aria-describedby="emailHelp"
@@ -1419,7 +1389,6 @@
               <input
                 type="text"
                 class="form-control"
-                autocomplete="off"
                 id="exampleInputEmail1"
                 maxlength="100"
                 @input="item.cargo = formatInputUpperCase($event.target.value)"
@@ -1540,7 +1509,6 @@
               <input
                 type="text"
                 class="form-control"
-                autocomplete="off"
                 id="exampleInputEmail1"
                 maxlength="50"
                 aria-describedby="emailHelp"
@@ -1561,7 +1529,6 @@
               <input
                 type="text"
                 class="form-control"
-                autocomplete="off"
                 id="exampleInputEmail1"
                 maxlength="50"
                 aria-describedby="emailHelp"
@@ -1913,7 +1880,6 @@
               <input
                 type="text"
                 class="form-control"
-                autocomplete="off"
                 id="exampleInputEmail1"
                 maxlength="20"
                 aria-describedby="emailHelp"
@@ -1945,7 +1911,6 @@
               <input
                 type="text"
                 class="form-control"
-                autocomplete="off"
                 id="exampleInputEmail1"
                 maxlength="100"
                 @input="item.socio = formatInputUpperCase($event.target.value)"
@@ -1971,7 +1936,6 @@
               <input
                 type="text"
                 class="form-control"
-                autocomplete="off"
                 id="exampleInputEmail1"
                 aria-describedby="emailHelp"
                 maxlength="10"
@@ -2021,7 +1985,6 @@
               <input
                 type="text"
                 class="form-control"
-                autocomplete="off"
                 id="exampleInputEmail1"
                 maxlength="100"
                 @input="item.nombre = formatInputUpperCase($event.target.value)"
@@ -2066,7 +2029,6 @@
               <input
                 type="text"
                 class="form-control"
-                autocomplete="off"
                 id="exampleInputEmail1"
                 maxlength="20"
                 aria-describedby="emailHelp"
@@ -2094,7 +2056,6 @@
               <input
                 type="text"
                 class="form-control"
-                autocomplete="off"
                 id="exampleInputEmail1"
                 aria-describedby="emailHelp"
                 v-model="item.telefono"
@@ -2128,7 +2089,6 @@
               <input
                 type="text"
                 class="form-control"
-                autocomplete="off"
                 id="exampleInputEmail1"
                 maxlength="100"
                 @input="item.correo = formatInputUpperCase($event.target.value)"
@@ -2264,7 +2224,6 @@
               <input
                 type="text"
                 class="form-control"
-                autocomplete="off"
                 id="exampleInputEmail1"
                 maxlength="150"
                 @input="item.nombre = formatInputUpperCase($event.target.value)"
@@ -2289,7 +2248,6 @@
               <input
                 type="text"
                 class="form-control"
-                autocomplete="off"
                 id="exampleInputEmail1"
                 maxlength="20"
                 aria-describedby="emailHelp"
@@ -2339,7 +2297,6 @@
             <input
               type="text"
               class="form-control"
-              autocomplete="off"
               id="exampleInputEmail1"
               maxlength="200"
               @input="
@@ -2393,7 +2350,6 @@
             <input
               type="text"
               class="form-control"
-              autocomplete="off"
               id="exampleInputEmail1"
               aria-describedby="emailHelp"
               v-model="item.numero_resolucion"
@@ -2414,7 +2370,6 @@
             <input
               type="date"
               class="form-control"
-              autocomplete="off"
               id="exampleInputEmail1"
               aria-describedby="emailHelp"
               v-model="item.fecha"
@@ -2439,7 +2394,6 @@
             <input
               type="text"
               class="form-control"
-              autocomplete="off"
               id="exampleInputEmail1"
               maxlength="100"
               @input="
@@ -2487,7 +2441,6 @@
             <input
               type="text"
               class="form-control"
-              autocomplete="off"
               id="exampleInputEmail1"
               maxlength="20"
               aria-describedby="emailHelp"
@@ -2517,7 +2470,6 @@
             <input
               type="text"
               class="form-control"
-              autocomplete="off"
               id="exampleInputEmail1"
               aria-describedby="emailHelp"
               v-model="telefono_contador"
@@ -2551,7 +2503,6 @@
             <input
               type="text"
               class="form-control"
-              autocomplete="off"
               id="exampleInputEmail1"
               maxlength="100"
               @input="
@@ -2568,7 +2519,6 @@
             <input
               type="text"
               class="form-control"
-              autocomplete="off"
               id="exampleInputEmail1"
               aria-describedby="emailHelp"
               v-model="telefono_tesorero"
@@ -2580,7 +2530,6 @@
             <input
               type="text"
               class="form-control"
-              autocomplete="off"
               id="exampleInputEmail1"
               @input="
                 correo_tesorero = formatInputUpperCase($event.target.value)
@@ -2601,7 +2550,6 @@
             <input
               type="text"
               class="form-control"
-              autocomplete="off"
               id="exampleInputEmail1"
               aria-describedby="emailHelp"
               v-model="ingreso_mensual"
@@ -2619,7 +2567,6 @@
             <input
               type="text"
               class="form-control"
-              autocomplete="off"
               id="exampleInputEmail1"
               aria-describedby="emailHelp"
               v-model="costos_gastos"
@@ -2637,7 +2584,6 @@
             <input
               type="text"
               class="form-control"
-              autocomplete="off"
               id="exampleInputEmail1"
               aria-describedby="emailHelp"
               v-model="activos"
@@ -2657,7 +2603,6 @@
             <input
               type="text"
               class="form-control"
-              autocomplete="off"
               id="exampleInputEmail1"
               aria-describedby="emailHelp"
               v-model="otros_ingresos"
@@ -2675,7 +2620,6 @@
             <input
               type="text"
               class="form-control"
-              autocomplete="off"
               id="exampleInputEmail1"
               aria-describedby="emailHelp"
               v-model="detalle_otros_ingresos"
@@ -2692,7 +2636,6 @@
             <input
               type="text"
               class="form-control"
-              autocomplete="off"
               id="exampleInputEmail1"
               aria-describedby="emailHelp"
               v-model="pasivos"
@@ -2712,7 +2655,6 @@
             <input
               type="text"
               class="form-control"
-              autocomplete="off"
               id="exampleInputEmail1"
               aria-describedby="emailHelp"
               v-model="total_ingresos"
@@ -2730,7 +2672,6 @@
             <input
               type="text"
               class="form-control"
-              autocomplete="off"
               id="exampleInputEmail1"
               aria-describedby="emailHelp"
               v-model="reintegro_costos"
@@ -2748,7 +2689,6 @@
             <input
               type="text"
               class="form-control"
-              autocomplete="off"
               id="exampleInputEmail1"
               aria-describedby="emailHelp"
               v-model="patrimonio"
@@ -2823,7 +2763,6 @@
               <input
                 type="text"
                 class="form-control"
-                autocomplete="off"
                 id="exampleInputEmail1"
                 maxlength="20"
                 aria-describedby="emailHelp"
@@ -2876,7 +2815,6 @@
               <input
                 type="text"
                 class="form-control"
-                autocomplete="off"
                 id="exampleInputEmail1"
                 maxlength="100"
                 @input="
@@ -2904,7 +2842,6 @@
               <input
                 type="text"
                 class="form-control"
-                autocomplete="off"
                 id="exampleInputEmail1"
                 maxlength="20"
                 aria-describedby="emailHelp"
@@ -2930,7 +2867,6 @@
               <input
                 type="text"
                 class="form-control"
-                autocomplete="off"
                 id="exampleInputEmail1"
                 maxlength="100"
                 @input="
@@ -2972,7 +2908,6 @@
               <input
                 type="text"
                 class="form-control"
-                autocomplete="off"
                 id="exampleInputEmail1"
                 maxlength="200"
                 @input="item.nombre = formatInputUpperCase($event.target.value)"
@@ -2987,7 +2922,6 @@
               <input
                 type="text"
                 class="form-control"
-                autocomplete="off"
                 id="exampleInputEmail1"
                 maxlength="100"
                 @input="
@@ -3004,7 +2938,6 @@
               <input
                 type="text"
                 class="form-control"
-                autocomplete="off"
                 id="exampleInputEmail1"
                 maxlength="20"
                 aria-describedby="emailHelp"
@@ -3097,7 +3030,6 @@
             <input
               type="text"
               class="form-control"
-              autocomplete="off"
               id="exampleInputEmail1"
               maxlength="100"
               @input="item.nombre = formatInputUpperCase($event.target.value)"
@@ -3141,7 +3073,6 @@
             <input
               type="text"
               class="form-control"
-              autocomplete="off"
               id="exampleInputEmail1"
               maxlength="20"
               aria-describedby="emailHelp"
@@ -3167,7 +3098,6 @@
             <input
               type="text"
               class="form-control"
-              autocomplete="off"
               id="exampleInputEmail1"
               maxlength="50"
               @input="
@@ -3253,7 +3183,6 @@
             <input
               type="text"
               class="form-control"
-              autocomplete="off"
               id="exampleInputEmail1"
               maxlength="100"
               @input="
@@ -4688,15 +4617,21 @@ export default {
           bandera++;
         }
         document.append("documento" + index, item);
-       if (self.fileInputsCount[index] !== undefined && self.fileInputsCount[index] !== null) {
-            if (self.fileInputsCount[index].tipo_documento_id !== undefined) {
-                document.append('id' + index, self.fileInputsCount[index].tipo_documento_id);
-            } else {
-                document.append("id" + index, self.fileInputsCount[index].id);
-            }
-} else {
-    console.error(`El índice ${index} no existe en fileInputsCount`);
-}
+        if (
+          self.fileInputsCount[index] !== undefined &&
+          self.fileInputsCount[index] !== null
+        ) {
+          if (self.fileInputsCount[index].tipo_documento_id !== undefined) {
+            document.append(
+              "id" + index,
+              self.fileInputsCount[index].tipo_documento_id
+            );
+          } else {
+            document.append("id" + index, self.fileInputsCount[index].id);
+          }
+        } else {
+          console.error(`El índice ${index} no existe en fileInputsCount`);
+        }
       });
       if (bandera <= 0) {
         axios
@@ -7217,7 +7152,8 @@ export default {
         // }
 
         item.documentos_adjuntos.forEach(function (item) {
-          self.convertFile(item.ruta)
+          self
+            .convertFile(item.ruta)
             .then((archivo) => {
               self.file.push(archivo);
             })
@@ -7226,8 +7162,6 @@ export default {
               console.log(error);
             });
         });
-
-      
 
         if (item.cargos.length > 0) {
           this.cargos = item.cargos;

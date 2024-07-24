@@ -191,21 +191,21 @@
                 </div>
             </div>
         </div>
-        <div class="row" v-if="!sin_registros && items_tabla2.length > 0 && ruta == '/navbar/gestion-ingresosl'"
+        <div class="row" v-if="!sin_registros && items_tabla2.length > 0 && ruta == '/navbar/gestion-ingresosl' || !sin_registros && items_tabla2.length > 0 && ruta == '/navbar/lista-riesgos'"
             style="clear: both;">
             <div class="col-3 mb-3">
-                <label for="exampleInputEmail1" style="float:left" class="form-label"> Búsqueda por documento</label>
+                <label for="exampleInputEmail1" style="float:left" class="form-label"> {{label_busqueda_rapida}}</label>
                 <input type="text" class="form-control form-control-sm" autocomplete="off" id="exampleInputEmail2"
                     aria-describedby="emailHelp" v-model="numero_documento_candidato" />
             </div>
-            <div v-if="!sin_registros && items_tabla2.length > 0 && ruta == '/navbar/gestion-ingresosl' && numero_documento_candidato != ''"
+            <div v-if="!sin_registros && items_tabla2.length > 0 && ruta == '/navbar/gestion-ingresosl' && numero_documento_candidato != '' || !sin_registros && items_tabla2.length > 0 && ruta == '/navbar/lista-riesgos' && numero_documento_candidato != ''"
                 class="col-xs-3 col-md-3">
                 <button type="button" style="margin-top: 35px;" @click="buscarDocumentoLista()"
                     class="btn btn-success btn-sm">
                     Buscar
                 </button>
             </div>
-            <div v-if="!sin_registros && items_tabla2.length > 0 && ruta == '/navbar/gestion-ingresosl' && busqueda_por_documento == true"
+            <div v-if="!sin_registros && items_tabla2.length > 0 && ruta == '/navbar/gestion-ingresosl' && busqueda_por_documento == true || !sin_registros && items_tabla2.length > 0 && ruta == '/navbar/lista-riesgos' && busqueda_por_documento == true"
                 class="col-xs-3 col-md-3">
                 <button type="button" style="margin-top: 35px;" @click="getRegistros(), busqueda_por_documento = false"
                     class="btn btn-success btn-sm">
@@ -242,7 +242,7 @@
                     Seleccionar todo
                 </button>
             </div> -->
-            <div v-if="check.length > 0 && ruta != '/navbar/gestion-ingresosl' && ruta != '/navbar/crm-seguimiento'"
+            <div v-if="check.length > 0 && ruta != '/navbar/gestion-ingresosl' && ruta != '/navbar/crm-seguimiento' && ruta != '/navbar/lista-riesgos'"
                 class="col-xs-3 col-md-3">
                 <button type="button" style="margin-top: 35px; background-color:#E74C3C;color:white"
                     @click="masiveDeleteMessage()" class="btn btn-sm">
@@ -268,14 +268,14 @@
                     <tr>
                         <th v-if="ruta != '/navbar/reporteitems' && !empleados() && ruta != '/navbar/reportes' && ruta != '/navbar/trump' && ruta != '/navbar/procesosespeciales' && ruta != '/navbar/debida-diligencia/clientes' && ruta != '/navbar/correo-novedades-nomina' && ruta != '/navbar/cliente-supervision' && ruta != '/navbar/solicitudes-os'"
                             scope="col"><i class="bi bi-check-square"></i></th>
-                        <th v-if="ruta == '/navbar/gestion-ingresosl'">Ver registro</th>
+                        <th v-if="ruta == '/navbar/gestion-ingresosl' || ruta == '/navbar/lista-riesgos'">Ver registro</th>
                         <th @click="sort(item, index + 1, (sorted = !sorted))" scope="col"
                             v-for="(item, index) in tabla2" :key="index"
                             :class="{ 'd-none': item.nombre === 'Estado contrato' }">
                             {{ item.nombre }}
                         </th>
                         <!-- <th v-if="editar || eliminar" -->
-                        <th v-if="ruta != '/navbar/reporteitems' && ruta != '/navbar/trump' && ruta != '/navbar/procesosespeciales' && ruta != '/navbar/correo-novedades-nomina'"
+                        <th v-if="ruta != '/navbar/reporteitems' && ruta != '/navbar/trump' && ruta != '/navbar/procesosespeciales' && ruta != '/navbar/correo-novedades-nomina' && ruta != '/navbar/lista-riesgos'"
                             colspan="4">Acciones</th>
                     </tr>
                 </thead>
@@ -306,7 +306,27 @@
                                             @click="verOrdenIngreso(item)">Formulario</a></li>
                                     <li>
                                         <a style="color:black; cursor: pointer;" class="dropdown-item"
-                                            data-bs-toggle="modal" data-bs-target="#exampleModal"
+                                            data-bs-toggle="modal" data-bs-target="#formulario_ingreso"
+                                            @click="id_flotante = item.id">
+                                            Flotante
+                                        </a>
+                                    </li>
+
+                                </ul>
+                            </div>
+                        </td>
+                        <td v-if="ruta == '/navbar/lista-riesgos'">
+                            <div class="dropdown">
+                                <button class="btn btn-success dropdown-toggle" type="button" data-bs-toggle="dropdown"
+                                    aria-expanded="false">
+                                    <i class="bi bi-eye"> </i>
+                                </button>
+                                <ul class="dropdown-menu">
+                                    <li><a style="color:black; cursor: pointer;" class="dropdown-item"
+                                            @click="verRegistroRiesgo(item)">Formulario</a></li>
+                                    <li>
+                                        <a style="color:black; cursor: pointer;" class="dropdown-item"
+                                            data-bs-toggle="modal" data-bs-target="#formulario_riesgos"
                                             @click="id_flotante = item.id">
                                             Flotante
                                         </a>
@@ -378,11 +398,6 @@
                         </td>
                         <td v-if="ruta == '/navbar/crm-seguimiento' || ruta == '/navbar/crm-pendientes'">
                             <button type="button" class="btn btn-success btn-sm " @click="verRegistroCrm(item)">
-                                Ver registro
-                            </button>
-                        </td>
-                        <td v-if="ruta == '/navbar/lista-riesgos'">
-                            <button type="button" class="btn btn-success btn-sm " @click="verRegistroRiesgo(item)">
                                 Ver registro
                             </button>
                         </td>
@@ -491,6 +506,7 @@
                 </nav>
             </div>
             <FlotanteFormularioIngreso v-if="$route.path.includes('gestion-ingresosl')" :id_flotante="id_flotante" />
+            <FlotanteFormularioRiesgos v-if="$route.path.includes('lista-riesgos')" :id_flotante="id_flotante" />
             <!-- Modal -->
             <!-- <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel"
                 aria-hidden="true">
@@ -532,6 +548,7 @@ import axios from 'axios'
 import Modal from './Modal.vue'
 import ConsultaContrato from './ConsultaContrato.vue'
 import FlotanteFormularioIngreso from './FlotanteFormularioIngreso.vue'
+import FlotanteFormularioRiesgos from './FlotanteFormularioRiesgos.vue'
 import { Alerts } from '../Mixins/Alerts.js';
 import { Token } from '../Mixins/Token.js';
 import { Permisos } from '../Mixins/Permisos.js';
@@ -542,7 +559,8 @@ export default {
         Modal,
         ConsultaContrato,
         Loading,
-        FlotanteFormularioIngreso
+        FlotanteFormularioIngreso,
+        FlotanteFormularioRiesgos
     },
     mixins: [Token, Alerts, Permisos, Scroll],
     props: {
@@ -626,6 +644,8 @@ export default {
             numero_documento_candidato: '',
             busqueda_por_documento: false,
             id_flotante: 0,
+            label_busqueda_rapida:'',
+            endpoint_busqueda_rapida:''
 
         };
     },
@@ -666,6 +686,16 @@ export default {
                 clearInterval(this.interval2)
             }
         }
+    },
+    mounted(){
+        if(this.ruta == '/navbar/gestion-ingresosl'){
+            this.label_busqueda_rapida = 'Búsqueda por documento'
+            this.endpoint_busqueda_rapida = 'buscardocumentolistai'
+        }else if(this.ruta == '/navbar/lista-riesgos'){
+            this.label_busqueda_rapida = 'Búsqueda por radicado'
+            this.endpoint_busqueda_rapida = 'buscarradicado'
+        }
+
     },
     created() {
         this.empleados()
@@ -759,9 +789,6 @@ export default {
             else if (this.ruta.includes('cliente-supervision')) {
                 return true
             }
-            // else if (this.ruta.includes('zonas')) {
-            //     return true
-            // }
             else if (this.ruta.includes('debida-diligencia')) {
                 return true
             }
@@ -769,6 +796,9 @@ export default {
                 return true
             }
             else if (this.ruta.includes('crm-seguimiento')) {
+                return true
+            }
+            else if (this.ruta.includes('lista-riesgos')) {
                 return true
             }
         },
@@ -1233,7 +1263,7 @@ export default {
             self.busqueda_por_documento = true
             var config = this.configHeader();
             axios
-                .get(self.URL_API + "api/v1/buscardocumentolistai/" + self.numero_documento_candidato, config)
+                .get(self.URL_API + "api/v1/"+self.endpoint_busqueda_rapida+"/" + self.numero_documento_candidato, config)
                 .then(function (result) {
                     self.llenarTabla(result)
                     self.loading = false

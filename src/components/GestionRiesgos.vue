@@ -1,5 +1,6 @@
 <template>
   <div class="container">
+    <Loading :loading="loading" />
     <h2>Matriz de riesgos</h2>
     <form class="was-validated" @submit.prevent="save()">
       <div id="seccion">
@@ -230,7 +231,6 @@
                   <input
                     type="text"
                     class="form-control"
-                    autocomplete="off"
                     id="direccion_empresa"
                     aria-describedby="emailHelp"
                     v-model="probabilidad[indice].probabilidad"
@@ -282,7 +282,6 @@
                   <input
                     type="text"
                     class="form-control"
-                    autocomplete="off"
                     id="direccion_empresa"
                     aria-describedby="emailHelp"
                     v-model="impacto[indice].impacto"
@@ -313,7 +312,6 @@
                   <input
                     type="text"
                     class="form-control"
-                    autocomplete="off"
                     id="direccion_empresa"
                     aria-describedby="emailHelp"
                     v-model="resultado[indice].total"
@@ -334,7 +332,6 @@
               <input
                 type="text"
                 class="form-control"
-                autocomplete="off"
                 id="direccion_empresa"
                 :style="`background-color: ${
                   nivel_riesgo_oportunidad[this.indice].background
@@ -352,7 +349,6 @@
               <input
                 type="text"
                 class="form-control"
-                autocomplete="off"
                 id="direccion_empresa"
                 :style="`background-color: ${nivel_riesgo_oportunidad[indice].background}; color: ${nivel_riesgo_oportunidad[indice].color}`"
                 aria-describedby="emailHelp"
@@ -459,7 +455,7 @@
               </div>
             </div>
             <div class="col mb-3" v-if="indice == 1">
-              <label for="formFileMultiple" class="form-label"
+              <label for="formFile" class="form-label"
                 >Adjuntar evidencia</label
               >
               <div class="input-group mb-3">
@@ -468,13 +464,13 @@
                   ref="inputFile"
                   type="file"
                   @change="cargarArchivo($event)"
-                  id="formFileMultiple"
-                  multiple
+                  id="formFile"
+                  accept=".pdf"
                 />
                 <span
                   style="cursor: pointer"
                   class="input-group-text"
-                  @click="quitarAdjuntos()"
+                  @click="deleteFile(index)"
                   id="basic-addon1"
                   >Quitar archivo</span
                 >
@@ -525,7 +521,6 @@
                   <input
                     type="text"
                     class="form-control"
-                    autocomplete="off"
                     id="direccion_empresa"
                     aria-describedby="emailHelp"
                     v-model="documento_registrado[indice].peso"
@@ -577,7 +572,6 @@
                   <input
                     type="text"
                     class="form-control"
-                    autocomplete="off"
                     id="direccion_empresa"
                     aria-describedby="emailHelp"
                     v-model="clase_control[indice].peso"
@@ -631,7 +625,6 @@
                   <input
                     type="text"
                     class="form-control"
-                    autocomplete="off"
                     id="direccion_empresa"
                     aria-describedby="emailHelp"
                     v-model="frecuencia_control[indice].peso"
@@ -683,7 +676,6 @@
                   <input
                     type="text"
                     class="form-control"
-                    autocomplete="off"
                     id="direccion_empresa"
                     aria-describedby="emailHelp"
                     v-model="tipo_control[indice].peso"
@@ -737,7 +729,6 @@
                   <input
                     type="text"
                     class="form-control"
-                    autocomplete="off"
                     id="direccion_empresa"
                     aria-describedby="emailHelp"
                     v-model="existe_evidencia[indice].peso"
@@ -789,7 +780,6 @@
                   <input
                     type="text"
                     class="form-control"
-                    autocomplete="off"
                     id="direccion_empresa"
                     aria-describedby="emailHelp"
                     v-model="ejecucion_eficas[indice].peso"
@@ -803,7 +793,7 @@
             </div>
           </div>
           <div class="row">
-            <div class="col-6">
+            <div class="col">
               <div class="row mt-4">
                 <div
                   style="
@@ -825,7 +815,6 @@
                       this.resultado_control[this.indice].background
                     }; color: ${this.resultado_control[this.indice].color}`"
                     class="form-control"
-                    autocomplete="off"
                     id="direccion_empresa"
                     aria-describedby="emailHelp"
                     v-model="resultado_control[indice].descripcion"
@@ -846,7 +835,6 @@
                       this.resultado_control[this.indice].background
                     }; color: ${this.resultado_control[this.indice].color}`"
                     class="form-control"
-                    autocomplete="off"
                     id="direccion_empresa"
                     aria-describedby="emailHelp"
                     v-model="resultado_control[indice].peso"
@@ -856,6 +844,17 @@
                     {{ mensaje_error }}
                   </div>
                 </div>
+              </div>
+            </div>
+            <div class="col">
+              <div v-if="ruta_archivo != null" class="evidencia">
+                <a
+                  :href="URL_API + ruta_archivo"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  ><i class="bi bi-file-earmark-richtext"></i>Descargar
+                  evidencia</a
+                >
               </div>
             </div>
           </div>
@@ -895,21 +894,6 @@
           </li>
         </ul>
         <div class="row mb-5">
-          <!-- <div class="col">
-            <label class="form-label">Responsable: *</label>
-            <input
-              type="text"
-              class="form-control"
-              autocomplete="off"
-              id="direccion_empresa"
-              required
-              aria-describedby="emailHelp"
-              v-model="responsable"
-            />
-            <div class="invalid-feedback">
-              {{ mensaje_error }}
-            </div>
-          </div> -->
           <div class="col">
             <label class="form-label">Responsable: *</label>
             <select
@@ -936,7 +920,6 @@
             <input
               type="date"
               class="form-control"
-              autocomplete="off"
               id="direccion_empresa"
               required
               aria-describedby="emailHelp"
@@ -952,6 +935,14 @@
       <button class="btn btn-success m-4" type="submit">
         Guardar formulario
       </button>
+      <button
+        v-if="indice == 1"
+        class="btn btn-success m-4"
+        type="button"
+        @click="saveFile()"
+      >
+        Cargar evidencia
+      </button>
     </form>
   </div>
 </template>
@@ -959,11 +950,21 @@
 /* eslint-disable */
 import axios from "axios";
 import { Token } from "../Mixins/Token.js";
+import Loading from "./Loading.vue";
+import { Alerts } from "../Mixins/Alerts.js";
+import { Permisos } from "../Mixins/Permisos.js";
 
 export default {
-  components: {},
-  mixins: [Token],
-  props: {},
+  components: {
+    Loading,
+  },
+  mixins: [Token, Alerts, Permisos],
+  props: {
+    id_registro: {
+      type: Number,
+      default: 0,
+    },
+  },
   data() {
     return {
       URL_API: process.env.VUE_APP_URL_API,
@@ -1022,6 +1023,9 @@ export default {
       lideres: [],
       lider: {},
       riesgo_id: this.$route.params.id,
+      loading: false,
+      file: [],
+      ruta_archivo: "",
     };
   },
   computed: {},
@@ -1045,6 +1049,62 @@ export default {
       this.getResultadoControl();
     },
     indice() {
+      this.setIndice();
+    },
+    color_celda_oportunidades() {
+      this.setColorCeldaOportunidades();
+    },
+    impacto() {
+      this.setImpacto();
+    },
+    probabilidad() {
+      this.setProbabilidad();
+    },
+    id_registro() {
+      this.getApi(this.id_registro);
+    },
+  },
+  mounted() {
+    if (this.riesgo_id != undefined) {
+      this.getApi(this.riesgo_id);
+    }
+  },
+  methods: {
+    cargarArchivo(event) {
+      const file = event.target.files[0];
+      this.file[0] = file;
+    },
+    deleteFile(index) {
+      this.file.splice(index, 1);
+      document.getElementById("formFile" + index).value = "";
+    },
+    getApi(id) {
+      this.getTiposProceso();
+      this.getNombresProceso();
+      this.getNivelProbabilidad();
+      this.getNivelImpacto();
+      this.getMetodosIdentificacion();
+      this.getFactores();
+      this.getSeguimientos();
+      this.getDocumentosRegistrados();
+      this.getClasesControl();
+      this.getFrecuenciasControl();
+      this.getTiposControl();
+      this.getEvidencias();
+      this.getEjecucionesEficaces();
+      this.getLideres();
+      this.getControl();
+      this.getMatrizOportunidades();
+      this.getMatrizAmenazas();
+      this.getItems(id);
+    },
+    setColorCeldaOportunidades() {
+      this.nivel_riesgo_oportunidad[this.indice].background =
+        this.color_celda_oportunidades;
+      this.nivel_riesgo_oportunidad[this.indice].color =
+        this.color_celda_oportunidades === "yellow" ? "black" : "white";
+    },
+    setIndice() {
       if (this.nivel_riesgo_oportunidad[this.indice].background == undefined) {
         this.nivel_riesgo_oportunidad[this.indice].background = "#e9ecef";
       } else {
@@ -1063,13 +1123,7 @@ export default {
           this.resultado_control[this.indice].color;
       }
     },
-    color_celda_oportunidades() {
-      this.nivel_riesgo_oportunidad[this.indice].background =
-        this.color_celda_oportunidades;
-      this.nivel_riesgo_oportunidad[this.indice].color =
-        this.color_celda_oportunidades === "yellow" ? "black" : "white";
-    },
-    impacto() {
+    setImpacto() {
       if (
         this.impacto[this.indice].nivel != undefined &&
         this.probabilidad[this.indice].nivel != undefined
@@ -1082,7 +1136,7 @@ export default {
         this.oportunidadTratamiento(total);
       }
     },
-    probabilidad() {
+    setProbabilidad() {
       if (
         this.impacto[this.indice].nivel != undefined &&
         this.probabilidad[this.indice].nivel != undefined
@@ -1095,112 +1149,182 @@ export default {
         this.oportunidadTratamiento(total);
       }
     },
-  },
-  mounted() {
-    this.getTiposProceso()
-    this.getNombresProceso()
-    this.getNivelProbabilidad()
-    this.getNivelImpacto()
-    this.getMetodosIdentificacion()
-    this.getFactores()
-    this.getSeguimientos()
-    this.getControl();
-    this.getMatrizOportunidades();
-    this.getMatrizAmenazas();
-    if (this.riesgo_id != undefined) {
-      this.getItems();
-    }
-  },
-  methods: {
-    getItems() {
+    getItems(id) {
       let self = this;
       let config = this.configHeader();
       axios
-        .get(self.URL_API + "api/v1/matrizriesgobyid/" + self.riesgo_id, config)
+        .get(self.URL_API + "api/v1/matrizriesgobyid/" + id, config)
         .then(function (result) {
           self.llenarFormulario(result.data);
         });
     },
     llenarFormulario(formulario) {
-      console.log(formulario);
-      
-        this.nombre_riesgo = formulario.nombre_riesgo
-        this.oportunidad = formulario.oportunidad
-        this.causa = formulario.causa
-        this.plan_accion = formulario.plan_accion
-        this.consecuencia = formulario.consecuencia
-        this.efecto = formulario.efecto
-        this.amenaza = formulario.amenaza
-        this.oportunidad2 = formulario.oportunidad_2
-        this.tipo_proceso = this.tipos_proceso[formulario.a_tipo_proceso_id]
-        this.nombre_proceso = this.nombres_proceso[formulario.a_nombre_proceso_id]
-        this.probabilidad[this.indice] = this.nivel_probabilidad[formulario.a_nivel_probabilidad]
-        this.impacto[this.indice] = this.nivel_impacto[formulario.a_nivel_impacto]
-        this.metodo_identificacion[this.indice] = this.metodos_identificacion[formulario.a_metodo_identificacion_id]
-        this.factor[this.indice] = this.factores[formulario.a_factor_id]
-        // this.control[this.indice].control = formulario.a_
-        // this.soporte[this.indice].soporte = formulario.a_
-        this.seguimiento[this.indice] = this.seguimientos[formulario.a_seguimiento_id]
-        this.algo = formulario.a_probabilidad
-        this.algo = formulario.a_nivel_probabilidad
-        this.algo = formulario.a_impacto_id
-        this.algo = formulario.a_impacto
-        this.algo = formulario.a_nivel_impacto
-        this.algo = formulario.a_metodo_identificacion_id
-        this.algo = formulario.a_metodo_identificacion
-        this.algo = formulario.a_factor_id
-        this.algo = formulario.a_factor
-        this.algo = formulario.a_seguimiento_id
-        this.algo = formulario.a_seguimiento
-        this.algo = formulario.a_documento_registrado_id
-        this.algo = formulario.a_documento_registrado
-        this.algo = formulario.a_documento_registrado_peso
-        this.algo = formulario.a_clase_control_id
-        this.algo = formulario.a_clase_control
-        this.algo = formulario.a_clase_control_peso
-        this.algo = formulario.a_frecuencia_control_id
-        this.algo = formulario.a_frecuencia_control
-        this.algo = formulario.a_frecuencia_control_peso
-        this.algo = formulario.a_tipo_control_id
-        this.algo = formulario.a_tipo_control
-        this.algo = formulario.a_tipo_control_peso
-        this.algo = formulario.a_existe_evidencia_id
-        this.algo = formulario.a_existe_evidencia
-        this.algo = formulario.a_existe_evidencia_peso
-        this.algo = formulario.a_ejecucion_eficaz_id
-        this.algo = formulario.a_ejecucion_eficaz
-        this.algo = formulario.a_ejecucion_eficaz_peso
-        this.algo = formulario.o_probabilidad_id
-        this.algo = formulario.o_probabilidad
-        this.algo = formulario.o_nivel_probabilidad
-        this.algo = formulario.o_impacto_id
-        this.algo = formulario.o_impacto
-        this.algo = formulario.o_nivel_impacto
-        this.algo = formulario.o_metodo_identificacion_id
-        this.algo = formulario.o_metodo_identificacion
-        this.algo = formulario.o_factor_id
-        this.algo = formulario.o_factor
-        this.algo = formulario.o_seguimiento_id
-        this.algo = formulario.o_seguimiento
-        this.algo = formulario.o_documento_registrado_id
-        this.algo = formulario.o_documento_registrado
-        this.algo = formulario.o_documento_registrado_peso
-        this.algo = formulario.o_clase_control_id
-        this.algo = formulario.o_clase_control
-        this.algo = formulario.o_clase_control_peso
-        this.algo = formulario.o_frecuencia_control_id
-        this.algo = formulario.o_frecuencia_control
-        this.algo = formulario.o_frecuencia_control_peso
-        this.algo = formulario.o_tipo_control_id
-        this.algo = formulario.o_tipo_control
-        this.algo = formulario.o_tipo_control_peso
-        this.algo = formulario.o_existe_evidencia_id
-        this.algo = formulario.o_existe_evidencia
-        this.algo = formulario.o_existe_evidencia_peso
-        this.algo = formulario.o_ejecucion_eficaz_id
-        this.algo = formulario.o_ejecucion_eficaz
-        this.algo = formulario.o_ejecucion_eficaz_peso
-      
+      this.nombre_riesgo = formulario.nombre_riesgo;
+      this.oportunidad = formulario.oportunidad;
+      this.causa = formulario.causa;
+      this.plan_accion = formulario.plan_accion;
+      this.consecuencia = formulario.consecuencia;
+      this.efecto = formulario.efecto;
+      this.amenaza = formulario.amenaza;
+      this.oportunidad2 = formulario.oportunidad_2;
+      this.ruta_archivo = formulario.evidencia;
+      this.tipo_proceso = this.filteredArray(
+        this.tipos_proceso,
+        formulario.a_tipo_proceso_id
+      );
+
+      this.nombre_proceso = this.filteredArray(
+        this.nombres_proceso,
+        formulario.a_nombre_proceso_id
+      );
+
+      this.probabilidad[0] = this.filteredArray(
+        this.nivel_probabilidad,
+        formulario.a_probabilidad_id
+      );
+
+      this.probabilidad[1] = this.filteredArray(
+        this.nivel_probabilidad,
+        formulario.o_probabilidad_id
+      );
+
+      this.impacto[0] = this.filteredArray(
+        this.nivel_impacto,
+        formulario.a_impacto_id
+      );
+
+      this.impacto[1] = this.filteredArray(
+        this.nivel_impacto,
+        formulario.o_impacto_id
+      );
+
+      this.nivel_oportunidad_riesgo[0].nivel = formulario.a_nivel_riesgo;
+      this.nivel_oportunidad_riesgo[0].tratamiento = formulario.a_tratamiento;
+      this.nivel_oportunidad_riesgo[1].nivel = formulario.o_nivel_riesgo;
+      this.nivel_oportunidad_riesgo[1].tratamiento = formulario.o_tratamiento;
+
+      this.metodo_identificacion[0] = this.filteredArray(
+        this.metodos_identificacion,
+        formulario.a_metodo_identificacion_id
+      );
+
+      this.metodo_identificacion[1] = this.filteredArray(
+        this.metodos_identificacion,
+        formulario.o_metodo_identificacion_id
+      );
+
+      this.factor[0] = this.filteredArray(
+        this.factores,
+        formulario.a_factor_id
+      );
+
+      this.factor[1] = this.filteredArray(
+        this.factores,
+        formulario.o_factor_id
+      );
+
+      this.control[0].control = formulario.a_nombre_control;
+      this.control[1].control = formulario.o_nombre_control;
+      this.soporte[0].soporte = formulario.a_soporte;
+      this.soporte[1].soporte = formulario.o_soporte;
+      this.seguimiento[0] = this.filteredArray(
+        this.seguimientos,
+        formulario.a_seguimiento_id
+      );
+
+      this.seguimiento[1] = this.filteredArray(
+        this.seguimientos,
+        formulario.o_seguimiento_id
+      );
+
+      this.documento_registrado[0] = this.filteredArray(
+        this.documentos_registrados,
+        formulario.a_documento_registrado_id
+      );
+
+      this.documento_registrado[1] = this.filteredArray(
+        this.documentos_registrados,
+        formulario.o_documento_registrado_id
+      );
+
+      this.clase_control[0] = this.filteredArray(
+        this.clases_control,
+        formulario.a_clase_control_id
+      );
+
+      this.clase_control[1] = this.filteredArray(
+        this.clases_control,
+        formulario.o_clase_control_id
+      );
+
+      this.frecuencia_control[0] = this.filteredArray(
+        this.frecuencias_control,
+        formulario.a_frecuencia_control_id
+      );
+
+      this.frecuencia_control[1] = this.filteredArray(
+        this.frecuencias_control,
+        formulario.o_frecuencia_control_id
+      );
+
+      this.tipo_control[0] = this.filteredArray(
+        this.tipos_control,
+        formulario.a_tipo_control_id
+      );
+
+      this.tipo_control[1] = this.filteredArray(
+        this.tipos_control,
+        formulario.a_tipo_control_id
+      );
+
+      this.existe_evidencia[0] = this.filteredArray(
+        this.existe_evidencias,
+        formulario.a_existe_evidencia_id
+      );
+
+      this.existe_evidencia[1] = this.filteredArray(
+        this.existe_evidencias,
+        formulario.o_existe_evidencia_id
+      );
+
+      this.ejecucion_eficas[0] = this.filteredArray(
+        this.ejecuciones_eficaces,
+        formulario.a_ejecucion_eficaz_id
+      );
+
+      this.ejecucion_eficas[1] = this.filteredArray(
+        this.ejecuciones_eficaces,
+        formulario.o_ejecucion_eficaz_id
+      );
+      this.ejecuciones_eficaces[formulario.o_ejecucion_eficaz_id];
+
+      this.resultado_control[0].descripcion =
+        formulario.a_resultado_control_descripcion;
+      this.resultado_control[0].peso = formulario.a_resultado_control_peso;
+      this.resultado_control[1].descripcion =
+        formulario.a_resultado_control_descripcion;
+      this.resultado_control[1].peso = formulario.a_resultado_control_peso;
+
+      this.ultima_revision = formulario.ultima_revision;
+      this.lider = this.filteredArray(this.lideres, formulario.responsable_id);
+
+      this.resultado[0].total = formulario.a_total;
+      this.resultado[1].total = formulario.o_total;
+
+      this.resultado_control[0].descripcion =
+        formulario.a_resultado_control_descripcion;
+      this.resultado_control[0].peso = formulario.a_resultado_control_peso;
+      this.resultado_control[1].descripcion =
+        formulario.o_resultado_control_descripcion;
+      this.resultado_control[1].peso = formulario.o_resultado_control_peso;
+
+      this.oportunidadTratamiento(formulario.a_total);
+      this.setImpacto();
+      this.getResultadoControl();
+      this.loading = false;
+    },
+    filteredArray(array, id) {
+      return array.find((objto) => objto.id == id);
     },
     getNivelImpacto() {
       if (this.nivel_impacto.length <= 0) {
@@ -1455,11 +1579,44 @@ export default {
       let self = this;
       let form = this.crearObjetoRiesgo();
       let config = this.configHeader();
-      axios
-        .post(self.URL_API + "api/v1/matrizriesgo", form, config)
-        .then(function (result) {
-          console.log(result);
-        });
+      var url = "";
+      if (this.$route.params.id != undefined) {
+        var id = this.$route.params.id;
+      } else if (this.id_registro != 0) {
+        var id = this.id_registro;
+      }
+      if (id != undefined) {
+        url = self.URL_API + "api/v1/matrizriesgo/" + id;
+      } else {
+        url = self.URL_API + "api/v1/matrizriesgo";
+      }
+      axios.post(url, form, config).then(function (result) {
+        self.showAlert(result.data.message, result.data.status);
+      });
+    },
+    saveFile() {
+      var self = this;
+      let config = this.configHeader();
+      const form = new FormData();
+      form.append("evidencia", self.file[0]);
+      if (this.$route.params.id != undefined) {
+        var id = this.$route.params.id;
+      } else if (this.id_registro != 0) {
+        var id = this.id_registro;
+      }
+      if (id != undefined) {
+        axios
+          .post(self.URL_API + "api/v1/matrizriesgo/doc/" + id, form, config)
+          .then(function (result) {
+            console.log(result);
+            // self.showAlert(result.data.message, result.data.status);
+          });
+      } else {
+        self.showAlert(
+          "Diligencie y guarde el archivo para cargar la evidencia.",
+          "Error"
+        );
+      }
     },
     crearObjetoRiesgo() {
       let objeto_riesgo = {
@@ -1531,5 +1688,42 @@ label {
 
 .nav-link {
   color: black;
+}
+
+.evidencia {
+  background-color: rgb(143, 138, 138);
+  margin-top: 20px;
+  height: 85%;
+  padding: 10px;
+  padding-top: 50px;
+  box-sizing: border-box;
+  margin-top: 25px;
+  border-radius: 10px;
+  /* color: white; */
+  font-size: 1.4rem;
+  cursor: pointer;
+  text-align: 0 auto;
+  transition-duration: 1.5s;
+}
+
+.evidencia i {
+  margin-right: 10px;
+}
+
+.evidencia a {
+  color: white;
+  text-decoration: none;
+  transition-duration: 1.5s;
+}
+
+.evidencia:hover {
+  /* color: rgb(12 89 109); */
+  background-color: rgb(29, 117, 194);
+  transition-duration: 1.5s;
+}
+
+.evidencia a:hover {
+  /* color: rgb(12 89 109); */
+  transition-duration: 1.5s;
 }
 </style>
