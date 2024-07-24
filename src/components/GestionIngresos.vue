@@ -802,7 +802,7 @@ export default {
         },
         id_registro() {
             this.scrollTop()
-            this.loading = true
+            // this.loading = true
             this.getArchivosIngreso()
         }
     },
