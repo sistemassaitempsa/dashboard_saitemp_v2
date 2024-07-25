@@ -152,6 +152,12 @@ export default {
           tipo: "texto",
           calculado: "false",
         },
+        {
+          nombre: "Fecha radicado",
+          orden: "DESC",
+          tipo: "fecha",
+          calculado: "false",
+        },
         
       ],
       filtro_gestion_ingresos: false,

@@ -1105,6 +1105,8 @@ export default {
         this.color_celda_oportunidades === "yellow" ? "black" : "white";
     },
     setIndice() {
+      // this.oportunidadTratamiento(this.resultado[this.indice].total);
+
       if (this.nivel_riesgo_oportunidad[this.indice].background == undefined) {
         this.nivel_riesgo_oportunidad[this.indice].background = "#e9ecef";
       } else {
@@ -1485,7 +1487,7 @@ export default {
         let self = this;
         let config = this.configHeader();
         axios
-          .get(self.URL_API + "api/v1/matrizamenazas", config)
+          .get(self.URL_API + "api/v1/matrizoportunidades", config)
           .then(function (result) {
             self.matriz_oportunidades = result.data;
           });
@@ -1496,7 +1498,7 @@ export default {
         let self = this;
         let config = this.configHeader();
         axios
-          .get(self.URL_API + "api/v1/matrizoportunidades", config)
+          .get(self.URL_API + "api/v1/matrizamenazas", config)
           .then(function (result) {
             self.matriz_amenazas = result.data;
           });
@@ -1551,12 +1553,23 @@ export default {
     },
     recorreMatriz(matriz, total) {
       var self = this;
+      if (String(total).includes("%")) {
+        total = total.replace("%","");
+      }
+      console.log(total)
       matriz.forEach((item) => {
         if (item.peso_celda == total) {
           self.nivel_oportunidad_riesgo[self.indice].nivel = item.atributo_1;
           self.nivel_oportunidad_riesgo[self.indice].tratamiento =
             item.atributo_2;
           self.color_celda_oportunidades = item.color;
+
+          // this.nivel_riesgo_oportunidad[this.indice].background = item.color;
+          // this.nivel_riesgo_oportunidad[this.indice].color =
+          //   item.color === "yellow" ? "black" : "white";
+
+          // this.resultado_control[this.indice].background = item.color;
+          // this.resultado_control[this.indice].color = item.color === "yellow" ? "black" : "white";
         }
       });
     },

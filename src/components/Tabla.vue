@@ -176,7 +176,7 @@
                         Realizar búsqueda
                     </button>
                 </div>
-                <div v-if="ruta == '/navbar/debida-diligencia/clientes' && this.campo != '' && this.operador && this.valor_comparar || this.valor_comparar2"
+                <div v-if="(ruta == '/navbar/debida-diligencia/clientes' && this.campo != '' && this.operador && this.valor_comparar || this.valor_comparar2) || (ruta == '/navbar/lista-riesgos' && this.campo != '' && this.operador && this.valor_comparar || this.valor_comparar2)"
                     class="col-xs-3 col-md-3">
                     <button id="exportar" @click="exportar()" type="button" class="btn btn-success btn-sm">
                         <a :href="URL_API + 'api/v1/' + endpointexport + '/' + base64consulta"
