@@ -1051,14 +1051,11 @@ export default {
     indice() {
       this.setIndice();
     },
-    color_celda_oportunidades() {
-      this.setColorCeldaOportunidades();
-    },
     impacto() {
-      this.setImpacto();
+      this.setImpactoxProbabilidad();
     },
     probabilidad() {
-      this.setProbabilidad();
+      this.setImpactoxProbabilidad();
     },
     id_registro() {
       this.getApi(this.id_registro);
@@ -1067,6 +1064,10 @@ export default {
   mounted() {
     if (this.riesgo_id != undefined) {
       this.getApi(this.riesgo_id);
+    } else {
+      this.getMatrizOportunidades();
+      this.getMatrizAmenazas();
+      this.getControl();
     }
   },
   methods: {
@@ -1098,47 +1099,17 @@ export default {
       this.getMatrizAmenazas();
       this.getItems(id);
     },
-    setColorCeldaOportunidades() {
-      this.nivel_riesgo_oportunidad[this.indice].background =
-        this.color_celda_oportunidades;
-      this.nivel_riesgo_oportunidad[this.indice].color =
-        this.color_celda_oportunidades === "yellow" ? "black" : "white";
-    },
     setIndice() {
-      // this.oportunidadTratamiento(this.resultado[this.indice].total);
-
       if (this.nivel_riesgo_oportunidad[this.indice].background == undefined) {
         this.nivel_riesgo_oportunidad[this.indice].background = "#e9ecef";
-      } else {
-        this.nivel_riesgo_oportunidad[this.indice].background =
-          this.nivel_riesgo_oportunidad[this.indice].background;
-        this.nivel_riesgo_oportunidad[this.indice].color =
-          this.nivel_riesgo_oportunidad[this.indice].color;
       }
-
       if (this.resultado_control[this.indice].background == undefined) {
         this.resultado_control[this.indice].background = "#e9ecef";
-      } else {
-        this.resultado_control[this.indice].background =
-          this.resultado_control[this.indice].background;
-        this.resultado_control[this.indice].color =
-          this.resultado_control[this.indice].color;
       }
+      this.oportunidadTratamiento(this.resultado[this.indice].total);
+      this.setColorResultadoControl(this.resultado_control[this.indice].peso)
     },
-    setImpacto() {
-      if (
-        this.impacto[this.indice].nivel != undefined &&
-        this.probabilidad[this.indice].nivel != undefined
-      ) {
-        let total = "";
-        total =
-          parseInt(this.impacto[this.indice].nivel) *
-          parseInt(this.probabilidad[this.indice].nivel);
-        this.resultado[this.indice].total = total + " %";
-        this.oportunidadTratamiento(total);
-      }
-    },
-    setProbabilidad() {
+    setImpactoxProbabilidad() {
       if (
         this.impacto[this.indice].nivel != undefined &&
         this.probabilidad[this.indice].nivel != undefined
@@ -1321,7 +1292,7 @@ export default {
       this.resultado_control[1].peso = formulario.o_resultado_control_peso;
 
       this.oportunidadTratamiento(formulario.a_total);
-      this.setImpacto();
+      this.setImpactoxProbabilidad();
       this.getResultadoControl();
       this.loading = false;
     },
@@ -1526,17 +1497,21 @@ export default {
           parseInt(this.ejecucion_eficas[this.indice].peso);
 
         this.resultado_control[this.indice].peso = peso_total;
-        this.controles.forEach(function (item) {
-          if (item.peso == 0) {
-            self.getColorCeldaResultadoControl(item);
-          } else {
-            var peso = item.peso.split("-");
-            if (peso_total >= peso[0] && peso_total <= peso[1]) {
-              self.getColorCeldaResultadoControl(item);
-            }
-          }
-        });
+        this.setColorResultadoControl(peso_total);
       }
+    },
+    setColorResultadoControl(peso_total) {
+      var self = this
+      this.controles.forEach(function (item) {
+        if (item.peso == 0) {
+          self.getColorCeldaResultadoControl(item);
+        } else {
+          var peso = item.peso.split("-");
+          if (peso_total >= peso[0] && peso_total <= peso[1]) {
+            self.getColorCeldaResultadoControl(item);
+          }
+        }
+      });
     },
     getColorCeldaResultadoControl(item) {
       this.resultado_control[this.indice].descripcion = item.control;
@@ -1547,29 +1522,27 @@ export default {
     oportunidadTratamiento(total) {
       if (this.indice == 0) {
         this.recorreMatriz(this.matriz_amenazas, total);
+      
       } else {
         this.recorreMatriz(this.matriz_oportunidades, total);
+     
       }
     },
     recorreMatriz(matriz, total) {
+     
       var self = this;
       if (String(total).includes("%")) {
-        total = total.replace("%","");
+        total = total.replace("%", "");
       }
-      console.log(total)
       matriz.forEach((item) => {
-        if (item.peso_celda == total) {
+        if (item.peso_celda == String(total).trim()) {
           self.nivel_oportunidad_riesgo[self.indice].nivel = item.atributo_1;
           self.nivel_oportunidad_riesgo[self.indice].tratamiento =
             item.atributo_2;
-          self.color_celda_oportunidades = item.color;
 
-          // this.nivel_riesgo_oportunidad[this.indice].background = item.color;
-          // this.nivel_riesgo_oportunidad[this.indice].color =
-          //   item.color === "yellow" ? "black" : "white";
-
-          // this.resultado_control[this.indice].background = item.color;
-          // this.resultado_control[this.indice].color = item.color === "yellow" ? "black" : "white";
+          self.nivel_riesgo_oportunidad[self.indice].background = item.color;
+          self.nivel_riesgo_oportunidad[self.indice].color =
+            item.color === "yellow" ? "black" : "white";
         }
       });
     },
