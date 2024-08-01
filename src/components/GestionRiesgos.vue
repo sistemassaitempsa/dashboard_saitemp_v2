@@ -1615,7 +1615,7 @@ export default {
       ) {
         this.resultado_control[this.indice].descripcion = item.control;
       }
-      if (this.setColorCelda_resultado || this.contador >= 4) {
+      if ((this.setColorCelda_resultado || this.contador >= 4) || (!this.setColorCelda_resultado && this.$route.params.id == undefined && this.contador >= 2)) {
         this.resultado_control[this.indice].background = item.color;
         this.resultado_control[this.indice].color =
           item.color === "yellow" ? "black" : "white";
