@@ -403,9 +403,9 @@ export default {
                                     {},
                                     {
                                         ul: [
-                                            { text: 'Código: '+this.codigo_documento, listType: 'none', fontSize: 8, margin: [0, 5], },
-                                            { text: 'Fecha: '+this.fecha_documento, listType: 'none', fontSize: 8, margin: [0, 5], },
-                                            { text: 'Version: '+this.version_documento, listType: 'none', fontSize: 8, margin: [0, 5], },
+                                            { text:this.codigo_documento, listType: 'none', fontSize: 8, margin: [0, 5], },
+                                            { text:this.fecha_documento, listType: 'none', fontSize: 8, margin: [0, 5], },
+                                            { text:this.version_documento, listType: 'none', fontSize: 8, margin: [0, 5], },
                                         ],
 
                                     },

@@ -64,6 +64,9 @@ import CrmCliente from "../components/CrmCliente.vue";
 import CrmSeguimiento from "../components/CrmSeguimiento.vue";
 import PendientesCrm from "../components/PendientesCrm.vue";
 import IndicadoresSeya from "../components/IndicadoresSeya.vue";
+import Calendario from "../components/Calendario.vue";
+import GestionRiesgos from '../components/GestionRiesgos.vue';
+import ListaRiesgos from '../components/ListaRiesgos.vue';
 
 
 
@@ -389,6 +392,21 @@ const routes = [
         path: "indicadores-seiya",
         name: "indicadores-seiya",
         component: IndicadoresSeya,
+      },
+      {
+        path: "calendario",
+        name: "calendario",
+        component: Calendario,
+      },
+      {
+        path: "gestionriesgos/:id?",
+        name: "gestionriesgos",
+        component: GestionRiesgos,
+      },
+      {
+        path: "lista-riesgos",
+        name: "lista-riesgos",
+        component: ListaRiesgos,
       },
       // {
       //   path: "navbar/*",
