@@ -99,12 +99,6 @@ export default {
           calculado: "false",
         },
         {
-          nombre: "Amenaza Impacto*probabilidad",
-          orden: "DESC",
-          tipo: "texto",
-          calculado: "false",
-        },
-        {
           nombre: "Amenaza Nivel de riesgo",
           orden: "DESC",
           tipo: "texto",
@@ -117,7 +111,7 @@ export default {
           calculado: "false",
         },
         {
-          nombre: "Oportunidad Impacto*probabilidad",
+          nombre: "Amenaza Impacto*probabilidad",
           orden: "DESC",
           tipo: "texto",
           calculado: "false",
@@ -130,6 +124,12 @@ export default {
         },
         {
           nombre: "Oportunidad Tratamiento",
+          orden: "DESC",
+          tipo: "texto",
+          calculado: "false",
+        },
+        {
+          nombre: "Oportunidad Impacto*probabilidad",
           orden: "DESC",
           tipo: "texto",
           calculado: "false",

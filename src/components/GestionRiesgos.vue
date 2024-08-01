@@ -2,6 +2,24 @@
   <div class="container">
     <Loading :loading="loading" />
     <h2>Matriz de riesgos</h2>
+    <div
+      @click="toggleDiv"
+      :class="{ expandido: divExpandido, pestaña: !divExpandido }"
+      class="pestaña"
+      style="overflow-y: auto"
+      v-if="seguimiento_guardado.length > 0"
+    >
+      <div v-if="!divExpandido">Seguimiento guardado</div>
+      <div v-for="(item, index) in seguimiento_guardado" :key="index">
+        <div v-if="divExpandido" style="text-align: left">
+          {{ item.usuario }}
+        </div>
+        <div v-if="divExpandido" style="text-align: left">
+          {{ reformatearFecha(item.created_at) }}
+        </div>
+        <hr v-if="divExpandido" />
+      </div>
+    </div>
     <form class="was-validated" @submit.prevent="save()">
       <div id="seccion">
         <div class="row">
@@ -1025,11 +1043,20 @@ export default {
       riesgo_id: this.$route.params.id,
       loading: false,
       file: [],
-      ruta_archivo: "",
+      ruta_archivo: null,
+      setColorCelda_resultado: true,
+      divExpandido: false,
+      seguimiento_guardado: [],
+      contador: 0,
     };
   },
   computed: {},
   watch: {
+    $route() {
+      if (this.$route.params.id == undefined) {
+        this.LimpiarFormulario();
+      }
+    },
     documento_registrado() {
       this.getResultadoControl();
     },
@@ -1049,6 +1076,7 @@ export default {
       this.getResultadoControl();
     },
     indice() {
+      this.contador = 2;
       this.setIndice();
     },
     impacto() {
@@ -1058,19 +1086,43 @@ export default {
       this.setImpactoxProbabilidad();
     },
     id_registro() {
+      this.reseteaTab();
       this.getApi(this.id_registro);
     },
   },
   mounted() {
     if (this.riesgo_id != undefined) {
+      this.reseteaTab();
       this.getApi(this.riesgo_id);
     } else {
+      this.reseteaTab();
       this.getMatrizOportunidades();
       this.getMatrizAmenazas();
       this.getControl();
+      this.setColorCelda_resultado = true;
     }
   },
   methods: {
+    reformatearFecha(fechaOriginal) {
+      const fechaHora = new Date(fechaOriginal);
+      const año = fechaHora.getFullYear();
+      const mes = (fechaHora.getMonth() + 1).toString().padStart(2, "0"); // Los meses son indexados desde 0
+      const dia = fechaHora.getDate().toString().padStart(2, "0");
+      const horas = fechaHora.getHours().toString().padStart(2, "0");
+      const minutos = fechaHora.getMinutes().toString().padStart(2, "0");
+      const segundos = fechaHora.getSeconds().toString().padStart(2, "0");
+      const fechaFormateada = `${dia}/${mes}/${año}  `;
+      const horaFormateada = `${horas}:${minutos}:${segundos}`;
+      return fechaFormateada + " " + horaFormateada;
+    },
+    toggleDiv() {
+      this.divExpandido = !this.divExpandido;
+    },
+    reseteaTab() {
+      this.tab_amenaza = true;
+      this.tab_oportunidad = false;
+      this.indice = 0;
+    },
     cargarArchivo(event) {
       const file = event.target.files[0];
       this.file[0] = file;
@@ -1107,7 +1159,7 @@ export default {
         this.resultado_control[this.indice].background = "#e9ecef";
       }
       this.oportunidadTratamiento(this.resultado[this.indice].total);
-      this.setColorResultadoControl(this.resultado_control[this.indice].peso)
+      this.setColorResultadoControl(this.resultado_control[this.indice].peso);
     },
     setImpactoxProbabilidad() {
       if (
@@ -1271,13 +1323,6 @@ export default {
       );
       this.ejecuciones_eficaces[formulario.o_ejecucion_eficaz_id];
 
-      this.resultado_control[0].descripcion =
-        formulario.a_resultado_control_descripcion;
-      this.resultado_control[0].peso = formulario.a_resultado_control_peso;
-      this.resultado_control[1].descripcion =
-        formulario.a_resultado_control_descripcion;
-      this.resultado_control[1].peso = formulario.a_resultado_control_peso;
-
       this.ultima_revision = formulario.ultima_revision;
       this.lider = this.filteredArray(this.lideres, formulario.responsable_id);
 
@@ -1291,6 +1336,13 @@ export default {
         formulario.o_resultado_control_descripcion;
       this.resultado_control[1].peso = formulario.o_resultado_control_peso;
 
+      this.nivel_riesgo_oportunidad[0].background = formulario.a_total_color;
+      this.resultado_control[0].background = formulario.a_color_resultado;
+
+      this.nivel_riesgo_oportunidad[1].background = formulario.o_total_color;
+      this.resultado_control[1].background = formulario.o_color_resultado;
+      this.setColorCelda_resultado = false;
+      this.seguimiento_guardado = formulario.seguimiento;
       this.oportunidadTratamiento(formulario.a_total);
       this.setImpactoxProbabilidad();
       this.getResultadoControl();
@@ -1298,6 +1350,48 @@ export default {
     },
     filteredArray(array, id) {
       return array.find((objto) => objto.id == id);
+    },
+    LimpiarFormulario() {
+      this.tipo_proceso = {};
+      this.nombre_proceso = {};
+      this.nombre_riesgo = "";
+      this.oportunidad = "";
+      this.causa = "";
+      this.plan_accion = "";
+      this.consecuencia = "";
+      this.efecto = "";
+      this.amenaza = "";
+      this.oportunidad2 = "";
+      this.ruta_archivo = null;
+      this.probabilidad = [{}, {}];
+      this.impacto = [{}, {}];
+      this.documento_registrado = [{}, {}];
+      this.clase_control = [{}, {}];
+      this.frecuencia_control = [{}, {}];
+      this.tipo_control = [{}, {}];
+      this.existe_evidencia = [{}, {}];
+      this.ejecucion_eficas = [{}, {}];
+      this.metodo_identificacion = [{}, {}];
+      this.factor = [{}, {}];
+      this.seguimiento = [{}, {}];
+      this.control = [{}, {}];
+      this.soporte = [{}, {}];
+      this.nivel_oportunidad_riesgo = [{}, {}];
+      this.resultado = [{}, {}];
+      this.resultado_control = [{}, {}];
+      this.ultima_revision = "";
+      this.lider = {};
+      this.nivel_riesgo_oportunidad[0].background = "#e9ecef";
+      this.resultado_control[0].background = "#e9ecef";
+      this.nivel_riesgo_oportunidad[1].background = "#e9ecef";
+      this.resultado_control[1].background = "#e9ecef";
+      this.file = []
+      this.seguimiento_guardado = []
+      this.tab_amenaza = true;
+      this.tab_oportunidad = false;
+      this.id_registro = 0
+      this.riesgo_id = undefined
+      this.indice = 0;
     },
     getNivelImpacto() {
       if (this.nivel_impacto.length <= 0) {
@@ -1480,6 +1574,7 @@ export default {
     },
     getResultadoControl() {
       var self = this;
+      // this.setColorCelda_resultado = true
       if (
         this.documento_registrado[this.indice].peso != undefined &&
         this.clase_control[this.indice].peso != undefined &&
@@ -1501,7 +1596,7 @@ export default {
       }
     },
     setColorResultadoControl(peso_total) {
-      var self = this
+      var self = this;
       this.controles.forEach(function (item) {
         if (item.peso == 0) {
           self.getColorCeldaResultadoControl(item);
@@ -1514,22 +1609,32 @@ export default {
       });
     },
     getColorCeldaResultadoControl(item) {
-      this.resultado_control[this.indice].descripcion = item.control;
-      this.resultado_control[this.indice].background = item.color;
-      this.resultado_control[this.indice].color =
-        item.color === "yellow" ? "black" : "white";
+      if (
+        (this.id_registro == 0 && this.riesgo_id == undefined) ||
+        this.contador >= 4
+      ) {
+        this.resultado_control[this.indice].descripcion = item.control;
+      }
+      if (this.setColorCelda_resultado || this.contador >= 4) {
+        this.resultado_control[this.indice].background = item.color;
+        this.resultado_control[this.indice].color =
+          item.color === "yellow" ? "black" : "white";
+      } else {
+        this.resultado_control[this.indice].color =
+          this.resultado_control[this.indice].background === "yellow"
+            ? "black"
+            : "white";
+      }
+      this.contador++;
     },
     oportunidadTratamiento(total) {
       if (this.indice == 0) {
         this.recorreMatriz(this.matriz_amenazas, total);
-      
       } else {
         this.recorreMatriz(this.matriz_oportunidades, total);
-     
       }
     },
     recorreMatriz(matriz, total) {
-     
       var self = this;
       if (String(total).includes("%")) {
         total = total.replace("%", "");
@@ -1594,8 +1699,7 @@ export default {
         axios
           .post(self.URL_API + "api/v1/matrizriesgo/doc/" + id, form, config)
           .then(function (result) {
-            console.log(result);
-            // self.showAlert(result.data.message, result.data.status);
+            self.showAlert(result.data.message, result.data.status);
           });
       } else {
         self.showAlert(
@@ -1633,7 +1737,6 @@ export default {
         a_existe_evidencia: this.existe_evidencia[0],
         a_ejecucion_eficas: this.ejecucion_eficas[0],
         a_resultado_control: this.resultado_control[0],
-
         o_probabilidad: this.probabilidad[1],
         o_impacto: this.impacto[1],
         o_total: this.resultado[1].total,
@@ -1651,7 +1754,6 @@ export default {
         o_existe_evidencia: this.existe_evidencia[1],
         o_ejecucion_eficas: this.ejecucion_eficas[1],
         o_resultado_control: this.resultado_control[1],
-
         responsable_id: this.lider.id,
         responsable_nombre: this.lider.nombre,
         ultima_revision: this.ultima_revision,
@@ -1711,5 +1813,64 @@ label {
 .evidencia a:hover {
   /* color: rgb(12 89 109); */
   transition-duration: 1.5s;
+}
+
+.pestaña {
+  position: fixed;
+  top: 30%;
+  right: 0;
+  background-color: lightblue;
+  padding: 10px;
+  border-top-left-radius: 10px;
+  border-bottom-left-radius: 10px;
+  cursor: pointer;
+  z-index: 1000;
+  background: rgb(0, 107, 63);
+  color: white;
+  background: linear-gradient(
+    95deg,
+    rgba(0, 107, 63, 1) 4%,
+    rgba(26, 150, 56, 1) 19%,
+    rgba(48, 159, 128, 1) 45%,
+    rgba(22, 119, 115, 1) 63%,
+    rgba(4, 66, 105, 1) 88%
+  );
+}
+
+/* Animación para expandir */
+@keyframes expandir {
+  from {
+    width: 0;
+  }
+
+  to {
+    width: 300px;
+  }
+}
+
+@keyframes contraer {
+  from {
+    width: 300px;
+  }
+
+  to {
+    width: 0;
+  }
+}
+
+/* Estilos cuando el div está expandido */
+.expandido {
+  animation: expandir 1s ease;
+  /* Animación para expandir */
+  width: 300px;
+  height: 300px;
+  /* Anchura del contenido expandido */
+}
+
+.pestaña:not(.expandido) {
+  animation: contraer 1s ease;
+  /* Animación para contraer */
+  overflow: hidden;
+  /* Ocultar el contenido al contraer */
 }
 </style>
