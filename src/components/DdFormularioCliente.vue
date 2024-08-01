@@ -1,11 +1,11 @@
 <template>
   <div class="container" id="contenedor-formulario">
     <Loading :loading="loading" />
-    <div class="row">
+    <div class="row" >
       <div class="col-2">
         <img style="width: 80%" src="@/assets/logo1.png" alt="" />
       </div>
-      <div class="col-8">
+      <div class="col">
         <h5>SAGRILAFT</h5>
         <h5>
           Sistema de Autocontrol y Gestión del Riesgo Integral de Lavado de
@@ -13,10 +13,8 @@
           CONTRAPARTES
         </h5>
       </div>
-      <div class="col-2">
-        <p>GCM130-1</p>
-        <p>3-01-2023</p>
-        <p>Versión 5</p>
+      <div class="col-2 versionamiento" :style="'font-size:'+versiones[0].tamano_texto+'rem'">
+        <div class="row" v-for="item in versiones" :key="item.id"> <p>{{item.descripcion}}</p></div>
       </div>
     </div>
     <form class="was-validated" @submit.prevent="save()">
@@ -3925,6 +3923,7 @@ export default {
       consulta_contratacion_tipo_contrato: "",
       consulta_contratacion_pago_31: "",
       contratacion_pago_31_id: "",
+      versiones:[],
     };
   },
   computed: {
@@ -3971,6 +3970,7 @@ export default {
     this.getElementosPP();
     this.fileInputsCountCopia = [...this.fileInputsCount];
     this.scrollTop();
+    this.validarVersionamiento()
     if (
       this.$route.params.id != undefined &&
       this.$route.path != "/formularioregistro"
@@ -3997,6 +3997,15 @@ export default {
     }
   },
   methods: {
+    validarVersionamiento(){
+      let self = this;
+      let config = this.configHeader();
+      axios
+        .get(self.URL_API + "api/v1/versiondebidadiligencia", config)
+        .then(function (result) {
+          self.versiones = result.data;
+        });
+    },
     validaCamposDinamicos(index, bandera = null) {
       if (bandera != null) {
         this.campo_dinamico[index] = false;
@@ -7489,6 +7498,15 @@ ul li {
   background-color: rgb(28, 146, 77);
   color: white;
 }
+
+.versionamiento .row p{
+  border-bottom: rgba(0, 0, 0, 0.377) 1px solid;
+  padding:0px;
+  margin: 0px;
+  margin-top: 5px;
+  color: rgba(0, 0, 0, 0.377)
+}
+
 
 /* .orientacion{
     text-align: justify;

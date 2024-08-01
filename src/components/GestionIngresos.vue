@@ -4,7 +4,7 @@
         <h2>Solicitud de servicio</h2>
         <div @click="toggleDiv"
             :class="{ 'expandido': divExpandido, 'pestaña': !divExpandido, 'pestaña3': divExpandido }" class="pestaña"
-            style="overflow-y: auto;">
+            style="overflow-y: auto;" v-if="seguimiento.length > 0">
             <div v-if="!divExpandido">Seguimiento guardado</div>
             <div v-for="item, index in seguimiento" :key="index">
                 <div v-if="divExpandido" style="text-align: left;">{{ item.estado }}</div>
@@ -15,7 +15,7 @@
         </div>
         <div @click="toggleDiv2"
             :class="{ 'expandido2': divExpandido2, 'pestaña': !divExpandido2, 'pestaña2': divExpandido2 }"
-            class="pestaña2" style="overflow-y: auto;">
+            class="pestaña2" style="overflow-y: auto;" v-if="seguimiento_estados.length > 0">
             <div v-if="!divExpandido2">Seguimiento estados</div>
             <div v-for="item, index in seguimiento_estados" :key="index">
                 <div v-if="divExpandido2" style="text-align: left;">{{ item.estado_ingreso_final }}</div>
