@@ -1761,6 +1761,7 @@ export default {
 
       return objeto_riesgo;
     },
+    
   },
 };
 </script>
