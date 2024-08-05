@@ -67,6 +67,7 @@ import IndicadoresSeya from "../components/IndicadoresSeya.vue";
 import Calendario from "../components/Calendario.vue";
 import GestionRiesgos from '../components/GestionRiesgos.vue';
 import ListaRiesgos from '../components/ListaRiesgos.vue';
+import GuiaRiesgos from '../components/GuiaRiesgos.vue';
 
 
 
@@ -407,6 +408,11 @@ const routes = [
         path: "lista-riesgos",
         name: "lista-riesgos",
         component: ListaRiesgos,
+      },
+      {
+        path: "guia-riesgos",
+        name: "guia-riesgos",
+        component: GuiaRiesgos,
       },
       // {
       //   path: "navbar/*",
