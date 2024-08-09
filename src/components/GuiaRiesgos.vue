@@ -2,10 +2,10 @@
   <div class="container">
     <h2>Criterio matriz riesgos</h2>
     <Loading :loading="loading" />
-    <table class="table table-bordered border-dark" v-if="!loading">
+    <table class="table table-bordered border-dark table-responsive" v-if="!loading">
       <thead class="table-dark">
         <tr>
-          <th scope="col" colspan="5">Matriz calificación de oportunidades</th>
+          <td scope="col" colspan="6">Matriz calificación de oportunidades</td>
         </tr>
       </thead>
       <tbody>
@@ -13,31 +13,44 @@
           <!-- Genera una celda para cada valor de columna definida -->
           <td v-for="key in columnKeys" :key="key">
             <div
+              class="center-flex formatted-text"
               v-for="item in groupedItems[`column-${key}`]"
               :key="item.id"
               :style="{
-                backgroundColor: item.color,
+                backgroundColor: item.color != '' ? item.color : 'white',
                 color:
-                  item.color === 'yellow'
+                  item.color == ''
+                    ? 'black'
+                    : item.color === 'yellow'
                     ? 'black'
                     : 'white' /* Condición para el color del texto */,
                 border: '1px solid black',
                 padding: '8px',
                 margin: '4px',
+                minHeight: '120px',
+                width: '200px',
+                borderRadius: '5px',
+                cursor: 'pointer',
               }"
+              @mouseover="mostrarDescripcion(item, true, matriz_oportunidades)"
+              @mouseleave="
+                mostrarDescripcion(item, false, matriz_oportunidades)
+              "
             >
-              {{ item.atributo_1 }}<br />{{ item.atributo_2 }}<br />{{
-                item.peso_celda
-              }}
+              <div class="popover" v-if="item.show && item.descripcion != null">
+                {{ item.descripcion }}
+              </div>
+              {{ formattedText(item.atributo_1) }}<br />{{ item.atributo_2
+              }}<br />{{ item.peso_celda }}
             </div>
           </td>
         </tr>
       </tbody>
     </table>
-    <table class="table table-bordered border-dark" v-if="!loading">
+    <table class="table table-bordered border-dark" table-responsive v-if="!loading">
       <thead class="table-dark">
         <tr>
-          <th scope="col" colspan="5">Matriz calificación de riesgo</th>
+          <td scope="col" colspan="6">Matriz calificación de riesgo</td>
         </tr>
       </thead>
       <tbody>
@@ -45,22 +58,33 @@
           <!-- Genera una celda para cada valor de columna definida -->
           <td v-for="key in columnKeys2" :key="key">
             <div
+              class="center-flex formatted-text"
               v-for="item in groupedItems2[`column-${key}`]"
               :key="item.id"
               :style="{
-                backgroundColor: item.color,
+                backgroundColor: item.color != '' ? item.color : 'white',
                 color:
-                  item.color === 'yellow'
+                  item.color == ''
+                    ? 'black'
+                    : item.color === 'yellow'
                     ? 'black'
                     : 'white' /* Condición para el color del texto */,
                 border: '1px solid black',
                 padding: '8px',
                 margin: '4px',
+                minHeight: '120px',
+                width: '200px',
+                borderRadius: '5px',
+                cursor: 'pointer',
               }"
+              @mouseover="mostrarDescripcion(item, true, matriz_amenazas)"
+              @mouseleave="mostrarDescripcion(item, false, matriz_amenazas)"
             >
-              {{ item.atributo_1 }}<br />{{ item.atributo_2 }}<br />{{
-                item.peso_celda
-              }}
+              <div class="popover" v-if="item.show && item.descripcion != null">
+                {{ item.descripcion }}
+              </div>
+              {{ formattedText(item.atributo_1) }}<br />{{ item.atributo_2
+              }}<br />{{ item.peso_celda }}
             </div>
           </td>
         </tr>
@@ -75,7 +99,7 @@ import { Alerts } from "../Mixins/Alerts.js";
 import Loading from "./Loading.vue";
 export default {
   components: {
-    Loading
+    Loading,
   },
   mixins: [Token, Alerts],
   props: {},
@@ -86,6 +110,7 @@ export default {
       matriz_amenazas: [],
       controles: [],
       loading: true,
+      posicion: 0,
     };
   },
   computed: {
@@ -106,18 +131,18 @@ export default {
       }, {});
     },
     columnKeys() {
-      return [1, 5, 10, 15, 20];
+      return [0, 1, 5, 10, 15, 20];
     },
     columnKeys2() {
-      return [1, 5, 10, 15, 20];
+      return [0, 1, 5, 10, 15, 20];
     },
   },
   watch: {
     matriz_oportunidades() {
-        this.validaLoading()
+      this.validaLoading();
     },
     matriz_amenazas() {
-        this.validaLoading()
+      this.validaLoading();
     },
   },
   mounted() {
@@ -126,11 +151,20 @@ export default {
     this.getControl();
   },
   methods: {
-    validaLoading(){
-        if(this.matriz_oportunidades != [] &&
-        this.matriz_amenazas != []){
-            this.loading = false
+    mostrarDescripcion(registro, booleano, array) {
+      array.forEach(function (item, index) {
+        if (item.id == registro.id) {
+          array[index].show = booleano;
         }
+      });
+    },
+    formattedText(text) {
+      return text.replace(/,/g, ",\n");
+    },
+    validaLoading() {
+      if (this.matriz_oportunidades != [] && this.matriz_amenazas != []) {
+        this.loading = false;
+      }
     },
     getMatrizOportunidades() {
       if (this.matriz_oportunidades.length <= 0) {
@@ -168,4 +202,31 @@ export default {
   },
 };
 </script>
-<style scoped></style>
+<style scoped>
+.center-flex {
+  display: flex;
+  justify-content: center; /* Centrar horizontalmente */
+  align-items: center; /* Centrar verticalmente */
+  height: 100px; /* Ajusta la altura según sea necesario */
+}
+
+.formatted-text {
+  white-space: pre-line; /* Mantiene los saltos de línea del texto */
+  /* Otros estilos opcionales como color, padding, etc. */
+  position:relative;
+}
+
+.popover {
+  background-color: white;
+  position: absolute;
+  color: black;
+  padding: 10px;
+  top:-60px;
+  left:30px;
+}
+
+table{
+    margin-bottom:50px
+}
+
+</style>
