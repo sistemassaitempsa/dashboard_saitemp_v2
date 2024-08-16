@@ -139,7 +139,7 @@ export default {
   methods: {
     validaAnchoTabla() {
       this.ruta = this.$route.path
-      if (this.ruta.includes('gestion-ingresosl') || this.ruta.includes('debida-diligencia/clientes') || this.ruta.includes('ingresos-pendientes') || this.ruta.includes('correo-novedades-nomina') || this.ruta.includes('crm-seguimiento') || this.ruta.includes('crm-pendientes') || this.ruta.includes('indicadores-seiya')) {
+      if (this.ruta.includes('gestion-ingresosl') || this.ruta.includes('debida-diligencia/clientes') || this.ruta.includes('ingresos-pendientes') || this.ruta.includes('correo-novedades-nomina') || this.ruta.includes('crm-seguimiento') || this.ruta.includes('crm-pendientes') || this.ruta.includes('indicadores-seiya') || this.ruta.includes('lista-riesgos')) {
         this.anchocomponente = true
       } else {
         this.anchocomponente = false
@@ -155,7 +155,7 @@ export default {
           var bandera = false
           this.menu.forEach(function (item) {
             item.opciones.forEach(function (item2) {
-              if (newPath.includes(item2.url.split("/")[1]) || newPath.includes('empleado') || newPath.includes('editarUsuario') || newPath.includes('timeLine')) {
+              if (newPath.includes(item2.url.split("/")[1]) || newPath.includes('empleado') || newPath.includes('editarUsuario') || newPath.includes('timeLine') || newPath.includes('landing')) {
                 bandera = true
               }
             })

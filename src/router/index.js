@@ -68,6 +68,7 @@ import Calendario from "../components/Calendario.vue";
 import GestionRiesgos from '../components/GestionRiesgos.vue';
 import ListaRiesgos from '../components/ListaRiesgos.vue';
 import GuiaRiesgos from '../components/GuiaRiesgos.vue';
+import Landing from '../components/Landing.vue';
 
 
 
@@ -413,6 +414,11 @@ const routes = [
         path: "guia-riesgos",
         name: "guia-riesgos",
         component: GuiaRiesgos,
+      },
+      {
+        path: "landing",
+        name: "landing",
+        component: Landing,
       },
       // {
       //   path: "navbar/*",
