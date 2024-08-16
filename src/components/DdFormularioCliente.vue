@@ -13,7 +13,7 @@
           CONTRAPARTES
         </h5>
       </div>
-      <div class="col-2 versionamiento" :style="'font-size:'+versiones[0].tamano_texto+'rem'">
+      <div class="col-2 versionamiento" :style="'font-size:'+tamano_texto_version+'rem'">
         <div class="row" v-for="item in versiones" :key="item.id"> <p>{{item.descripcion}}</p></div>
       </div>
     </div>
@@ -3924,6 +3924,7 @@ export default {
       consulta_contratacion_pago_31: "",
       contratacion_pago_31_id: "",
       versiones:[],
+      tamano_texto_version:'',
     };
   },
   computed: {
@@ -4004,6 +4005,7 @@ export default {
         .get(self.URL_API + "api/v1/versiondebidadiligencia", config)
         .then(function (result) {
           self.versiones = result.data;
+          self.tamano_texto_version = self.versiones[0].tamano_texto
         });
     },
     validaCamposDinamicos(index, bandera = null) {
@@ -6612,6 +6614,7 @@ export default {
     },
     llenarFormularioGuardado(item = null) {
       var self = this;
+      console.log(this.item)
       this.cliente_existe = false;
       // if (item.numero_identificacion != '') {
       //     this.getCliente(item.numero_identificacion, 1)
@@ -7166,10 +7169,10 @@ export default {
             .then((archivo) => {
               self.file.push(archivo);
             })
-            .catch((error) => {
-              self.showAlert("Error al convertir el archivo:", "error");
-              console.log(error);
-            });
+            // .catch((error) => {
+            //   self.showAlert("Error al convertir el archivo:", "error");
+            //   console.log(error);
+            // });
         });
 
         if (item.cargos.length > 0) {
