@@ -69,6 +69,7 @@ import GestionRiesgos from '../components/GestionRiesgos.vue';
 import ListaRiesgos from '../components/ListaRiesgos.vue';
 import GuiaRiesgos from '../components/GuiaRiesgos.vue';
 import Landing from '../components/Landing.vue';
+import Configuraciones from '../components/Configuraciones.vue';
 
 
 
@@ -419,6 +420,11 @@ const routes = [
         path: "landing",
         name: "landing",
         component: Landing,
+      },
+      {
+        path: "configuraciones",
+        name: "configuraciones",
+        component: Configuraciones,
       },
       // {
       //   path: "navbar/*",
