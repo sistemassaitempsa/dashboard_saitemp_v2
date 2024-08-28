@@ -46,8 +46,14 @@
                         </button>
                     </div>
                 </div>
-                <div class="row" v-if="$route.path == '/navbar/gestion-ingresos'">
+                <div class="row">
                     <div class="col-3 mb-3">
+                        <label for="exampleInputEmail1" style="float:left" class="form-label"> N° servicio</label>
+                        <input type="text" class="form-control form-control-sm" autocomplete="off"
+                            id="exampleInputEmail2" aria-describedby="emailHelp" v-model="n_servicio"
+                            placeholder="Radicado del servcio" />
+                    </div>
+                    <div class="col-3 mb-3" v-if="$route.path == '/navbar/gestion-ingresos'">
                         <label for="exampleInputEmail1" style="float:left" class="form-label"> Replicar
                             formulario</label>
                         <input type="text" class="form-control form-control-sm" autocomplete="off"
@@ -785,6 +791,7 @@ export default {
             variableX: '',
             hora: '',
             replica: '',
+            n_servicio:''
 
         }
     },
@@ -1423,7 +1430,8 @@ export default {
                 consulta_encargado_corregir: this.consulta_encargado_corregir,
                 no_conformidad: this.no_conformidad,
                 variableX: this.variableX,
-                replica: this.replica
+                replica: this.replica,
+                n_servicio: this.n_servicio
 
             }
         },
@@ -1587,6 +1595,7 @@ export default {
             this.encargado_id = item.responsable_id
             this.consulta_encargado_corregir = item.responsable_corregir
             this.no_conformidad = item.nc_hora_cierre
+            this.n_servicio = item.n_servicio
 
 
             if (item['laboratorios'][0] != undefined) {
@@ -1665,6 +1674,7 @@ export default {
             this.tipo_servicio_id = ''
             this.tipo_identificacion = ''
             this.consulta_tipo_identificacion = ''
+            this.n_servicio = ''
             this.getArchivosIngreso()
 
         },

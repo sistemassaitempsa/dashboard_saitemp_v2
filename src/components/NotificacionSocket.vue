@@ -20,7 +20,7 @@ export default {
     },
     data() {
         return {
-            mensaje_notificacion: '',
+            // mensaje_notificacion: '',
             animacion: false,
         }
     },
@@ -31,7 +31,7 @@ export default {
 
     },
     mounted() {
-        this.socket('channel', 'NotificacionesPush')
+        this.socket('channel', 'NotificacionSeiya')
     },
     created() {
         if (localStorage.getItem("pila") != '') {
@@ -47,7 +47,6 @@ export default {
                 self.pila_notificaciones[self.pila_notificaciones.length - 2].class = 'notificacion animate__animated animate__fadeInRight'
             }
             setTimeout(() => {
-                console.log(index)
                 self.pila_notificaciones.splice(index, 1)
                 localStorage.setItem("pila", JSON.stringify(self.pila_notificaciones));
             }, 1000);

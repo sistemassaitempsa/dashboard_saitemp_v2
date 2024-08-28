@@ -6614,7 +6614,6 @@ export default {
     },
     llenarFormularioGuardado(item = null) {
       var self = this;
-      console.log(this.item)
       this.cliente_existe = false;
       // if (item.numero_identificacion != '') {
       //     this.getCliente(item.numero_identificacion, 1)
