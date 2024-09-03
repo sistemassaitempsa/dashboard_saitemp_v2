@@ -152,17 +152,59 @@
                         </div>
                     </div> -->
                 </div>
-                <div class="row">
-                    <div class="col mb-3">
-                        <label class="form-label">Observación: *</label>
-                        <textarea class="form-control" required name="" id="razon_social" rows="10"
-                            v-model="observacion" placeholder="Observación"
-                            :disabled="$route.params.id != undefined"></textarea>
-                        <div class="invalid-feedback">
-                            {{ mensaje_error }}
+  <div class="row">
+                    <div class="row obs" v-for="item, index in observaciones" :key="item.id">
+                                <div class="mb-3" v-if="$route.params.id == undefined">
+                                    <label for="formFileMultiple" class="form-label">Adjuntar imágenes: * </label>
+                                    <div class="input-group mb-3">
+                                        <input class="form-control" type="file" accept="image/*"
+                                            @change="cargarArchivo($event, index)" id="formFileMultiple" multiple required>
+                                        <span style="cursor: pointer" class="input-group-text"
+                                            @click="quitarAdjuntos(index)" id="basic-addon1">Quitar imágenes</span>
+                                    </div>
+                                </div>
+                                <div class="botones" v-for="item2, index2 in observaciones[index].file" :key="index2">
+                                    <div class="card mb-3" v-if="$route.params.id != undefined">
+                                        <div class="row g-0">
+                                            <div class="col-md-4">
+                                                <img v-bind:src="item2" class="img-fluid rounded-start" alt="">
+                                            </div>
+                                            <div class="col-md-8">
+                                                <div class="card-body" style="text-align: left;">
+                                                    <h5 class="card-title">Observación:</h5>
+                                                    <div v-html="item.body"></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div v-else class="btn-group" role="group" aria-label="Basic example">
+                                        <button type="button" class="btn adjunto"><i class="bi bi-file-earmark-check"></i>
+                                            {{ item2.name | truncate(10, '...')
+                                            }} {{ formatearPesoArchivo(item2.size) }}</button>
+                                        <button type="button" @click="item['file'].splice(index2, 1)"
+                                            class="btn btn-success"><i class="bi bi-x"></i></button>
+                                    </div>
+                                </div>
+                            <div class="row editor" v-if="$route.params.id == undefined">
+                                <div class="mb-3 ">
+                                    <label for="exampleInputEmail1" class="form-label">Observaciones: </label>
+                                    <br>
+                                    <br>
+                                    <EditorTextoHtml :consulta="consulta_texto[index]" :index="index"
+                                        @retornoTexto="retornoTexto" :showToolbar="true" />
+                                </div>
+                            </div>
+                            <div class="col-1 trash" v-if="$route.params.id == undefined">
+                                <i class="bi bi-trash-fill" v-if="index > 0"
+                                    @click="deleteDynamic(observaciones, index, 'identificador')"></i>
+                            </div>
                         </div>
+                    
+                    <span v-if="$route.params.id == undefined" id="clasificador" @click="agregarObservacion()"
+                            style="cursor: pointer"><i class="bi bi-plus-circle-fill"></i>
+                            Agregar observacion
+                        </span>
                     </div>
-                </div>
                 <button class="btn btn-success" type="submit">Guardar formulario</button>
             </form>
         </div>
@@ -174,10 +216,12 @@ import { Token } from '../Mixins/Token.js';
 import { Alerts } from '../Mixins/Alerts.js';
 import SearchList from './SearchList.vue';
 import Loading from './Loading.vue';
+import EditorTextoHtml from './EditorTextoHtml.vue';
 export default {
     components: {
         SearchList,
         Loading,
+        EditorTextoHtml,
     },
     mixins: [Token, Alerts],
     props: {
@@ -220,7 +264,9 @@ export default {
             consulta_cierra_pqrsf: '',
             responsable_id: '',
             consulta_responsable: '',
-            usuarios: []
+            usuarios: [],
+            observaciones: [{ body: '', file: [] }],
+            consulta_texto: [],
         }
     },
     computed: {
@@ -238,6 +284,24 @@ export default {
         }
     },
     methods: {
+        agregarObservacion() {
+            this.verLista = this.verLista + 1
+            if (this.observaciones.length <= 10) {
+                this.observaciones.push({ body: '', file: [] })
+            }
+
+        },
+        retornoTexto(index, texto) {
+            this.observaciones[index].body = texto
+            this.consulta_texto[index] = texto
+        },
+        deleteDynamic(array, index, identificador = null) {
+            if (identificador != null) {
+                this.consulta_texto.splice(index, 1)
+                this.observaciones[index].file = []
+            }
+            array.splice(index, 1)
+        },
         limpiarFormulario() {
             this.radicado = ''
             this.nombre_contacto = ''
@@ -314,6 +378,28 @@ export default {
                 return formattedDate;
             }
         },
+        cargarArchivo(event, index) {
+            var self = this
+            const file = event.target.files;
+            for (var i = 0; i < file.length; i++) {
+                self.observaciones[index].file.push(file[i])
+            }
+        },
+        quitarAdjuntos(index) {
+            this.observaciones[index].file = []
+        },
+        formatearPesoArchivo(pesoBytes) {
+            if (pesoBytes < 1024) {
+                return `${pesoBytes} bytes`;
+            } else if (pesoBytes < 1024 * 1024) {
+                return `${Math.ceil(pesoBytes / 1024)} KB`;
+            } else if (pesoBytes < 1024 * 1024 * 1024) {
+                return `${Math.ceil(pesoBytes / (1024 * 1024))} MB`;
+            } else {
+                return `${Math.ceil(pesoBytes / (1024 * 1024 * 1024))} GB`;
+            }
+        },
+     
         save() {
             let self = this;
             let config = this.configHeader();
@@ -474,11 +560,28 @@ export default {
     padding: 5px;
     top: 22px;
 }
+.bi bi-x {
+    margin: 20px 0px 20px 0px;
+    max-width: 400px;
+    cursor: pointer;
+}
+.btn-group {
+    overflow: auto;
+}
 
 span {
     height: 38px;
 }
-
+.botones {
+    padding: 5px;
+}
+.adjunto {
+    white-space: nowrap;
+    margin-bottom: 10px;
+    background-color: #239B56;
+    color: rgb(255, 255, 255);
+    width: 100%;
+}
 
 label {
     float: left;
