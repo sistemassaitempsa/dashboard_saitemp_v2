@@ -151,7 +151,7 @@
           </div>
         </div>
         <div class="row">
-          <div class="col">
+          <!-- <div class="col">
             <label class="form-label">Amenaza: * </label>
             <textarea
               id="novedades"
@@ -175,6 +175,50 @@
             ></textarea>
             <div class="invalid-feedback">
               {{ mensaje_error }}
+            </div>
+          </div> -->
+          <div class="row">
+            <div class="col">
+              <label class="form-label">Amenaza: *</label>
+              <select
+                @click="getClasificacion"
+                class="form-select"
+                aria-label="Default select example"
+                v-model="amenaza"
+                required
+              >
+                <option
+                  :value="item"
+                  v-for="(item, index) in clasificaciones"
+                  :key="index"
+                >
+                  {{ item.nombre }}
+                </option>
+              </select>
+              <div class="invalid-feedback">
+                {{ mensaje_error }}
+              </div>
+            </div>
+            <div class="col">
+              <label class="form-label">Oportunidad: *</label>
+              <select
+                @click="getClasificacion"
+                class="form-select"
+                aria-label="Default select example"
+                v-model="oportunidad2"
+                required
+              >
+                <option
+                  :value="item"
+                  v-for="(item, index) in clasificaciones"
+                  :key="index"
+                >
+                  {{ item.nombre }}
+                </option>
+              </select>
+              <div class="invalid-feedback">
+                {{ mensaje_error }}
+              </div>
             </div>
           </div>
         </div>
@@ -1048,6 +1092,7 @@ export default {
       divExpandido: false,
       seguimiento_guardado: [],
       contador: 0,
+      clasificaciones:[]
     };
   },
   computed: {},
@@ -1099,6 +1144,7 @@ export default {
       this.getMatrizOportunidades();
       this.getMatrizAmenazas();
       this.getControl();
+      this.getClasificacion();
       this.setColorCelda_resultado = true;
     }
   },
@@ -1146,6 +1192,7 @@ export default {
       this.getEvidencias();
       this.getEjecucionesEficaces();
       this.getLideres();
+      this.getClasificacion();
       this.getControl();
       this.getMatrizOportunidades();
       this.getMatrizAmenazas();
@@ -1190,9 +1237,19 @@ export default {
       this.plan_accion = formulario.plan_accion;
       this.consecuencia = formulario.consecuencia;
       this.efecto = formulario.efecto;
-      this.amenaza = formulario.amenaza;
-      this.oportunidad2 = formulario.oportunidad_2;
       this.ruta_archivo = formulario.evidencia;
+
+      this.amenaza = this.filteredArray(
+        this.clasificaciones,
+        formulario.amenaza
+      );
+
+      this.oportunidad2 = this.filteredArray(
+        this.clasificaciones,
+        formulario.oportunidad_2
+      );
+
+
       this.tipo_proceso = this.filteredArray(
         this.tipos_proceso,
         formulario.a_tipo_proceso_id
@@ -1385,12 +1442,12 @@ export default {
       this.resultado_control[0].background = "#e9ecef";
       this.nivel_riesgo_oportunidad[1].background = "#e9ecef";
       this.resultado_control[1].background = "#e9ecef";
-      this.file = []
-      this.seguimiento_guardado = []
+      this.file = [];
+      this.seguimiento_guardado = [];
       this.tab_amenaza = true;
       this.tab_oportunidad = false;
-      this.id_registro = 0
-      this.riesgo_id = undefined
+      this.id_registro = 0;
+      this.riesgo_id = undefined;
       this.indice = 0;
     },
     getNivelImpacto() {
@@ -1615,7 +1672,13 @@ export default {
       ) {
         this.resultado_control[this.indice].descripcion = item.control;
       }
-      if ((this.setColorCelda_resultado || this.contador >= 4) || (!this.setColorCelda_resultado && this.$route.params.id == undefined && this.contador >= 2)) {
+      if (
+        this.setColorCelda_resultado ||
+        this.contador >= 4 ||
+        (!this.setColorCelda_resultado &&
+          this.$route.params.id == undefined &&
+          this.contador >= 2)
+      ) {
         this.resultado_control[this.indice].background = item.color;
         this.resultado_control[this.indice].color =
           item.color === "yellow" ? "black" : "white";
@@ -1663,6 +1726,17 @@ export default {
           .get(self.URL_API + "api/v1/lideres", config)
           .then(function (result) {
             self.lideres = result.data;
+          });
+      }
+    },
+    getClasificacion() {
+      if (this.clasificaciones.length <= 0) {
+        let self = this;
+        let config = this.configHeader();
+        axios
+          .get(self.URL_API + "api/v1/clasificacionesriesgos", config)
+          .then(function (result) {
+            self.clasificaciones = result.data;
           });
       }
     },

@@ -609,6 +609,36 @@
           Añadir a tareas pendientes
         </button>
       </div>
+      <div
+        class="col"
+        style="margin-top: 35px"
+        v-if="ruta == '/navbar/gestion-ingresosl' && check.length > 0 && permisos[30].autorizado">
+        <select
+          class="form-select form-select-sm"
+          aria-label="Ejemplo de .form-select-sm"
+          @change="getEncargados(estado_ingreso2.id), lista_encargados = []"
+          v-model="estado_ingreso2"
+        >
+          <option :value="item" v-for="item in estados_ingreso" :key="item.id">
+            {{ item.nombre }}
+          </option>
+        </select>
+      </div>
+      <div
+        class="col"
+        style="margin-top: 35px"
+        v-if="ruta == '/navbar/gestion-ingresosl' && check.length > 0 && permisos[30].autorizado">
+        <select
+          class="form-select form-select-sm"
+          aria-label="Ejemplo de .form-select-sm"
+          v-model="encargado2"
+          @change="confirmationMessage()"
+        >
+          <option :value="item" v-for="item in lista_encargados" :key="item.id">
+            {{ item.nombre }}
+          </option>
+        </select>
+      </div>
       <div v-if="cantidad >= 20" class="col-xs-3 col-md-3">
         <button
           type="submit"
@@ -1016,7 +1046,7 @@
                   data-bs-toggle="dropdown"
                   aria-expanded="false"
                   :style="'color:black;background-color:' + item.color_estado"
-                  @click="getEncargados(item)"
+                  @click="getEncargados(item.estado_ingreso_id), (lista_encargados = [])"
                 >
                   <span class="visually-hidden">Toggle Dropdown</span>
                 </button>
@@ -1251,6 +1281,8 @@ export default {
       id_flotante: 0,
       label_busqueda_rapida: "",
       endpoint_busqueda_rapida: "",
+      estado_ingreso2: {},
+      encargado2: {},
     };
   },
 
@@ -1308,6 +1340,16 @@ export default {
     }
   },
   methods: {
+    asignacionMasiva() {
+        console.log(this.estado_ingreso2)
+      let self = this;
+      let config = this.configHeader();
+      axios
+        .post(self.URL_API + "api/v1/asignacionmasivaformularioingreso/"+this.estado_ingreso2.id+'/'+ this.encargado2.usuario_id, this.check, config)
+        .then(function (result) {
+          self.showAlert(result.data.message, result.data.status);
+        });
+    },
     getDynamicStyle(item, index) {
       this.isActive = true;
       if (item == "a_nivel_riesgo" || item == "a_tratamiento") {
@@ -1361,45 +1403,36 @@ export default {
         ...this.getDynamicStyle(item, index),
       };
     },
-    getEncargados(item) {
+    getEncargados(id) {
       let self = this;
-      let config = this.configHeader();
-      axios
-        .get(
-          self.URL_API + "api/v1/responsableingresos/" + item.estado_ingreso_id,
-          config
-        )
-        .then(function (result) {
-          self.lista_encargados = result.data;
-        });
+        let config = this.configHeader();
+        axios
+          .get(self.URL_API + "api/v1/responsableingresos/" + id, config)
+          .then(function (result) {
+            self.lista_encargados = result.data;
+          });
     },
     truncateText(text, maxLength) {
       // if (!(id in this.lista_estados_id)) {
       if (text.length > maxLength) {
-        // console.log('dentro del if', this.lista_estados_id[id])
         return text.substring(0, maxLength) + "...";
         // return 'Estado'
       } else {
         return text;
-        // console.log('dentro del else', this.lista_estados_id[id])
       }
       // }
-      // console.log('por fuera del if', this.lista_estados_id[id])
       // return this.lista_estados_id[id];
       // return 'Estado'
     },
     truncateOwner(text, maxLength) {
       // if (!(id in this.lista_estados_id)) {
       if (text != null && text.length > maxLength) {
-        // console.log('dentro del if', this.lista_estados_id[id])
         return text.substring(0, maxLength) + "...";
         // return 'Estado'
       } else {
         return text;
-        // console.log('dentro del else', this.lista_estados_id[id])
       }
       // }
-      // console.log('por fuera del if', this.lista_estados_id[id])
       // return this.lista_estados_id[id];
       // return 'Estado'
     },
@@ -1486,12 +1519,7 @@ export default {
       // const encryptedText = this.CryptoJS.AES.encrypt(cadena, localStorage.getItem("access_token").substring(0,32)).toString()
       // let base64 = (btoa(encryptedText))
       let base64 = btoa(cadena);
-
-      // console.log(encryptedText,'cifrado')
       // const decryptedText = this.CryptoJS.AES.decrypt(encryptedText, localStorage.getItem("access_token").substring(0,32)).toString(this.CryptoJS.enc.Utf8)
-      // console.log(decryptedText,'texto plano')
-      // console.log(base64,'base64')
-      // console.log(localStorage.getItem("access_token").substring(0,32),'contyraseña')
 
       axios
         .get(
@@ -2021,6 +2049,23 @@ export default {
           self.llenarTabla(result);
           self.loading = false;
         });
+    },
+    confirmationMessage() {
+        // 'Está seguro de guardar la información del formulario?', 'Si', 'Cancelar', 'Información guardada con exito'
+      this.$swal({
+        icon: "warning",
+        title: 'Está seguro de guardar la información del formulario?',
+        showDenyButton: true,
+        showCancelButton: false,
+        confirmButtonText: 'Si',
+        denyButtonText: 'Cancelar',
+      }).then((result) => {
+        if (result.isConfirmed) {
+          this.asignacionMasiva();
+        } else if (result.isDenied) {
+          this.showAlert("Accion cancelada", "info");
+        }
+      });
     },
   },
 };

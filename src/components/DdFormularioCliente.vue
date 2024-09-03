@@ -13,7 +13,7 @@
           CONTRAPARTES
         </h5>
       </div>
-      <div class="col-2 versionamiento" :style="'font-size:'+versiones[0].tamano_texto+'rem'">
+      <div class="col-2 versionamiento" :style="'font-size:'+tamano_texto_version+'rem'">
         <div class="row" v-for="item in versiones" :key="item.id"> <p>{{item.descripcion}}</p></div>
       </div>
     </div>
@@ -2992,7 +2992,7 @@
                 type="radio"
                 :value="true"
                 v-model="declaraciones_autorizaciones"
-                name="radio1"
+                name="radio"
                 id="radio1"
               />
               Si acepto
@@ -3003,7 +3003,7 @@
                 type="radio"
                 :value="false"
                 v-model="declaraciones_autorizaciones"
-                name="radio1"
+                name="radio"
                 id="radio1"
                 checked
               />
@@ -3924,6 +3924,7 @@ export default {
       consulta_contratacion_pago_31: "",
       contratacion_pago_31_id: "",
       versiones:[],
+      tamano_texto_version:'',
     };
   },
   computed: {
@@ -4004,6 +4005,7 @@ export default {
         .get(self.URL_API + "api/v1/versiondebidadiligencia", config)
         .then(function (result) {
           self.versiones = result.data;
+          self.tamano_texto_version = self.versiones[0].tamano_texto
         });
     },
     validaCamposDinamicos(index, bandera = null) {
@@ -6984,7 +6986,7 @@ export default {
         this.consulta_sucursal_facturacion = item.sucursal_facturacion;
         this.sucursal = item.sucursal_facturacion_id;
         this.declaraciones_autorizaciones =
-          item.declaraciones_autirizaciones == "1" ? true : false;
+          item.declaraciones_autorizaciones == "1" ? true : false;
         this.tratamiento_datos_personales =
           item.tratamiento_datos_personales == "1" ? true : false;
         this.tipo_operacion_internacional =
@@ -7166,10 +7168,10 @@ export default {
             .then((archivo) => {
               self.file.push(archivo);
             })
-            .catch((error) => {
-              self.showAlert("Error al convertir el archivo:", "error");
-              console.log(error);
-            });
+            // .catch((error) => {
+            //   self.showAlert("Error al convertir el archivo:", "error");
+            //   console.log(error);
+            // });
         });
 
         if (item.cargos.length > 0) {

@@ -1,7 +1,10 @@
 <template>
   <div v-if="autoriced">
     <NotificacionesSocket />
-    <nav class="navbar navbar-expand-lg navbar-dark gradient-background" style=" heigth: 100px">
+    <nav
+      class="navbar navbar-expand-lg navbar-dark gradient-background"
+      style="heigth: 100px"
+    >
       <div class="container-fluid">
         <a class="navbar-brand" href="">
           <!-- <img
@@ -10,35 +13,77 @@
               :width="logo.ancho"
               class="d-inline-block align-text-top"
             /> -->
-          <img src="@/assets/logo2.png" width="60px" class="d-inline-block align-text-top" alt="">
+          <img
+            src="@/assets/logo2.png"
+            width="60px"
+            class="d-inline-block align-text-top"
+            alt=""
+          />
           <!-- Acá va el nombre-->
         </a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
-          aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"
-          @click="collapese">
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarSupportedContent"
+          aria-controls="navbarSupportedContent"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
+          @click="collapese"
+        >
           <span class="navbar-toggler-icon"></span>
         </button>
-        <div :class="collapse
-    ? 'collapse navbar-collapse show'
-    : 'collapse navbar-collapse'
-    " id="navbarNav">
+        <div
+          :class="
+            collapse
+              ? 'collapse navbar-collapse show'
+              : 'collapse navbar-collapse'
+          "
+          id="navbarNav"
+        >
           <ul class="navbar-nav">
-            <li class="nav-item" @click="collapese" :style="actualizacion ? 'padding-top: 15px' : ''">
-              <router-link class="nav-link active" to="">{{ saludo }}
-                {{ userlogued.nombres }}</router-link>
+            <li
+              class="nav-item"
+              @click="collapese"
+              :style="actualizacion ? 'padding-top: 15px' : ''"
+            >
+              <router-link class="nav-link active" to=""
+                >{{ saludo }} {{ userlogued.nombres }}</router-link
+              >
             </li>
             <li>
               <CuentaRegresiva @timeElapsed="actualizacion = false" />
             </li>
-            <li class="nav-item contrasena" id="menu-lateral" @click="ocultarMenu(), collapese()">
-              <i :class="menu_lateral ? 'bi bi-text-indent-right' : 'bi bi-text-indent-left'"></i> {{ menu_lateral ?
-    'Ocultar menú lateral' : 'Mostrar menú lateral' }}
+            <li
+              class="nav-item contrasena"
+              id="menu-lateral"
+              @click="ocultarMenu(), collapese()"
+            >
+              <i
+                :class="
+                  menu_lateral
+                    ? 'bi bi-text-indent-right'
+                    : 'bi bi-text-indent-left'
+                "
+              ></i>
+              {{
+                menu_lateral ? "Ocultar menú lateral" : "Mostrar menú lateral"
+              }}
             </li>
-            <li class="nav-item contrasena" :style="actualizacion ? 'padding-top: 15px' : ''" id="contrasena"
-              @click="actualizar()">
+            <li
+              class="nav-item contrasena"
+              :style="actualizacion ? 'padding-top: 15px' : ''"
+              id="contrasena"
+              @click="actualizar()"
+            >
               <i class="bi bi-person-circle"></i> Editar usuario
             </li>
-            <li class="nav-item logout" :style="actualizacion ? 'padding-top: 15px' : ''" id="logout" @click="logout">
+            <li
+              class="nav-item logout"
+              :style="actualizacion ? 'padding-top: 15px' : ''"
+              id="logout"
+              @click="logout"
+            >
               <i class="bi bi-box-arrow-left"></i> Cerrar sesión
             </li>
           </ul>
@@ -48,49 +93,88 @@
     <div class="aside">
       <div class="accordion-item" v-for="(item, index) in menu" :key="index">
         <h2 class="accordion-header" :id="'flush-heading' + option[index]">
-          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-            :data-bs-target="'#flush-collapse' + option[index]" aria-expanded="false"
-            :aria-controls="'flush-collapse' + option[index]">
+          <button
+            class="accordion-button collapsed"
+            type="button"
+            data-bs-toggle="collapse"
+            :data-bs-target="'#flush-collapse' + option[index]"
+            aria-expanded="false"
+            :aria-controls="'flush-collapse' + option[index]"
+          >
             <i :class="item.icon"></i><span>{{ item.categoria }}</span>
           </button>
         </h2>
-        <div :id="'flush-collapse' + option[index]" class="accordion-collapse collapse"
-          :aria-labelledby="'flush-heading' + option[index]" data-bs-parent="#accordionFlushExample">
-          <div v-for="(item, index) in menu[index].opciones" :key="index" class="accordion-body">
-            <router-link v-if="item.urlExterna == '0'" class="nav-link active"
-              :to="item.powerbi != '' ? '/' + item.url + '/' + item.nombre : item.url != '' ? '/' + item.url : '/navbar'"
-              :style="{ 'pointer-events': item.disabled ? 'none' : 'auto' }">
-              <i :class="item.icon"></i><span>{{ item.nombre == 'rol' ? 'Rol: ' + userlogued.rol : item.nombre }}</span>
+        <div
+          :id="'flush-collapse' + option[index]"
+          class="accordion-collapse collapse"
+          :aria-labelledby="'flush-heading' + option[index]"
+          data-bs-parent="#accordionFlushExample"
+        >
+          <div
+            v-for="(item, index) in menu[index].opciones"
+            :key="index"
+            class="accordion-body"
+          >
+            <router-link
+              v-if="item.urlExterna == '0'"
+              class="nav-link active"
+              :to="
+                item.powerbi != ''
+                  ? '/' + item.url + '/' + item.nombre
+                  : item.url != ''
+                  ? '/' + item.url
+                  : '/navbar'
+              "
+              :style="{ 'pointer-events': item.disabled ? 'none' : 'auto' }"
+            >
+              <i :class="item.icon"></i
+              ><span>{{
+                item.nombre == "rol" ? "Rol: " + userlogued.rol : item.nombre
+              }}</span>
             </router-link>
-            <a v-else :href="item.url" target="_blank" rel="noopener noreferrer"
-              style="color:white; text-decoration:none" class="nav-link active"
-              :style="{ 'pointer-events': item.disabled ? 'none' : 'auto' }">
+            <a
+              v-else
+              :href="item.url"
+              target="_blank"
+              rel="noopener noreferrer"
+              style="color: white; text-decoration: none"
+              class="nav-link active"
+              :style="{ 'pointer-events': item.disabled ? 'none' : 'auto' }"
+            >
               <i :class="item.icon"></i> <span>{{ item.nombre }}</span>
             </a>
           </div>
         </div>
-        <hr>
+        <hr />
       </div>
     </div>
-    <ModalPrincipal @actualizacion="actualizacion = true" :modal="actualizacion" />
-    <router-view :class="{ 'ancho_componente': anchocomponente }" :userlogued="userlogued" :menu="menu"
-      @getMenu="getMenu" />
+    <ModalPrincipal
+      @actualizacion="actualizacion = true"
+      :modal="actualizacion"
+    />
+    <router-view
+      :class="{ ancho_componente: anchocomponente }"
+      :userlogued="userlogued"
+      :menu="menu"
+      @getMenu="getMenu"
+      :actualizacion="actualizacion"
+    />
   </div>
 </template>
 <script>
 /* eslint-disable */
 import axios from "axios";
-import { Token } from '../Mixins/Token'
+import { Token } from "../Mixins/Token";
 import { Alerts } from "@/Mixins/Alerts";
-import CuentaRegresiva from '../components/CuentaRegresiva'
-import ModalPrincipal from '../components/ModalPrincipal'
-import NotificacionesSocket from './NotificacionSocket.vue'
+import CuentaRegresiva from "../components/CuentaRegresiva";
+import ModalPrincipal from "../components/ModalPrincipal";
+import NotificacionesSocket from "./NotificacionSocket.vue";
 export default {
   components: {
-    name: 'Navbar',
+    name: "Navbar",
     CuentaRegresiva,
     ModalPrincipal,
-    NotificacionesSocket
+    NotificacionesSocket,
   },
   mixins: [Token, Alerts],
   data() {
@@ -98,72 +182,91 @@ export default {
       username: "",
       collapse: false,
       expand: false,
-      saludo: 'Bienvenido',
-      ruta: '',
+      saludo: "Bienvenido",
+      ruta: "",
       menu: [],
-      userlogued: { nombres: '', rol: '' },
+      userlogued: { nombres: "", rol: "" },
       logo: [],
-      user_id: '',
+      user_id: "",
       URL_API: process.env.VUE_APP_URL_API,
       autoriced: false,
       option: [],
       categoria_menu: [],
       menu_lateral: true,
       anchocomponente: false,
-      ruta: '',
+      ruta: "",
       labelscountdown: {
-        days: 'Días',
-        hours: 'Horas',
-        minutes: 'Minutos',
-        seconds: 'Segundos',
+        days: "Días",
+        hours: "Horas",
+        minutes: "Minutos",
+        seconds: "Segundos",
       },
       actualizacion: true,
     };
   },
   watch: {
     $route() {
-      this.validaAnchoTabla()
+      this.validaAnchoTabla();
     },
   },
   mounted() {
+    // window.Echo.channel("channel").listen("NotificacionSeiya", (e) => {
+    //   console.log(e.message);
+    // });
   },
   created() {
-    this.urlExterna()
-    this.userLogued()
-    this.validaRuta()
-    this.validaAnchoTabla()
+    this.urlExterna();
+    this.userLogued();
+    this.validaRuta();
+    this.validaAnchoTabla();
   },
   destroyed() {
     localStorage.removeItem("access_token");
   },
   methods: {
     validaAnchoTabla() {
-      this.ruta = this.$route.path
-      if (this.ruta.includes('gestion-ingresosl') || this.ruta.includes('debida-diligencia/clientes') || this.ruta.includes('ingresos-pendientes') || this.ruta.includes('correo-novedades-nomina') || this.ruta.includes('crm-seguimiento') || this.ruta.includes('crm-pendientes') || this.ruta.includes('indicadores-seiya')) {
-        this.anchocomponente = true
+      this.ruta = this.$route.path;
+      if (
+        this.ruta.includes("gestion-ingresosl") ||
+        this.ruta.includes("debida-diligencia/clientes") ||
+        this.ruta.includes("ingresos-pendientes") ||
+        this.ruta.includes("correo-novedades-nomina") ||
+        this.ruta.includes("crm-seguimiento") ||
+        this.ruta.includes("crm-pendientes") ||
+        this.ruta.includes("indicadores-seiya") ||
+        this.ruta.includes("lista-riesgos")
+      ) {
+        this.anchocomponente = true;
       } else {
-        this.anchocomponente = false
+        this.anchocomponente = false;
       }
     },
-    validaRuta() { // valida si el usuario tiene acceso a la ruta o menú consultado, incluir los módulos que no están en el menú
-      var self = this
-      var rutaAnterior = ''
+    validaRuta() {
+      // valida si el usuario tiene acceso a la ruta o menú consultado, incluir los módulos que no están en el menú
+      var self = this;
+      var rutaAnterior = "";
       var regex = /\/navbar\/(.*)/;
       this.$watch(
         () => this.$route.path,
         (newPath, oldPath) => {
-          var bandera = false
+          var bandera = false;
           this.menu.forEach(function (item) {
             item.opciones.forEach(function (item2) {
-              if (newPath.includes(item2.url.split("/")[1]) || newPath.includes('empleado') || newPath.includes('editarUsuario') || newPath.includes('timeLine')) {
-                bandera = true
+              if (
+                newPath.includes(item2.url.split("/")[1]) ||
+                newPath.includes("empleado") ||
+                newPath.includes("editarUsuario") ||
+                newPath.includes("timeLine") ||
+                newPath.includes("landing")
+              ) {
+                bandera = true;
               }
-            })
-          })
+            });
+          });
           if (!bandera) {
             self.$router.push(oldPath.match(regex)[1]);
           }
-          bandera = false
+          bandera = false;
         }
       );
     },
@@ -189,49 +292,53 @@ export default {
       //   });
     },
     ocultarMenu() {
-      var menu = document.getElementsByClassName('aside')[0];
+      var menu = document.getElementsByClassName("aside")[0];
 
       if (this.menu_lateral) {
-        menu.style.display = 'none'; // Ocultar el menú
+        menu.style.display = "none"; // Ocultar el menú
       } else {
-        menu.style.display = 'block'; // Mostrar el menú
+        menu.style.display = "block"; // Mostrar el menú
       }
-      this.menu_lateral = !this.menu_lateral
-      localStorage.setItem("menu_lateral", this.menu_lateral)
+      this.menu_lateral = !this.menu_lateral;
+      localStorage.setItem("menu_lateral", this.menu_lateral);
     },
     actualizar() {
-      this.$router.push({ name: "editarUsuario", params: { id: this.user_id } });
+      this.$router.push({
+        name: "editarUsuario",
+        params: { id: this.user_id },
+      });
     },
     userLogued() {
       let self = this;
       let config = this.configHeader();
       axios
-        .get(self.URL_API + 'api/v1/userlogued', config)
+        .get(self.URL_API + "api/v1/userlogued", config)
         .then(function (result) {
           if (result.data[0] != undefined) {
             self.userlogued = result.data[0];
             self.user_id = result.data[0].usuario_id;
-            self.autoriced = true
-            self.getMenu()
+            self.autoriced = true;
+            self.getMenu();
           } else {
             self.$router.push("/");
           }
-        }).catch(function () {
+        })
+        .catch(function () {
           self.$router.push("/");
         });
     },
     getMenu() {
-      let self = this
+      let self = this;
       let config = this.configHeader();
       axios
-        .get(self.URL_API + 'api/v1/categoriaMenu', config)
+        .get(self.URL_API + "api/v1/categoriaMenu", config)
         .then(function (result) {
-          self.menu = result.data
+          self.menu = result.data;
           self.menu.forEach(function (item, index) {
-            self.option.push(index)
-          })
-        }).catch(function () {
-        });
+            self.option.push(index);
+          });
+        })
+        .catch(function () {});
     },
     asideExpand() {
       this.expand = !this.expand;
@@ -308,7 +415,6 @@ export default {
   left: 7px;
 }
 
-
 .aside .accordion-collapse i {
   position: absolute;
   left: 15px;
@@ -338,11 +444,10 @@ export default {
   pointer-events: auto;
 }
 
-
 .aside span {
   position: relative;
   margin-left: 40px;
-  white-space: nowrap
+  white-space: nowrap;
 }
 
 .aside:hover {
@@ -364,7 +469,6 @@ export default {
 .aside h1 i {
   cursor: pointer;
 }
-
 
 .aside #icon {
   margin-left: 10px;
@@ -461,7 +565,14 @@ export default {
   /* background: rgb(0, 107, 63);
   background: linear-gradient(90deg, rgba(0, 107, 63, 1) 6%, rgba(26, 150, 56, 1) 16%, rgba(22, 119, 115, 1) 47%, rgba(117, 165, 176, 1) 56%, rgba(4, 66, 105, 1) 66%); */
   background: rgb(0, 107, 63);
-  background: linear-gradient(95deg, rgba(0, 107, 63, 1) 4%, rgba(26, 150, 56, 1) 19%, rgba(48, 159, 128, 1) 45%, rgba(22, 119, 115, 1) 63%, rgba(4, 66, 105, 1) 88%);
+  background: linear-gradient(
+    95deg,
+    rgba(0, 107, 63, 1) 4%,
+    rgba(26, 150, 56, 1) 19%,
+    rgba(48, 159, 128, 1) 45%,
+    rgba(22, 119, 115, 1) 63%,
+    rgba(4, 66, 105, 1) 88%
+  );
   /* Para navegadores que no admiten degradados */
   /* background-image: url('ruta/a/una/imagen-de-fondo.jpg'); */
   /* En caso de que el navegador no admita degradados, proporciona una imagen de fondo */
