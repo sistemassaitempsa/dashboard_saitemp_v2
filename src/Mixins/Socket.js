@@ -5,6 +5,20 @@ export const Socket = {
       pila_notificaciones: [],
     };
   },
+  mounted() {
+    var self = this
+    setInterval(() => {
+      console.log("limpiando consola")
+      self.pila_notificaciones = JSON.parse(localStorage.getItem("pila"))
+      if(self.pila_notificaciones.length > 1){
+        self.pila_notificaciones.splice(0,1)
+        localStorage.setItem (
+          'pila',
+          JSON.stringify (this.pila_notificaciones)
+        );
+      }
+    }, 10000);
+  },
   methods: {
     decodeJwtFromLocalStorage (key) {
       try {

@@ -2992,7 +2992,7 @@
                 type="radio"
                 :value="true"
                 v-model="declaraciones_autorizaciones"
-                name="radio1"
+                name="radio"
                 id="radio1"
               />
               Si acepto
@@ -3003,7 +3003,7 @@
                 type="radio"
                 :value="false"
                 v-model="declaraciones_autorizaciones"
-                name="radio1"
+                name="radio"
                 id="radio1"
                 checked
               />
@@ -6986,7 +6986,7 @@ export default {
         this.consulta_sucursal_facturacion = item.sucursal_facturacion;
         this.sucursal = item.sucursal_facturacion_id;
         this.declaraciones_autorizaciones =
-          item.declaraciones_autirizaciones == "1" ? true : false;
+          item.declaraciones_autorizaciones == "1" ? true : false;
         this.tratamiento_datos_personales =
           item.tratamiento_datos_personales == "1" ? true : false;
         this.tipo_operacion_internacional =
