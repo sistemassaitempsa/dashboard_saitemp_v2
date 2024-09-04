@@ -524,7 +524,7 @@
                                 :accept="fileInputsCount[index].tipo_archivo" @change="cargarArchivo($event, index)"
                                 aria-describedby="inputGroupFileAddon04" aria-label="Upload"
                                 :="item.nombre.includes('*') && item.ruta == undefined">
-                            <button class="btn btn-outline-secondary" type="button" @click="deleteFile(index)"
+                            <button class="borderRadius" type="button" @click="deleteFile(index)"
                                 id="inputGroupFileAddon04">Quitar
                                 archivo</button>
                             <div class="invalid-feedback">
@@ -1903,4 +1903,15 @@ h2 {
     overflow: hidden;
     /* Ocultar el contenido al contraer */
 }
+.borderRadius{
+    outline: none;
+    background-color: #f0f0f0; /* Gris claro */
+    border: 1px solid #ccc; /* Borde de 1px con color gris */
+    border-radius:10px; /* Ajusta el valor para tu borderRadius */
+    padding: 8px 12px; /* Añade un poco de padding para un mejor aspecto */
+    cursor: pointer;
+    transition: background-color 0.3s ease; 
+
+}
+
 </style>
