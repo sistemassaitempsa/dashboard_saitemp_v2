@@ -275,6 +275,78 @@
           </div>
         </div>
 
+        <div v-if="$route.params.id !== undefined">
+          <div class="d-flex justify-content-evenly">
+            <div
+              class="card p-3"
+              v-for="evidencia in consulta_evidencias"
+              :key="evidencia.id"
+              style="width: 18rem"
+            >
+              <div
+                class="col d-flex justify-content-end"
+                v-if="$route.params.id != null"
+              >
+                <a
+                  :href="URL_API + evidencia.archivo"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <button
+                    type="button"
+                    :class="
+                      evidencia.archivo != undefined
+                        ? 'btn btn-sm ver'
+                        : 'btn btn-sm btn-secondary'
+                    "
+                  >
+                    <i class="bi bi-eye"> ver</i>
+                  </button>
+                </a>
+              </div>
+
+              <div class="card-body">
+                <h5 class="card-title">{{ getFileName(evidencia.archivo) }}</h5>
+              </div>
+
+              <div class="col">
+                <div class="mb-3">
+                  <textarea
+                    class="form-control"
+                    id="exampleFormControlTextarea1"
+                    v-model="evidencia.descripcion"
+                    :disabled="!evidencia.edit"
+                  ></textarea>
+                </div>
+              </div>
+
+              <div class="col">
+                <div
+                  class="d-flex justify-content-between align-items-center p-1"
+                >
+                  <button
+                    type="button"
+                    class="btn btn-danger"
+                    @click="messageDelete(evidencia)"
+                  >
+                    <label class="bi bi-trash-fill labelOption">
+                      Eliminar
+                    </label>
+                  </button>
+                  <button
+                    type="button"
+                    class="btn btn-warning"
+                    @click="toggleEdit(evidencia)"
+                  >
+                    <label class="bi bi-pencil-square labelOption">
+                      {{ evidencia.edit ? "Guardar" : "Editar" }}
+                    </label>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
         <div class="col">
           <div
             class="row obs"
@@ -432,6 +504,7 @@ export default {
       usuarios: [],
       evidencias: [{ observacion: "", file: {} }],
       consulta_texto: [],
+      consulta_evidencias: [],
     };
   },
   computed: {},
@@ -446,7 +519,34 @@ export default {
       this.getItem(this.id_registro);
     }
   },
+
   methods: {
+    getFileName(filePath) {
+      const lastUnderscoreIndex = filePath.lastIndexOf("_");
+      if (lastUnderscoreIndex === -1) return filePath;
+      return filePath.substring(lastUnderscoreIndex + 1);
+    },
+    toggleEdit(evidencia) {
+      /* if (!evidencia.edit) {
+        this.saveEvidencia(evidencia);
+      } */
+      evidencia.edit = !evidencia.edit;
+    },
+    saveEvidencia(evidencia) {
+      let self = this;
+      let config = this.configHeader();
+      axios
+        .put(
+          self.URL_API + "api/v1/seguimientocrmupdateevidencia/" + evidencia.id,
+          evidencia,
+          config
+        )
+        .then(function (result) {
+          self.showAlert(result.data.message, result.data.status);
+        });
+      console.log("Guardando evidencia:", evidencia);
+    },
+
     agregarObservacion() {
       this.verLista = this.verLista + 1;
       if (this.evidencias.length <= 10) {
@@ -457,6 +557,13 @@ export default {
       if (identificador != null) {
         this.consulta_texto.splice(index, 1);
         this.evidencias[index].file = [];
+      }
+      array.splice(index, 1);
+    },
+    deleteConsultaEvidencia(array, index, identificador = null) {
+      if (identificador != null) {
+        this.consulta_texto.splice(index, 1);
+        this.consulta_evidencias[index] = [];
       }
       array.splice(index, 1);
     },
@@ -523,6 +630,8 @@ export default {
       this.fecha_radicado = this.formatearFecha(item.created_at);
       this.fecha_cierre = this.formatearFecha(item.fecha_cerrado);
       this.loading = false;
+      this.consulta_evidencias = item.Evidencias;
+      console.log(this.consulta_evidencias);
     },
     formatearFecha(fechaOriginal) {
       if (fechaOriginal != null) {
@@ -536,9 +645,10 @@ export default {
         return formattedDate;
       }
     },
-    cargarArchivo(event, index) {
+    Archivo(event, index) {
       const file = event.target.files[0]; // Tomar solo el primer archivo
       this.evidencias[index].file = file;
+      console.log("Archivo seleccionado:", file); // Verificar si se selecciona el archivo
     },
     quitarAdjuntos(index) {
       this.evidencias[index].file = [];
@@ -582,13 +692,15 @@ export default {
           evidencia.observacion
         );
       });
-      console.log(formulario);
       var id = this.$route.params.id;
       var url = "";
       if (id != null) {
         url = self.URL_API + "api/v1/seguimientocrm/" + id;
       } else {
         url = self.URL_API + "api/v1/seguimientocrm";
+      }
+      for (let pair of formulario.entries()) {
+        console.log(pair[0] + ": " + pair[1]);
       }
       axios.post(url, formulario, config).then(function (result) {
         self.showAlert(result.data.message, result.data.status);
@@ -597,6 +709,41 @@ export default {
         self.$router.replace({ ...rutaActual, params: nuevosParametros });
         self.getItem(result.data.id);
       });
+    },
+    eliminarDocumento(item) {
+      let self = this;
+      let config = this.configHeader();
+      axios
+        .delete(
+          self.URL_API +
+            "api/v1/eliminararevidencia/" +
+            this.$route.params.id +
+            "/" +
+            item.id,
+          config
+        )
+        .then(function (result) {
+          self.showAlert(result.data.message, result.data.status);
+        });
+    },
+    messageDelete(item) {
+      let self = this;
+      var title = "Estas seguro de elimiar el resgistro?";
+      this.$swal
+        .fire({
+          title: title,
+          text: "Esta operación no se puede revertir!",
+          icon: "warning",
+          showCancelButton: true,
+          confirmButtonColor: "#3085d6",
+          cancelButtonColor: "#d33",
+          confirmButtonText: "Si, eliminar!",
+        })
+        .then((result) => {
+          if (result.isConfirmed) {
+            self.eliminarDocumento(item);
+          }
+        });
     },
     getSedes(item = null) {
       if (item != null) {
@@ -764,11 +911,7 @@ label {
   width: 100%;
 }
 .labelOption {
-  display: flex;
-  width: 50%;
-  align-items: center;
-  justify-content: center;
-  margin: auto;
+  margin: 0;
 }
 .right {
   justify-content: right;
@@ -788,5 +931,9 @@ label {
 }
 .padding-1 {
   padding: 0.5em;
+}
+.ver {
+  background-color: #006b3f;
+  color: white;
 }
 </style>
