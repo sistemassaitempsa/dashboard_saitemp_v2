@@ -267,26 +267,20 @@
                     </div> -->
         </div>
         <div class="row">
-          <div class="col-5">
-            <label class="form-label labelBlock">Adjuntar Imágenes</label>
-          </div>
-          <div class="col-7">
-            <label class="form-label labelBlock">Obervaciones</label>
+          <div class="col" v-if="$route.params.id != null">
+            <label class="form-label labelBlock">Archivos adjuntos:</label>
           </div>
         </div>
 
-        <div v-if="$route.params.id !== undefined">
-          <div class="d-flex justify-content-evenly">
+        <div v-if="consulta_evidencias.length > 0">
+          <div class="d-flex justify-content-center p-5 gap-8 flex-wrap">
             <div
-              class="card p-3"
+              class="card p-3 fontSize-5"
               v-for="evidencia in consulta_evidencias"
               :key="evidencia.id"
               style="width: 18rem"
             >
-              <div
-                class="col d-flex justify-content-end"
-                v-if="$route.params.id != null"
-              >
+              <div class="col d-flex justify-content-end">
                 <a
                   :href="URL_API + evidencia.archivo"
                   target="_blank"
@@ -306,7 +300,7 @@
               </div>
 
               <div class="card-body">
-                <h5 class="card-title">{{ getFileName(evidencia.archivo) }}</h5>
+                <h6 class="card-title">{{ getFileName(evidencia.archivo) }}</h6>
               </div>
 
               <div class="col">
@@ -335,7 +329,9 @@
                   </button>
                   <button
                     type="button"
-                    class="btn btn-warning"
+                    :class="
+                      evidencia.edit ? 'btn btn-success' : 'btn btn-warning'
+                    "
                     @click="toggleEdit(evidencia)"
                   >
                     <label class="bi bi-pencil-square labelOption">
@@ -349,103 +345,189 @@
         </div>
         <div class="col">
           <div
-            class="row obs"
-            v-for="(item, index) in evidencias"
-            :key="item.id"
+            class="row"
+            style="text-align: left; clear: both; margin-top: 40px"
           >
-            <div class="row">
-              <div class="mb-3" v-if="$route.params.id == undefined">
-                <div class="row">
-                  <div class="col-5">
-                    <div class="input-group">
-                      <input
-                        class="form-control"
-                        type="file"
-                        accept="image/*"
-                        @change="cargarArchivo($event, index)"
-                        id="formFileMultiple"
-                        required
-                      />
-                      <span
-                        style="cursor: pointer"
-                        class="btn btn-outline-secondary"
-                        @click="quitarAdjuntos(index)"
-                        id="basic-addon1"
-                        >Quitar imágenes</span
+            <h5 @click="adjuntos = !adjuntos" style="cursor: pointer">
+              Cargar Archivos
+              <i v-if="adjuntos" class="bi bi-chevron-down"></i
+              ><i v-if="!adjuntos" class="bi bi-chevron-compact-up"></i>
+            </h5>
+          </div>
+          <div v-if="adjuntos">
+            <div
+              class="row obs"
+              v-for="(item, index) in evidencias"
+              :key="item.id"
+            >
+              <div class="row">
+                <div class="mb-3">
+                  <div class="row">
+                    <div class="col-5">
+                      <div class="input-group">
+                        <input
+                          class="form-control"
+                          type="file"
+                          accept="image/*,.pdf, .msg"
+                          @change="cargarArchivo($event, index)"
+                          id="formFileMultiple"
+                          required
+                        />
+                        <span
+                          style="cursor: pointer"
+                          class="btn btn-outline-secondary"
+                          @click="quitarAdjuntos(index)"
+                          id="basic-addon1"
+                          >Quitar imágenes</span
+                        >
+                      </div>
+                    </div>
+
+                    <div class="col-5">
+                      <textarea
+                        name=""
+                        id="novedades"
+                        class="form-control textareaControl"
+                        rows="1"
+                        v-model="item.observacion"
+                        @input="
+                          item.observacion = formatInputUpperCase(
+                            item.observacion
+                          )
+                        "
+                      ></textarea>
+                    </div>
+                    <div class="col-2 rightContent">
+                      <label
+                        class="bi bi-trash-fill labelOption"
+                        v-if="index > 0"
+                        @click="
+                          deleteDynamic(evidencias, index, 'identificador')
+                        "
+                      >
+                        Eliminar</label
                       >
                     </div>
                   </div>
-
-                  <div class="col-5">
-                    <textarea
-                      name=""
-                      id="novedades"
-                      class="form-control textareaControl"
-                      rows="1"
-                      v-model="item.observacion"
-                      @input="
-                        item.observacion = formatInputUpperCase(
-                          item.observacion
-                        )
-                      "
-                    ></textarea>
-                  </div>
-                  <div class="col-2 rightContent">
-                    <label
-                      class="bi bi-trash-fill labelOption"
-                      v-if="index > 0"
-                      @click="deleteDynamic(evidencias, index, 'identificador')"
-                    >
-                      Eliminar</label
-                    >
-                  </div>
                 </div>
               </div>
-            </div>
-            <div
-              class="botones"
-              v-for="(item2, index2) in evidencias[index].file"
-              :key="index2"
-            >
-              <div class="card mb-3" v-if="$route.params.id != undefined">
-                <div class="row g-0">
-                  <div class="col-md-4">
-                    <img
-                      v-bind:src="item2"
-                      class="img-fluid rounded-start"
-                      alt=""
-                    />
-                  </div>
-                  <div class="col-md-8">
-                    <div class="card-body" style="text-align: left">
-                      <h5 class="card-title">Observación:</h5>
+              <div
+                class="botones"
+                v-for="(item2, index2) in evidencias[index].file"
+                :key="index2"
+              >
+                <div class="card mb-3" v-if="$route.params.id != undefined">
+                  <div class="row g-0">
+                    <div class="col-md-4">
+                      <img
+                        v-bind:src="item2"
+                        class="img-fluid rounded-start"
+                        alt=""
+                      />
+                    </div>
+                    <div class="col-md-8">
+                      <div class="card-body" style="text-align: left">
+                        <h5 class="card-title">Observación:</h5>
+                      </div>
                     </div>
                   </div>
                 </div>
               </div>
-            </div>
-            <div class="row editor" v-if="$route.params.id == undefined"></div>
-            <div
-              class="row trash justify-content-center align-items-center padding-1"
-              v-if="$route.params.id == undefined"
-            >
-              <label
-                v-if="
-                  $route.params.id == undefined &&
-                  index == evidencias.length - 1
-                "
-                id="clasificador"
-                @click="agregarObservacion()"
-                style="cursor: pointer"
-                ><i class="bi bi-plus-circle-fill"></i>
-                Agregar imagen
-              </label>
+              <div class="row editor"></div>
+              <div
+                class="row trash justify-content-center align-items-center padding-1"
+              >
+                <label
+                  v-if="index == evidencias.length - 1"
+                  id="clasificador"
+                  @click="agregarObservacion()"
+                  style="cursor: pointer"
+                  ><i class="bi bi-plus-circle-fill"></i>
+                  Agregar archivo
+                </label>
+              </div>
             </div>
           </div>
         </div>
+
         <button class="btn btn-success" type="submit">
           Guardar formulario
         </button>
+        <div
+          class="row"
+          v-if="$route.params.id != undefined"
+          style="text-align: left; clear: both; margin-bottom: 40px"
+        >
+          <h5 @click="envio_correo = !envio_correo" style="cursor: pointer">
+            Envío correo <i v-if="envio_correo" class="bi bi-chevron-down"></i
+            ><i v-if="!envio_correo" class="bi bi-chevron-compact-up"></i>
+          </h5>
+        </div>
+        <SolicitudNovedadesNomina
+          v-if="$route.params.id != undefined && envio_correo"
+          :menu="menu"
+          :reenvio_correo="reenvio_correo"
+          :adjuntos_candidato_string="adjuntos_candidato_string"
+          @lanzarLoading="lanzarLoading"
+          @correoEnviado="manejarCorreoEnviado"
+        />
+
+        <div
+          class="row"
+          v-if="gestioningresocorreos.length > 0"
+          style="text-align: left; clear: both; margin-bottom: 40px"
+        >
+          <h5
+            @click="historico_correos = !historico_correos"
+            style="cursor: pointer"
+          >
+            Historico correos enviados
+            <i v-if="historico_correos" class="bi bi-chevron-compact-up"></i
+            ><i v-if="!historico_correos" class="bi bi-chevron-down"></i>
+          </h5>
+        </div>
+        <div class="table-responsive" v-if="!historico_correos">
+          <table
+            class="table table-striped table-hover table-bordered align-middle"
+          >
+            <thead>
+              <tr>
+                <th scope="col">#</th>
+                <th scope="col">Remitente</th>
+                <th scope="col">Destinatario</th>
+                <th scope="col">Con copia</th>
+                <th scope="col">Con copia oculta</th>
+                <th scope="col">Asunto</th>
+                <th scope="col">Mensaje</th>
+                <th scope="col">Adjuntos</th>
+                <th scope="col">Fecha envío</th>
+                <th scope="col">Acciones</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="(item, index) in gestioningresocorreos" :key="index">
+                <th scope="row">{{ index }}</th>
+                <td>{{ item.remitente }}</td>
+                <td>{{ item.destinatario }}</td>
+                <td>{{ item.con_copia }}</td>
+                <td>{{ item.con_copia_oculta }}</td>
+                <td>{{ item.asunto }}</td>
+                <td>{{ item.mensaje }}</td>
+                <td>{{ item.adjunto }}</td>
+                <td>{{ reformatearFecha(item.created_at) }}</td>
+                <td scope="col">
+                  <button
+                    class="btn btn-success"
+                    type="button"
+                    @click="reenviar(item)"
+                  >
+                    Reenviar
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
       </form>
     </div>
   </div>
@@ -456,17 +538,28 @@ import { Token } from "../Mixins/Token.js";
 import { Alerts } from "../Mixins/Alerts.js";
 import SearchList from "./SearchList.vue";
 import Loading from "./Loading.vue";
+import SolicitudNovedadesNomina from "./SolicitudNovedadesNomina.vue";
 
 export default {
   components: {
     SearchList,
     Loading,
+    SolicitudNovedadesNomina,
   },
   mixins: [Token, Alerts],
-  props: {},
+  props: {
+    menu: [],
+  },
   data() {
     return {
+      reenvio_correo: "",
+      historico_correos: true,
       URL_API: process.env.VUE_APP_URL_API,
+      envio_correo: false,
+      adjuntos_candidato_string: "",
+      gestioningresocorreos: [],
+      menu_id: "",
+      adjuntos: false,
       mensaje_error: "",
       procesos: [],
       consulta_proceso: "",
@@ -502,7 +595,8 @@ export default {
       responsable_id: "",
       consulta_responsable: "",
       usuarios: [],
-      evidencias: [{ observacion: "", file: {} }],
+      /*       evidencias: [{ observacion: "", file: {} }],
+       */ evidencias: [],
       consulta_texto: [],
       consulta_evidencias: [],
     };
@@ -512,25 +606,54 @@ export default {
     $route() {
       this.limpiarFormulario();
     },
+    menu() {
+      this.getModulo();
+    },
   },
-  mounted() {
+  created() {
+    this.getModulo();
+  },
+  async mounted() {
     this.id_registro = this.$route.params.id;
-    if (this.id_registro != undefined) {
+
+    if (this.id_registro !== undefined) {
       this.getItem(this.id_registro);
     }
   },
 
   methods: {
     getFileName(filePath) {
-      const lastUnderscoreIndex = filePath.lastIndexOf("_");
+      let lastUnderscoreIndex = 0;
+      if (filePath) {
+        lastUnderscoreIndex = filePath.lastIndexOf("_");
+      } else {
+        return null;
+      }
       if (lastUnderscoreIndex === -1) return filePath;
       return filePath.substring(lastUnderscoreIndex + 1);
     },
+    manejarCorreoEnviado() {
+      this.historico_correos = true;
+      this.historicoCorreos();
+    },
+
+    reformatearFecha(fechaOriginal) {
+      const fechaHora = new Date(fechaOriginal);
+      const año = fechaHora.getFullYear();
+      const mes = (fechaHora.getMonth() + 1).toString().padStart(2, "0"); // Los meses son indexados desde 0
+      const dia = fechaHora.getDate().toString().padStart(2, "0");
+      const horas = fechaHora.getHours().toString().padStart(2, "0");
+      const minutos = fechaHora.getMinutes().toString().padStart(2, "0");
+      const segundos = fechaHora.getSeconds().toString().padStart(2, "0");
+      const fechaFormateada = `${dia}/${mes}/${año}  `;
+      const horaFormateada = `${horas}:${minutos}:${segundos}`;
+      return fechaFormateada + " " + horaFormateada;
+    },
     toggleEdit(evidencia) {
-      /* if (!evidencia.edit) {
-        this.saveEvidencia(evidencia);
-      } */
       evidencia.edit = !evidencia.edit;
+      if (!evidencia.edit) {
+        this.saveEvidencia(evidencia);
+      }
     },
     saveEvidencia(evidencia) {
       let self = this;
@@ -591,6 +714,10 @@ export default {
       this.crea_pqrsf = "";
       this.consulta_cierra_pqrsf = "";
       this.consulta_responsable = "";
+      this.historico_correos = true;
+      this.gestioningresocorreos = [];
+      this.consulta_evidencias = [];
+      this.evidencias = [{ observacion: "", file: {} }];
       let currentRoute = { ...this.$route };
       delete currentRoute.params.id;
       this.$router.replace(currentRoute);
@@ -645,7 +772,7 @@ export default {
         return formattedDate;
       }
     },
-    Archivo(event, index) {
+    cargarArchivo(event, index) {
       const file = event.target.files[0]; // Tomar solo el primer archivo
       this.evidencias[index].file = file;
       console.log("Archivo seleccionado:", file); // Verificar si se selecciona el archivo
@@ -704,6 +831,7 @@ export default {
       }
       axios.post(url, formulario, config).then(function (result) {
         self.showAlert(result.data.message, result.data.status);
+        console.log(result.data.id);
         const rutaActual = self.$route;
         const nuevosParametros = { ...rutaActual.params, id: result.data.id };
         self.$router.replace({ ...rutaActual, params: nuevosParametros });
@@ -724,6 +852,11 @@ export default {
         )
         .then(function (result) {
           self.showAlert(result.data.message, result.data.status);
+          if (result.data.status == "success") {
+            self.consulta_evidencias = self.consulta_evidencias.filter(
+              (evidencia) => evidencia.id !== item.id
+            );
+          }
         });
     },
     messageDelete(item) {
@@ -756,6 +889,12 @@ export default {
         self.sedes = result.data;
       });
     },
+    reenviar(item) {
+      this.envio_correo = true;
+      setTimeout(() => {
+        this.reenvio_correo = item;
+      }, 1000);
+    },
     getProcesos(item = null) {
       let self = this;
       if (item != null) {
@@ -768,6 +907,37 @@ export default {
         .then(function (result) {
           self.procesos = result.data;
         });
+    },
+    historicoCorreos() {
+      var self = this;
+      var config = this.configHeader();
+      axios
+        .get(
+          self.URL_API +
+            "api/v1/consultacorreo/" +
+            self.menu_id +
+            "/" +
+            self.$route.params.id,
+          config
+        )
+        .then(function (result) {
+          self.gestioningresocorreos = result.data;
+        });
+    },
+    getModulo() {
+      var self = this;
+      if (self.$route.path != "/navbar/gestion-ingresosl") {
+        var ruta =
+          self.$route.path.split("/")[1] + "/" + self.$route.path.split("/")[2];
+        this.menu.forEach(function (item) {
+          item.opciones.forEach((element) => {
+            if (element.url == ruta) {
+              self.menu_id = element.id;
+              self.historicoCorreos();
+            }
+          });
+        });
+      }
     },
     getInteracciones(item = null) {
       let self = this;
@@ -795,6 +965,25 @@ export default {
           self.solicitantes = result.data;
         });
     },
+    enviarArchivos(booleano, ruta_archivo, nombre) {
+      var self = this;
+      if (booleano) {
+        this.adjuntos_candidato.push({
+          nombre_archivo: nombre,
+          ruta_archivo: ruta_archivo,
+        });
+      } else {
+        this.adjuntos_candidato.forEach(function (item, index) {
+          if (item.nombre_archivo == nombre) {
+            self.adjuntos_candidato.splice(index, 1);
+          }
+        });
+      }
+      this.adjuntos_candidato_string = JSON.stringify(self.adjuntos_candidato);
+    },
+    lanzarLoading(loading) {
+      this.loading = loading;
+    },
     getEstadoCierreCrm(item = null) {
       let self = this;
       if (item != null) {
@@ -810,6 +999,41 @@ export default {
         .get(self.URL_API + "api/v1/estadocirrecrm", config)
         .then(function (result) {
           self.estados_cierre = result.data;
+        });
+    },
+    valida_envioCorreo() {
+      if (this.correo_empresa == null && this.correo_laboratorio == null) {
+        this.showAlert(
+          "Para enviar el correo debe diligenciar por lo menos el correo de la empresa y guardar el formulario",
+          "error"
+        );
+        return true;
+      }
+    },
+    envioCorreo(id) {
+      let self = this;
+      if (this.valida_envioCorreo()) {
+        return;
+      }
+      this.idSeleccionado = id;
+      this.loading = true;
+      this.scrollTop();
+      let config = this.configHeader();
+      axios
+        .get(
+          self.URL_API +
+            "api/v1/gestioningresospdf/" +
+            self.menu_id +
+            "/" +
+            self.$route.params.id +
+            "/" +
+            this.idSeleccionado,
+          config
+        )
+        .then(function (result) {
+          // self.estados_ingreso = result.data
+          self.showAlert(result.data.message, result.data.status);
+          self.loading = false;
         });
     },
     getPQRSF(item = null) {
@@ -935,5 +1159,11 @@ label {
 .ver {
   background-color: #006b3f;
   color: white;
+}
+.fontSize-5 {
+  font-size: 0.5em;
+}
+.gap-8 {
+  gap: 6em;
 }
 </style>
