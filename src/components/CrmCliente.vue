@@ -37,13 +37,13 @@
                     <div class="col mb-3">
                         <SearchList nombreCampo="Sede*" @getSedes="getSedes" eventoCampo="getSedes" nombreItem="nombre"
                             :registros="sedes" placeholder="Seleccione una opción" :consulta="consulta_sede"
-                            :disabled="$route.params.id != undefined" />
+                            :disabled="$route.params.id != undefined && !permisos[32].autorizado" />
                     </div>
 
                     <div class="col mb-3">
                         <SearchList nombreCampo="Proceso o área *" @getProcesos="getProcesos" eventoCampo="getProcesos"
                             nombreItem="nombre" :registros="procesos" placeholder="Seleccione una opción"
-                            :consulta="consulta_proceso" :disabled="$route.params.id != undefined" />
+                            :consulta="consulta_proceso" :disabled="$route.params.id != undefined && !permisos[32].autorizado" />
                     </div>
                 </div>
                 <div class="row">
@@ -51,13 +51,13 @@
                         <SearchList nombreCampo="Solicitante *" @getSolicitanteCrm="getSolicitanteCrm"
                             eventoCampo="getSolicitanteCrm" nombreItem="nombre" :registros="solicitantes"
                             placeholder="Seleccione una opción" :consulta="consulta_solicitante"
-                            :disabled="$route.params.id != undefined" />
+                            :disabled="$route.params.id != undefined && !permisos[32].autorizado" />
                     </div>
                     <div class="col mb-3">
                         <SearchList nombreCampo="Tipo de atención *" @getInteracciones="getInteracciones"
                             eventoCampo="getInteracciones" nombreItem="nombre" :registros="respuestas_interaccion"
                             placeholder="Seleccione una opción" :consulta="consulta_interaccion"
-                            :disabled="$route.params.id != undefined" />
+                            :disabled="$route.params.id != undefined && !permisos[32].autorizado" />
                     </div>
                 </div>
                 <div class="row">
@@ -66,7 +66,7 @@
                         </label>
                         <input type="text" class="form-control" autocomplete="off" id="exampleInputEmail1"
                             aria-describedby="emailHelp" v-model="nombre_contacto" required
-                            :disabled="$route.params.id != undefined" />
+                            :disabled="$route.params.id != undefined && !permisos[32].autorizado" />
                         <div class="invalid-feedback">
                             {{ mensaje_error }}
                         </div>
@@ -76,7 +76,7 @@
                         </label>
                         <input type="text" class="form-control" autocomplete="off" id="exampleInputEmail1"
                             aria-describedby="emailHelp" v-model="nit_documento" required
-                            :disabled="$route.params.id != undefined" />
+                            :disabled="$route.params.id != undefined && !permisos[32].autorizado" />
                         <div class="invalid-feedback">
                             {{ mensaje_error }}
                         </div>
@@ -88,7 +88,7 @@
                         </label>
                         <input type="text" class="form-control" autocomplete="off" id="exampleInputEmail1"
                             aria-describedby="emailHelp" v-model="telefono_contacto" required
-                            :disabled="$route.params.id != undefined" />
+                            :disabled="$route.params.id != undefined && !permisos[32].autorizado" />
                         <div class="invalid-feedback">
                             {{ mensaje_error }}
                         </div>
@@ -98,7 +98,7 @@
                         </label>
                         <input type="text" class="form-control" autocomplete="off" id="exampleInputEmail1"
                             aria-describedby="emailHelp" v-model="correo_contacto" required
-                            :disabled="$route.params.id != undefined" />
+                            :disabled="$route.params.id != undefined && !permisos[32].autorizado" />
                         <div class="invalid-feedback">
                             {{ mensaje_error }}
                         </div>
@@ -114,20 +114,20 @@
                     <div class="col mb-3">
                         <SearchList nombreCampo="PQRSF *" @getPQRSF="getPQRSF" eventoCampo="getPQRSF"
                             nombreItem="nombre" :registros="lista_pqrsf" placeholder="Seleccione una opción"
-                            :consulta="consulta_pqrsf" :disabled="$route.params.id != undefined" />
+                            :consulta="consulta_pqrsf" :disabled="$route.params.id != undefined && !permisos[32].autorizado" />
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-6 mb-3">
                         <SearchList nombreCampo="Responsable *" @getUsuarios="getUsuarios" eventoCampo="getUsuarios"
                             nombreItem="nombre" :registros="usuarios" placeholder="Seleccione una opción"
-                            :consulta="consulta_responsable" :disabled="$route.params.id != undefined" :index="1" />
+                            :consulta="consulta_responsable" :disabled="$route.params.id != undefined && !permisos[32].autorizado" :index="1" />
                     </div>
                     <div class="col-6 mb-3" v-if="estado_cierre_id == 2 && $route.params.id != undefined || estado_cierre_id == 2 && $route.params.id == undefined">
                         <SearchList nombreCampo="Cierra la PQRSF *" @getUsuarios="getUsuarios" eventoCampo="getUsuarios"
                             nombreItem="nombre" :registros="usuarios" placeholder="Seleccione una opción"
                             :consulta="consulta_cierra_pqrsf"
-                            :disabled="$route.params.id != undefined && consulta_cierra_pqrsf != null && fecha_cierre != undefined" :index="2" />
+                            :disabled="$route.params.id != undefined && consulta_cierra_pqrsf != null && fecha_cierre != undefined && !permisos[32].autorizado" :index="2" />
                     </div>
                 </div>
                 <div class="row">
@@ -136,7 +136,7 @@
                         </label>
                         <input type="text" class="form-control" autocomplete="off" id="exampleInputEmail1"
                             aria-describedby="emailHelp" v-model="crea_pqrsf" required
-                            :disabled="$route.params.id != undefined" />
+                            :disabled="$route.params.id != undefined && !permisos[32].autorizado" />
                         <div class="invalid-feedback">
                             {{ mensaje_error }}
                         </div>
@@ -157,7 +157,7 @@
                         <label class="form-label">Observación: *</label>
                         <textarea class="form-control" required name="" id="razon_social" rows="10"
                             v-model="observacion" placeholder="Observación"
-                            :disabled="$route.params.id != undefined"></textarea>
+                            :disabled="$route.params.id != undefined && !permisos[32].autorizado"></textarea>
                         <div class="invalid-feedback">
                             {{ mensaje_error }}
                         </div>
@@ -174,12 +174,13 @@ import { Token } from '../Mixins/Token.js';
 import { Alerts } from '../Mixins/Alerts.js';
 import SearchList from './SearchList.vue';
 import Loading from './Loading.vue';
+import { Permisos } from '../Mixins/Permisos.js';
 export default {
     components: {
         SearchList,
         Loading,
     },
-    mixins: [Token, Alerts],
+    mixins: [Token, Alerts,Permisos],
     props: {
 
     },
