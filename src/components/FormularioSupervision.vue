@@ -433,6 +433,7 @@ export default {
                     formulario.append('imagen[' + index + '][' + (index2 + 1) + ']', item2)
                 })
             })
+            console.log(formulario)
             let config = this.configHeader();
             axios
                 .post(self.URL_API + "api/v1/formulariosupervision", formulario, config)

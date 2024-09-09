@@ -390,11 +390,6 @@
                         class="form-control textareaControl"
                         rows="1"
                         v-model="item.observacion"
-                        @input="
-                          item.observacion = formatInputUpperCase(
-                            item.observacion
-                          )
-                        "
                       ></textarea>
                     </div>
                     <div class="col-2 rightContent">
@@ -426,9 +421,7 @@
                       />
                     </div>
                     <div class="col-md-8">
-                      <div class="card-body" style="text-align: left">
-                        <h5 class="card-title">Observación:</h5>
-                      </div>
+                      <div class="card-body" style="text-align: left"></div>
                     </div>
                   </div>
                 </div>
@@ -595,8 +588,7 @@ export default {
       responsable_id: "",
       consulta_responsable: "",
       usuarios: [],
-      /*       evidencias: [{ observacion: "", file: {} }],
-       */ evidencias: [],
+      evidencias: [{ observacion: "", file: [] }],
       consulta_texto: [],
       consulta_evidencias: [],
     };
@@ -673,7 +665,7 @@ export default {
     agregarObservacion() {
       this.verLista = this.verLista + 1;
       if (this.evidencias.length <= 10) {
-        this.evidencias.push({ observacion: "", file: {} });
+        this.evidencias.push({ body: "", file: [] });
       }
     },
     deleteDynamic(array, index, identificador = null) {
@@ -717,10 +709,8 @@ export default {
       this.historico_correos = true;
       this.gestioningresocorreos = [];
       this.consulta_evidencias = [];
-      this.evidencias = [{ observacion: "", file: {} }];
-      let currentRoute = { ...this.$route };
-      delete currentRoute.params.id;
-      this.$router.replace(currentRoute);
+      this.evidencias = [{ observacion: "", file: [] }];
+      this.adjuntos = false;
     },
     getItem(id) {
       let self = this;
@@ -773,9 +763,11 @@ export default {
       }
     },
     cargarArchivo(event, index) {
-      const file = event.target.files[0]; // Tomar solo el primer archivo
-      this.evidencias[index].file = file;
-      console.log("Archivo seleccionado:", file); // Verificar si se selecciona el archivo
+      var self = this;
+      const file = event.target.files;
+      for (var i = 0; i < file.length; i++) {
+        self.evidencias[index].file.push(file[i]);
+      }
     },
     quitarAdjuntos(index) {
       this.evidencias[index].file = [];
@@ -810,15 +802,16 @@ export default {
       formulario.append("creacion_pqrsf", this.crea_pqrsf);
       formulario.append("cierre_pqrsf", this.consulta_cierra_pqrsf);
       formulario.append("responsable", this.consulta_responsable);
-      this.evidencias.forEach((evidencia, index) => {
-        if (evidencia.file) {
-          formulario.append(`evidencias[${index}][file]`, evidencia.file);
-        }
-        formulario.append(
-          `evidencias[${index}][observacion]`,
-          evidencia.observacion
-        );
+      this.evidencias.forEach(function (item, index) {
+        formulario.append("imagen[" + index + "][0]", item.observacion);
+        item.file.forEach(function (item2, index2) {
+          formulario.append(
+            "imagen[" + index + "][" + (index2 + 1) + "]",
+            item2
+          );
+        });
       });
+      console.log(formulario);
       var id = this.$route.params.id;
       var url = "";
       if (id != null) {
@@ -831,11 +824,11 @@ export default {
       }
       axios.post(url, formulario, config).then(function (result) {
         self.showAlert(result.data.message, result.data.status);
-        console.log(result.data.id);
-        const rutaActual = self.$route;
+        self.getItem(result.data.id);
+        const rutaActual = self.$route.path;
+        console.log(rutaActual);
         const nuevosParametros = { ...rutaActual.params, id: result.data.id };
         self.$router.replace({ ...rutaActual, params: nuevosParametros });
-        self.getItem(result.data.id);
       });
     },
     eliminarDocumento(item) {
