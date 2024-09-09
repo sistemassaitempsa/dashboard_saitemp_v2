@@ -267,6 +267,24 @@
                     </div> -->
         </div>
         <div class="row">
+          <div class="col mb-3">
+            <label class="form-label">Observación: *</label>
+            <textarea
+              class="form-control"
+              required
+              name=""
+              id="razon_social"
+              rows="10"
+              v-model="observacion"
+              placeholder="Observación"
+              :disabled="$route.params.id != undefined"
+            ></textarea>
+            <div class="invalid-feedback">
+              {{ mensaje_error }}
+            </div>
+          </div>
+        </div>
+        <div class="row">
           <div class="col" v-if="$route.params.id != null">
             <label class="form-label labelBlock">Archivos adjuntos:</label>
           </div>
@@ -445,82 +463,82 @@
         <button class="btn btn-success" type="submit">
           Guardar formulario
         </button>
-        <div
-          class="row"
-          v-if="$route.params.id != undefined"
-          style="text-align: left; clear: both; margin-bottom: 40px"
-        >
-          <h5 @click="envio_correo = !envio_correo" style="cursor: pointer">
-            Envío correo <i v-if="envio_correo" class="bi bi-chevron-down"></i
-            ><i v-if="!envio_correo" class="bi bi-chevron-compact-up"></i>
-          </h5>
-        </div>
-        <SolicitudNovedadesNomina
-          v-if="$route.params.id != undefined && envio_correo"
-          :menu="menu"
-          :reenvio_correo="reenvio_correo"
-          :adjuntos_candidato_string="adjuntos_candidato_string"
-          @lanzarLoading="lanzarLoading"
-          @correoEnviado="manejarCorreoEnviado"
-        />
-
-        <div
-          class="row"
-          v-if="gestioningresocorreos.length > 0"
-          style="text-align: left; clear: both; margin-bottom: 40px"
-        >
-          <h5
-            @click="historico_correos = !historico_correos"
-            style="cursor: pointer"
-          >
-            Historico correos enviados
-            <i v-if="historico_correos" class="bi bi-chevron-compact-up"></i
-            ><i v-if="!historico_correos" class="bi bi-chevron-down"></i>
-          </h5>
-        </div>
-        <div class="table-responsive" v-if="!historico_correos">
-          <table
-            class="table table-striped table-hover table-bordered align-middle"
-          >
-            <thead>
-              <tr>
-                <th scope="col">#</th>
-                <th scope="col">Remitente</th>
-                <th scope="col">Destinatario</th>
-                <th scope="col">Con copia</th>
-                <th scope="col">Con copia oculta</th>
-                <th scope="col">Asunto</th>
-                <th scope="col">Mensaje</th>
-                <th scope="col">Adjuntos</th>
-                <th scope="col">Fecha envío</th>
-                <th scope="col">Acciones</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr v-for="(item, index) in gestioningresocorreos" :key="index">
-                <th scope="row">{{ index }}</th>
-                <td>{{ item.remitente }}</td>
-                <td>{{ item.destinatario }}</td>
-                <td>{{ item.con_copia }}</td>
-                <td>{{ item.con_copia_oculta }}</td>
-                <td>{{ item.asunto }}</td>
-                <td>{{ item.mensaje }}</td>
-                <td>{{ item.adjunto }}</td>
-                <td>{{ reformatearFecha(item.created_at) }}</td>
-                <td scope="col">
-                  <button
-                    class="btn btn-success"
-                    type="button"
-                    @click="reenviar(item)"
-                  >
-                    Reenviar
-                  </button>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
       </form>
+    </div>
+    <div
+      class="row"
+      v-if="$route.params.id != undefined"
+      style="text-align: left; clear: both; margin-bottom: 40px"
+    >
+      <h5 @click="envio_correo = !envio_correo" style="cursor: pointer">
+        Envío correo <i v-if="envio_correo" class="bi bi-chevron-down"></i
+        ><i v-if="!envio_correo" class="bi bi-chevron-compact-up"></i>
+      </h5>
+    </div>
+    <SolicitudNovedadesNomina
+      v-if="$route.params.id != undefined && envio_correo"
+      :menu="menu"
+      :reenvio_correo="reenvio_correo"
+      :adjuntos_candidato_string="adjuntos_candidato_string"
+      @lanzarLoading="lanzarLoading"
+      @correoEnviado="manejarCorreoEnviado"
+    />
+
+    <div
+      class="row"
+      v-if="gestioningresocorreos.length > 0"
+      style="text-align: left; clear: both; margin-bottom: 40px"
+    >
+      <h5
+        @click="historico_correos = !historico_correos"
+        style="cursor: pointer"
+      >
+        Historico correos enviados
+        <i v-if="historico_correos" class="bi bi-chevron-compact-up"></i
+        ><i v-if="!historico_correos" class="bi bi-chevron-down"></i>
+      </h5>
+    </div>
+    <div class="table-responsive" v-if="!historico_correos">
+      <table
+        class="table table-striped table-hover table-bordered align-middle"
+      >
+        <thead>
+          <tr>
+            <th scope="col">#</th>
+            <th scope="col">Remitente</th>
+            <th scope="col">Destinatario</th>
+            <th scope="col">Con copia</th>
+            <th scope="col">Con copia oculta</th>
+            <th scope="col">Asunto</th>
+            <th scope="col">Mensaje</th>
+            <th scope="col">Adjuntos</th>
+            <th scope="col">Fecha envío</th>
+            <th scope="col">Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="(item, index) in gestioningresocorreos" :key="index">
+            <th scope="row">{{ index }}</th>
+            <td>{{ item.remitente }}</td>
+            <td>{{ item.destinatario }}</td>
+            <td>{{ item.con_copia }}</td>
+            <td>{{ item.con_copia_oculta }}</td>
+            <td>{{ item.asunto }}</td>
+            <td>{{ item.mensaje }}</td>
+            <td>{{ item.adjunto }}</td>
+            <td>{{ reformatearFecha(item.created_at) }}</td>
+            <td scope="col">
+              <button
+                class="btn btn-success"
+                type="button"
+                @click="reenviar(item)"
+              >
+                Reenviar
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
     </div>
   </div>
 </template>
