@@ -8,7 +8,6 @@ export const Socket = {
   mounted() {
     var self = this
     setInterval(() => {
-      console.log("limpiando consola")
       self.pila_notificaciones = JSON.parse(localStorage.getItem("pila"))
       if(self.pila_notificaciones.length > 1){
         self.pila_notificaciones.splice(0,1)
