@@ -61,7 +61,9 @@
                 :registros="sedes"
                 placeholder="Seleccione una opción"
                 :consulta="consulta_sede"
-                :disabled="$route.params.id != undefined  && permisos[32].autorizado"
+                :disabled="$route.params.id != undefined  && 
+                
+ [32].autorizado"
               />
             </div>
   

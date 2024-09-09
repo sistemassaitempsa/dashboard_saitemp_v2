@@ -367,7 +367,6 @@ export default {
     enviar() {
       let self = this;
       self.$emit("lanzarLoading", true);
-      self.$emit("lanzarLoading", true);
       let config = this.configHeader();
       const correo = new FormData();
       correo.append("to", this.correos);
@@ -389,7 +388,6 @@ export default {
           item.ruta_archivo + "*" + item.nombre_archivo
         );
       });
-
       axios
         .post(self.URL_API + "api/v1/enviocorreo", correo, config)
         .then(function (result) {
@@ -397,6 +395,7 @@ export default {
           self.$emit("lanzarLoading", false);
           self.$emit("correoEnviado");
           self.showAlert(result.data.message, result.data.status);
+
         });
     },
     cargarArchivo(event) {

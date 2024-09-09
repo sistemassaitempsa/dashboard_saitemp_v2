@@ -3004,7 +3004,7 @@
                 :value="false"
                 v-model="declaraciones_autorizaciones"
                 name="radio"
-                id="radio1"
+                id="radio2"
                 checked
               />
               No acepto
@@ -3924,7 +3924,6 @@ export default {
       consulta_contratacion_pago_31: "",
       contratacion_pago_31_id: "",
       versiones:[],
-      tamano_texto_version:'',
     };
   },
   computed: {
@@ -4005,7 +4004,6 @@ export default {
         .get(self.URL_API + "api/v1/versiondebidadiligencia", config)
         .then(function (result) {
           self.versiones = result.data;
-          self.tamano_texto_version = self.versiones[0].tamano_texto
         });
     },
     validaCamposDinamicos(index, bandera = null) {
@@ -7168,10 +7166,10 @@ export default {
             .then((archivo) => {
               self.file.push(archivo);
             })
-            // .catch((error) => {
-            //   self.showAlert("Error al convertir el archivo:", "error");
-            //   console.log(error);
-            // });
+            .catch((error) => {
+              self.showAlert("Error al convertir el archivo:", "error");
+              console.log(error);
+            });
         });
 
         if (item.cargos.length > 0) {

@@ -35,6 +35,7 @@ export default {
             tabla: [
                 { nombre: "#", orden: "DESC" },
                 { nombre: "Radicado", orden: "DESC", tipo: "texto", calculado: 'false' },
+                { nombre: "N° de servicio", orden: "DESC", tipo: "texto", calculado: 'false' },
                 { nombre: "Fecha radicado", orden: "DESC", tipo: "fecha", calculado: 'false' },
                 { nombre: "Número identificación", orden: "DESC", tipo: "texto", calculado: 'false' },
                 { nombre: "Nombre candidato", orden: "DESC", tipo: "texto", calculado: 'false' },
