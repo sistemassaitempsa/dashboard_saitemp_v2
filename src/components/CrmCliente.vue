@@ -61,7 +61,7 @@
                 :registros="sedes"
                 placeholder="Seleccione una opción"
                 :consulta="consulta_sede"
-                :disabled="$route.params.id != undefined  && permisos[32].autorizado"
+                :disabled="$route.params.id != undefined  && !permisos[32].autorizado"
               />
             </div>
   
@@ -74,7 +74,7 @@
                 :registros="procesos"
                 placeholder="Seleccione una opción"
                 :consulta="consulta_proceso"
-                :disabled="$route.params.id != undefined  && permisos[32].autorizado"
+                :disabled="$route.params.id != undefined  && !permisos[32].autorizado"
               />
             </div>
           </div>
@@ -88,7 +88,7 @@
                 :registros="solicitantes"
                 placeholder="Seleccione una opción"
                 :consulta="consulta_solicitante"
-                :disabled="$route.params.id != undefined  && permisos[32].autorizado"
+                :disabled="$route.params.id != undefined  && !permisos[32].autorizado"
               />
             </div>
             <div class="col mb-3">
@@ -100,7 +100,7 @@
                 :registros="respuestas_interaccion"
                 placeholder="Seleccione una opción"
                 :consulta="consulta_interaccion"
-                :disabled="$route.params.id != undefined  && permisos[32].autorizado"
+                :disabled="$route.params.id != undefined  && !permisos[32].autorizado"
               />
             </div>
           </div>
@@ -115,7 +115,7 @@
                 aria-describedby="emailHelp"
                 v-model="nombre_contacto"
                 required
-                :disabled="$route.params.id != undefined  && permisos[32].autorizado"
+                :disabled="$route.params.id != undefined  && !permisos[32].autorizado"
               />
               <div class="invalid-feedback">
                 {{ mensaje_error }}
@@ -131,7 +131,7 @@
                 aria-describedby="emailHelp"
                 v-model="nit_documento"
                 required
-                :disabled="$route.params.id != undefined  && permisos[32].autorizado"
+                :disabled="$route.params.id != undefined  && !permisos[32].autorizado"
               />
               <div class="invalid-feedback">
                 {{ mensaje_error }}
@@ -149,7 +149,7 @@
                 aria-describedby="emailHelp"
                 v-model="telefono_contacto"
                 required
-                :disabled="$route.params.id != undefined  && permisos[32].autorizado"
+                :disabled="$route.params.id != undefined  && !permisos[32].autorizado"
               />
               <div class="invalid-feedback">
                 {{ mensaje_error }}
@@ -165,7 +165,7 @@
                 aria-describedby="emailHelp"
                 v-model="correo_contacto"
                 required
-                :disabled="$route.params.id != undefined  && permisos[32].autorizado"
+                :disabled="$route.params.id != undefined  && !permisos[32].autorizado"
               />
               <div class="invalid-feedback">
                 {{ mensaje_error }}
@@ -196,7 +196,7 @@
                 :registros="lista_pqrsf"
                 placeholder="Seleccione una opción"
                 :consulta="consulta_pqrsf"
-                :disabled="$route.params.id != undefined  && permisos[32].autorizado"
+                :disabled="$route.params.id != undefined  && !permisos[32].autorizado"
               />
             </div>
           </div>
@@ -210,7 +210,7 @@
                 :registros="usuarios"
                 placeholder="Seleccione una opción"
                 :consulta="consulta_responsable"
-                :disabled="$route.params.id != undefined  && permisos[32].autorizado"
+                :disabled="$route.params.id != undefined  && !permisos[32].autorizado"
                 :index="1"
               />
             </div>
@@ -249,7 +249,7 @@
                 aria-describedby="emailHelp"
                 v-model="crea_pqrsf"
                 required
-                :disabled="$route.params.id != undefined  && permisos[32].autorizado"
+                :disabled="$route.params.id != undefined  && !permisos[32].autorizado"
               />
               <div class="invalid-feedback">
                 {{ mensaje_error }}
@@ -267,7 +267,7 @@
                 rows="10"
                 v-model="observacion"
                 placeholder="Observación"
-                :disabled="$route.params.id != undefined  && permisos[32].autorizado"
+                :disabled="$route.params.id != undefined  && !permisos[32].autorizado"
               ></textarea>
               <div class="invalid-feedback">
                 {{ mensaje_error }}
@@ -410,27 +410,6 @@
                     </div>
                   </div>
                 </div>
-                <div
-                  class="botones"
-                  v-for="(item2, index2) in evidencias[index].file"
-                  :key="index2"
-                >
-                  <div class="card mb-3" v-if="$route.params.id != undefined">
-                    <div class="row g-0">
-                      <div class="col-md-4">
-                        <img
-                          v-bind:src="item2"
-                          class="img-fluid rounded-start"
-                          alt=""
-                        />
-                      </div>
-                      <!-- <div class="col-md-8">
-                        <div class="card-body" style="text-align: left"></div>
-                      </div> -->
-                    </div>
-                  </div>
-                </div>
-                <!-- <div class="row editor"></div> -->
                 <div
                   class="row trash justify-content-center align-items-center padding-1"
                 >
@@ -663,7 +642,6 @@
           .then(function (result) {
             self.showAlert(result.data.message, result.data.status);
           });
-        console.log("Guardando evidencia:", evidencia);
       },
   
       agregarObservacion() {
@@ -752,7 +730,6 @@
         this.fecha_cierre = this.formatearFecha(item.fecha_cerrado);
         this.loading = false;
         this.consulta_evidencias = item.Evidencias;
-        console.log(this.consulta_evidencias);
       },
       formatearFecha(fechaOriginal) {
         if (fechaOriginal != null) {
@@ -815,7 +792,6 @@
             );
           });
         });
-        console.log(formulario);
         var id = this.$route.params.id;
         var url = "";
         if (id != null) {
@@ -830,7 +806,6 @@
           self.showAlert(result.data.message, result.data.status);
           self.getItem(result.data.id);
           const rutaActual = self.$route.path;
-          console.log(rutaActual);
           const nuevosParametros = { ...rutaActual.params, id: result.data.id };
           self.$router.replace({ ...rutaActual, params: nuevosParametros });
         });

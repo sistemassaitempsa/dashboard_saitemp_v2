@@ -30,7 +30,6 @@
             </div>
         </div>
         <form class="was-validated" @submit.prevent="save()">
-            <!-- <h6 class="tituloseccion">Información general</h6> -->
             <div id="seccion">
                 <div class="row" v-if="$route.path != '/navbar/gestion-ingresosl'">
                     <div class="col-3 mb-3">
