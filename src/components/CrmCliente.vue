@@ -307,16 +307,66 @@
           </div>
         </div>
         <!-- finaliza aqui -->
+
         <div class="row">
-          <h6 class="padding-1">Presentacion y revisión de temas:</h6>
+          <div class="col mb-3">
+            <label class="form-label">Tema de la visita:*</label>
+            <textarea
+              class="form-control"
+              required
+              name=""
+              id="temaArea"
+              rows="3"
+              v-model="tema"
+              placeholder="Tema"
+              :disabled="
+                $route.params.id != undefined && !permisos[32].autorizado
+              "
+            ></textarea>
+            <div class="invalid-feedback">
+              {{ mensaje_error }}
+            </div>
+          </div>
         </div>
-        <div
-          class="row trash justify-content-center align-items-center padding-1"
-        >
-          <label id="clasificador" style="cursor: pointer"
-            ><i class="bi bi-plus-circle-fill"></i>
-            Agregar tema
-          </label>
+        <div class="row">
+          <div class="col mb-3">
+            <label class="form-label">Compromiso 1:*</label>
+            <textarea
+              class="form-control"
+              required
+              name=""
+              id="temaArea"
+              rows="2"
+              v-model="compromiso1"
+              placeholder="Compromiso 1"
+              :disabled="
+                $route.params.id != undefined && !permisos[32].autorizado
+              "
+            ></textarea>
+            <div class="invalid-feedback">
+              {{ mensaje_error }}
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col mb-3">
+            <label class="form-label">Compromiso 2:*</label>
+            <textarea
+              class="form-control"
+              required
+              name=""
+              id="temaArea"
+              rows="2"
+              v-model="compromiso2"
+              placeholder="Compromiso 2"
+              :disabled="
+                $route.params.id != undefined && !permisos[32].autorizado
+              "
+            ></textarea>
+            <div class="invalid-feedback">
+              {{ mensaje_error }}
+            </div>
+          </div>
         </div>
         <div class="row">
           <div class="col mb-3">
@@ -724,6 +774,9 @@ export default {
   },
   data() {
     return {
+      compromiso2: "",
+      compromiso1: "",
+      tema: "",
       alcance_visita: "",
       objetivo_visita: "",
       cargo_visitado: "",
@@ -847,7 +900,9 @@ export default {
           self.showAlert(result.data.message, result.data.status);
         });
     },
-
+    agregarTema() {
+      this.temas.push({ titulo: "", descripcion: "" });
+    },
     agregarObservacion() {
       this.verLista = this.verLista + 1;
       if (this.evidencias.length <= 10) {
