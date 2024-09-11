@@ -190,53 +190,34 @@
         </div>
         <!-- columnas para visita -->
         <div class="row">
-          <div
-            :class="$route.params.id !== undefined ? 'col-3 mb-3' : 'col mb-3'"
-          >
-            <label class="form-label">Hora inicio de visita:* </label>
-            <input
-              type="time"
-              class="form-control"
-              autocomplete="off"
-              id="exampleInputEmail1"
-              aria-describedby="emailHelp"
-              v-model="hora_inicio"
-              required
-              :disabled="
-                $route.params.id != undefined && !permisos[32].autorizado
-              "
-            />
-            <div class="invalid-feedback">
-              {{ mensaje_error }}
-            </div>
-          </div>
-          <div class="col-3 mb-3" v-if="$route.params.id != undefined">
-            <label class="form-label">Hora fin de visita:* </label>
-            <input
-              type="time"
-              class="form-control"
-              autocomplete="off"
-              id="exampleInputEmail1"
-              aria-describedby="emailHelp"
-              v-model="hora_cierre"
-              required
-              :disabled="
-                $route.params.id != undefined && !permisos[32].autorizado
-              "
-            />
-            <div class="invalid-feedback">
-              {{ mensaje_error }}
-            </div>
-          </div>
           <div class="col mb-3">
             <label class="form-label">Visita realizada por:* </label>
+            <input
+              type="time"
+              class="form-control"
+              autocomplete="off"
+              id="exampleInputEmail1"
+              aria-describedby="emailHelp"
+              v-model="visitante"
+              required
+              :disabled="
+                $route.params.id != undefined && !permisos[32].autorizado
+              "
+            />
+            <div class="invalid-feedback">
+              {{ mensaje_error }}
+            </div>
+          </div>
+
+          <div class="col mb-3">
+            <label class="form-label">Cargo del visitante:* </label>
             <input
               type="text"
               class="form-control"
               autocomplete="off"
               id="exampleInputEmail1"
               aria-describedby="emailHelp"
-              v-model="correo_contacto"
+              v-model="cargo_visitante"
               required
               :disabled="
                 $route.params.id != undefined && !permisos[32].autorizado
@@ -247,7 +228,45 @@
             </div>
           </div>
         </div>
+        <div class="row">
+          <div class="col mb-3">
+            <label class="form-label">Visita atendida por:* </label>
+            <input
+              type="time"
+              class="form-control"
+              autocomplete="off"
+              id="exampleInputEmail1"
+              aria-describedby="emailHelp"
+              v-model="visitado"
+              required
+              :disabled="
+                $route.params.id != undefined && !permisos[32].autorizado
+              "
+            />
+            <div class="invalid-feedback">
+              {{ mensaje_error }}
+            </div>
+          </div>
 
+          <div class="col mb-3">
+            <label class="form-label">Cargo del visitado:* </label>
+            <input
+              type="text"
+              class="form-control"
+              autocomplete="off"
+              id="exampleInputEmail1"
+              aria-describedby="emailHelp"
+              v-model="cargo_visitado"
+              required
+              :disabled="
+                $route.params.id != undefined && !permisos[32].autorizado
+              "
+            />
+            <div class="invalid-feedback">
+              {{ mensaje_error }}
+            </div>
+          </div>
+        </div>
         <!-- finaliza aqui -->
         <div class="row">
           <div class="col mb-3">
@@ -294,6 +313,44 @@
               "
               :index="1"
             />
+          </div>
+          <div
+            :class="$route.params.id !== undefined ? 'col-3 mb-3' : 'col mb-3'"
+          >
+            <label class="form-label">Hora inicio de visita:* </label>
+            <input
+              type="time"
+              class="form-control"
+              autocomplete="off"
+              id="exampleInputEmail1"
+              aria-describedby="emailHelp"
+              v-model="hora_inicio"
+              required
+              :disabled="
+                $route.params.id != undefined && !permisos[32].autorizado
+              "
+            />
+            <div class="invalid-feedback">
+              {{ mensaje_error }}
+            </div>
+          </div>
+          <div class="col-3 mb-3" v-if="$route.params.id != undefined">
+            <label class="form-label">Hora fin de visita:* </label>
+            <input
+              type="time"
+              class="form-control"
+              autocomplete="off"
+              id="exampleInputEmail1"
+              aria-describedby="emailHelp"
+              v-model="hora_cierre"
+              required
+              :disabled="
+                $route.params.id != undefined && !permisos[32].autorizado
+              "
+            />
+            <div class="invalid-feedback">
+              {{ mensaje_error }}
+            </div>
           </div>
           <div
             class="col-6 mb-3"
@@ -617,6 +674,10 @@ export default {
   },
   data() {
     return {
+      cargo_visitado: "",
+      visitado: "",
+      cargo_visitante: "",
+      visitante: "",
       hora_cierre: "",
       hora_inicio: "",
       reenvio_correo: "",
