@@ -193,7 +193,7 @@
           <div class="col mb-3">
             <label class="form-label">Visita realizada por:* </label>
             <input
-              type="time"
+              type="text"
               class="form-control"
               autocomplete="off"
               id="exampleInputEmail1"
@@ -232,7 +232,7 @@
           <div class="col mb-3">
             <label class="form-label">Visita atendida por:* </label>
             <input
-              type="time"
+              type="text"
               class="form-control"
               autocomplete="off"
               id="exampleInputEmail1"
@@ -267,7 +267,57 @@
             </div>
           </div>
         </div>
+        <div class="row">
+          <div class="col mb-3">
+            <label class="form-label">Objetivo:* </label>
+            <input
+              type="text"
+              class="form-control"
+              autocomplete="off"
+              id="exampleInputEmail1"
+              aria-describedby="emailHelp"
+              v-model="objetivo_visita"
+              required
+              :disabled="
+                $route.params.id != undefined && !permisos[32].autorizado
+              "
+            />
+            <div class="invalid-feedback">
+              {{ mensaje_error }}
+            </div>
+          </div>
+
+          <div class="col mb-3">
+            <label class="form-label">Alcance:* </label>
+            <input
+              type="text"
+              class="form-control"
+              autocomplete="off"
+              id="exampleInputEmail1"
+              aria-describedby="emailHelp"
+              v-model="alcance_visita"
+              required
+              :disabled="
+                $route.params.id != undefined && !permisos[32].autorizado
+              "
+            />
+            <div class="invalid-feedback">
+              {{ mensaje_error }}
+            </div>
+          </div>
+        </div>
         <!-- finaliza aqui -->
+        <div class="row">
+          <h6 class="padding-1">Presentacion y revisión de temas:</h6>
+        </div>
+        <div
+          class="row trash justify-content-center align-items-center padding-1"
+        >
+          <label id="clasificador" style="cursor: pointer"
+            ><i class="bi bi-plus-circle-fill"></i>
+            Agregar tema
+          </label>
+        </div>
         <div class="row">
           <div class="col mb-3">
             <SearchList
@@ -674,6 +724,8 @@ export default {
   },
   data() {
     return {
+      alcance_visita: "",
+      objetivo_visita: "",
       cargo_visitado: "",
       visitado: "",
       cargo_visitante: "",
