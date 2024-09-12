@@ -579,6 +579,25 @@
                   :signed="signed"
                 />
               </div>
+              <div class="col-sm-12 col-md-6 mb-3">
+                <div
+                  class="d-flex justify-content-end align-items-end w-100 h-100"
+                >
+                  <label
+                    class="bi bi-trash-fill labelOption"
+                    v-if="index > 0"
+                    @click="
+                      deleteDynamicAsistencia(
+                        asistencias,
+                        index,
+                        'identificador'
+                      )
+                    "
+                  >
+                    Eliminar</label
+                  >
+                </div>
+              </div>
             </div>
           </div>
           <div
@@ -1016,6 +1035,12 @@ export default {
       if (identificador != null) {
         this.consulta_texto.splice(index, 1);
         this.evidencias[index].file = [];
+      }
+      array.splice(index, 1);
+    },
+    deleteDynamicAsistencia(array, index, identificador = null) {
+      if (identificador != null) {
+        this.asistencias[index] = {};
       }
       array.splice(index, 1);
     },
