@@ -306,6 +306,7 @@
             </div>
           </div>
         </div>
+
         <!-- finaliza aqui -->
 
         <div class="row">
@@ -496,6 +497,104 @@
             </div>
           </div>
         </div>
+        <!-- campo visita firmas -->
+        <div v-for="(asistencia, index) in asistencias" :key="index">
+          <div class="row">
+            <h6 class="padding-1">{{ "Asistencia" + " " + (index + 1) }}</h6>
+          </div>
+          <div class="row border rounded border-2">
+            <div class="col mb-3">
+              <label class="form-label">Nombre:* </label>
+              <input
+                type="text"
+                class="form-control"
+                autocomplete="off"
+                id="exampleInputEmail1"
+                aria-describedby="emailHelp"
+                v-model="asistencia.nombre"
+                required
+                :disabled="
+                  $route.params.id != undefined && !permisos[32].autorizado
+                "
+              />
+              <div class="invalid-feedback">
+                {{ mensaje_error }}
+              </div>
+            </div>
+            <div class="col mb-3">
+              <label class="form-label">Cargo:* </label>
+              <input
+                type="text"
+                class="form-control"
+                autocomplete="off"
+                id="exampleInputEmail1"
+                aria-describedby="emailHelp"
+                v-model="asistencia.cargo"
+                required
+                :disabled="
+                  $route.params.id != undefined && !permisos[32].autorizado
+                "
+              />
+              <div class="invalid-feedback">
+                {{ mensaje_error }}
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-sm-12 col-md-6 mb-3">
+                <label for="exampleFormControlInput1" class="form-label"
+                  >Firma *:</label
+                >
+                <div v-if="$route.params.id != undefined" class="imagen_firma">
+                  <img :src="imagen_firma_supervisor" alt="" />
+                </div>
+                <div v-else class="input-group mb-3">
+                  <span class="input-group-text" id="basic-addon2"
+                    ><i
+                      class="bi bi-pen"
+                      style="cursor: pointer"
+                      @click="signature('firma_supervisor')"
+                    ></i
+                  ></span>
+                  <input
+                    type="password"
+                    disabled
+                    class="form-control"
+                    placeholder=""
+                    aria-label="firma"
+                    v-model="firma_supervisor"
+                    aria-describedby="basic-addon1"
+                  />
+                  <span class="input-group-text" id="basic-addon3"
+                    ><i
+                      class="bi bi-x-circle"
+                      style="cursor: pointer"
+                      @click="firma_supervisor = ''"
+                    ></i
+                  ></span>
+                </div>
+                <FirmaDigital
+                  class="tochpad"
+                  v-if="show_pad1"
+                  @firma="firma"
+                  :signed="signed"
+                />
+              </div>
+            </div>
+          </div>
+          <div
+            class="row trash justify-content-center align-items-center padding-1"
+          >
+            <label
+              v-if="index == asistencias.length - 1"
+              id="clasificador"
+              @click="agregarAsistencia()"
+              style="cursor: pointer"
+              ><i class="bi bi-plus-circle-fill"></i>
+              Agregar asistencia
+            </label>
+          </div>
+        </div>
+        <!-- finaliza aqui -->
         <div class="row">
           <div class="col mb-3">
             <label class="form-label">Observación: *</label>
@@ -774,6 +873,7 @@ export default {
   },
   data() {
     return {
+      asistencias: [{ nombre: "", cargo: "", firma: "" }],
       compromiso2: "",
       compromiso1: "",
       tema: "",
@@ -908,6 +1008,9 @@ export default {
       if (this.evidencias.length <= 10) {
         this.evidencias.push({ body: "", file: [] });
       }
+    },
+    agregarAsistencia() {
+      this.asistencias.push({ nombre: "", cargo: "", firma: "" });
     },
     deleteDynamic(array, index, identificador = null) {
       if (identificador != null) {
