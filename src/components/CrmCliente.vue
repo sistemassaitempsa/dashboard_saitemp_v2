@@ -552,7 +552,7 @@
                     ><i
                       class="bi bi-pen"
                       style="cursor: pointer"
-                      @click="signature('firma_supervisor')"
+                      @click="signature(asistencias, index)"
                     ></i
                   ></span>
                   <input
@@ -561,22 +561,21 @@
                     class="form-control"
                     placeholder=""
                     aria-label="firma"
-                    v-model="firma_supervisor"
+                    v-model="asistencia.firma_hash"
                     aria-describedby="basic-addon1"
                   />
                   <span class="input-group-text" id="basic-addon3"
                     ><i
                       class="bi bi-x-circle"
                       style="cursor: pointer"
-                      @click="firma_supervisor = ''"
+                      @click="asistencia.firma_hash = ''"
                     ></i
                   ></span>
                 </div>
                 <FirmaDigital
                   class="tochpad"
-                  v-if="show_pad1"
-                  @firma="firma"
-                  :signed="signed"
+                  v-if="asistencia.show_pad"
+                  @firma="firma($event, index)"
                 />
               </div>
               <div class="col-sm-12 col-md-6 mb-3">
@@ -879,12 +878,14 @@ import SearchList from "./SearchList.vue";
 import Loading from "./Loading.vue";
 import { Permisos } from "../Mixins/Permisos.js";
 import SolicitudNovedadesNomina from "./SolicitudNovedadesNomina.vue";
+import FirmaDigital from "./FirmaDigital.vue";
 
 export default {
   components: {
     SearchList,
     Loading,
     SolicitudNovedadesNomina,
+    FirmaDigital,
   },
   mixins: [Token, Alerts, Permisos],
   props: {
@@ -892,7 +893,9 @@ export default {
   },
   data() {
     return {
-      asistencias: [{ nombre: "", cargo: "", firma: "" }],
+      asistencias: [
+        { nombre: "", cargo: "", firma: null, show_pad: false, firma_hash: "" },
+      ],
       compromiso2: "",
       compromiso1: "",
       tema: "",
@@ -1029,7 +1032,12 @@ export default {
       }
     },
     agregarAsistencia() {
-      this.asistencias.push({ nombre: "", cargo: "", firma: "" });
+      this.asistencias.push({
+        nombre: "",
+        cargo: "",
+        firma: "",
+        show_pad: false,
+      });
     },
     deleteDynamic(array, index, identificador = null) {
       if (identificador != null) {
@@ -1050,6 +1058,40 @@ export default {
         this.consulta_evidencias[index] = [];
       }
       array.splice(index, 1);
+    },
+    /* funcion para cambiar el estado de cada "pad" */
+    signature(array, index) {
+      console.log(array);
+      array.forEach((asistencia) => {
+        asistencia.show_pad = false;
+      });
+      array[index].show_pad = true;
+    },
+    /* funcion para firmar */
+    firma(firma, index) {
+      if (this.asistencias[index].show_pad) {
+        this.asistencias[index].firma_hash = firma;
+        this.funcionGenericaUrlaArchivo(firma, index);
+      }
+
+      this.asistencias.forEach((asistencia) => {
+        asistencia.show_pad = false;
+      });
+    },
+    funcionGenericaUrlaArchivo(firma, index) {
+      var self = this;
+      this.urltoFile(firma, index + ".png", "image/png").then(function (file) {
+        self.asistencias[index].firma = file;
+      });
+    },
+    urltoFile(url, filename, mimeType) {
+      return fetch(url)
+        .then(function (res) {
+          return res.arrayBuffer();
+        })
+        .then(function (buf) {
+          return new File([buf], filename, { type: mimeType });
+        });
     },
     limpiarFormulario() {
       this.radicado = "";
