@@ -318,7 +318,7 @@
               name=""
               id="temaArea"
               rows="3"
-              v-model="tema"
+              v-model="temasPrincipales[0].descripcionTema"
               placeholder="Tema"
               :disabled="
                 $route.params.id != undefined && !permisos[32].autorizado
@@ -338,7 +338,7 @@
               name=""
               id="temaArea"
               rows="2"
-              v-model="compromiso1"
+              v-model="compromisos[0].descripcionCompromiso"
               placeholder="Compromiso 1"
               :disabled="
                 $route.params.id != undefined && !permisos[32].autorizado
@@ -358,7 +358,7 @@
               name=""
               id="temaArea"
               rows="2"
-              v-model="compromiso2"
+              v-model="compromisos[1].descripcionCompromiso"
               placeholder="Compromiso 2"
               :disabled="
                 $route.params.id != undefined && !permisos[32].autorizado
@@ -894,11 +894,13 @@ export default {
   data() {
     return {
       asistencias: [
-        { nombre: "", cargo: "", firma: null, show_pad: false, firma_hash: "" },
+        { nombre: "", cargo: "", firma: [], show_pad: false, firma_hash: "" },
       ],
-      compromiso2: "",
-      compromiso1: "",
-      tema: "",
+      compromisos: [
+        { tituloCompromiso: "compromiso1", descripcionCompromiso: "" },
+        { tituloCompromiso: "compromiso2", descripcionCompromiso: "" },
+      ],
+      temasPrincipales: [{ tituloTema: "tema1", descripcionTema: "" }],
       alcance_visita: "",
       objetivo_visita: "",
       cargo_visitado: "",
@@ -1022,9 +1024,10 @@ export default {
           self.showAlert(result.data.message, result.data.status);
         });
     },
-    agregarTema() {
+    /* funcion para agregar multiples temas */
+    /* agregarTema() {
       this.temas.push({ titulo: "", descripcion: "" });
-    },
+    }, */
     agregarObservacion() {
       this.verLista = this.verLista + 1;
       if (this.evidencias.length <= 10) {
@@ -1035,7 +1038,7 @@ export default {
       this.asistencias.push({
         nombre: "",
         cargo: "",
-        firma: "",
+        firma: [],
         show_pad: false,
       });
     },
@@ -1081,7 +1084,7 @@ export default {
     funcionGenericaUrlaArchivo(firma, index) {
       var self = this;
       this.urltoFile(firma, index + ".png", "image/png").then(function (file) {
-        self.asistencias[index].firma = file;
+        self.asistencias[index].firma.push(file);
       });
     },
     urltoFile(url, filename, mimeType) {
@@ -1193,11 +1196,21 @@ export default {
         return `${Math.ceil(pesoBytes / (1024 * 1024 * 1024))} GB`;
       }
     },
-
+    tomarHoraCierre() {
+      const now = new Date();
+      const horas = now.getHours().toString().padStart(2, "0");
+      const minutos = now.getMinutes().toString().padStart(2, "0");
+      const segundos = now.getSeconds().toString().padStart(2, "0");
+      const horaActual = `${horas}:${minutos}:${segundos}`;
+      this.hora_cierre = horaActual;
+    },
     save() {
+      this.tomarHoraCierre();
+      console.log(this.asistencias);
       let self = this;
       let config = this.configHeader();
       const formulario = new FormData();
+      console.log(this.compromisos);
       formulario.append("nombre_contacto", this.nombre_contacto);
       formulario.append("sede_id", this.sede_id);
       formulario.append("proceso_id", this.proceso_id);
@@ -1212,11 +1225,41 @@ export default {
       formulario.append("creacion_pqrsf", this.crea_pqrsf);
       formulario.append("cierre_pqrsf", this.consulta_cierra_pqrsf);
       formulario.append("responsable", this.consulta_responsable);
+      /* campos para visita, falta poner la condicion */
+      formulario.append("compromisos", JSON.stringify(this.compromisos));
+      formulario.append(
+        "temasPrincipales",
+        JSON.stringify(this.temasPrincipales)
+      );
+      formulario.append("hora_inicio", this.hora_inicio);
+      formulario.append("hora_cierre", this.hora_cierre);
+      formulario.append("cargo_visitante", this.cargo_visitante);
+      formulario.append("cargo_atendio", this.cargo_visitado);
+      formulario.append("objetivo_visita", this.objetivo_visita);
+      formulario.append("alcance_visita", this.alcance_visita);
+      formulario.append("visitante", this.visitante);
+      formulario.append("visitado", this.visitado);
+      /* finaliza campos para visita */
       this.evidencias.forEach(function (item, index) {
         formulario.append("imagen[" + index + "][0]", item.observacion);
         item.file.forEach(function (item2, index2) {
           formulario.append(
             "imagen[" + index + "][" + (index2 + 1) + "]",
+            item2
+          );
+        });
+      });
+      this.asistencias.forEach(function (item, index) {
+        formulario.append(
+          "asistencia[" + index + "][0]",
+          JSON.stringify({
+            nombre: item.nombre,
+            cargo: item.cargo,
+          })
+        );
+        item.firma.forEach(function (item2, index2) {
+          formulario.append(
+            "asistencia[" + index + "][" + (index2 + 1) + "]",
             item2
           );
         });
@@ -1231,6 +1274,7 @@ export default {
       for (let pair of formulario.entries()) {
         console.log(pair[0] + ": " + pair[1]);
       }
+      console.log(formulario);
       axios.post(url, formulario, config).then(function (result) {
         self.showAlert(result.data.message, result.data.status);
         self.getItem(result.data.id);
