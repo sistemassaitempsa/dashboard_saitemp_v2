@@ -189,186 +189,188 @@
           </div>
         </div>
         <!-- columnas para visita -->
-        <div class="row">
-          <div class="col mb-3">
-            <label class="form-label">Visita realizada por:* </label>
-            <input
-              type="text"
-              class="form-control"
-              autocomplete="off"
-              id="exampleInputEmail1"
-              aria-describedby="emailHelp"
-              v-model="visitante"
-              required
-              :disabled="
-                $route.params.id != undefined && !permisos[32].autorizado
-              "
-            />
-            <div class="invalid-feedback">
-              {{ mensaje_error }}
+        <div v-if="consulta_interaccion == `07. Visita`">
+          <div class="row">
+            <div class="col mb-3">
+              <label class="form-label">Visita realizada por:* </label>
+              <input
+                type="text"
+                class="form-control"
+                autocomplete="off"
+                id="exampleInputEmail1"
+                aria-describedby="emailHelp"
+                v-model="visitante"
+                required
+                :disabled="
+                  $route.params.id != undefined && !permisos[32].autorizado
+                "
+              />
+              <div class="invalid-feedback">
+                {{ mensaje_error }}
+              </div>
             </div>
-          </div>
 
-          <div class="col mb-3">
-            <label class="form-label">Cargo del visitante:* </label>
-            <input
-              type="text"
-              class="form-control"
-              autocomplete="off"
-              id="exampleInputEmail1"
-              aria-describedby="emailHelp"
-              v-model="cargo_visitante"
-              required
-              :disabled="
-                $route.params.id != undefined && !permisos[32].autorizado
-              "
-            />
-            <div class="invalid-feedback">
-              {{ mensaje_error }}
+            <div class="col mb-3">
+              <label class="form-label">Cargo del visitante:* </label>
+              <input
+                type="text"
+                class="form-control"
+                autocomplete="off"
+                id="exampleInputEmail1"
+                aria-describedby="emailHelp"
+                v-model="cargo_visitante"
+                required
+                :disabled="
+                  $route.params.id != undefined && !permisos[32].autorizado
+                "
+              />
+              <div class="invalid-feedback">
+                {{ mensaje_error }}
+              </div>
             </div>
           </div>
-        </div>
-        <div class="row">
-          <div class="col mb-3">
-            <label class="form-label">Visita atendida por:* </label>
-            <input
-              type="text"
-              class="form-control"
-              autocomplete="off"
-              id="exampleInputEmail1"
-              aria-describedby="emailHelp"
-              v-model="visitado"
-              required
-              :disabled="
-                $route.params.id != undefined && !permisos[32].autorizado
-              "
-            />
-            <div class="invalid-feedback">
-              {{ mensaje_error }}
+          <div class="row">
+            <div class="col mb-3">
+              <label class="form-label">Visita atendida por:* </label>
+              <input
+                type="text"
+                class="form-control"
+                autocomplete="off"
+                id="exampleInputEmail1"
+                aria-describedby="emailHelp"
+                v-model="visitado"
+                required
+                :disabled="
+                  $route.params.id != undefined && !permisos[32].autorizado
+                "
+              />
+              <div class="invalid-feedback">
+                {{ mensaje_error }}
+              </div>
             </div>
-          </div>
 
-          <div class="col mb-3">
-            <label class="form-label">Cargo del visitado:* </label>
-            <input
-              type="text"
-              class="form-control"
-              autocomplete="off"
-              id="exampleInputEmail1"
-              aria-describedby="emailHelp"
-              v-model="cargo_visitado"
-              required
-              :disabled="
-                $route.params.id != undefined && !permisos[32].autorizado
-              "
-            />
-            <div class="invalid-feedback">
-              {{ mensaje_error }}
+            <div class="col mb-3">
+              <label class="form-label">Cargo del visitado:* </label>
+              <input
+                type="text"
+                class="form-control"
+                autocomplete="off"
+                id="exampleInputEmail1"
+                aria-describedby="emailHelp"
+                v-model="cargo_visitado"
+                required
+                :disabled="
+                  $route.params.id != undefined && !permisos[32].autorizado
+                "
+              />
+              <div class="invalid-feedback">
+                {{ mensaje_error }}
+              </div>
             </div>
           </div>
-        </div>
-        <div class="row">
-          <div class="col mb-3">
-            <label class="form-label">Objetivo:* </label>
-            <input
-              type="text"
-              class="form-control"
-              autocomplete="off"
-              id="exampleInputEmail1"
-              aria-describedby="emailHelp"
-              v-model="objetivo_visita"
-              required
-              :disabled="
-                $route.params.id != undefined && !permisos[32].autorizado
-              "
-            />
-            <div class="invalid-feedback">
-              {{ mensaje_error }}
+          <div class="row">
+            <div class="col mb-3">
+              <label class="form-label">Objetivo:* </label>
+              <input
+                type="text"
+                class="form-control"
+                autocomplete="off"
+                id="exampleInputEmail1"
+                aria-describedby="emailHelp"
+                v-model="objetivo_visita"
+                required
+                :disabled="
+                  $route.params.id != undefined && !permisos[32].autorizado
+                "
+              />
+              <div class="invalid-feedback">
+                {{ mensaje_error }}
+              </div>
             </div>
-          </div>
 
-          <div class="col mb-3">
-            <label class="form-label">Alcance:* </label>
-            <input
-              type="text"
-              class="form-control"
-              autocomplete="off"
-              id="exampleInputEmail1"
-              aria-describedby="emailHelp"
-              v-model="alcance_visita"
-              required
-              :disabled="
-                $route.params.id != undefined && !permisos[32].autorizado
-              "
-            />
-            <div class="invalid-feedback">
-              {{ mensaje_error }}
+            <div class="col mb-3">
+              <label class="form-label">Alcance:* </label>
+              <input
+                type="text"
+                class="form-control"
+                autocomplete="off"
+                id="exampleInputEmail1"
+                aria-describedby="emailHelp"
+                v-model="alcance_visita"
+                required
+                :disabled="
+                  $route.params.id != undefined && !permisos[32].autorizado
+                "
+              />
+              <div class="invalid-feedback">
+                {{ mensaje_error }}
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col mb-3">
+              <label class="form-label">Tema de la visita:*</label>
+              <textarea
+                class="form-control"
+                required
+                name=""
+                id="temaArea"
+                rows="3"
+                v-model="temasPrincipales[0].descripcion"
+                placeholder="Tema"
+                :disabled="
+                  $route.params.id != undefined && !permisos[32].autorizado
+                "
+              ></textarea>
+              <div class="invalid-feedback">
+                {{ mensaje_error }}
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col mb-3">
+              <label class="form-label">Compromiso 1:*</label>
+              <textarea
+                class="form-control"
+                required
+                name=""
+                id="temaArea"
+                rows="2"
+                v-model="compromisos[0].descripcion"
+                placeholder="Compromiso 1"
+                :disabled="
+                  $route.params.id != undefined && !permisos[32].autorizado
+                "
+              ></textarea>
+              <div class="invalid-feedback">
+                {{ mensaje_error }}
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col mb-3">
+              <label class="form-label">Compromiso 2:*</label>
+              <textarea
+                class="form-control"
+                required
+                name=""
+                id="temaArea"
+                rows="2"
+                v-model="compromisos[1].descripcion"
+                placeholder="Compromiso 2"
+                :disabled="
+                  $route.params.id != undefined && !permisos[32].autorizado
+                "
+              ></textarea>
+              <div class="invalid-feedback">
+                {{ mensaje_error }}
+              </div>
             </div>
           </div>
         </div>
 
         <!-- finaliza aqui -->
 
-        <div class="row">
-          <div class="col mb-3">
-            <label class="form-label">Tema de la visita:*</label>
-            <textarea
-              class="form-control"
-              required
-              name=""
-              id="temaArea"
-              rows="3"
-              v-model="temasPrincipales[0].descripcion"
-              placeholder="Tema"
-              :disabled="
-                $route.params.id != undefined && !permisos[32].autorizado
-              "
-            ></textarea>
-            <div class="invalid-feedback">
-              {{ mensaje_error }}
-            </div>
-          </div>
-        </div>
-        <div class="row">
-          <div class="col mb-3">
-            <label class="form-label">Compromiso 1:*</label>
-            <textarea
-              class="form-control"
-              required
-              name=""
-              id="temaArea"
-              rows="2"
-              v-model="compromisos[0].descripcion"
-              placeholder="Compromiso 1"
-              :disabled="
-                $route.params.id != undefined && !permisos[32].autorizado
-              "
-            ></textarea>
-            <div class="invalid-feedback">
-              {{ mensaje_error }}
-            </div>
-          </div>
-        </div>
-        <div class="row">
-          <div class="col mb-3">
-            <label class="form-label">Compromiso 2:*</label>
-            <textarea
-              class="form-control"
-              required
-              name=""
-              id="temaArea"
-              rows="2"
-              v-model="compromisos[1].descripcion"
-              placeholder="Compromiso 2"
-              :disabled="
-                $route.params.id != undefined && !permisos[32].autorizado
-              "
-            ></textarea>
-            <div class="invalid-feedback">
-              {{ mensaje_error }}
-            </div>
-          </div>
-        </div>
         <div class="row">
           <div class="col mb-3">
             <SearchList
@@ -416,6 +418,7 @@
             />
           </div>
           <div
+            v-if="consulta_interaccion == `07. Visita`"
             :class="$route.params.id !== undefined ? 'col-3 mb-3' : 'col mb-3'"
           >
             <label class="form-label">Hora inicio de visita:* </label>
@@ -498,118 +501,123 @@
           </div>
         </div>
         <!-- campo visita firmas -->
-        <div v-for="(asistencia, index) in asistencias" :key="index">
-          <div class="row">
-            <h6 class="padding-1">{{ "Asistencia" + " " + (index + 1) }}</h6>
-          </div>
-          <div class="row border rounded border-2">
-            <div class="col mb-3">
-              <label class="form-label">Nombre:* </label>
-              <input
-                type="text"
-                class="form-control"
-                autocomplete="off"
-                id="exampleInputEmail1"
-                aria-describedby="emailHelp"
-                v-model="asistencia.nombre"
-                required
-                :disabled="
-                  $route.params.id != undefined && !permisos[32].autorizado
-                "
-              />
-              <div class="invalid-feedback">
-                {{ mensaje_error }}
-              </div>
-            </div>
-            <div class="col mb-3">
-              <label class="form-label">Cargo:* </label>
-              <input
-                type="text"
-                class="form-control"
-                autocomplete="off"
-                id="exampleInputEmail1"
-                aria-describedby="emailHelp"
-                v-model="asistencia.cargo"
-                required
-                :disabled="
-                  $route.params.id != undefined && !permisos[32].autorizado
-                "
-              />
-              <div class="invalid-feedback">
-                {{ mensaje_error }}
-              </div>
-            </div>
+        <div v-if="consulta_interaccion == `07. Visita`">
+          <div v-for="(asistencia, index) in asistencias" :key="index">
             <div class="row">
-              <div class="col-sm-12 col-md-6 mb-3">
-                <label for="exampleFormControlInput1" class="form-label"
-                  >Firma *:</label
-                >
-                <div v-if="$route.params.id != undefined" class="imagen_firma">
-                  <img :src="URL_API + asistencia.firma" alt="" />
-                </div>
-                <div v-else class="input-group mb-3">
-                  <span class="input-group-text" id="basic-addon2"
-                    ><i
-                      class="bi bi-pen"
-                      style="cursor: pointer"
-                      @click="signature(asistencias, index)"
-                    ></i
-                  ></span>
-                  <input
-                    type="password"
-                    disabled
-                    class="form-control"
-                    placeholder=""
-                    aria-label="firma"
-                    v-model="asistencia.firma_hash"
-                    aria-describedby="basic-addon1"
-                  />
-                  <span class="input-group-text" id="basic-addon3"
-                    ><i
-                      class="bi bi-x-circle"
-                      style="cursor: pointer"
-                      @click="asistencia.firma_hash = ''"
-                    ></i
-                  ></span>
-                </div>
-                <FirmaDigital
-                  class="tochpad"
-                  v-if="asistencia.show_pad"
-                  @firma="firma($event, index)"
+              <h6 class="padding-1">{{ "Asistencia" + " " + (index + 1) }}</h6>
+            </div>
+            <div class="row border rounded border-2">
+              <div class="col mb-3">
+                <label class="form-label">Nombre:* </label>
+                <input
+                  type="text"
+                  class="form-control"
+                  autocomplete="off"
+                  id="exampleInputEmail1"
+                  aria-describedby="emailHelp"
+                  v-model="asistencia.nombre"
+                  required
+                  :disabled="
+                    $route.params.id != undefined && !permisos[32].autorizado
+                  "
                 />
+                <div class="invalid-feedback">
+                  {{ mensaje_error }}
+                </div>
               </div>
-              <div class="col-sm-12 col-md-6 mb-3">
-                <div
-                  class="d-flex justify-content-end align-items-end w-100 h-100"
-                >
-                  <label
-                    class="bi bi-trash-fill labelOption"
-                    v-if="index > 0"
-                    @click="
-                      deleteDynamicAsistencia(
-                        asistencias,
-                        index,
-                        'identificador'
-                      )
-                    "
+              <div class="col mb-3">
+                <label class="form-label">Cargo:* </label>
+                <input
+                  type="text"
+                  class="form-control"
+                  autocomplete="off"
+                  id="exampleInputEmail1"
+                  aria-describedby="emailHelp"
+                  v-model="asistencia.cargo"
+                  required
+                  :disabled="
+                    $route.params.id != undefined && !permisos[32].autorizado
+                  "
+                />
+                <div class="invalid-feedback">
+                  {{ mensaje_error }}
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-sm-12 col-md-6 mb-3">
+                  <label for="exampleFormControlInput1" class="form-label"
+                    >Firma *:</label
                   >
-                    Eliminar</label
+                  <div
+                    v-if="$route.params.id != undefined"
+                    class="imagen_firma"
                   >
+                    <img :src="URL_API + asistencia.firma" alt="" />
+                  </div>
+                  <div v-else class="input-group mb-3">
+                    <span class="input-group-text" id="basic-addon2"
+                      ><i
+                        class="bi bi-pen"
+                        style="cursor: pointer"
+                        @click="signature(asistencias, index)"
+                      ></i
+                    ></span>
+                    <input
+                      type="password"
+                      disabled
+                      class="form-control"
+                      placeholder=""
+                      aria-label="firma"
+                      v-model="asistencia.firma_hash"
+                      aria-describedby="basic-addon1"
+                    />
+                    <span class="input-group-text" id="basic-addon3"
+                      ><i
+                        class="bi bi-x-circle"
+                        style="cursor: pointer"
+                        @click="asistencia.firma_hash = ''"
+                      ></i
+                    ></span>
+                  </div>
+                  <FirmaDigital
+                    class="tochpad"
+                    v-if="asistencia.show_pad"
+                    @firma="firma($event, index)"
+                  />
+                </div>
+                <div class="col-sm-12 col-md-6 mb-3">
+                  <div
+                    class="d-flex justify-content-end align-items-end w-100 h-100"
+                  >
+                    <label
+                      class="bi bi-trash-fill labelOption"
+                      v-if="index > 0"
+                      @click="
+                        deleteDynamicAsistencia(
+                          asistencias,
+                          index,
+                          'identificador'
+                        )
+                      "
+                    >
+                      Eliminar</label
+                    >
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
-          <div
-            class="row trash justify-content-center align-items-center padding-1"
-          >
-            <label
-              v-if="index == asistencias.length - 1"
-              id="clasificador"
-              @click="agregarAsistencia()"
-              style="cursor: pointer"
-              ><i class="bi bi-plus-circle-fill"></i>
-              Agregar asistencia
-            </label>
+            <div
+              class="row trash justify-content-center align-items-center padding-1"
+            >
+              <label
+                v-if="index == asistencias.length - 1"
+                id="clasificador"
+                @click="agregarAsistencia()"
+                style="cursor: pointer"
+                ><i class="bi bi-plus-circle-fill"></i>
+                Agregar asistencia
+              </label>
+            </div>
           </div>
         </div>
         <!-- finaliza aqui -->
@@ -1274,12 +1282,14 @@ export default {
             cargo: item.cargo,
           })
         );
-        item.firma.forEach(function (item2, index2) {
-          formulario.append(
-            "asistencia[" + index + "][" + (index2 + 1) + "]",
-            item2
-          );
-        });
+        Array.isArray(item.firma)
+          ? item.firma.forEach(function (item2, index2) {
+              formulario.append(
+                "asistencia[" + index + "][" + (index2 + 1) + "]",
+                item2
+              );
+            })
+          : item.firma;
       });
       var id = this.$route.params.id;
       var url = "";
