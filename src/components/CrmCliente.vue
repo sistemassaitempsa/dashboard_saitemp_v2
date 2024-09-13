@@ -318,7 +318,7 @@
               name=""
               id="temaArea"
               rows="3"
-              v-model="temasPrincipales[0].descripcionTema"
+              v-model="temasPrincipales[0].descripcion"
               placeholder="Tema"
               :disabled="
                 $route.params.id != undefined && !permisos[32].autorizado
@@ -338,7 +338,7 @@
               name=""
               id="temaArea"
               rows="2"
-              v-model="compromisos[0].descripcionCompromiso"
+              v-model="compromisos[0].descripcion"
               placeholder="Compromiso 1"
               :disabled="
                 $route.params.id != undefined && !permisos[32].autorizado
@@ -358,7 +358,7 @@
               name=""
               id="temaArea"
               rows="2"
-              v-model="compromisos[1].descripcionCompromiso"
+              v-model="compromisos[1].descripcion"
               placeholder="Compromiso 2"
               :disabled="
                 $route.params.id != undefined && !permisos[32].autorizado
@@ -545,7 +545,7 @@
                   >Firma *:</label
                 >
                 <div v-if="$route.params.id != undefined" class="imagen_firma">
-                  <img :src="imagen_firma_supervisor" alt="" />
+                  <img :src="URL_API + asistencia.firma" alt="" />
                 </div>
                 <div v-else class="input-group mb-3">
                   <span class="input-group-text" id="basic-addon2"
@@ -897,10 +897,10 @@ export default {
         { nombre: "", cargo: "", firma: [], show_pad: false, firma_hash: "" },
       ],
       compromisos: [
-        { tituloCompromiso: "compromiso1", descripcionCompromiso: "" },
-        { tituloCompromiso: "compromiso2", descripcionCompromiso: "" },
+        { titulo: "compromiso1", descripcion: "" },
+        { titulo: "compromiso2", descripcion: "" },
       ],
-      temasPrincipales: [{ tituloTema: "tema1", descripcionTema: "" }],
+      temasPrincipales: [{ titulo: "tema1", descripcion: "" }],
       alcance_visita: "",
       objetivo_visita: "",
       cargo_visitado: "",
@@ -992,7 +992,10 @@ export default {
       this.historico_correos = true;
       this.historicoCorreos();
     },
-
+    formatearHora(hora) {
+      // Extraer las primeras 5 posiciones (HH:MM) de la cadena recibida
+      return hora.slice(0, 5); // Devolver solo '01:00'
+    },
     reformatearFecha(fechaOriginal) {
       const fechaHora = new Date(fechaOriginal);
       const año = fechaHora.getFullYear();
@@ -1137,6 +1140,20 @@ export default {
         });
     },
     llenarFormulario(item) {
+      /* formulario visita */
+      this.asistencias = item.asistencias;
+      this.compromisos = item.compromisos;
+      this.temasPrincipales = item.temasPrincipales;
+      this.alcance_visita = item.alcance;
+      this.objetivo_visita = item.objetivo;
+      this.cargo_visitado = item.cargo_visitado;
+      this.visitado = item.visitado;
+      this.cargo_visitante = item.cargo_visitante;
+      this.visitante = item.cargo_visitante;
+      this.hora_cierre = item.hora_cierre;
+      this.hora_inicio = this.formatearHora(item.hora_inicio);
+      this.temasPrincipales;
+      /* finaliza aqui */
       this.radicado = item.numero_radicado;
       this.nombre_contacto = item.nombre_contacto;
       this.sede_id = item.sede_id;
