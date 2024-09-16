@@ -189,7 +189,7 @@
           </div>
         </div>
         <!-- columnas para visita -->
-        <div v-if="consulta_interaccion == `07. Visita`">
+        <div v-if="consulta_interaccion == `Visita`">
           <div class="row">
             <div class="col mb-3">
               <label class="form-label">Visita realizada por:* </label>
@@ -418,7 +418,7 @@
             />
           </div>
           <div
-            v-if="consulta_interaccion == `07. Visita`"
+            v-if="consulta_interaccion == `Visita`"
             :class="$route.params.id !== undefined ? 'col-3 mb-3' : 'col mb-3'"
           >
             <label class="form-label">Hora inicio de visita:* </label>
@@ -501,7 +501,7 @@
           </div>
         </div>
         <!-- campo visita firmas -->
-        <div v-if="consulta_interaccion == `07. Visita`">
+        <div v-if="consulta_interaccion == `Visita`">
           <div v-for="(asistencia, index) in asistencias" :key="index">
             <div class="row">
               <h6 class="padding-1">{{ "Asistencia" + " " + (index + 1) }}</h6>
@@ -1235,7 +1235,8 @@ export default {
       let self = this;
       let config = this.configHeader();
       const formulario = new FormData();
-      console.log(this.compromisos);
+
+      // Agrega los datos del formulario como lo tienes actualmente
       formulario.append("nombre_contacto", this.nombre_contacto);
       formulario.append("sede_id", this.sede_id);
       formulario.append("proceso_id", this.proceso_id);
@@ -1250,7 +1251,6 @@ export default {
       formulario.append("creacion_pqrsf", this.crea_pqrsf);
       formulario.append("cierre_pqrsf", this.consulta_cierra_pqrsf);
       formulario.append("responsable", this.consulta_responsable);
-      /* campos para visita, falta poner la condicion */
       formulario.append("compromisos", JSON.stringify(this.compromisos));
       formulario.append(
         "temasPrincipales",
@@ -1264,7 +1264,8 @@ export default {
       formulario.append("alcance_visita", this.alcance_visita);
       formulario.append("visitante", this.visitante);
       formulario.append("visitado", this.visitado);
-      /* finaliza campos para visita */
+
+      // Evidencias
       this.evidencias.forEach(function (item, index) {
         formulario.append("imagen[" + index + "][0]", item.observacion);
         item.file.forEach(function (item2, index2) {
@@ -1274,6 +1275,8 @@ export default {
           );
         });
       });
+
+      // Asistencias
       this.asistencias.forEach(function (item, index) {
         formulario.append(
           "asistencia[" + index + "][0]",
@@ -1291,24 +1294,41 @@ export default {
             })
           : item.firma;
       });
+
       var id = this.$route.params.id;
-      var url = "";
-      if (id != null) {
-        url = self.URL_API + "api/v1/seguimientocrm/" + id;
-      } else {
-        url = self.URL_API + "api/v1/seguimientocrm";
-      }
-      for (let pair of formulario.entries()) {
-        console.log(pair[0] + ": " + pair[1]);
-      }
-      console.log(formulario);
-      axios.post(url, formulario, config).then(function (result) {
-        self.showAlert(result.data.message, result.data.status);
-        self.getItem(result.data.id);
-        const rutaActual = self.$route.path;
-        const nuevosParametros = { ...rutaActual.params, id: result.data.id };
-        self.$router.replace({ ...rutaActual, params: nuevosParametros });
-      });
+      var url =
+        id != null
+          ? `${self.URL_API}api/v1/seguimientocrm/${id}`
+          : `${self.URL_API}api/v1/seguimientocrm`;
+
+      axios
+        .post(url, formulario, config)
+        .then(function (result) {
+          self.showAlert(result.data.message, result.data.status);
+          self.getItem(result.data.id);
+
+          // Aquí se genera el PDF y se envía el correo una vez guardado el formulario
+          const id = result.data.id;
+          axios
+            .get(self.URL_API + "api/v1/seguimientocrmpdf/" + id, config)
+            .then(function () {
+              console.log("PDF generado y correo enviado correctamente.");
+            })
+            .catch(function (error) {
+              console.error("Error al generar PDF o enviar correo:", error);
+            });
+
+          const rutaActual = self.$route.path;
+          const nuevosParametros = { ...rutaActual.params, id: result.data.id };
+          self.$router.replace({ ...rutaActual, params: nuevosParametros });
+        })
+        .then(() => {
+          this.historicoCorreos();
+          this.historico_correos = false;
+        })
+        .catch(function (error) {
+          console.error("Error al guardar el formulario:", error);
+        });
     },
     eliminarDocumento(item) {
       let self = this;
