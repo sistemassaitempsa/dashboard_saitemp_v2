@@ -61,9 +61,6 @@
               :registros="sedes"
               placeholder="Seleccione una opción"
               :consulta="consulta_sede"
-              :disabled="
-                $route.params.id != undefined && !permisos[32].autorizado
-              "
             />
           </div>
 
@@ -76,9 +73,6 @@
               :registros="procesos"
               placeholder="Seleccione una opción"
               :consulta="consulta_proceso"
-              :disabled="
-                $route.params.id != undefined && !permisos[32].autorizado
-              "
             />
           </div>
         </div>
@@ -92,23 +86,17 @@
               :registros="solicitantes"
               placeholder="Seleccione una opción"
               :consulta="consulta_solicitante"
-              :disabled="
-                $route.params.id != undefined && !permisos[32].autorizado
-              "
             />
           </div>
           <div class="col mb-3">
             <SearchList
-              nombreCampo="Tipo de atención *"
+              nombreCampo="Medio de atención *"
               @getInteracciones="getInteracciones"
               eventoCampo="getInteracciones"
               nombreItem="nombre"
               :registros="respuestas_interaccion"
               placeholder="Seleccione una opción"
               :consulta="consulta_interaccion"
-              :disabled="
-                $route.params.id != undefined && !permisos[32].autorizado
-              "
             />
           </div>
         </div>
@@ -123,9 +111,6 @@
               aria-describedby="emailHelp"
               v-model="nombre_contacto"
               required
-              :disabled="
-                $route.params.id != undefined && !permisos[32].autorizado
-              "
             />
             <div class="invalid-feedback">
               {{ mensaje_error }}
@@ -141,9 +126,6 @@
               aria-describedby="emailHelp"
               v-model="nit_documento"
               required
-              :disabled="
-                $route.params.id != undefined && !permisos[32].autorizado
-              "
             />
             <div class="invalid-feedback">
               {{ mensaje_error }}
@@ -161,9 +143,6 @@
               aria-describedby="emailHelp"
               v-model="telefono_contacto"
               required
-              :disabled="
-                $route.params.id != undefined && !permisos[32].autorizado
-              "
             />
             <div class="invalid-feedback">
               {{ mensaje_error }}
@@ -179,9 +158,6 @@
               aria-describedby="emailHelp"
               v-model="correo_contacto"
               required
-              :disabled="
-                $route.params.id != undefined && !permisos[32].autorizado
-              "
             />
             <div class="invalid-feedback">
               {{ mensaje_error }}
@@ -189,7 +165,7 @@
           </div>
         </div>
         <!-- columnas para visita -->
-        <div v-if="consulta_interaccion == `Visita`">
+        <div v-if="consulta_interaccion == `Visita presencial`">
           <div class="row">
             <div class="col mb-3">
               <label class="form-label">Visita realizada por:* </label>
@@ -201,9 +177,6 @@
                 aria-describedby="emailHelp"
                 v-model="visitante"
                 required
-                :disabled="
-                  $route.params.id != undefined && !permisos[32].autorizado
-                "
               />
               <div class="invalid-feedback">
                 {{ mensaje_error }}
@@ -220,9 +193,6 @@
                 aria-describedby="emailHelp"
                 v-model="cargo_visitante"
                 required
-                :disabled="
-                  $route.params.id != undefined && !permisos[32].autorizado
-                "
               />
               <div class="invalid-feedback">
                 {{ mensaje_error }}
@@ -240,9 +210,6 @@
                 aria-describedby="emailHelp"
                 v-model="visitado"
                 required
-                :disabled="
-                  $route.params.id != undefined && !permisos[32].autorizado
-                "
               />
               <div class="invalid-feedback">
                 {{ mensaje_error }}
@@ -259,9 +226,6 @@
                 aria-describedby="emailHelp"
                 v-model="cargo_visitado"
                 required
-                :disabled="
-                  $route.params.id != undefined && !permisos[32].autorizado
-                "
               />
               <div class="invalid-feedback">
                 {{ mensaje_error }}
@@ -279,9 +243,6 @@
                 aria-describedby="emailHelp"
                 v-model="objetivo_visita"
                 required
-                :disabled="
-                  $route.params.id != undefined && !permisos[32].autorizado
-                "
               />
               <div class="invalid-feedback">
                 {{ mensaje_error }}
@@ -298,9 +259,6 @@
                 aria-describedby="emailHelp"
                 v-model="alcance_visita"
                 required
-                :disabled="
-                  $route.params.id != undefined && !permisos[32].autorizado
-                "
               />
               <div class="invalid-feedback">
                 {{ mensaje_error }}
@@ -318,52 +276,123 @@
                 rows="3"
                 v-model="temasPrincipales[0].descripcion"
                 placeholder="Tema"
-                :disabled="
-                  $route.params.id != undefined && !permisos[32].autorizado
-                "
               ></textarea>
               <div class="invalid-feedback">
                 {{ mensaje_error }}
               </div>
             </div>
           </div>
-          <div class="row">
-            <div class="col mb-3">
-              <label class="form-label">Compromiso 1:*</label>
-              <textarea
-                class="form-control"
-                required
-                name=""
-                id="temaArea"
-                rows="2"
-                v-model="compromisos[0].descripcion"
-                placeholder="Compromiso 1"
-                :disabled="
-                  $route.params.id != undefined && !permisos[32].autorizado
-                "
-              ></textarea>
-              <div class="invalid-feedback">
-                {{ mensaje_error }}
+          <div class="row border rounded">
+            <div class="row">
+              <div class="col mb-3">
+                <label class="form-label">Compromiso 1:*</label>
+                <textarea
+                  class="form-control"
+                  required
+                  name=""
+                  id="temaArea"
+                  rows="2"
+                  v-model="compromisos[0].descripcion"
+                  placeholder="Compromiso 1"
+                ></textarea>
+                <div class="invalid-feedback">
+                  {{ mensaje_error }}
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-3 mb-3" v-if="$route.params.id != undefined">
+                  <label class="form-label">Fecha de apertura: </label>
+                  <input
+                    type="datetime-local"
+                    class="form-control"
+                    autocomplete="off"
+                    id="exampleInputEmail1"
+                    aria-describedby="emailHelp"
+                    v-model="fecha_radicado"
+                    disabled
+                  />
+                </div>
+                <div class="col-2 mb-3">
+                  <label class="form-label">Fecha de cierre: </label>
+                  <input
+                    type="date"
+                    class="form-control"
+                    autocomplete="off"
+                    id="exampleInputEmail1"
+                    aria-describedby="emailHelp"
+                    v-model="compromisos[0].fecha_cierre"
+                  />
+                </div>
+                <div class="col-2 mb-3">
+                  <label class="form-label">Estado:*</label>
+                  <select
+                    class="form-select"
+                    v-model="compromisos[0].estado_cierre_id"
+                    :disabled="
+                      $route.params.id != undefined && fecha_cierre != undefined
+                    "
+                  >
+                    <option :value="1">Eficaz</option>
+                    <option :value="2">Ineficaz</option>
+                  </select>
+                </div>
               </div>
             </div>
           </div>
-          <div class="row">
-            <div class="col mb-3">
-              <label class="form-label">Compromiso 2:*</label>
-              <textarea
-                class="form-control"
-                required
-                name=""
-                id="temaArea"
-                rows="2"
-                v-model="compromisos[1].descripcion"
-                placeholder="Compromiso 2"
-                :disabled="
-                  $route.params.id != undefined && !permisos[32].autorizado
-                "
-              ></textarea>
-              <div class="invalid-feedback">
-                {{ mensaje_error }}
+          <div class="row border mt-1 rounded">
+            <div class="row">
+              <div class="col mb-3">
+                <label class="form-label">Compromiso 2:*</label>
+                <textarea
+                  class="form-control"
+                  required
+                  name=""
+                  id="temaArea"
+                  rows="2"
+                  v-model="compromisos[1].descripcion"
+                  placeholder="Compromiso 2"
+                ></textarea>
+                <div class="invalid-feedback">
+                  {{ mensaje_error }}
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-3 mb-3" v-if="$route.params.id != undefined">
+                  <label class="form-label">Fecha de apertura: </label>
+                  <input
+                    type="datetime-local"
+                    class="form-control"
+                    autocomplete="off"
+                    id="exampleInputEmail1"
+                    aria-describedby="emailHelp"
+                    v-model="fecha_radicado"
+                    disabled
+                  />
+                </div>
+                <div class="col-2 mb-3">
+                  <label class="form-label">Fecha de cierre: </label>
+                  <input
+                    type="date"
+                    class="form-control"
+                    autocomplete="off"
+                    id="exampleInputEmail1"
+                    aria-describedby="emailHelp"
+                    v-model="compromisos[1].fecha_cierre"
+                  />
+                </div>
+                <div class="col-2 mb-3">
+                  <label class="form-label">Estado:*</label>
+                  <select
+                    class="form-select"
+                    v-model="compromisos[1].estado_cierre_id"
+                    :disabled="
+                      $route.params.id != undefined && fecha_cierre != undefined
+                    "
+                  >
+                    <option :value="1">Eficaz</option>
+                    <option :value="2">Ineficaz</option>
+                  </select>
+                </div>
               </div>
             </div>
           </div>
@@ -395,9 +424,6 @@
               :registros="lista_pqrsf"
               placeholder="Seleccione una opción"
               :consulta="consulta_pqrsf"
-              :disabled="
-                $route.params.id != undefined && !permisos[32].autorizado
-              "
             />
           </div>
         </div>
@@ -411,14 +437,11 @@
               :registros="usuarios"
               placeholder="Seleccione una opción"
               :consulta="consulta_responsable"
-              :disabled="
-                $route.params.id != undefined && !permisos[32].autorizado
-              "
               :index="1"
             />
           </div>
           <div
-            v-if="consulta_interaccion == `Visita`"
+            v-if="consulta_interaccion == `Visita presencial`"
             :class="$route.params.id !== undefined ? 'col-3 mb-3' : 'col mb-3'"
           >
             <label class="form-label">Hora inicio de visita:* </label>
@@ -430,9 +453,6 @@
               aria-describedby="emailHelp"
               v-model="hora_inicio"
               required
-              :disabled="
-                $route.params.id != undefined && !permisos[32].autorizado
-              "
             />
             <div class="invalid-feedback">
               {{ mensaje_error }}
@@ -448,9 +468,6 @@
               aria-describedby="emailHelp"
               v-model="hora_cierre"
               required
-              :disabled="
-                $route.params.id != undefined && !permisos[32].autorizado
-              "
             />
             <div class="invalid-feedback">
               {{ mensaje_error }}
@@ -491,9 +508,6 @@
               aria-describedby="emailHelp"
               v-model="crea_pqrsf"
               required
-              :disabled="
-                $route.params.id != undefined && !permisos[32].autorizado
-              "
             />
             <div class="invalid-feedback">
               {{ mensaje_error }}
@@ -501,7 +515,7 @@
           </div>
         </div>
         <!-- campo visita firmas -->
-        <div v-if="consulta_interaccion == `Visita`">
+        <div v-if="consulta_interaccion == `Visita presencial`">
           <div v-for="(asistencia, index) in asistencias" :key="index">
             <div class="row">
               <h6 class="padding-1">{{ "Asistencia" + " " + (index + 1) }}</h6>
@@ -632,9 +646,6 @@
               rows="10"
               v-model="observacion"
               placeholder="Observación"
-              :disabled="
-                $route.params.id != undefined && !permisos[32].autorizado
-              "
             ></textarea>
             <div class="invalid-feedback">
               {{ mensaje_error }}
@@ -796,9 +807,22 @@
             </div>
           </div>
         </div>
-        <button class="btn btn-success" type="submit">
-          Guardar formulario
-        </button>
+        <div class="row">
+          <div class="col" v-if="$route.params.id != undefined">
+            <button
+              class="btn btn-success"
+              type="button"
+              @click="descargarInforme(2)"
+            >
+              Descargar PDF
+            </button>
+          </div>
+          <div class="col">
+            <button class="btn btn-success" type="submit">
+              Guardar formulario
+            </button>
+          </div>
+        </div>
       </form>
     </div>
     <div
@@ -905,8 +929,20 @@ export default {
         { nombre: "", cargo: "", firma: [], show_pad: false, firma_hash: "" },
       ],
       compromisos: [
-        { titulo: "compromiso1", descripcion: "" },
-        { titulo: "compromiso2", descripcion: "" },
+        {
+          titulo: "compromiso1",
+          descripcion: "",
+          estado_cierre_id: "",
+          fecha_cierre: "",
+          fecha_inicio: "",
+        },
+        {
+          titulo: "compromiso2",
+          descripcion: "",
+          estado_cierre_id: "",
+          fecha_cierre: "",
+          fecha_inicio: "",
+        },
       ],
       temasPrincipales: [{ titulo: "tema1", descripcion: "" }],
       alcance_visita: "",
@@ -1136,6 +1172,34 @@ export default {
       this.consulta_evidencias = [];
       this.evidencias = [{ observacion: "", file: [] }];
       this.adjuntos = false;
+      this.asistencias = [
+        { nombre: "", cargo: "", firma: [], show_pad: false, firma_hash: "" },
+      ];
+      this.compromisos = [
+        {
+          titulo: "compromiso1",
+          descripcion: "",
+          estado_cierre_id: "",
+          fecha_cierre: "",
+          fecha_inicio: "",
+        },
+        {
+          titulo: "compromiso2",
+          descripcion: "",
+          estado_cierre_id: "",
+          fecha_cierre: "",
+          fecha_inicio: "",
+        },
+      ];
+      this.temasPrincipales = [{ titulo: "tema1", descripcion: "" }];
+      this.alcance_visita = "";
+      this.objetivo_visita = "";
+      this.cargo_visitado = "";
+      this.visitado = "";
+      this.cargo_visitante = "";
+      this.visitante = "";
+      this.hora_cierre = "";
+      this.hora_inicio = "";
     },
     getItem(id) {
       let self = this;
@@ -1145,12 +1209,14 @@ export default {
         .get(self.URL_API + "api/v1/seguimientocrmbyid/" + id, config)
         .then(function (result) {
           self.llenarFormulario(result.data);
+          self.historicoCorreos();
         });
     },
     llenarFormulario(item) {
       /* formulario visita */
       this.asistencias = item.asistencias;
       this.compromisos = item.compromisos;
+      this.formatearFechaCompromisos();
       this.temasPrincipales = item.temasPrincipales;
       this.alcance_visita = item.alcance;
       this.objetivo_visita = item.objetivo;
@@ -1158,7 +1224,7 @@ export default {
       this.visitado = item.visitado;
       this.cargo_visitante = item.cargo_visitante;
       this.visitante = item.cargo_visitante;
-      this.hora_cierre = item.hora_cierre;
+      this.hora_cierre = this.formatearHora(item.hora_cierre);
       this.hora_inicio = this.formatearHora(item.hora_inicio);
       this.temasPrincipales;
       /* finaliza aqui */
@@ -1187,6 +1253,34 @@ export default {
       this.fecha_cierre = this.formatearFecha(item.fecha_cerrado);
       this.loading = false;
       this.consulta_evidencias = item.Evidencias;
+    },
+    formatearFechaCompromisos() {
+      this.compromisos.forEach((item, index) => {
+        // Usar Vue.set para garantizar reactividad
+        const fechaFormateada = this.formateoFechaSinHora(item.fecha_cierre);
+        console.log(fechaFormateada);
+        if (fechaFormateada) {
+          this.$set(this.compromisos, index, {
+            ...item,
+            fecha_cierre: fechaFormateada,
+          });
+        }
+      });
+    },
+    formateoFechaSinHora(fechaOriginal) {
+      if (fechaOriginal != null) {
+        const fecha = new Date(fechaOriginal);
+        if (isNaN(fecha.getTime())) {
+          console.error("Fecha inválida: ", fechaOriginal);
+          return fechaOriginal;
+        }
+        const year = fecha.getFullYear();
+        const month = ("0" + (fecha.getMonth() + 1)).slice(-2);
+        const day = ("0" + fecha.getDate()).slice(-2);
+        const formattedDate = `${year}-${month}-${day}`;
+
+        return formattedDate;
+      }
     },
     formatearFecha(fechaOriginal) {
       if (fechaOriginal != null) {
@@ -1310,7 +1404,10 @@ export default {
           // Aquí se genera el PDF y se envía el correo una vez guardado el formulario
           const id = result.data.id;
           axios
-            .get(self.URL_API + "api/v1/seguimientocrmpdf/" + id, config)
+            .get(
+              self.URL_API + "api/v1/seguimientocrmpdf/" + id + "/" + "1",
+              config
+            )
             .then(function () {
               console.log("PDF generado y correo enviado correctamente.");
             })
@@ -1324,7 +1421,6 @@ export default {
         })
         .then(() => {
           this.historicoCorreos();
-          this.historico_correos = false;
         })
         .catch(function (error) {
           console.error("Error al guardar el formulario:", error);
@@ -1387,6 +1483,17 @@ export default {
         this.reenvio_correo = item;
       }, 1000);
     },
+    getEstadoCompromisosCrm(estado, index) {
+      if (estado != null) {
+        this.compromisos[index].estado_cierre_id = estado.id; // Asigna el ID del estado al compromiso correspondiente // Asigna el nombre del estado si es necesari
+      }
+      let config = this.configHeader();
+      axios
+        .get(self.URL_API + "api/v1/estadocirrecrm", config)
+        .then(function (result) {
+          self.estados_cierre = result.data;
+        });
+    },
     getProcesos(item = null) {
       let self = this;
       if (item != null) {
@@ -1431,6 +1538,19 @@ export default {
         });
       }
     },
+    descargarInforme(id) {
+      this.idSeleccionado = id;
+      if (this.$route.params.id !== undefined) {
+        const urlDescarga =
+          this.URL_API +
+          "api/v1/seguimientocrmpdf/" +
+          this.$route.params.id +
+          "/" +
+          this.idSeleccionado;
+        window.open(urlDescarga, "_blank");
+      }
+    },
+
     getInteracciones(item = null) {
       let self = this;
       if (item != null) {
@@ -1660,3 +1780,7 @@ label {
 }
 </style>
 <!-- 222 -->
+
+<!-- :disabled="
+                $route.params.id != undefined && !permisos[32].autorizado
+              " -->
