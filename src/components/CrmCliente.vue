@@ -328,7 +328,7 @@
                     {{ mensaje_error }}
                   </div>
                 </div>
-                <div class="col-3 mb-3">
+                <!-- <div class="col-3 mb-3">
                   <label class="form-label">Fecha de cierre: </label>
                   <input
                     type="date"
@@ -338,7 +338,7 @@
                     aria-describedby="emailHelp"
                     v-model="compromisos[0].fecha_cierre"
                   />
-                </div>
+                </div> -->
                 <div class="col-3 mb-3">
                   <label class="form-label">Estado:*</label>
                   <select
@@ -400,7 +400,7 @@
                     {{ mensaje_error }}
                   </div>
                 </div>
-                <div class="col-3 mb-3">
+                <!--     <div class="col-3 mb-3">
                   <label class="form-label">Fecha de cierre: </label>
                   <input
                     type="date"
@@ -410,7 +410,7 @@
                     aria-describedby="emailHelp"
                     v-model="compromisos[1].fecha_cierre"
                   />
-                </div>
+                </div> -->
                 <div class="col-3 mb-3">
                   <label class="form-label">Estado:*</label>
                   <select
@@ -931,10 +931,22 @@
         </tbody>
       </table>
     </div>
+    <div class="row mt-4" v-if="latitud != null">
+      <h3>Geolocalización <i class="bi bi-geo-alt"></i></h3>
+      <MapaVue
+        @coordenadas="coordenadas"
+        :showMap="showMap"
+        :latitud="latitud"
+        :longitud="longitud"
+        :label="label"
+        :marcador="marcador"
+      />
+    </div>
   </div>
 </template>
 <script>
 import axios from "axios";
+import MapaVue from "./MapaVue.vue";
 import { Token } from "../Mixins/Token.js";
 import { Alerts } from "../Mixins/Alerts.js";
 import SearchList from "./SearchList.vue";
@@ -942,6 +954,7 @@ import Loading from "./Loading.vue";
 import { Permisos } from "../Mixins/Permisos.js";
 import SolicitudNovedadesNomina from "./SolicitudNovedadesNomina.vue";
 import FirmaDigital from "./FirmaDigital.vue";
+import { Geolocal } from "../Mixins/Geolocal.js";
 
 export default {
   components: {
@@ -949,13 +962,20 @@ export default {
     Loading,
     SolicitudNovedadesNomina,
     FirmaDigital,
+    MapaVue,
   },
-  mixins: [Token, Alerts, Permisos],
+  mixins: [Token, Alerts, Permisos, Geolocal],
   props: {
     menu: [],
   },
   data() {
     return {
+      geolocalizacion: null,
+      marcador: require("@/assets/marcador_alinstante.png"),
+      label: "",
+      showMap: true,
+      latitud: "",
+      longitud: "",
       visitante_id: "",
       empresas_cliente: [],
       bloquea_campos: false,
@@ -1057,9 +1077,47 @@ export default {
     if (this.id_registro !== undefined) {
       this.getItem(this.id_registro);
     }
+    if (this.$route.params.id == undefined) {
+      this.geolocal();
+    }
   },
 
   methods: {
+    coordenadas(item) {
+      console.log(item);
+    },
+    async geolocal() {
+      try {
+        // Llamar a obtenerGeolocalizacion y esperar la respuesta
+        const result = await this.obtenerGeolocalizacion();
+        this.label = "Ubicacion actual";
+        this.latitud = String(result.latitud);
+        this.longitud = String(result.longitud);
+        this.showMap = !this.showMap;
+        return true;
+      } catch (error) {
+        this.showMap = false;
+        return false;
+      }
+    },
+    async validaLocalizacion() {
+      try {
+        const resultado = await this.geolocal();
+        if (resultado) {
+          this.save();
+        } else {
+          this.showAlert(
+            "No se a podido obtener la geolocalización del dispositivo, por favor verifica tu conexión a internet o activa el gps del dispositivo.",
+            "error"
+          );
+        }
+      } catch (error) {
+        this.showAlert(
+          "No se a podido obtener la geolocalización del dispositivo, por favor verifica tu conexión a internet o activa el gps del dispositivo.",
+          "error"
+        );
+      }
+    },
     getFileName(filePath) {
       let lastUnderscoreIndex = 0;
       if (filePath) {
