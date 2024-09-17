@@ -101,6 +101,22 @@
           </div>
         </div>
         <div class="row">
+          <div class="col">
+            <SearchList
+              nombreCampo="Nit/identificacion: *"
+              @getEmpresasCliente="getEmpresasCliente"
+              eventoCampo="getEmpresasCliente"
+              nombreItem="nit"
+              :consulta="consulta_empresa_cliente"
+              :registros="empresas_cliente"
+              placeholder="Seleccione una opción"
+              :disabled="
+                bloquea_campos &&
+                consulta_empresa_cliente != null &&
+                !permisos[25].autorizado
+              "
+            />
+          </div>
           <div class="col mb-3">
             <label class="form-label">Nombre / razón social: </label>
             <input
@@ -109,22 +125,7 @@
               autocomplete="off"
               id="exampleInputEmail1"
               aria-describedby="emailHelp"
-              v-model="nombre_contacto"
-              required
-            />
-            <div class="invalid-feedback">
-              {{ mensaje_error }}
-            </div>
-          </div>
-          <div class="col mb-3">
-            <label class="form-label">Nit / número de documento: </label>
-            <input
-              type="text"
-              class="form-control"
-              autocomplete="off"
-              id="exampleInputEmail1"
-              aria-describedby="emailHelp"
-              v-model="nit_documento"
+              v-model="empresa_cliente_nombre"
               required
             />
             <div class="invalid-feedback">
@@ -925,6 +926,8 @@ export default {
   },
   data() {
     return {
+      empresas_cliente: [],
+      bloquea_campos: false,
       asistencias: [
         { nombre: "", cargo: "", firma: [], show_pad: false, firma_hash: "" },
       ],
@@ -944,7 +947,9 @@ export default {
           fecha_inicio: "",
         },
       ],
+      empresa_cliente_nombre: "",
       temasPrincipales: [{ titulo: "tema1", descripcion: "" }],
+      consulta_empresa_cliente: "",
       alcance_visita: "",
       objetivo_visita: "",
       cargo_visitado: "",
@@ -1144,6 +1149,7 @@ export default {
         });
     },
     limpiarFormulario() {
+      this.bloquea_campos = false;
       this.radicado = "";
       this.nombre_contacto = "";
       this.sede_id = "";
@@ -1214,6 +1220,8 @@ export default {
     },
     llenarFormulario(item) {
       /* formulario visita */
+      this.consulta_empresa_cliente = item.nit;
+      self.bloquea_campos = true;
       this.asistencias = item.asistencias;
       this.compromisos = item.compromisos;
       this.formatearFechaCompromisos();
@@ -1322,6 +1330,21 @@ export default {
       const segundos = now.getSeconds().toString().padStart(2, "0");
       const horaActual = `${horas}:${minutos}:${segundos}`;
       this.hora_cierre = horaActual;
+    },
+    getEmpresasCliente(item = null) {
+      if (item != null) {
+        this.consulta_empresa_cliente = item.nit;
+        this.empresa_cliente_nombre = item.nombre;
+      }
+      let self = this;
+      let config = this.configHeader();
+      axios
+        .get(self.URL_API + "api/v1/empresascliente", config)
+        .then(function (result) {
+          self.empresas_cliente = result.data.filter(
+            (empresa) => empresa.nit !== null
+          );
+        });
     },
     save() {
       this.tomarHoraCierre();
