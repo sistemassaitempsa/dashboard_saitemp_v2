@@ -107,12 +107,12 @@
               @getEmpresasCliente="getEmpresasCliente"
               eventoCampo="getEmpresasCliente"
               nombreItem="nit"
-              :consulta="consulta_empresa_cliente"
+              :consulta="nit_documento"
               :registros="empresas_cliente"
               placeholder="Seleccione una opción"
               :disabled="
                 bloquea_campos &&
-                consulta_empresa_cliente != null &&
+                nit_documento != null &&
                 !permisos[25].autorizado
               "
             />
@@ -168,16 +168,16 @@
         <!-- columnas para visita -->
         <div v-if="consulta_interaccion == `Visita presencial`">
           <div class="row">
-            <div class="col mb-3">
-              <label class="form-label">Visita realizada por:* </label>
-              <input
-                type="text"
-                class="form-control"
-                autocomplete="off"
-                id="exampleInputEmail1"
-                aria-describedby="emailHelp"
-                v-model="visitante"
-                required
+            <div class="col-6 mb-3">
+              <SearchList
+                nombreCampo="Visita realizada por: *"
+                @getUsuarios="getUsuarios"
+                eventoCampo="getUsuarios"
+                nombreItem="nombre"
+                :registros="usuarios"
+                placeholder="Seleccione una opción"
+                :consulta="visitante"
+                :index="3"
               />
               <div class="invalid-feedback">
                 {{ mensaje_error }}
@@ -313,7 +313,22 @@
                     disabled
                   />
                 </div>
-                <div class="col-2 mb-3">
+                <div class="col-6 mb-3">
+                  <SearchList
+                    nombreCampo="Responsable: *"
+                    @getUsuarios="getUsuarios"
+                    eventoCampo="getUsuarios"
+                    nombreItem="nombre"
+                    :registros="usuarios"
+                    placeholder="Seleccione una opción"
+                    :consulta="compromisos[0].responsable"
+                    :index="4"
+                  />
+                  <div class="invalid-feedback">
+                    {{ mensaje_error }}
+                  </div>
+                </div>
+                <div class="col-3 mb-3">
                   <label class="form-label">Fecha de cierre: </label>
                   <input
                     type="date"
@@ -324,7 +339,7 @@
                     v-model="compromisos[0].fecha_cierre"
                   />
                 </div>
-                <div class="col-2 mb-3">
+                <div class="col-3 mb-3">
                   <label class="form-label">Estado:*</label>
                   <select
                     class="form-select"
@@ -370,7 +385,22 @@
                     disabled
                   />
                 </div>
-                <div class="col-2 mb-3">
+                <div class="col-6 mb-3">
+                  <SearchList
+                    nombreCampo="Responsable: *"
+                    @getUsuarios="getUsuarios"
+                    eventoCampo="getUsuarios"
+                    nombreItem="nombre"
+                    :registros="usuarios"
+                    placeholder="Seleccione una opción"
+                    :consulta="compromisos[1].responsable"
+                    :index="5"
+                  />
+                  <div class="invalid-feedback">
+                    {{ mensaje_error }}
+                  </div>
+                </div>
+                <div class="col-3 mb-3">
                   <label class="form-label">Fecha de cierre: </label>
                   <input
                     type="date"
@@ -381,7 +411,7 @@
                     v-model="compromisos[1].fecha_cierre"
                   />
                 </div>
-                <div class="col-2 mb-3">
+                <div class="col-3 mb-3">
                   <label class="form-label">Estado:*</label>
                   <select
                     class="form-select"
@@ -926,6 +956,7 @@ export default {
   },
   data() {
     return {
+      visitante_id: "",
       empresas_cliente: [],
       bloquea_campos: false,
       asistencias: [
@@ -938,6 +969,7 @@ export default {
           estado_cierre_id: "",
           fecha_cierre: "",
           fecha_inicio: "",
+          responsable: "",
         },
         {
           titulo: "compromiso2",
@@ -945,6 +977,7 @@ export default {
           estado_cierre_id: "",
           fecha_cierre: "",
           fecha_inicio: "",
+          responsable: "",
         },
       ],
       empresa_cliente_nombre: "",
@@ -1231,7 +1264,7 @@ export default {
       this.cargo_visitado = item.cargo_visitado;
       this.visitado = item.visitado;
       this.cargo_visitante = item.cargo_visitante;
-      this.visitante = item.cargo_visitante;
+      this.visitante = item.visitante;
       this.hora_cierre = this.formatearHora(item.hora_cierre);
       this.hora_inicio = this.formatearHora(item.hora_inicio);
       this.temasPrincipales;
@@ -1333,7 +1366,7 @@ export default {
     },
     getEmpresasCliente(item = null) {
       if (item != null) {
-        this.consulta_empresa_cliente = item.nit;
+        this.nit_documento = item.nit;
         this.empresa_cliente_nombre = item.nombre;
       }
       let self = this;
@@ -1693,9 +1726,18 @@ export default {
             this.cierra_pqrsf_id = item.id;
             this.consulta_cierra_pqrsf = item.nombre;
             break;
+          case 3:
+            this.visitante_id = item.id;
+            this.visitante = item.nombre;
+            break;
+          case 4:
+            this.compromisos[0].responsable = item.nombre;
+            break;
+          case 5:
+            this.compromisos[1].responsable = item.nombre;
+            break;
         }
       }
-
       let self = this;
       let config = this.configHeader();
       axios
