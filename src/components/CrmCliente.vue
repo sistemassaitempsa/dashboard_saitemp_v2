@@ -125,7 +125,7 @@
               autocomplete="off"
               id="exampleInputEmail1"
               aria-describedby="emailHelp"
-              v-model="empresa_cliente_nombre"
+              v-model="nombre_contacto"
               required
             />
             <div class="invalid-feedback">
@@ -849,9 +849,30 @@
             </button>
           </div>
           <div class="col">
-            <button class="btn btn-success" type="submit">
-              Guardar formulario
-            </button>
+            <div class="btn-group-vertical" role="group">
+              <button
+                id="btnGroupDrop1"
+                type="button"
+                class="btn btn-success dropdown-toggle"
+                data-bs-toggle="dropdown"
+                aria-expanded="false"
+              >
+                Guardar Formulario
+              </button>
+              <ul class="dropdown-menu" aria-labelledby="btnGroupDrop1">
+                <li @click="save(1)">
+                  <a class="dropdown-item" href="#">Guardar y enviar PDF</a>
+                </li>
+                <li @click="save(2)">
+                  <a class="dropdown-item" href="#">Guardar y descargar PDF</a>
+                </li>
+                <li>
+                  <a class="dropdown-item" href="#" @click="save(3)"
+                    >Guardar sin enviar PDF</a
+                  >
+                </li>
+              </ul>
+            </div>
           </div>
         </div>
       </form>
@@ -971,7 +992,7 @@ export default {
   data() {
     return {
       geolocalizacion: null,
-      marcador: require("@/assets/marcador_alinstante.png"),
+      marcador: require("@/assets/marcador_saitemp.png"),
       label: "",
       showMap: true,
       latitud: "",
@@ -1311,6 +1332,11 @@ export default {
     },
     llenarFormulario(item) {
       /* formulario visita */
+      this.latitud = item.latitud;
+      this.longitud = item.longitud;
+      if (this.latitud != null) {
+        this.showMap = !this.showMap;
+      }
       this.consulta_empresa_cliente = item.nit;
       self.bloquea_campos = true;
       this.asistencias = item.asistencias;
@@ -1425,7 +1451,7 @@ export default {
     getEmpresasCliente(item = null) {
       if (item != null) {
         this.nit_documento = item.nit;
-        this.empresa_cliente_nombre = item.nombre;
+        this.nombre_contacto = item.nombre;
       }
       let self = this;
       let config = this.configHeader();
@@ -1437,7 +1463,7 @@ export default {
           );
         });
     },
-    save() {
+    save(tipoSave) {
       this.tomarHoraCierre();
       console.log(this.asistencias);
       let self = this;
@@ -1446,6 +1472,8 @@ export default {
 
       // Agrega los datos del formulario como lo tienes actualmente
       formulario.append("nombre_contacto", this.nombre_contacto);
+      formulario.append("latitud", this.latitud);
+      formulario.append("longitud", this.longitud);
       formulario.append("sede_id", this.sede_id);
       formulario.append("proceso_id", this.proceso_id);
       formulario.append("solicitante_id", this.solicitante_id);
@@ -1517,24 +1545,32 @@ export default {
 
           // Aquí se genera el PDF y se envía el correo una vez guardado el formulario
           const id = result.data.id;
-          axios
-            .get(
-              self.URL_API + "api/v1/seguimientocrmpdf/" + id + "/" + "1",
-              config
-            )
-            .then(function () {
-              console.log("PDF generado y correo enviado correctamente.");
-            })
-            .catch(function (error) {
-              console.error("Error al generar PDF o enviar correo:", error);
-            });
-
+          if (tipoSave == 1) {
+            axios
+              .get(
+                self.URL_API +
+                  "api/v1/seguimientocrmpdf/" +
+                  id +
+                  "/" +
+                  tipoSave,
+                config
+              )
+              .then(function () {
+                console.log("PDF generado y correo enviado correctamente.");
+              })
+              .catch(function (error) {
+                console.error("Error al generar PDF o enviar correo:", error);
+              });
+          }
           const rutaActual = self.$route.path;
           const nuevosParametros = { ...rutaActual.params, id: result.data.id };
           self.$router.replace({ ...rutaActual, params: nuevosParametros });
         })
         .then(() => {
           this.historicoCorreos();
+          if (tipoSave == 2) {
+            this.descargarInforme(2);
+          }
         })
         .catch(function (error) {
           console.error("Error al guardar el formulario:", error);
