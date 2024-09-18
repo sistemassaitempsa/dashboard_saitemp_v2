@@ -316,10 +316,10 @@
                 <div class="col-6 mb-3">
                   <SearchList
                     nombreCampo="Responsable: *"
-                    @getUsuarios="getUsuarios"
-                    eventoCampo="getUsuarios"
+                    @getUsuariosLideres="getUsuariosLideres"
+                    eventoCampo="getUsuariosLideres"
                     nombreItem="nombre"
-                    :registros="usuarios"
+                    :registros="usuarios_lider"
                     placeholder="Seleccione una opción"
                     :consulta="compromisos[0].responsable"
                     :index="4"
@@ -388,10 +388,10 @@
                 <div class="col-6 mb-3">
                   <SearchList
                     nombreCampo="Responsable: *"
-                    @getUsuarios="getUsuarios"
-                    eventoCampo="getUsuarios"
+                    @getUsuariosLideres="getUsuariosLideres"
+                    eventoCampo="getUsuariosLideres"
                     nombreItem="nombre"
-                    :registros="usuarios"
+                    :registros="usuarios_lider"
                     placeholder="Seleccione una opción"
                     :consulta="compromisos[1].responsable"
                     :index="5"
@@ -484,12 +484,19 @@
               aria-describedby="emailHelp"
               v-model="hora_inicio"
               required
+              :disabled="$route.params.id !== undefined"
             />
             <div class="invalid-feedback">
               {{ mensaje_error }}
             </div>
           </div>
-          <div class="col-3 mb-3" v-if="$route.params.id != undefined">
+          <div
+            class="col-3 mb-3"
+            v-if="
+              $route.params.id != undefined &&
+              consulta_interaccion == `Visita presencial`
+            "
+          >
             <label class="form-label">Hora fin de visita:* </label>
             <input
               type="time"
@@ -499,6 +506,7 @@
               aria-describedby="emailHelp"
               v-model="hora_cierre"
               required
+              disabled
             />
             <div class="invalid-feedback">
               {{ mensaje_error }}
@@ -991,6 +999,7 @@ export default {
   },
   data() {
     return {
+      usuarios_lider: [],
       geolocalizacion: null,
       marcador: require("@/assets/marcador_saitemp.png"),
       label: "",
@@ -1349,8 +1358,12 @@ export default {
       this.visitado = item.visitado;
       this.cargo_visitante = item.cargo_visitante;
       this.visitante = item.visitante;
-      this.hora_cierre = this.formatearHora(item.hora_cierre);
-      this.hora_inicio = this.formatearHora(item.hora_inicio);
+      this.hora_cierre = item.hora_cierre
+        ? this.formatearHora(item.hora_cierre)
+        : " ";
+      this.hora_inicio = item.hora_inicio
+        ? this.formatearHora(item.hora_inicio)
+        : " ";
       this.temasPrincipales;
       /* finaliza aqui */
       this.radicado = item.numero_radicado;
@@ -1464,7 +1477,10 @@ export default {
         });
     },
     save(tipoSave) {
-      this.tomarHoraCierre();
+      if (this.$route.params.id == undefined) {
+        this.tomarHoraCierre();
+      }
+
       console.log(this.asistencias);
       let self = this;
       let config = this.configHeader();
@@ -1487,19 +1503,38 @@ export default {
       formulario.append("creacion_pqrsf", this.crea_pqrsf);
       formulario.append("cierre_pqrsf", this.consulta_cierra_pqrsf);
       formulario.append("responsable", this.consulta_responsable);
-      formulario.append("compromisos", JSON.stringify(this.compromisos));
-      formulario.append(
-        "temasPrincipales",
-        JSON.stringify(this.temasPrincipales)
-      );
-      formulario.append("hora_inicio", this.hora_inicio);
-      formulario.append("hora_cierre", this.hora_cierre);
-      formulario.append("cargo_visitante", this.cargo_visitante);
-      formulario.append("cargo_atendio", this.cargo_visitado);
-      formulario.append("objetivo_visita", this.objetivo_visita);
-      formulario.append("alcance_visita", this.alcance_visita);
-      formulario.append("visitante", this.visitante);
-      formulario.append("visitado", this.visitado);
+      if (this.consulta_interaccion == `Visita presencial`) {
+        formulario.append("compromisos", JSON.stringify(this.compromisos));
+        formulario.append(
+          "temasPrincipales",
+          JSON.stringify(this.temasPrincipales)
+        );
+        formulario.append("hora_inicio", this.hora_inicio);
+        formulario.append("hora_cierre", this.hora_cierre);
+        formulario.append("cargo_visitante", this.cargo_visitante);
+        formulario.append("cargo_atendio", this.cargo_visitado);
+        formulario.append("objetivo_visita", this.objetivo_visita);
+        formulario.append("alcance_visita", this.alcance_visita);
+        formulario.append("visitante", this.visitante);
+        formulario.append("visitado", this.visitado);
+        this.asistencias.forEach(function (item, index) {
+          formulario.append(
+            "asistencia[" + index + "][0]",
+            JSON.stringify({
+              nombre: item.nombre,
+              cargo: item.cargo,
+            })
+          );
+          Array.isArray(item.firma)
+            ? item.firma.forEach(function (item2, index2) {
+                formulario.append(
+                  "asistencia[" + index + "][" + (index2 + 1) + "]",
+                  item2
+                );
+              })
+            : item.firma;
+        });
+      }
 
       // Evidencias
       this.evidencias.forEach(function (item, index) {
@@ -1513,23 +1548,6 @@ export default {
       });
 
       // Asistencias
-      this.asistencias.forEach(function (item, index) {
-        formulario.append(
-          "asistencia[" + index + "][0]",
-          JSON.stringify({
-            nombre: item.nombre,
-            cargo: item.cargo,
-          })
-        );
-        Array.isArray(item.firma)
-          ? item.firma.forEach(function (item2, index2) {
-              formulario.append(
-                "asistencia[" + index + "][" + (index2 + 1) + "]",
-                item2
-              );
-            })
-          : item.firma;
-      });
 
       var id = this.$route.params.id;
       var url =
@@ -1751,7 +1769,7 @@ export default {
       if (item != null) {
         this.estado_cierre_id = item.id;
         this.consulta_estado_cierre_id = item.nombre;
-        if (item.id == 1) {
+        if (item.id == 4) {
           this.cierra_pqrsf_id = "";
           this.consulta_cierra_pqrsf = "";
         }
@@ -1760,7 +1778,9 @@ export default {
       axios
         .get(self.URL_API + "api/v1/estadocirrecrm", config)
         .then(function (result) {
-          self.estados_cierre = result.data;
+          self.estados_cierre = self.estados_cierre = result.data.filter(
+            (estado) => estado.tipo_estado == 2
+          );
         });
     },
     valida_envioCorreo() {
@@ -1808,6 +1828,37 @@ export default {
       axios.get(self.URL_API + "api/v1/pqrsf", config).then(function (result) {
         self.lista_pqrsf = result.data;
       });
+    },
+    getUsuariosLideres(item = null, index = null) {
+      if (item != null) {
+        switch (index) {
+          case 1:
+            this.responsable_id = item.id;
+            this.consulta_responsable = item.nombre;
+            break;
+          case 2:
+            this.cierra_pqrsf_id = item.id;
+            this.consulta_cierra_pqrsf = item.nombre;
+            break;
+          case 3:
+            this.visitante_id = item.id;
+            this.visitante = item.nombre;
+            break;
+          case 4:
+            this.compromisos[0].responsable = item.nombre;
+            break;
+          case 5:
+            this.compromisos[1].responsable = item.nombre;
+            break;
+        }
+      }
+      let self = this;
+      let config = this.configHeader();
+      axios
+        .get(self.URL_API + "api/v1/userslist", config)
+        .then(function (result) {
+          self.usuarios_lider = result.data.filter((user) => user.lider == 1);
+        });
     },
     getUsuarios(item = null, index = null) {
       if (item != null) {
