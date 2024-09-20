@@ -773,6 +773,7 @@ export default {
     },
 
     signature(campo) {
+      console.log(campo);
       if (campo == "firma_supervisor") {
         this.show_pad1 = !this.show_pad1;
         this.show_pad2 = false;
