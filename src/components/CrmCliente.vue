@@ -61,6 +61,9 @@
               :registros="sedes"
               placeholder="Seleccione una opción"
               :consulta="consulta_sede"
+              :disabled="
+                $route.params.id != undefined && !permisos[32].autorizado
+              "
             />
           </div>
 
@@ -73,6 +76,9 @@
               :registros="procesos"
               placeholder="Seleccione una opción"
               :consulta="consulta_proceso"
+              :disabled="
+                $route.params.id != undefined && !permisos[32].autorizado
+              "
             />
           </div>
         </div>
@@ -86,6 +92,9 @@
               :registros="solicitantes"
               placeholder="Seleccione una opción"
               :consulta="consulta_solicitante"
+              :disabled="
+                $route.params.id != undefined && !permisos[32].autorizado
+              "
             />
           </div>
           <div class="col mb-3">
@@ -97,6 +106,9 @@
               :registros="respuestas_interaccion"
               placeholder="Seleccione una opción"
               :consulta="consulta_interaccion"
+              :disabled="
+                $route.params.id != undefined && !permisos[32].autorizado
+              "
             />
           </div>
         </div>
@@ -127,6 +139,9 @@
                 aria-describedby="emailHelp"
                 v-model="nit_documento"
                 required
+                :disabled="
+                  $route.params.id != undefined && !permisos[32].autorizado
+                "
               />
               <div class="invalid-feedback">
                 {{ mensaje_error }}
@@ -143,6 +158,9 @@
               aria-describedby="emailHelp"
               v-model="nombre_contacto"
               required
+              :disabled="
+                $route.params.id != undefined && !permisos[32].autorizado
+              "
             />
             <div class="invalid-feedback">
               {{ mensaje_error }}
@@ -168,14 +186,21 @@
           <div class="col mb-3">
             <label class="form-label">Correo de contacto: </label>
             <input
-              type="text"
+              type="email"
               class="form-control"
               autocomplete="off"
               id="exampleInputEmail1"
               aria-describedby="emailHelp"
               v-model="correo_contacto"
               required
+              @input="validateEmail"
             />
+            <small
+              v-if="!emailValido && correo_contacto.length > 0"
+              class="text-danger"
+            >
+              Por favor ingresa un correo válido.
+            </small>
             <div class="invalid-feedback">
               {{ mensaje_error }}
             </div>
@@ -194,6 +219,9 @@
                 placeholder="Seleccione una opción"
                 :consulta="visitante"
                 :index="3"
+                :disabled="
+                  $route.params.id != undefined && !permisos[32].autorizado
+                "
               />
               <div class="invalid-feedback">
                 {{ mensaje_error }}
@@ -209,6 +237,9 @@
                 :registros="cargos_planta"
                 placeholder="Seleccione una opción"
                 :consulta="cargo_visitante"
+                :disabled="
+                  $route.params.id != undefined && !permisos[32].autorizado
+                "
               />
               <div class="invalid-feedback">
                 {{ mensaje_error }}
@@ -226,6 +257,9 @@
                 aria-describedby="emailHelp"
                 v-model="visitado"
                 required
+                :disabled="
+                  $route.params.id != undefined && !permisos[32].autorizado
+                "
               />
               <div class="invalid-feedback">
                 {{ mensaje_error }}
@@ -242,6 +276,9 @@
                 aria-describedby="emailHelp"
                 v-model="cargo_visitado"
                 required
+                :disabled="
+                  $route.params.id != undefined && !permisos[32].autorizado
+                "
               />
               <div class="invalid-feedback">
                 {{ mensaje_error }}
@@ -259,6 +296,9 @@
                 aria-describedby="emailHelp"
                 v-model="objetivo_visita"
                 required
+                :disabled="
+                  $route.params.id != undefined && !permisos[32].autorizado
+                "
               />
               <div class="invalid-feedback">
                 {{ mensaje_error }}
@@ -275,6 +315,9 @@
                 aria-describedby="emailHelp"
                 v-model="alcance_visita"
                 required
+                :disabled="
+                  $route.params.id != undefined && !permisos[32].autorizado
+                "
               />
               <div class="invalid-feedback">
                 {{ mensaje_error }}
@@ -294,8 +337,13 @@
                 placeholder="Tema"
                 @input="checkCharLimit"
                 maxlength="3000"
+                :disabled="
+                  $route.params.id != undefined && !permisos[32].autorizado
+                "
               ></textarea>
-              <small class="char-count">{{ remainingChars }}/3000</small>
+              <div class="d-flex justify-content-end">
+                <small class="char-count">{{ remainingChars }}/3000</small>
+              </div>
               <div class="invalid-feedback">
                 {{ mensaje_error }}
               </div>
@@ -310,9 +358,18 @@
                   name=""
                   id="temaArea"
                   rows="2"
+                  maxlength="4000"
                   v-model="compromisos[0].descripcion"
                   placeholder="Compromiso 1"
+                  :disabled="
+                    $route.params.id != undefined && !permisos[32].autorizado
+                  "
                 ></textarea>
+                <div class="d-flex justify-content-end">
+                  <small class="char-count"
+                    >{{ remainingCharsCompromiso }}/4000</small
+                  >
+                </div>
                 <div class="invalid-feedback">
                   {{ mensaje_error }}
                 </div>
@@ -341,7 +398,11 @@
                     :consulta="compromisos[0].responsable"
                     :index="4"
                     :valida_campo="compromisos[0].descripcion != ''"
+                    :disabled="
+                      $route.params.id != undefined && !permisos[32].autorizado
+                    "
                   />
+
                   <div class="invalid-feedback">
                     {{ mensaje_error }}
                   </div>
@@ -371,6 +432,30 @@
                   </select>
                 </div>
               </div>
+              <div class="row">
+                <div class="col mb-3">
+                  <label class="form-label"
+                    >Observaciones para el responsable: *</label
+                  >
+                  <textarea
+                    class="form-control"
+                    name=""
+                    id="razon_social"
+                    rows="1"
+                    v-model="compromisos[0].observacion"
+                    placeholder="Observación"
+                    :disabled="
+                      $route.params.id != undefined && !permisos[32].autorizado
+                    "
+                    maxlength="3000"
+                  ></textarea>
+                  <div class="d-flex justify-content-end">
+                    <small class="char-count"
+                      >{{ remainingCharsObservasion }}/3000</small
+                    >
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
           <div class="row border mt-1 rounded">
@@ -384,7 +469,16 @@
                   rows="2"
                   v-model="compromisos[1].descripcion"
                   placeholder="Compromiso 2"
+                  :disabled="
+                    $route.params.id != undefined && !permisos[32].autorizado
+                  "
+                  maxlength="4000"
                 ></textarea>
+                <div class="d-flex justify-content-end">
+                  <small class="char-count"
+                    >{{ remainingCharsCompromiso2 }}/4000</small
+                  >
+                </div>
                 <div class="invalid-feedback">
                   {{ mensaje_error }}
                 </div>
@@ -413,6 +507,9 @@
                     :consulta="compromisos[1].responsable"
                     :index="5"
                     :valida_campo="compromisos[1].descripcion != ''"
+                    :disabled="
+                      $route.params.id != undefined && !permisos[32].autorizado
+                    "
                   />
                 </div>
                 <!--     <div class="col-3 mb-3">
@@ -438,6 +535,29 @@
                     <option :value="1">Eficaz</option>
                     <option :value="2">Ineficaz</option>
                   </select>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col mb-3">
+                <label class="form-label"
+                  >Observaciones para el responsable: *</label
+                >
+                <textarea
+                  class="form-control"
+                  name=""
+                  id="razon_social"
+                  rows="1"
+                  v-model="compromisos[1].observacion"
+                  placeholder="Observación"
+                  :disabled="
+                    $route.params.id != undefined && !permisos[32].autorizado
+                  "
+                ></textarea>
+                <div class="d-flex justify-content-end">
+                  <small class="char-count"
+                    >{{ remainingCharsObservasion2 }}/3000</small
+                  >
                 </div>
               </div>
             </div>
@@ -470,6 +590,9 @@
               :registros="lista_pqrsf"
               placeholder="Seleccione una opción"
               :consulta="consulta_pqrsf"
+              :disabled="
+                $route.params.id != undefined && !permisos[32].autorizado
+              "
             />
           </div>
         </div>
@@ -484,6 +607,9 @@
               placeholder="Seleccione una opción"
               :consulta="consulta_responsable"
               :index="1"
+              :disabled="
+                $route.params.id != undefined && !permisos[32].autorizado
+              "
             />
           </div>
           <div
@@ -562,6 +688,9 @@
               aria-describedby="emailHelp"
               v-model="crea_pqrsf"
               required
+              :disabled="
+                $route.params.id != undefined && !permisos[32].autorizado
+              "
             />
             <div class="invalid-feedback">
               {{ mensaje_error }}
@@ -699,7 +828,13 @@
               rows="10"
               v-model="observacion"
               placeholder="Observación"
+              maxlength="3000"
             ></textarea>
+            <div class="d-flex justify-content-end">
+              <small class="char-count"
+                >{{ remainingCharsObservasion3 }}/3000</small
+              >
+            </div>
             <div class="invalid-feedback">
               {{ mensaje_error }}
             </div>
@@ -1013,6 +1148,9 @@ export default {
   },
   data() {
     return {
+      emailValido: true,
+      correo_responsable1: "",
+      correo_responsable2: "",
       charLimit_tema: 3000,
       cargos_planta: [],
       usuarios_lider: [],
@@ -1036,6 +1174,7 @@ export default {
           fecha_cierre: "",
           fecha_inicio: "",
           responsable: "",
+          observacion: "",
         },
         {
           titulo: "compromiso2",
@@ -1044,6 +1183,7 @@ export default {
           fecha_cierre: "",
           fecha_inicio: "",
           responsable: "",
+          observacion: "",
         },
       ],
       empresa_cliente_nombre: "",
@@ -1107,7 +1247,22 @@ export default {
   },
   computed: {
     remainingChars() {
-      return this.charLimit_tema - this.temasPrincipales[0].descripcion.length;
+      return 0 + this.temasPrincipales[0].descripcion.length;
+    },
+    remainingCharsCompromiso() {
+      return 0 + this.compromisos[0].descripcion.length;
+    },
+    remainingCharsObservasion() {
+      return 0 + this.compromisos[0].observacion.length;
+    },
+    remainingCharsCompromiso2() {
+      return 0 + this.compromisos[1].descripcion.length;
+    },
+    remainingCharsObservasion2() {
+      return 0 + this.compromisos[1].observacion.length;
+    },
+    remainingCharsObservasion3() {
+      return 0 + this.observacion.length;
     },
   },
   watch: {
@@ -1135,6 +1290,10 @@ export default {
   methods: {
     coordenadas(item) {
       console.log(item);
+    },
+    validateEmail() {
+      const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      this.emailValido = regex.test(this.correo_contacto);
     },
     async geolocal() {
       try {
@@ -1290,7 +1449,9 @@ export default {
         });
     },
     limpiarFormulario() {
-      this.bloquea_campos = false;
+      (this.correo_responsable1 = ""),
+        (this.correo_responsable2 = ""),
+        (this.bloquea_campos = false);
       this.radicado = "";
       this.nombre_contacto = "";
       this.sede_id = "";
@@ -1329,6 +1490,7 @@ export default {
           estado_cierre_id: "",
           fecha_cierre: "",
           fecha_inicio: "",
+          observacion: "",
         },
         {
           titulo: "compromiso2",
@@ -1336,6 +1498,7 @@ export default {
           estado_cierre_id: "",
           fecha_cierre: "",
           fecha_inicio: "",
+          observacion: "",
         },
       ];
       this.temasPrincipales = [{ titulo: "tema1", descripcion: "" }];
@@ -1500,12 +1663,27 @@ export default {
       if (this.$route.params.id == undefined) {
         this.tomarHoraCierre();
       }
+      let correosResponsables = {
+        correos: [
+          {
+            correo: this.correo_responsable1,
+            observacion: this.compromisos[0].observacion,
+          },
+          {
+            correo: this.correo_responsable2,
+            observacion: this.compromisos[1].observacion,
+          },
+        ],
+      };
 
       console.log(this.asistencias);
       let self = this;
       let config = this.configHeader();
       const formulario = new FormData();
-
+      if (!this.emailValido || this.correo_contacto == "") {
+        self.showAlert("Ingrese un correo de contacto valido", "error");
+        return;
+      }
       // Agrega los datos del formulario como lo tienes actualmente
       formulario.append("nombre_contacto", this.nombre_contacto);
       formulario.append("latitud", this.latitud);
@@ -1578,26 +1756,23 @@ export default {
       axios
         .post(url, formulario, config)
         .then(function (result) {
-          self.showAlert(result.data.message, result.data.status);
           self.getItem(result.data.id);
 
           // Aquí se genera el PDF y se envía el correo una vez guardado el formulario
           const id = result.data.id;
+          self.showAlert(result.data.message, result.data.status);
           if (tipoSave == 1) {
-            axios
-              .get(
-                self.URL_API +
-                  "api/v1/seguimientocrmpdf/" +
-                  id +
-                  "/" +
-                  tipoSave,
-                config
-              )
+            self
+              .enviarCorreos(id, tipoSave, correosResponsables)
               .then(function () {
-                console.log("PDF generado y correo enviado correctamente.");
+                self.showAlert("correo enviado correctamente", "success");
               })
               .catch(function (error) {
-                console.error("Error al generar PDF o enviar correo:", error);
+                console.log(error);
+                self.showAlert(
+                  "Error al enviar correo verifique el correo de contacto",
+                  "error"
+                );
               });
           }
           const rutaActual = self.$route.path;
@@ -1652,6 +1827,18 @@ export default {
           if (result.isConfirmed) {
             self.eliminarDocumento(item);
           }
+        });
+    },
+    enviarCorreos(id, tipoSave, correosResponsables) {
+      let config = this.configHeader();
+      axios
+        .post(
+          this.URL_API + "api/v1/seguimientocrmpdf/" + id + "/" + tipoSave,
+          correosResponsables,
+          config
+        )
+        .then((response) => {
+          this.showAlert(response.data.message, response.data.status);
         });
     },
     getSedes(item = null) {
@@ -1885,9 +2072,11 @@ export default {
             break;
           case 4:
             this.compromisos[0].responsable = item.nombre;
+            this.correo_responsable1 = item.email;
             break;
           case 5:
             this.compromisos[1].responsable = item.nombre;
+            this.correo_responsable2 = item.email;
             break;
         }
       }
@@ -2028,15 +2217,8 @@ label {
   gap: 6em;
 }
 .char-count {
-  position: absolute;
-  bottom: 5px;
-  right: 2em;
   font-size: 12px;
   color: #6c757d;
+  margin-top: 10px;
 }
 </style>
-<!-- 222 -->
-
-<!-- :disabled="
-                $route.params.id != undefined && !permisos[32].autorizado
-              " -->
