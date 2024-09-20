@@ -62,7 +62,7 @@
               placeholder="Seleccione una opción"
               :consulta="consulta_sede"
               :disabled="
-                $route.params.id != undefined && !permisos[32].autorizado
+                $route.params.id != undefined && !permisos[1].autorizado
               "
             />
           </div>
@@ -107,7 +107,7 @@
               placeholder="Seleccione una opción"
               :consulta="consulta_interaccion"
               :disabled="
-                $route.params.id != undefined && !permisos[32].autorizado
+                $route.params.id != undefined && !permisos[1].autorizado
               "
             />
           </div>
@@ -1524,6 +1524,7 @@ export default {
     },
     llenarFormulario(item) {
       /* formulario visita */
+
       this.latitud = item.latitud;
       this.longitud = item.longitud;
       if (this.latitud != null) {
@@ -1532,9 +1533,32 @@ export default {
       this.consulta_empresa_cliente = item.nit;
       self.bloquea_campos = true;
       this.asistencias = item.asistencias;
-      this.compromisos = item.compromisos;
+      this.compromisos =
+        item.compromisos.length > 0
+          ? item.compromisos
+          : [
+              {
+                titulo: "compromiso1",
+                id: "",
+                descripcion: "",
+                estado_cierre_id: "",
+                fecha_cierre: "",
+                fecha_inicio: "",
+                responsable: "",
+                observacion: "",
+              },
+              {
+                titulo: "compromiso2",
+                id: "",
+                descripcion: "",
+                estado_cierre_id: "",
+                fecha_cierre: "",
+                fecha_inicio: "",
+                responsable: "",
+                observacion: "",
+              },
+            ];
       this.formatearFechaCompromisos();
-      this.temasPrincipales = item.temasPrincipales;
       this.alcance_visita = item.alcance;
       this.objetivo_visita = item.objetivo;
       this.cargo_visitado = item.cargo_visitado;
@@ -1547,7 +1571,10 @@ export default {
       this.hora_inicio = item.hora_inicio
         ? this.formatearHora(item.hora_inicio)
         : " ";
-      this.temasPrincipales;
+      this.temasPrincipales =
+        item.temasPrincipales.length > 0
+          ? item.compromisos
+          : [{ titulo: "tema1", descripcion: "", id: "" }];
       /* finaliza aqui */
       this.radicado = item.numero_radicado;
       this.nombre_contacto = item.nombre_contacto;
