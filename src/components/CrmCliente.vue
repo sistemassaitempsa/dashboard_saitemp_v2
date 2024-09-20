@@ -103,6 +103,7 @@
         <div class="row">
           <div class="col">
             <SearchList
+              v-if="solicitante_id == 1"
               nombreCampo="Nit/identificacion: *"
               @getEmpresasCliente="getEmpresasCliente"
               eventoCampo="getEmpresasCliente"
@@ -116,6 +117,21 @@
                 !permisos[25].autorizado
               "
             />
+            <div v-else>
+              <label class="form-label">Nit/identificacion: * </label>
+              <input
+                type="text"
+                class="form-control"
+                autocomplete="off"
+                id="exampleInputEmail1"
+                aria-describedby="emailHelp"
+                v-model="nit_documento"
+                required
+              />
+              <div class="invalid-feedback">
+                {{ mensaje_error }}
+              </div>
+            </div>
           </div>
           <div class="col mb-3">
             <label class="form-label">Nombre / razón social: </label>
@@ -185,15 +201,14 @@
             </div>
 
             <div class="col mb-3">
-              <label class="form-label">Cargo del visitante:* </label>
-              <input
-                type="text"
-                class="form-control"
-                autocomplete="off"
-                id="exampleInputEmail1"
-                aria-describedby="emailHelp"
-                v-model="cargo_visitante"
-                required
+              <SearchList
+                nombreCampo="Cargo del visitante: *"
+                @getCargosPlanta="getCargosPlanta"
+                eventoCampo="getCargosPlanta"
+                nombreItem="cargo"
+                :registros="cargos_planta"
+                placeholder="Seleccione una opción"
+                :consulta="cargo_visitante"
               />
               <div class="invalid-feedback">
                 {{ mensaje_error }}
@@ -267,7 +282,7 @@
             </div>
           </div>
           <div class="row">
-            <div class="col mb-3">
+            <div class="col mb-3 position-relative">
               <label class="form-label">Tema de la visita:*</label>
               <textarea
                 class="form-control"
@@ -277,7 +292,10 @@
                 rows="3"
                 v-model="temasPrincipales[0].descripcion"
                 placeholder="Tema"
+                @input="checkCharLimit"
+                maxlength="3000"
               ></textarea>
+              <small class="char-count">{{ remainingChars }}/3000</small>
               <div class="invalid-feedback">
                 {{ mensaje_error }}
               </div>
@@ -289,7 +307,6 @@
                 <label class="form-label">Compromiso 1:*</label>
                 <textarea
                   class="form-control"
-                  required
                   name=""
                   id="temaArea"
                   rows="2"
@@ -323,6 +340,7 @@
                     placeholder="Seleccione una opción"
                     :consulta="compromisos[0].responsable"
                     :index="4"
+                    :valida_campo="compromisos[0].descripcion != ''"
                   />
                   <div class="invalid-feedback">
                     {{ mensaje_error }}
@@ -361,7 +379,6 @@
                 <label class="form-label">Compromiso 2:*</label>
                 <textarea
                   class="form-control"
-                  required
                   name=""
                   id="temaArea"
                   rows="2"
@@ -395,10 +412,8 @@
                     placeholder="Seleccione una opción"
                     :consulta="compromisos[1].responsable"
                     :index="5"
+                    :valida_campo="compromisos[1].descripcion != ''"
                   />
-                  <div class="invalid-feedback">
-                    {{ mensaje_error }}
-                  </div>
                 </div>
                 <!--     <div class="col-3 mb-3">
                   <label class="form-label">Fecha de cierre: </label>
@@ -515,8 +530,8 @@
           <div
             class="col-6 mb-3"
             v-if="
-              (estado_cierre_id == 2 && $route.params.id != undefined) ||
-              (estado_cierre_id == 2 && $route.params.id == undefined)
+              (estado_cierre_id == 3 && $route.params.id != undefined) ||
+              (estado_cierre_id == 3 && $route.params.id == undefined)
             "
           >
             <SearchList
@@ -679,7 +694,6 @@
             <label class="form-label">Observación: *</label>
             <textarea
               class="form-control"
-              required
               name=""
               id="razon_social"
               rows="10"
@@ -999,6 +1013,8 @@ export default {
   },
   data() {
     return {
+      charLimit_tema: 3000,
+      cargos_planta: [],
       usuarios_lider: [],
       geolocalizacion: null,
       marcador: require("@/assets/marcador_saitemp.png"),
@@ -1089,7 +1105,11 @@ export default {
       consulta_evidencias: [],
     };
   },
-  computed: {},
+  computed: {
+    remainingChars() {
+      return this.charLimit_tema - this.temasPrincipales[0].descripcion.length;
+    },
+  },
   watch: {
     $route() {
       this.limpiarFormulario();
@@ -1829,6 +1849,25 @@ export default {
         self.lista_pqrsf = result.data;
       });
     },
+    checkCharLimit() {
+      if (this.temasPrincipales[0].descripcion.length > this.charLimit_tema) {
+        this.temasPrincipales[0].descripcion =
+          this.temasPrincipales[0].descripcion.slice(0, this.charLimit_tema);
+      }
+    },
+    getCargosPlanta(item = null) {
+      let self = this;
+      if (item != null) {
+        this.cargoPlanta_id = item.id;
+        this.cargo_visitante = item.cargo;
+      }
+      let config = this.configHeader();
+      axios
+        .get(self.URL_API + "api/v1/cargosPlanta", config)
+        .then(function (result) {
+          self.cargos_planta = result.data;
+        });
+    },
     getUsuariosLideres(item = null, index = null) {
       if (item != null) {
         switch (index) {
@@ -1987,6 +2026,13 @@ label {
 }
 .gap-8 {
   gap: 6em;
+}
+.char-count {
+  position: absolute;
+  bottom: 5px;
+  right: 2em;
+  font-size: 12px;
+  color: #6c757d;
 }
 </style>
 <!-- 222 -->
