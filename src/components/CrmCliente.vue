@@ -424,6 +424,9 @@
                   <label for="validationCustom" class="form-label"
                     >Estado:*</label
                   >
+                  <label for="validationCustom" class="form-label"
+                    >Estado:*</label
+                  >
                   <select
                     class="form-select"
                     :required="estado_cierre_id == 3"
