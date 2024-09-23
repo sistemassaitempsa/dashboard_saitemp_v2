@@ -126,7 +126,7 @@
               :disabled="
                 bloquea_campos &&
                 nit_documento != null &&
-                !permisos[25].autorizado
+                !permisos[32].autorizado
               "
             />
             <div v-else>
@@ -177,6 +177,7 @@
               id="exampleInputEmail1"
               aria-describedby="emailHelp"
               v-model="telefono_contacto"
+              :disabled="!permisos[32].autorizado"
               required
             />
             <div class="invalid-feedback">
@@ -192,6 +193,7 @@
               id="exampleInputEmail1"
               aria-describedby="emailHelp"
               v-model="correo_contacto"
+              :disabled="!permisos[32].autorizado"
               required
               @input="validateEmail"
             />
@@ -419,14 +421,20 @@
                   />
                 </div> -->
                 <div class="col-3 mb-3">
-                  <label class="form-label">Estado:*</label>
+                  <label for="validationCustom" class="form-label"
+                    >Estado:*</label
+                  >
                   <select
                     class="form-select"
+                    :required="estado_cierre_id == 3"
                     v-model="compromisos[0].estado_cierre_id"
                   >
                     <option :value="1">Eficaz</option>
                     <option :value="2">Ineficaz</option>
                   </select>
+                  <div class="invalid-feedback">
+                    Please select a valid state.
+                  </div>
                 </div>
               </div>
               <div class="row">
@@ -521,14 +529,20 @@
                   />
                 </div> -->
                 <div class="col-3 mb-3">
-                  <label class="form-label">Estado:*</label>
+                  <label for="validationCustom" class="form-label"
+                    >Estado:*</label
+                  >
                   <select
                     class="form-select"
+                    :required="estado_cierre_id == 3"
                     v-model="compromisos[1].estado_cierre_id"
                   >
                     <option :value="1">Eficaz</option>
                     <option :value="2">Ineficaz</option>
                   </select>
+                  <div class="invalid-feedback">
+                    Please select a valid state.
+                  </div>
                 </div>
               </div>
             </div>
