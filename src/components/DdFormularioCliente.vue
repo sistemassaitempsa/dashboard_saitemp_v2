@@ -662,8 +662,8 @@
           </div>
         </div>
       </div>
-      <h6 class="tituloseccion">Contratación</h6>
-      <div id="seccion">
+      <h6 class="tituloseccion" v-if="tipo_proveedor == 1">Contratación</h6>
+      <div id="seccion"  v-if="tipo_proveedor == 1">
         <div class="row">
           <div class="col mb-3">
             <label class="form-label" style="color: black"
@@ -1162,7 +1162,7 @@
           </div>
         </div>
       </div>
-      <h6 class="tituloseccion">Facturación</h6>
+      <h6 class="tituloseccion" v-if="tipo_cliente == 1">Facturación</h6>
       <div id="seccion" v-if="tipo_cliente == 1">
         <div class="row">
           <div class="col-4 mb-3">

@@ -126,7 +126,7 @@
               :disabled="
                 bloquea_campos &&
                 nit_documento != null &&
-                !permisos[25].autorizado
+                !permisos[32].autorizado
               "
             />
             <div v-else>
@@ -177,6 +177,7 @@
               id="exampleInputEmail1"
               aria-describedby="emailHelp"
               v-model="telefono_contacto"
+              :disabled="!permisos[32].autorizado"
               required
             />
             <div class="invalid-feedback">
@@ -192,6 +193,7 @@
               id="exampleInputEmail1"
               aria-describedby="emailHelp"
               v-model="correo_contacto"
+              :disabled="!permisos[32].autorizado"
               required
               @input="validateEmail"
             />
@@ -207,7 +209,7 @@
           </div>
         </div>
         <!-- columnas para visita -->
-        <div v-if="consulta_interaccion == `Visita presencial`">
+        <div v-if="interaccion_id == 5">
           <div class="row">
             <div class="col-6 mb-3">
               <SearchList
@@ -419,14 +421,20 @@
                   />
                 </div> -->
                 <div class="col-3 mb-3">
-                  <label class="form-label">Estado:*</label>
+                  <label for="validationCustom" class="form-label"
+                    >Estado:*</label
+                  >
                   <select
                     class="form-select"
+                    :required="estado_cierre_id == 3"
                     v-model="compromisos[0].estado_cierre_id"
                   >
                     <option :value="1">Eficaz</option>
                     <option :value="2">Ineficaz</option>
                   </select>
+                  <div class="invalid-feedback">
+                    Please select a valid state.
+                  </div>
                 </div>
               </div>
               <div class="row">
@@ -521,14 +529,20 @@
                   />
                 </div> -->
                 <div class="col-3 mb-3">
-                  <label class="form-label">Estado:*</label>
+                  <label for="validationCustom" class="form-label"
+                    >Estado:*</label
+                  >
                   <select
                     class="form-select"
+                    :required="estado_cierre_id == 3"
                     v-model="compromisos[1].estado_cierre_id"
                   >
                     <option :value="1">Eficaz</option>
                     <option :value="2">Ineficaz</option>
                   </select>
+                  <div class="invalid-feedback">
+                    Please select a valid state.
+                  </div>
                 </div>
               </div>
             </div>
@@ -607,7 +621,7 @@
             />
           </div>
           <div
-            v-if="consulta_interaccion == `Visita presencial`"
+            v-if="interaccion_id == 5"
             :class="$route.params.id !== undefined ? 'col-3 mb-3' : 'col mb-3'"
           >
             <label class="form-label">Hora inicio de visita:* </label>
@@ -628,7 +642,7 @@
             class="col-3 mb-3"
             v-if="
               $route.params.id != undefined &&
-              consulta_interaccion == `Visita presencial`
+              interaccion_id == 5
             "
           >
             <label class="form-label">Hora fin de visita:* </label>
@@ -691,7 +705,7 @@
           </div>
         </div>
         <!-- campo visita firmas -->
-        <div v-if="consulta_interaccion == `Visita presencial`">
+        <div v-if="interaccion_id == 5">
           <div v-for="(asistencia, index) in asistencias" :key="index">
             <div class="row">
               <h6 class="padding-1">{{ "Asistencia" + " " + (index + 1) }}</h6>
@@ -1709,7 +1723,7 @@ export default {
             this.cargo_visitante == "" ||
             this.visitante == "" ||
             this.temasPrincipales[0].descripcion == "",
-          this.asistencias[0].nombre == "" ||
+            this.asistencias[0].nombre == "" ||
             this.asistencias[0].cargo == "" ||
             this.asistencias[0].firma_hash == "")
         ) {
@@ -1766,7 +1780,7 @@ export default {
       formulario.append("creacion_pqrsf", this.crea_pqrsf);
       formulario.append("cierre_pqrsf", this.consulta_cierra_pqrsf);
       formulario.append("responsable", this.consulta_responsable);
-      if (this.consulta_interaccion == `Visita presencial`) {
+      if (this.interaccion_id == 5) {
         formulario.append("compromisos", JSON.stringify(this.compromisos));
         formulario.append(
           "temasPrincipales",
