@@ -62,7 +62,7 @@
               placeholder="Seleccione una opción"
               :consulta="consulta_sede"
               :disabled="
-                $route.params.id != undefined && !permisos[1].autorizado
+                $route.params.id != undefined && !permisos[32].autorizado
               "
             />
           </div>
@@ -77,7 +77,7 @@
               placeholder="Seleccione una opción"
               :consulta="consulta_proceso"
               :disabled="
-                $route.params.id != undefined && !permisos[1].autorizado
+                $route.params.id != undefined && !permisos[32].autorizado
               "
             />
           </div>
@@ -93,7 +93,7 @@
               placeholder="Seleccione una opción"
               :consulta="consulta_solicitante"
               :disabled="
-                $route.params.id != undefined && !permisos[1].autorizado
+                $route.params.id != undefined && !permisos[32].autorizado
               "
             />
           </div>
@@ -107,7 +107,7 @@
               placeholder="Seleccione una opción"
               :consulta="consulta_interaccion"
               :disabled="
-                $route.params.id != undefined && !permisos[1].autorizado
+                $route.params.id != undefined && !permisos[32].autorizado
               "
             />
           </div>
@@ -126,7 +126,7 @@
               :disabled="
                 bloquea_campos &&
                 nit_documento != null &&
-                !permisos[1].autorizado
+                !permisos[32].autorizado
               "
             />
             <div v-else>
@@ -140,7 +140,7 @@
                 v-model="nit_documento"
                 required
                 :disabled="
-                  $route.params.id != undefined && !permisos[1].autorizado
+                  $route.params.id != undefined && !permisos[32].autorizado
                 "
               />
               <div class="invalid-feedback">
@@ -159,7 +159,7 @@
               v-model="nombre_contacto"
               required
               :disabled="
-                $route.params.id != undefined && !permisos[1].autorizado
+                $route.params.id != undefined && !permisos[32].autorizado
               "
             />
             <div class="invalid-feedback">
@@ -177,7 +177,7 @@
               id="exampleInputEmail1"
               aria-describedby="emailHelp"
               v-model="telefono_contacto"
-              :disabled="!permisos[1].autorizado"
+              :disabled="!permisos[32].autorizado"
               required
             />
             <div class="invalid-feedback">
@@ -193,7 +193,7 @@
               id="exampleInputEmail1"
               aria-describedby="emailHelp"
               v-model="correo_contacto"
-              :disabled="!permisos[1].autorizado"
+              :disabled="!permisos[32].autorizado"
               required
               @input="validateEmail"
             />
@@ -222,7 +222,7 @@
                 :consulta="visitante"
                 :index="3"
                 :disabled="
-                  $route.params.id != undefined && !permisos[1].autorizado
+                  $route.params.id != undefined && !permisos[32].autorizado
                 "
               />
               <div class="invalid-feedback">
@@ -240,7 +240,7 @@
                 placeholder="Seleccione una opción"
                 :consulta="cargo_visitante"
                 :disabled="
-                  $route.params.id != undefined && !permisos[1].autorizado
+                  $route.params.id != undefined && !permisos[32].autorizado
                 "
               />
               <div class="invalid-feedback">
@@ -260,7 +260,7 @@
                 v-model="visitado"
                 required
                 :disabled="
-                  $route.params.id != undefined && !permisos[1].autorizado
+                  $route.params.id != undefined && !permisos[32].autorizado
                 "
               />
               <div class="invalid-feedback">
@@ -279,7 +279,7 @@
                 v-model="cargo_visitado"
                 required
                 :disabled="
-                  $route.params.id != undefined && !permisos[1].autorizado
+                  $route.params.id != undefined && !permisos[32].autorizado
                 "
               />
               <div class="invalid-feedback">
@@ -299,7 +299,7 @@
                 v-model="objetivo_visita"
                 required
                 :disabled="
-                  $route.params.id != undefined && !permisos[1].autorizado
+                  $route.params.id != undefined && !permisos[32].autorizado
                 "
               />
               <div class="invalid-feedback">
@@ -318,7 +318,7 @@
                 v-model="alcance_visita"
                 required
                 :disabled="
-                  $route.params.id != undefined && !permisos[1].autorizado
+                  $route.params.id != undefined && !permisos[32].autorizado
                 "
               />
               <div class="invalid-feedback">
@@ -340,7 +340,7 @@
                 @input="checkCharLimit"
                 maxlength="3000"
                 :disabled="
-                  $route.params.id != undefined && !permisos[1].autorizado
+                  $route.params.id != undefined && !permisos[32].autorizado
                 "
               ></textarea>
               <div class="d-flex justify-content-end">
@@ -364,7 +364,7 @@
                   v-model="compromisos[0].descripcion"
                   placeholder="Compromiso 1"
                   :disabled="
-                    $route.params.id != undefined && !permisos[1].autorizado
+                    $route.params.id != undefined && !permisos[32].autorizado
                   "
                 ></textarea>
                 <div class="d-flex justify-content-end">
@@ -401,7 +401,7 @@
                     :index="4"
                     :valida_campo="compromisos[0].descripcion != ''"
                     :disabled="
-                      $route.params.id != undefined && !permisos[1].autorizado
+                      $route.params.id != undefined && !permisos[32].autorizado
                     "
                   />
 
@@ -450,7 +450,7 @@
                     v-model="compromisos[0].observacion"
                     placeholder="Observación"
                     :disabled="
-                      $route.params.id != undefined && !permisos[1].autorizado
+                      $route.params.id != undefined && !permisos[32].autorizado
                     "
                     maxlength="3000"
                   ></textarea>
@@ -475,7 +475,7 @@
                   v-model="compromisos[1].descripcion"
                   placeholder="Compromiso 2"
                   :disabled="
-                    $route.params.id != undefined && !permisos[1].autorizado
+                    $route.params.id != undefined && !permisos[32].autorizado
                   "
                   maxlength="4000"
                 ></textarea>
@@ -513,7 +513,7 @@
                     :index="5"
                     :valida_campo="compromisos[1].descripcion != ''"
                     :disabled="
-                      $route.params.id != undefined && !permisos[1].autorizado
+                      $route.params.id != undefined && !permisos[32].autorizado
                     "
                   />
                 </div>
@@ -559,7 +559,7 @@
                   v-model="compromisos[1].observacion"
                   placeholder="Observación"
                   :disabled="
-                    $route.params.id != undefined && !permisos[1].autorizado
+                    $route.params.id != undefined && !permisos[32].autorizado
                   "
                 ></textarea>
                 <div class="d-flex justify-content-end">
@@ -599,7 +599,7 @@
               placeholder="Seleccione una opción"
               :consulta="consulta_pqrsf"
               :disabled="
-                $route.params.id != undefined && !permisos[1].autorizado
+                $route.params.id != undefined && !permisos[32].autorizado
               "
             />
           </div>
@@ -616,7 +616,7 @@
               :consulta="consulta_responsable"
               :index="1"
               :disabled="
-                $route.params.id != undefined && !permisos[1].autorizado
+                $route.params.id != undefined && !permisos[32].autorizado
               "
             />
           </div>
@@ -693,7 +693,7 @@
               v-model="crea_pqrsf"
               required
               :disabled="
-                $route.params.id != undefined && !permisos[1].autorizado
+                $route.params.id != undefined && !permisos[32].autorizado
               "
             />
             <div class="invalid-feedback">
@@ -719,7 +719,7 @@
                   v-model="asistencia.nombre"
                   required
                   :disabled="
-                    $route.params.id != undefined && !permisos[1].autorizado
+                    $route.params.id != undefined && !permisos[32].autorizado
                   "
                 />
                 <div class="invalid-feedback">
@@ -737,7 +737,7 @@
                   v-model="asistencia.cargo"
                   required
                   :disabled="
-                    $route.params.id != undefined && !permisos[1].autorizado
+                    $route.params.id != undefined && !permisos[32].autorizado
                   "
                 />
                 <div class="invalid-feedback">
