@@ -62,7 +62,7 @@
               placeholder="Seleccione una opción"
               :consulta="consulta_sede"
               :disabled="
-                $route.params.id != undefined && !permisos[1].autorizado
+                $route.params.id != undefined && !permisos[32].autorizado
               "
             />
           </div>
@@ -107,7 +107,7 @@
               placeholder="Seleccione una opción"
               :consulta="consulta_interaccion"
               :disabled="
-                $route.params.id != undefined && !permisos[1].autorizado
+                $route.params.id != undefined && !permisos[32].autorizado
               "
             />
           </div>
@@ -423,9 +423,6 @@
                   <select
                     class="form-select"
                     v-model="compromisos[0].estado_cierre_id"
-                    :disabled="
-                      $route.params.id != undefined && fecha_cierre != undefined
-                    "
                   >
                     <option :value="1">Eficaz</option>
                     <option :value="2">Ineficaz</option>
@@ -528,9 +525,6 @@
                   <select
                     class="form-select"
                     v-model="compromisos[1].estado_cierre_id"
-                    :disabled="
-                      $route.params.id != undefined && fecha_cierre != undefined
-                    "
                   >
                     <option :value="1">Eficaz</option>
                     <option :value="2">Ineficaz</option>
@@ -625,7 +619,6 @@
               aria-describedby="emailHelp"
               v-model="hora_inicio"
               required
-              :disabled="$route.params.id !== undefined"
             />
             <div class="invalid-feedback">
               {{ mensaje_error }}
@@ -746,7 +739,10 @@
                     >Firma *:</label
                   >
                   <div
-                    v-if="$route.params.id != undefined"
+                    v-if="
+                      $route.params.id != undefined &&
+                      asistencia.firma.length != 0
+                    "
                     class="imagen_firma"
                   >
                     <img :src="URL_API + asistencia.firma" alt="" />
@@ -1222,7 +1218,7 @@ export default {
       estado_cierre_id: "",
       consulta_estado_cierre: "",
       estados_cierre: [],
-      observacion: "",
+      observacion: " ",
       proceso_id: "",
       interaccion_id: "",
       nombre_contacto: "",
@@ -1262,7 +1258,10 @@ export default {
       return 0 + this.compromisos[1].observacion.length;
     },
     remainingCharsObservasion3() {
-      return 0 + this.observacion.length;
+      if (this.observacion) {
+        return 0 + this.observacion.length;
+      }
+      return 0;
     },
   },
   watch: {
@@ -1532,7 +1531,18 @@ export default {
       }
       this.consulta_empresa_cliente = item.nit;
       self.bloquea_campos = true;
-      this.asistencias = item.asistencias;
+      this.asistencias =
+        item.asistencias.length > 0
+          ? item.asistencias
+          : [
+              {
+                nombre: "",
+                cargo: "",
+                firma: [],
+                show_pad: false,
+                firma_hash: "",
+              },
+            ];
       this.compromisos =
         item.compromisos.length > 0
           ? item.compromisos
@@ -1573,7 +1583,7 @@ export default {
         : " ";
       this.temasPrincipales =
         item.temasPrincipales.length > 0
-          ? item.compromisos
+          ? item.temasPrincipales
           : [{ titulo: "tema1", descripcion: "", id: "" }];
       /* finaliza aqui */
       this.radicado = item.numero_radicado;
@@ -1687,9 +1697,37 @@ export default {
         });
     },
     save(tipoSave) {
-      if (this.$route.params.id == undefined) {
+      if (this.$route.params.id == undefined || this.hora_cierre == " ") {
         this.tomarHoraCierre();
       }
+      if (this.consulta_interaccion == "Visita presencial") {
+        if (
+          (this.alcance_visita == "" ||
+            this.objetivo_visita == "" ||
+            this.cargo_visitado == "" ||
+            this.visitado == "" ||
+            this.cargo_visitante == "" ||
+            this.visitante == "" ||
+            this.temasPrincipales[0].descripcion == "",
+          this.asistencias[0].nombre == "" ||
+            this.asistencias[0].cargo == "" ||
+            this.asistencias[0].firma_hash == "")
+        ) {
+          this.showAlert("Debe llenar los campos requeridos ", "error");
+          return;
+        }
+      } else {
+        if (
+          this.sede_id == "" ||
+          this.nombre_contacto == "" ||
+          this.nit_documento == "" ||
+          this.telefono_contacto == ""
+        ) {
+          this.showAlert("Debe llenar los campos requeridos ", "error");
+          return;
+        }
+      }
+
       let correosResponsables = {
         correos: [
           {
