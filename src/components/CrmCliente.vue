@@ -209,7 +209,7 @@
           </div>
         </div>
         <!-- columnas para visita -->
-        <div v-if="consulta_interaccion == `Visita presencial`">
+        <div v-if="interaccion_id == 5">
           <div class="row">
             <div class="col-6 mb-3">
               <SearchList
@@ -621,7 +621,7 @@
             />
           </div>
           <div
-            v-if="consulta_interaccion == `Visita presencial`"
+            v-if="interaccion_id == 5"
             :class="$route.params.id !== undefined ? 'col-3 mb-3' : 'col mb-3'"
           >
             <label class="form-label">Hora inicio de visita:* </label>
@@ -640,10 +640,7 @@
           </div>
           <div
             class="col-3 mb-3"
-            v-if="
-              $route.params.id != undefined &&
-              consulta_interaccion == `Visita presencial`
-            "
+            v-if="$route.params.id != undefined && interaccion_id == 5"
           >
             <label class="form-label">Hora fin de visita:* </label>
             <input
@@ -705,7 +702,7 @@
           </div>
         </div>
         <!-- campo visita firmas -->
-        <div v-if="consulta_interaccion == `Visita presencial`">
+        <div v-if="interaccion_id == 5">
           <div v-for="(asistencia, index) in asistencias" :key="index">
             <div class="row">
               <h6 class="padding-1">{{ "Asistencia" + " " + (index + 1) }}</h6>
@@ -1714,7 +1711,7 @@ export default {
       if (this.$route.params.id == undefined || this.hora_cierre == " ") {
         this.tomarHoraCierre();
       }
-      if (this.consulta_interaccion == "Visita presencial") {
+      if (this.interaccion_id == 5) {
         if (
           (this.alcance_visita == "" ||
             this.objetivo_visita == "" ||
@@ -1780,7 +1777,7 @@ export default {
       formulario.append("creacion_pqrsf", this.crea_pqrsf);
       formulario.append("cierre_pqrsf", this.consulta_cierra_pqrsf);
       formulario.append("responsable", this.consulta_responsable);
-      if (this.consulta_interaccion == `Visita presencial`) {
+      if (this.interaccion_id == 5) {
         formulario.append("compromisos", JSON.stringify(this.compromisos));
         formulario.append(
           "temasPrincipales",
