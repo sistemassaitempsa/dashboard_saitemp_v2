@@ -177,7 +177,9 @@
               id="exampleInputEmail1"
               aria-describedby="emailHelp"
               v-model="telefono_contacto"
-              :disabled="!permisos[32].autorizado"
+              :disabled="
+                $route.params.id != undefined && !permisos[32].autorizado
+              "
               required
             />
             <div class="invalid-feedback">
@@ -193,7 +195,9 @@
               id="exampleInputEmail1"
               aria-describedby="emailHelp"
               v-model="correo_contacto"
-              :disabled="!permisos[32].autorizado"
+              :disabled="
+                $route.params.id != undefined && !permisos[32].autorizado
+              "
               required
               @input="validateEmail"
             />
