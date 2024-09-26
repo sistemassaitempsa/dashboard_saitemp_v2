@@ -508,7 +508,7 @@
                   </div>
 
                   <div class="col" v-if="$route.params.id != null || $route.path == '/navbar/gestion-ingresosl'">
-                      <a :href="URL_API + item.ruta" target="_blank" rel="noopener noreferrer"><button type="button"
+                      <a :href="item.ruta != undefined ? URL_API + item.ruta: null" target="_blank" rel="noopener noreferrer"><button type="button"
                               :class="item.ruta != undefined ? 'btn btn-sm ver' : 'btn btn-sm btn-secondary'"><i
                                   class="bi bi-eye"> ver</i></button></a>
                   </div>

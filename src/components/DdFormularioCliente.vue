@@ -264,6 +264,7 @@
               :nombreItem="campos_actividad_ciiu"
               :datos="actividades_ciiu"
               placeholder="Seleccione una opción"
+              :disabled="actividad_ciiu_disabled"
             />
           </div>
           <div class="col mb-3">
@@ -1786,7 +1787,7 @@
         >
           <div class="col-2" v-if="$route.params.id != null">
             <a
-              :href="URL_API + item.ruta"
+              :href="item.ruta != undefined ? URL_API + item.ruta: null"
               target="_blank"
               rel="noopener noreferrer"
               ><button
@@ -3924,6 +3925,7 @@ export default {
       consulta_contratacion_pago_31: "",
       contratacion_pago_31_id: "",
       versiones:[],
+      actividad_ciiu_disabled:true
     };
   },
   computed: {
@@ -5200,6 +5202,7 @@ export default {
     getActividadesCiiu(item = null) {
       var id = "";
       if (item != null && item.codigo != undefined) {
+        this.actividad_ciiu_disabled = false
         this.codigo_ciiu_id = item.id;
         this.consulta_codigo_ciiu = item.codigo;
         id = item.id;
@@ -7160,16 +7163,21 @@ export default {
         //     this.fileInputsCount = item.documentos_adjuntos
         // }
 
-        item.documentos_adjuntos.forEach(function (item) {
-          self
-            .convertFile(item.ruta)
-            .then((archivo) => {
-              self.file.push(archivo);
-            })
-            .catch((error) => {
-              self.showAlert("Error al convertir el archivo:", "error");
-              console.log(error);
-            });
+      self.file = new Array(self.fileInputsCount.length)
+      self.fileInputsCount.forEach(function(item1, index){
+          item.documentos_adjuntos.forEach(function (archivo) {
+            if (archivo.tipo_documento_id == item1.id) {
+              self
+                .convertFile(archivo.ruta)
+                .then((archivo) => {
+                  self.file.splice(index, 0, archivo);
+                })
+                .catch((error) => {
+                  /*  self.showAlert("Error al convertir el archivo:", "error"); */
+                  console.log(error);
+                });
+            }
+          });
         });
 
         if (item.cargos.length > 0) {
