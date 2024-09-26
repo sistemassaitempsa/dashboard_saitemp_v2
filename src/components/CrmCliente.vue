@@ -193,7 +193,9 @@
               id="exampleInputEmail1"
               aria-describedby="emailHelp"
               v-model="correo_contacto"
-              :disabled="$route.params.id != undefined && !permisos[32].autorizado"
+              :disabled="
+                $route.params.id != undefined && !permisos[32].autorizado
+              "
               required
               @input="validateEmail"
             />
@@ -424,6 +426,9 @@
                   <label for="validationCustom" class="form-label"
                     >Estado:*</label
                   >
+                  <label for="validationCustom" class="form-label"
+                    >Estado:*</label
+                  >
                   <select
                     class="form-select"
                     :required="estado_cierre_id == 3"
@@ -640,10 +645,7 @@
           </div>
           <div
             class="col-3 mb-3"
-            v-if="
-              $route.params.id != undefined &&
-              interaccion_id == 5
-            "
+            v-if="$route.params.id != undefined && interaccion_id == 5"
           >
             <label class="form-label">Hora fin de visita:* </label>
             <input
@@ -1714,7 +1716,7 @@ export default {
       if (this.$route.params.id == undefined || this.hora_cierre == " ") {
         this.tomarHoraCierre();
       }
-      if (this.consulta_interaccion == "Visita presencial") {
+      if (this.interaccion_id == 5) {
         if (
           (this.alcance_visita == "" ||
             this.objetivo_visita == "" ||
@@ -1723,7 +1725,7 @@ export default {
             this.cargo_visitante == "" ||
             this.visitante == "" ||
             this.temasPrincipales[0].descripcion == "",
-            this.asistencias[0].nombre == "" ||
+          this.asistencias[0].nombre == "" ||
             this.asistencias[0].cargo == "" ||
             this.asistencias[0].firma_hash == "")
         ) {
