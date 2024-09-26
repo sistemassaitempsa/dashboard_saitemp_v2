@@ -6,7 +6,7 @@
                 <span class="input-group-text" id="basic-addon3"><i class="bi bi-search"></i></span>
                 <input type="text" @focus="consultaEndPoint()" @click="modal = true" autocomplete="off" class="form-control"
                     id="exampleInputEmail1" :placeholder="placeholder" aria-describedby="emailHelp" v-model="registro"
-                    :required="valida_campo" />
+                    :required="valida_campo" :disabled="disabled"/>
                 <span class="input-group-text" style="cursor:pointer" @click="registro = '', retornoValorCampo()"
                     id="basic-addon3"><i class="bi bi-x"></i></span>
                 <div class="invalid-feedback">
@@ -142,6 +142,10 @@ export default {
             type: String,
             default: ''
         },
+        disabled:{
+            type:Boolean,
+            default:false
+        }
     },
     data() {
         return {
