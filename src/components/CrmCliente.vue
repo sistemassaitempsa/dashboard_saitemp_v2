@@ -566,10 +566,10 @@
               <div class="col-6 mb-3">
                 <SearchList
                   nombreCampo="Responsable: *"
-                  @getUsuariosLideres="getUsuariosLideres"
-                  eventoCampo="getUsuariosLideres"
+                  @getUsuarios="getUsuarios"
+                  eventoCampo="getUsuarios"
                   nombreItem="nombre"
-                  :registros="usuarios_lider"
+                  :registros="usuarios"
                   placeholder="Seleccione una opción"
                   :consulta="compromisos[0].responsable"
                   :index="4"
@@ -680,10 +680,10 @@
               <div class="col-6 mb-3">
                 <SearchList
                   nombreCampo="Responsable: *"
-                  @getUsuariosLideres="getUsuariosLideres"
-                  eventoCampo="getUsuariosLideres"
+                  @getUsuarios="getUsuarios"
+                  eventoCampo="getUsuarios"
                   nombreItem="nombre"
-                  :registros="usuarios_lider"
+                  :registros="usuarios"
                   placeholder="Seleccione una opción"
                   :consulta="compromisos[1].responsable"
                   :index="5"
