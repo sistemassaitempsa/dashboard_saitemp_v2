@@ -177,7 +177,9 @@
               id="exampleInputEmail1"
               aria-describedby="emailHelp"
               v-model="telefono_contacto"
-              :disabled="$route.params.id != undefined && !permisos[32].autorizado"
+              :disabled="
+                $route.params.id != undefined && !permisos[32].autorizado
+              "
               required
             />
             <div class="invalid-feedback">
@@ -210,8 +212,164 @@
             </div>
           </div>
         </div>
+        <div class="row">
+          <div class="col mb-3">
+            <SearchList
+              nombreCampo="Estado *"
+              @getEstadoCierreCrm="getEstadoCierreCrm"
+              eventoCampo="getEstadoCierreCrm"
+              nombreItem="nombre"
+              :registros="estados_cierre"
+              placeholder="Seleccione una opción"
+              :consulta="consulta_estado_cierre"
+              :disabled="
+                $route.params.id != undefined && fecha_cierre != undefined
+              "
+            />
+          </div>
+          <div class="col mb-3">
+            <SearchList
+              nombreCampo="PQRSF *"
+              @getPQRSF="getPQRSF"
+              eventoCampo="getPQRSF"
+              nombreItem="nombre"
+              :registros="lista_pqrsf"
+              placeholder="Seleccione una opción"
+              :consulta="consulta_pqrsf"
+              :disabled="
+                $route.params.id != undefined && !permisos[32].autorizado
+              "
+            />
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-6 mb-3">
+            <SearchList
+              nombreCampo="Responsable *"
+              @getUsuarios="getUsuarios"
+              eventoCampo="getUsuarios"
+              nombreItem="nombre"
+              :registros="usuarios"
+              placeholder="Seleccione una opción"
+              :consulta="consulta_responsable"
+              :index="1"
+              :disabled="
+                $route.params.id != undefined && !permisos[32].autorizado
+              "
+            />
+          </div>
+          <div class="col-6 mb-3" v-if="$route.params.id != undefined">
+            <label class="form-label">Crea PQRSF: </label>
+            <input
+              type="text"
+              class="form-control"
+              autocomplete="off"
+              id="exampleInputEmail1"
+              aria-describedby="emailHelp"
+              v-model="crea_pqrsf"
+              required
+              :disabled="
+                $route.params.id != undefined && !permisos[32].autorizado
+              "
+            />
+            <div class="invalid-feedback">
+              {{ mensaje_error }}
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col mb-3">
+            <label class="form-label">Observación PQRSF: *</label>
+            <textarea
+              class="form-control"
+              name=""
+              id="razon_social"
+              rows="5"
+              v-model="observacion"
+              placeholder="Observación"
+              maxlength="3000"
+            ></textarea>
+            <div class="d-flex justify-content-end">
+              <small class="char-count"
+                >{{ remainingCharsObservasion3 }}/3000</small
+              >
+            </div>
+            <div class="invalid-feedback">
+              {{ mensaje_error }}
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div
+            class="col-6 mb-3"
+            v-if="
+              (estado_cierre_id == 3 && $route.params.id != undefined) ||
+              (estado_cierre_id == 3 && $route.params.id == undefined)
+            "
+          >
+            <SearchList
+              nombreCampo="Cierra la PQRSF *"
+              @getUsuarios="getUsuarios"
+              eventoCampo="getUsuarios"
+              nombreItem="nombre"
+              :registros="usuarios"
+              placeholder="Seleccione una opción"
+              :consulta="consulta_cierra_pqrsf"
+              :disabled="
+                $route.params.id != undefined &&
+                consulta_cierra_pqrsf != null &&
+                fecha_cierre != undefined
+              "
+              :index="2"
+            />
+          </div>
+        </div>
         <!-- columnas para visita -->
-        <div v-if="interaccion_id == 5">
+        <h5 class="text-start mt-4" v-if="interaccion_id == 5">
+          Formulario de visita:*
+        </h5>
+        <div v-if="interaccion_id == 5" class="border rounded p-4">
+          <div class="row">
+            <div
+              v-if="interaccion_id == 5"
+              :class="
+                $route.params.id !== undefined ? 'col-6 mb-3' : 'col-6 mb-3'
+              "
+            >
+              <label class="form-label">Hora inicio de visita:* </label>
+              <input
+                type="time"
+                class="form-control"
+                autocomplete="off"
+                id="exampleInputEmail1"
+                aria-describedby="emailHelp"
+                v-model="hora_inicio"
+                required
+              />
+              <div class="invalid-feedback">
+                {{ mensaje_error }}
+              </div>
+            </div>
+            <div
+              class="col-6 mb-3"
+              v-if="$route.params.id != undefined && interaccion_id == 5"
+            >
+              <label class="form-label">Hora fin de visita:* </label>
+              <input
+                type="time"
+                class="form-control"
+                autocomplete="off"
+                id="exampleInputEmail1"
+                aria-describedby="emailHelp"
+                v-model="hora_cierre"
+                required
+                disabled
+              />
+              <div class="invalid-feedback">
+                {{ mensaje_error }}
+              </div>
+            </div>
+          </div>
           <div class="row">
             <div class="col-6 mb-3">
               <SearchList
@@ -291,7 +449,7 @@
           </div>
           <div class="row">
             <div class="col mb-3">
-              <label class="form-label">Objetivo:* </label>
+              <label class="form-label">Objetivo de la visita:* </label>
               <input
                 type="text"
                 class="form-control"
@@ -310,7 +468,7 @@
             </div>
 
             <div class="col mb-3">
-              <label class="form-label">Alcance:* </label>
+              <label class="form-label">Alcance de la visita:* </label>
               <input
                 type="text"
                 class="form-control"
@@ -355,8 +513,24 @@
           </div>
           <div class="row border rounded">
             <div class="row">
-              <div class="col mb-3">
+              <div class="col align-self-center">
                 <label class="form-label">Compromiso 1:*</label>
+              </div>
+              <div class="col-3 mb-3" v-if="$route.params.id != undefined">
+                <label class="form-label">Fecha de apertura: </label>
+                <input
+                  type="datetime-local"
+                  class="form-control"
+                  autocomplete="off"
+                  id="exampleInputEmail1"
+                  aria-describedby="emailHelp"
+                  v-model="fecha_radicado"
+                  disabled
+                />
+              </div>
+            </div>
+            <div class="row">
+              <div class="col mb-3">
                 <textarea
                   class="form-control"
                   name=""
@@ -378,40 +552,29 @@
                   {{ mensaje_error }}
                 </div>
               </div>
-              <div class="row">
-                <div class="col-3 mb-3" v-if="$route.params.id != undefined">
-                  <label class="form-label">Fecha de apertura: </label>
-                  <input
-                    type="datetime-local"
-                    class="form-control"
-                    autocomplete="off"
-                    id="exampleInputEmail1"
-                    aria-describedby="emailHelp"
-                    v-model="fecha_radicado"
-                    disabled
-                  />
-                </div>
-                <div class="col-6 mb-3">
-                  <SearchList
-                    nombreCampo="Responsable: *"
-                    @getUsuariosLideres="getUsuariosLideres"
-                    eventoCampo="getUsuariosLideres"
-                    nombreItem="nombre"
-                    :registros="usuarios_lider"
-                    placeholder="Seleccione una opción"
-                    :consulta="compromisos[0].responsable"
-                    :index="4"
-                    :valida_campo="compromisos[0].descripcion != ''"
-                    :disabled="
-                      $route.params.id != undefined && !permisos[32].autorizado
-                    "
-                  />
+            </div>
+            <div class="row">
+              <div class="col-6 mb-3">
+                <SearchList
+                  nombreCampo="Responsable: *"
+                  @getUsuariosLideres="getUsuariosLideres"
+                  eventoCampo="getUsuariosLideres"
+                  nombreItem="nombre"
+                  :registros="usuarios_lider"
+                  placeholder="Seleccione una opción"
+                  :consulta="compromisos[0].responsable"
+                  :index="4"
+                  :valida_campo="compromisos[0].descripcion != ''"
+                  :disabled="
+                    $route.params.id != undefined && !permisos[32].autorizado
+                  "
+                />
 
-                  <div class="invalid-feedback">
-                    {{ mensaje_error }}
-                  </div>
+                <div class="invalid-feedback">
+                  {{ mensaje_error }}
                 </div>
-                <!-- <div class="col-3 mb-3">
+              </div>
+              <!-- <div class="col-3 mb-3">
                   <label class="form-label">Fecha de cierre: </label>
                   <input
                     type="date"
@@ -422,56 +585,66 @@
                     v-model="compromisos[0].fecha_cierre"
                   />
                 </div> -->
-                <div class="col-3 mb-3">
-                  <label for="validationCustom" class="form-label"
-                    >Estado:*</label
-                  >
-                  <label for="validationCustom" class="form-label"
-                    >Estado:*</label
-                  >
-                  <select
-                    class="form-select"
-                    :required="estado_cierre_id == 3"
-                    v-model="compromisos[0].estado_cierre_id"
-                  >
-                    <option :value="1">Eficaz</option>
-                    <option :value="2">Ineficaz</option>
-                  </select>
-                  <div class="invalid-feedback">
-                    Please select a valid state.
-                  </div>
-                </div>
+              <div class="col-6 mb-3">
+                <label for="validationCustom" class="form-label"
+                  >Estado:*</label
+                >
+                <select
+                  class="form-select"
+                  :required="estado_cierre_id == 3"
+                  v-model="compromisos[0].estado_cierre_id"
+                >
+                  <option :value="1">Eficaz</option>
+                  <option :value="2">Ineficaz</option>
+                </select>
+                <div class="invalid-feedback">Please select a valid state.</div>
               </div>
-              <div class="row">
-                <div class="col mb-3">
-                  <label class="form-label"
-                    >Observaciones para el responsable: *</label
+            </div>
+            <div class="row">
+              <div class="col mb-3">
+                <label class="form-label"
+                  >Observaciones para el responsable: *</label
+                >
+                <textarea
+                  class="form-control"
+                  name=""
+                  id="razon_social"
+                  rows="1"
+                  v-model="compromisos[0].observacion"
+                  placeholder="Observación"
+                  :disabled="
+                    $route.params.id != undefined && !permisos[32].autorizado
+                  "
+                  maxlength="3000"
+                ></textarea>
+                <div class="d-flex justify-content-end">
+                  <small class="char-count"
+                    >{{ remainingCharsObservasion }}/3000</small
                   >
-                  <textarea
-                    class="form-control"
-                    name=""
-                    id="razon_social"
-                    rows="1"
-                    v-model="compromisos[0].observacion"
-                    placeholder="Observación"
-                    :disabled="
-                      $route.params.id != undefined && !permisos[32].autorizado
-                    "
-                    maxlength="3000"
-                  ></textarea>
-                  <div class="d-flex justify-content-end">
-                    <small class="char-count"
-                      >{{ remainingCharsObservasion }}/3000</small
-                    >
-                  </div>
                 </div>
               </div>
             </div>
           </div>
           <div class="row border mt-1 rounded">
             <div class="row">
-              <div class="col mb-3">
+              <div class="col align-self-center">
                 <label class="form-label">Compromiso 2:*</label>
+              </div>
+              <div class="col-3 mb-3" v-if="$route.params.id != undefined">
+                <label class="form-label">Fecha de apertura: </label>
+                <input
+                  type="datetime-local"
+                  class="form-control"
+                  autocomplete="off"
+                  id="exampleInputEmail1"
+                  aria-describedby="emailHelp"
+                  v-model="fecha_radicado"
+                  disabled
+                />
+              </div>
+            </div>
+            <div class="row">
+              <div class="col mb-3">
                 <textarea
                   class="form-control"
                   name=""
@@ -493,36 +666,25 @@
                   {{ mensaje_error }}
                 </div>
               </div>
-              <div class="row">
-                <div class="col-3 mb-3" v-if="$route.params.id != undefined">
-                  <label class="form-label">Fecha de apertura: </label>
-                  <input
-                    type="datetime-local"
-                    class="form-control"
-                    autocomplete="off"
-                    id="exampleInputEmail1"
-                    aria-describedby="emailHelp"
-                    v-model="fecha_radicado"
-                    disabled
-                  />
-                </div>
-                <div class="col-6 mb-3">
-                  <SearchList
-                    nombreCampo="Responsable: *"
-                    @getUsuariosLideres="getUsuariosLideres"
-                    eventoCampo="getUsuariosLideres"
-                    nombreItem="nombre"
-                    :registros="usuarios_lider"
-                    placeholder="Seleccione una opción"
-                    :consulta="compromisos[1].responsable"
-                    :index="5"
-                    :valida_campo="compromisos[1].descripcion != ''"
-                    :disabled="
-                      $route.params.id != undefined && !permisos[32].autorizado
-                    "
-                  />
-                </div>
-                <!--     <div class="col-3 mb-3">
+            </div>
+            <div class="row">
+              <div class="col-6 mb-3">
+                <SearchList
+                  nombreCampo="Responsable: *"
+                  @getUsuariosLideres="getUsuariosLideres"
+                  eventoCampo="getUsuariosLideres"
+                  nombreItem="nombre"
+                  :registros="usuarios_lider"
+                  placeholder="Seleccione una opción"
+                  :consulta="compromisos[1].responsable"
+                  :index="5"
+                  :valida_campo="compromisos[1].descripcion != ''"
+                  :disabled="
+                    $route.params.id != undefined && !permisos[32].autorizado
+                  "
+                />
+              </div>
+              <!--     <div class="col-3 mb-3">
                   <label class="form-label">Fecha de cierre: </label>
                   <input
                     type="date"
@@ -533,24 +695,22 @@
                     v-model="compromisos[1].fecha_cierre"
                   />
                 </div> -->
-                <div class="col-3 mb-3">
-                  <label for="validationCustom" class="form-label"
-                    >Estado:*</label
-                  >
-                  <select
-                    class="form-select"
-                    :required="estado_cierre_id == 3"
-                    v-model="compromisos[1].estado_cierre_id"
-                  >
-                    <option :value="1">Eficaz</option>
-                    <option :value="2">Ineficaz</option>
-                  </select>
-                  <div class="invalid-feedback">
-                    Please select a valid state.
-                  </div>
-                </div>
+              <div class="col-6 mb-3">
+                <label for="validationCustom" class="form-label"
+                  >Estado:*</label
+                >
+                <select
+                  class="form-select"
+                  :required="estado_cierre_id == 3"
+                  v-model="compromisos[1].estado_cierre_id"
+                >
+                  <option :value="1">Eficaz</option>
+                  <option :value="2">Ineficaz</option>
+                </select>
+                <div class="invalid-feedback">Please select a valid state.</div>
               </div>
             </div>
+
             <div class="row">
               <div class="col mb-3">
                 <label class="form-label"
@@ -579,133 +739,6 @@
 
         <!-- finaliza aqui -->
 
-        <div class="row">
-          <div class="col mb-3">
-            <SearchList
-              nombreCampo="Estado *"
-              @getEstadoCierreCrm="getEstadoCierreCrm"
-              eventoCampo="getEstadoCierreCrm"
-              nombreItem="nombre"
-              :registros="estados_cierre"
-              placeholder="Seleccione una opción"
-              :consulta="consulta_estado_cierre"
-              :disabled="
-                $route.params.id != undefined && fecha_cierre != undefined
-              "
-            />
-          </div>
-          <div class="col mb-3">
-            <SearchList
-              nombreCampo="PQRSF *"
-              @getPQRSF="getPQRSF"
-              eventoCampo="getPQRSF"
-              nombreItem="nombre"
-              :registros="lista_pqrsf"
-              placeholder="Seleccione una opción"
-              :consulta="consulta_pqrsf"
-              :disabled="
-                $route.params.id != undefined && !permisos[32].autorizado
-              "
-            />
-          </div>
-        </div>
-        <div class="row">
-          <div class="col-6 mb-3">
-            <SearchList
-              nombreCampo="Responsable *"
-              @getUsuarios="getUsuarios"
-              eventoCampo="getUsuarios"
-              nombreItem="nombre"
-              :registros="usuarios"
-              placeholder="Seleccione una opción"
-              :consulta="consulta_responsable"
-              :index="1"
-              :disabled="
-                $route.params.id != undefined && !permisos[32].autorizado
-              "
-            />
-          </div>
-          <div
-            v-if="interaccion_id == 5"
-            :class="$route.params.id !== undefined ? 'col-3 mb-3' : 'col mb-3'"
-          >
-            <label class="form-label">Hora inicio de visita:* </label>
-            <input
-              type="time"
-              class="form-control"
-              autocomplete="off"
-              id="exampleInputEmail1"
-              aria-describedby="emailHelp"
-              v-model="hora_inicio"
-              required
-            />
-            <div class="invalid-feedback">
-              {{ mensaje_error }}
-            </div>
-          </div>
-          <div
-            class="col-3 mb-3"
-            v-if="$route.params.id != undefined && interaccion_id == 5"
-          >
-            <label class="form-label">Hora fin de visita:* </label>
-            <input
-              type="time"
-              class="form-control"
-              autocomplete="off"
-              id="exampleInputEmail1"
-              aria-describedby="emailHelp"
-              v-model="hora_cierre"
-              required
-              disabled
-            />
-            <div class="invalid-feedback">
-              {{ mensaje_error }}
-            </div>
-          </div>
-          <div
-            class="col-6 mb-3"
-            v-if="
-              (estado_cierre_id == 3 && $route.params.id != undefined) ||
-              (estado_cierre_id == 3 && $route.params.id == undefined)
-            "
-          >
-            <SearchList
-              nombreCampo="Cierra la PQRSF *"
-              @getUsuarios="getUsuarios"
-              eventoCampo="getUsuarios"
-              nombreItem="nombre"
-              :registros="usuarios"
-              placeholder="Seleccione una opción"
-              :consulta="consulta_cierra_pqrsf"
-              :disabled="
-                $route.params.id != undefined &&
-                consulta_cierra_pqrsf != null &&
-                fecha_cierre != undefined
-              "
-              :index="2"
-            />
-          </div>
-        </div>
-        <div class="row">
-          <div class="col-6 mb-3" v-if="$route.params.id != undefined">
-            <label class="form-label">Crea PQRSF: </label>
-            <input
-              type="text"
-              class="form-control"
-              autocomplete="off"
-              id="exampleInputEmail1"
-              aria-describedby="emailHelp"
-              v-model="crea_pqrsf"
-              required
-              :disabled="
-                $route.params.id != undefined && !permisos[32].autorizado
-              "
-            />
-            <div class="invalid-feedback">
-              {{ mensaje_error }}
-            </div>
-          </div>
-        </div>
         <!-- campo visita firmas -->
         <div v-if="interaccion_id == 5">
           <div v-for="(asistencia, index) in asistencias" :key="index">
@@ -830,28 +863,6 @@
           </div>
         </div>
         <!-- finaliza aqui -->
-        <div class="row">
-          <div class="col mb-3">
-            <label class="form-label">Observación: *</label>
-            <textarea
-              class="form-control"
-              name=""
-              id="razon_social"
-              rows="10"
-              v-model="observacion"
-              placeholder="Observación"
-              maxlength="3000"
-            ></textarea>
-            <div class="d-flex justify-content-end">
-              <small class="char-count"
-                >{{ remainingCharsObservasion3 }}/3000</small
-              >
-            </div>
-            <div class="invalid-feedback">
-              {{ mensaje_error }}
-            </div>
-          </div>
-        </div>
         <div class="row">
           <div class="col" v-if="$route.params.id != null">
             <label class="form-label labelBlock">Archivos adjuntos:</label>
