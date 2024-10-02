@@ -13,7 +13,7 @@
           @focus="consultaEndPoint()"
           @click="hover = !hover"
           @keyup="hover = true"
-          autocomplete="off"
+          autocomplete="nope"
           @input="filterResults(registro, registros, 'registros')"
           class="form-control"
           id="exampleInputEmail"
