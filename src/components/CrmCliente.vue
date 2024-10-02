@@ -18,7 +18,7 @@
           </button>
         </div>
       </div>
-      <form class="was-validated" @submit.prevent="save()">
+      <form class="was-validated" @submit.prevent="save()" autocomplete="off">
         <div class="row" v-if="$route.params.id != undefined">
           <div class="col mb-3">
             <label class="form-label">Fecha de radicado: </label>
@@ -26,7 +26,7 @@
               type="datetime-local"
               class="form-control"
               autocomplete="off"
-              id="exampleInputEmail1"
+              id="fechaRadicado"
               aria-describedby="emailHelp"
               v-model="fecha_radicado"
               disabled
@@ -41,7 +41,7 @@
               type="datetime-local"
               class="form-control"
               autocomplete="off"
-              id="exampleInputEmail1"
+              id="fechaCierre"
               aria-describedby="emailHelp"
               v-model="fecha_cierre"
               disabled
@@ -115,7 +115,7 @@
         <div class="row">
           <div class="col">
             <SearchList
-              v-if="solicitante_id == 1"
+              v-if="solicitante_id == 1 && $route.params.id == undefined"
               nombreCampo="Nit/identificacion: *"
               @getEmpresasCliente="getEmpresasCliente"
               eventoCampo="getEmpresasCliente"
@@ -135,7 +135,7 @@
                 type="text"
                 class="form-control"
                 autocomplete="off"
-                id="exampleInputEmail1"
+                id="no-id"
                 aria-describedby="emailHelp"
                 v-model="nit_documento"
                 required
@@ -154,7 +154,7 @@
               type="text"
               class="form-control"
               autocomplete="off"
-              id="exampleInputEmail1"
+              id="no-name"
               aria-describedby="emailHelp"
               v-model="nombre_contacto"
               required
@@ -174,7 +174,7 @@
               type="text"
               class="form-control"
               autocomplete="off"
-              id="exampleInputEmail1"
+              id="no-tel"
               aria-describedby="emailHelp"
               v-model="telefono_contacto"
               :disabled="
@@ -192,7 +192,7 @@
               type="email"
               class="form-control"
               autocomplete="off"
-              id="exampleInputEmail1"
+              id="no-email"
               aria-describedby="emailHelp"
               v-model="correo_contacto"
               :disabled="
@@ -258,48 +258,6 @@
               "
             />
           </div>
-          <div class="col-6 mb-3" v-if="$route.params.id != undefined">
-            <label class="form-label">Crea PQRSF: </label>
-            <input
-              type="text"
-              class="form-control"
-              autocomplete="off"
-              id="exampleInputEmail1"
-              aria-describedby="emailHelp"
-              v-model="crea_pqrsf"
-              required
-              :disabled="
-                $route.params.id != undefined && !permisos[32].autorizado
-              "
-            />
-            <div class="invalid-feedback">
-              {{ mensaje_error }}
-            </div>
-          </div>
-        </div>
-        <div class="row">
-          <div class="col mb-3">
-            <label class="form-label">Observación PQRSF: *</label>
-            <textarea
-              class="form-control"
-              name=""
-              id="razon_social"
-              rows="5"
-              v-model="observacion"
-              placeholder="Observación"
-              maxlength="3000"
-            ></textarea>
-            <div class="d-flex justify-content-end">
-              <small class="char-count"
-                >{{ remainingCharsObservasion3 }}/3000</small
-              >
-            </div>
-            <div class="invalid-feedback">
-              {{ mensaje_error }}
-            </div>
-          </div>
-        </div>
-        <div class="row">
           <div
             class="col-6 mb-3"
             v-if="
@@ -323,15 +281,63 @@
               :index="2"
             />
           </div>
+
+          <div class="col-6 mb-3" v-if="$route.params.id != undefined">
+            <label class="form-label">Crea PQRSF: </label>
+            <input
+              type="text"
+              class="form-control"
+              autocomplete="off"
+              id="no-pqr"
+              aria-describedby="emailHelp"
+              v-model="crea_pqrsf"
+              required
+              :disabled="
+                $route.params.id != undefined && !permisos[32].autorizado
+              "
+            />
+            <div class="invalid-feedback">
+              {{ mensaje_error }}
+            </div>
+          </div>
         </div>
+        <div class="row">
+          <div class="col mb-3">
+            <label class="form-label">Observación PQRSF: *</label>
+            <textarea
+              class="form-control"
+              name=""
+              id="observacion_PQRSF"
+              rows="5"
+              v-model="observacion"
+              placeholder="Observación"
+              maxlength="3000"
+            ></textarea>
+            <div class="d-flex justify-content-end">
+              <small class="char-count"
+                >{{ remainingCharsObservasion3 }}/3000</small
+              >
+            </div>
+            <div class="invalid-feedback">
+              {{ mensaje_error }}
+            </div>
+          </div>
+        </div>
+        <div class="row"></div>
         <!-- columnas para visita -->
-        <h5 class="text-start mt-4" v-if="interaccion_id == 5">
+        <h5
+          class="text-start mt-4"
+          v-if="interaccion_id == 5 || interaccion_id == 6"
+        >
           Formulario de visita:*
         </h5>
-        <div v-if="interaccion_id == 5" class="border rounded p-4">
+        <div
+          v-if="interaccion_id == 5 || interaccion_id == 6"
+          class="border rounded p-4"
+        >
           <div class="row">
             <div
-              v-if="interaccion_id == 5"
+              v-if="interaccion_id == 5 || interaccion_id == 6"
               :class="
                 $route.params.id !== undefined ? 'col-6 mb-3' : 'col-6 mb-3'
               "
@@ -341,7 +347,7 @@
                 type="time"
                 class="form-control"
                 autocomplete="off"
-                id="exampleInputEmail1"
+                id="no-hora"
                 aria-describedby="emailHelp"
                 v-model="hora_inicio"
                 required
@@ -352,14 +358,17 @@
             </div>
             <div
               class="col-6 mb-3"
-              v-if="$route.params.id != undefined && interaccion_id == 5"
+              v-if="
+                $route.params.id != undefined &&
+                (interaccion_id == 5 || interaccion_id == 6)
+              "
             >
               <label class="form-label">Hora fin de visita:* </label>
               <input
                 type="time"
                 class="form-control"
                 autocomplete="off"
-                id="exampleInputEmail1"
+                id="no-hora-fin"
                 aria-describedby="emailHelp"
                 v-model="hora_cierre"
                 required
@@ -415,7 +424,7 @@
                 type="text"
                 class="form-control"
                 autocomplete="off"
-                id="exampleInputEmail1"
+                id="no-visitante"
                 aria-describedby="emailHelp"
                 v-model="visitado"
                 required
@@ -434,7 +443,7 @@
                 type="text"
                 class="form-control"
                 autocomplete="off"
-                id="exampleInputEmail1"
+                id="no-visitado"
                 aria-describedby="emailHelp"
                 v-model="cargo_visitado"
                 required
@@ -454,7 +463,7 @@
                 type="text"
                 class="form-control"
                 autocomplete="off"
-                id="exampleInputEmail1"
+                id="no-objetivo"
                 aria-describedby="emailHelp"
                 v-model="objetivo_visita"
                 required
@@ -473,7 +482,7 @@
                 type="text"
                 class="form-control"
                 autocomplete="off"
-                id="exampleInputEmail1"
+                id="no-alcance"
                 aria-describedby="emailHelp"
                 v-model="alcance_visita"
                 required
@@ -522,7 +531,7 @@
                   type="datetime-local"
                   class="form-control"
                   autocomplete="off"
-                  id="exampleInputEmail1"
+                  id="no-fecha-open"
                   aria-describedby="emailHelp"
                   v-model="fecha_radicado"
                   disabled
@@ -534,7 +543,7 @@
                 <textarea
                   class="form-control"
                   name=""
-                  id="temaArea"
+                  id="compromiso1"
                   rows="2"
                   maxlength="4000"
                   v-model="compromisos[0].descripcion"
@@ -636,7 +645,7 @@
                   type="datetime-local"
                   class="form-control"
                   autocomplete="off"
-                  id="exampleInputEmail1"
+                  id="no-fecha-open2"
                   aria-describedby="emailHelp"
                   v-model="fecha_radicado"
                   disabled
@@ -648,7 +657,7 @@
                 <textarea
                   class="form-control"
                   name=""
-                  id="temaArea"
+                  id="compromiso2"
                   rows="2"
                   v-model="compromisos[1].descripcion"
                   placeholder="Compromiso 2"
@@ -719,7 +728,7 @@
                 <textarea
                   class="form-control"
                   name=""
-                  id="razon_social"
+                  id="observacion_compromiso1"
                   rows="1"
                   v-model="compromisos[1].observacion"
                   placeholder="Observación"
@@ -740,7 +749,7 @@
         <!-- finaliza aqui -->
 
         <!-- campo visita firmas -->
-        <div v-if="interaccion_id == 5">
+        <div v-if="interaccion_id == 5 || interaccion_id == 6">
           <div v-for="(asistencia, index) in asistencias" :key="index">
             <div class="row">
               <h6 class="padding-1">{{ "Asistencia" + " " + (index + 1) }}</h6>
@@ -752,7 +761,7 @@
                   type="text"
                   class="form-control"
                   autocomplete="off"
-                  id="exampleInputEmail1"
+                  id="no-name-asist"
                   aria-describedby="emailHelp"
                   v-model="asistencia.nombre"
                   required
@@ -770,7 +779,7 @@
                   type="text"
                   class="form-control"
                   autocomplete="off"
-                  id="exampleInputEmail1"
+                  id="no-cargo"
                   aria-describedby="emailHelp"
                   v-model="asistencia.cargo"
                   required
@@ -1727,24 +1736,30 @@ export default {
       if (this.$route.params.id == undefined || this.hora_cierre == " ") {
         this.tomarHoraCierre();
       }
-      if (this.interaccion_id == 5) {
+      if (this.interaccion_id == 5 || this.interaccion_id == 6) {
         if (
-          (this.alcance_visita == "" ||
-            this.objetivo_visita == "" ||
-            this.cargo_visitado == "" ||
-            this.visitado == "" ||
-            this.cargo_visitante == "" ||
-            this.visitante == "" ||
-            this.temasPrincipales[0].descripcion == "",
+          this.alcance_visita == "" ||
+          this.pqrsf_id == "" ||
+          this.sede_id == "" ||
+          this.nombre_contacto == "" ||
+          this.nit_documento == "" ||
+          this.telefono_contacto == "" ||
+          this.objetivo_visita == "" ||
+          this.cargo_visitado == "" ||
+          this.visitado == "" ||
+          this.cargo_visitante == "" ||
+          this.visitante == "" ||
+          this.temasPrincipales[0].descripcion == "" ||
           this.asistencias[0].nombre == "" ||
-            this.asistencias[0].cargo == "" ||
-            this.asistencias[0].firma_hash == "")
+          this.asistencias[0].cargo == "" ||
+          this.asistencias[0].firma_hash == ""
         ) {
           this.showAlert("Debe llenar los campos requeridos ", "error");
           return;
         }
       } else {
         if (
+          this.pqrsf_id == "" ||
           this.sede_id == "" ||
           this.nombre_contacto == "" ||
           this.nit_documento == "" ||
@@ -1793,7 +1808,7 @@ export default {
       formulario.append("creacion_pqrsf", this.crea_pqrsf);
       formulario.append("cierre_pqrsf", this.consulta_cierra_pqrsf);
       formulario.append("responsable", this.consulta_responsable);
-      if (this.interaccion_id == 5) {
+      if (this.interaccion_id == 5 || this.interaccion_id == 6) {
         formulario.append("compromisos", JSON.stringify(this.compromisos));
         formulario.append(
           "temasPrincipales",
