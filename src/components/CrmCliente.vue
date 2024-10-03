@@ -841,6 +841,7 @@
                 </div>
                 <div class="col-sm-12 col-md-6 mb-3">
                   <div
+                    v-if="$route.params.id == null"
                     class="d-flex justify-content-end align-items-end w-100 h-100"
                   >
                     <label
