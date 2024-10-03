@@ -2220,9 +2220,11 @@ export default {
             break;
           case 4:
             this.compromisos[0].responsable = item.nombre;
+            this.correo_responsable1 = item.email;
             break;
           case 5:
             this.compromisos[1].responsable = item.nombre;
+            this.correo_responsable1 = item.email;
             break;
         }
       }
