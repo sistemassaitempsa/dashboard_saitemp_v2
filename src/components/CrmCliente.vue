@@ -841,7 +841,11 @@
                 </div>
                 <div class="col-sm-12 col-md-6 mb-3">
                   <div
-                    v-if="$route.params.id == null"
+                    v-if="
+                      ($route.params.id != null &&
+                        asistencia.firma.length == 0) ||
+                      $route.params.id == null
+                    "
                     class="d-flex justify-content-end align-items-end w-100 h-100"
                   >
                     <label
@@ -1426,12 +1430,25 @@ export default {
       }
     },
     agregarAsistencia() {
-      this.asistencias.push({
-        nombre: "",
-        cargo: "",
-        firma: [],
-        show_pad: false,
-      });
+      const indexUltimaAsistencia = this.asistencias.length - 1;
+      if (
+        this.asistencias[indexUltimaAsistencia].cargo &&
+        /*  this.asistencias[indexUltimaAsistencia].firma_hash && */
+        this.asistencias[indexUltimaAsistencia].nombre
+      ) {
+        this.asistencias.push({
+          nombre: "",
+          cargo: "",
+          firma: [],
+          show_pad: false,
+        });
+        return;
+      }
+      this.showAlert(
+        "Debe llenar los campos requeridos de la asistencia ",
+        "error"
+      );
+      return;
     },
     deleteDynamic(array, index, identificador = null) {
       if (identificador != null) {
@@ -1740,6 +1757,10 @@ export default {
       if (this.$route.params.id == undefined || this.hora_cierre == " ") {
         this.tomarHoraCierre();
       }
+      if (this.estado_cierre_id == 3 && this.consulta_cierra_pqrsf == null) {
+        this.showAlert("Debe llenar los campos requeridos ", "error");
+        return;
+      }
       if (this.interaccion_id == 5 || this.interaccion_id == 6) {
         if (
           this.alcance_visita == "" ||
@@ -1810,7 +1831,10 @@ export default {
       formulario.append("nit_documento", this.nit_documento);
       formulario.append("pqrsf_id", this.pqrsf_id);
       formulario.append("creacion_pqrsf", this.crea_pqrsf);
-      formulario.append("cierre_pqrsf", this.consulta_cierra_pqrsf);
+      formulario.append(
+        "cierre_pqrsf",
+        this.consulta_cierra_pqrsf == null ? "" : this.consulta_cierra_pqrsf
+      );
       formulario.append("responsable", this.consulta_responsable);
       if (this.interaccion_id == 5 || this.interaccion_id == 6) {
         formulario.append("compromisos", JSON.stringify(this.compromisos));
