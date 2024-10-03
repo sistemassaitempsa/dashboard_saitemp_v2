@@ -566,10 +566,10 @@
               <div class="col-6 mb-3">
                 <SearchList
                   nombreCampo="Responsable: *"
-                  @getUsuariosLideres="getUsuariosLideres"
-                  eventoCampo="getUsuariosLideres"
+                  @getUsuarios="getUsuarios"
+                  eventoCampo="getUsuarios"
                   nombreItem="nombre"
-                  :registros="usuarios_lider"
+                  :registros="usuarios"
                   placeholder="Seleccione una opción"
                   :consulta="compromisos[0].responsable"
                   :index="4"
@@ -680,10 +680,10 @@
               <div class="col-6 mb-3">
                 <SearchList
                   nombreCampo="Responsable: *"
-                  @getUsuariosLideres="getUsuariosLideres"
-                  eventoCampo="getUsuariosLideres"
+                  @getUsuarios="getUsuarios"
+                  eventoCampo="getUsuarios"
                   nombreItem="nombre"
-                  :registros="usuarios_lider"
+                  :registros="usuarios"
                   placeholder="Seleccione una opción"
                   :consulta="compromisos[1].responsable"
                   :index="5"
@@ -826,7 +826,10 @@
                       ><i
                         class="bi bi-x-circle"
                         style="cursor: pointer"
-                        @click="asistencia.firma_hash = ''"
+                        @click="
+                          asistencia.firma = [];
+                          asistencia.firma_hash = '';
+                        "
                       ></i
                     ></span>
                   </div>
@@ -838,6 +841,7 @@
                 </div>
                 <div class="col-sm-12 col-md-6 mb-3">
                   <div
+                    v-if="$route.params.id == null"
                     class="d-flex justify-content-end align-items-end w-100 h-100"
                   >
                     <label
@@ -974,7 +978,7 @@
                         <input
                           class="form-control"
                           type="file"
-                          accept="image/*,.pdf, .msg"
+                          accept="image/*,.pdf, .msg, audio/*"
                           @change="cargarArchivo($event, index)"
                           id="formFileMultiple"
                           required
@@ -2078,6 +2082,14 @@ export default {
     lanzarLoading(loading) {
       this.loading = loading;
     },
+    getTipoArchivoSubir() {
+      let config = this.configHeader();
+      axios
+        .get(self.URL_API + "/api/v1/extensionArchivos", config)
+        .then((result) => {
+          return result.data;
+        });
+    },
     getEstadoCierreCrm(item = null) {
       let self = this;
       if (item != null) {
@@ -2212,9 +2224,11 @@ export default {
             break;
           case 4:
             this.compromisos[0].responsable = item.nombre;
+            this.correo_responsable1 = item.email;
             break;
           case 5:
             this.compromisos[1].responsable = item.nombre;
+            this.correo_responsable1 = item.email;
             break;
         }
       }
