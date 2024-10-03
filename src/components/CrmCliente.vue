@@ -826,7 +826,10 @@
                       ><i
                         class="bi bi-x-circle"
                         style="cursor: pointer"
-                        @click="asistencia.firma_hash = ''"
+                        @click="
+                          asistencia.firma = [];
+                          asistencia.firma_hash = '';
+                        "
                       ></i
                     ></span>
                   </div>
