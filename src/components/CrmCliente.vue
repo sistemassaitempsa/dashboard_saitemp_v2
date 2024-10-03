@@ -974,7 +974,7 @@
                         <input
                           class="form-control"
                           type="file"
-                          accept="image/*,.pdf, .msg"
+                          accept="image/*,.pdf, .msg, audio/*"
                           @change="cargarArchivo($event, index)"
                           id="formFileMultiple"
                           required
@@ -2079,6 +2079,7 @@ export default {
       this.loading = loading;
     },
     getTipoArchivoSubir() {
+      let config = this.configHeader();
       axios
         .get(self.URL_API + "/api/v1/extensionArchivos", config)
         .then((result) => {
