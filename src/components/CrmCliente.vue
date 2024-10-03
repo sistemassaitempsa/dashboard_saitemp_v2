@@ -2078,6 +2078,13 @@ export default {
     lanzarLoading(loading) {
       this.loading = loading;
     },
+    getTipoArchivoSubir() {
+      axios
+        .get(self.URL_API + "/api/v1/extensionArchivos", config)
+        .then((result) => {
+          return result.data;
+        });
+    },
     getEstadoCierreCrm(item = null) {
       let self = this;
       if (item != null) {
