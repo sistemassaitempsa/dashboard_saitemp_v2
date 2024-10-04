@@ -149,7 +149,7 @@
             </div>
           </div>
           <div class="col mb-3">
-            <label class="form-label">Nombre / razón social: </label>
+            <label class="form-label">Nombre / razón social:* </label>
             <input
               type="text"
               class="form-control"
@@ -159,7 +159,8 @@
               v-model="nombre_contacto"
               required
               :disabled="
-                $route.params.id != undefined && !permisos[32].autorizado
+                ($route.params.id != undefined && !permisos[32].autorizado) ||
+                disableName
               "
             />
             <div class="invalid-feedback">
@@ -169,7 +170,7 @@
         </div>
         <div class="row">
           <div class="col mb-3">
-            <label class="form-label">Telefono de contacto: </label>
+            <label class="form-label">Telefono de contacto:* </label>
             <input
               type="text"
               class="form-control"
@@ -187,7 +188,7 @@
             </div>
           </div>
           <div class="col mb-3">
-            <label class="form-label">Correo de contacto: </label>
+            <label class="form-label">Correo de contacto:* </label>
             <input
               type="email"
               class="form-control"
@@ -594,19 +595,23 @@
                     v-model="compromisos[0].fecha_cierre"
                   />
                 </div> -->
-              <div class="col-6 mb-3">
+              <div class="col-6 was-validated mb-3">
                 <label for="validationCustom" class="form-label"
                   >Estado:*</label
                 >
                 <select
                   class="form-select"
-                  :required="estado_cierre_id == 3"
+                  :required="
+                    estado_cierre_id == 3 && compromisos[0].descripcion != ''
+                  "
                   v-model="compromisos[0].estado_cierre_id"
                 >
                   <option :value="1">Eficaz</option>
                   <option :value="2">Ineficaz</option>
                 </select>
-                <div class="invalid-feedback">Please select a valid state.</div>
+                <div class="invalid-feedback">
+                  {{ mensaje_error }}
+                </div>
               </div>
             </div>
             <div class="row">
@@ -704,19 +709,23 @@
                     v-model="compromisos[1].fecha_cierre"
                   />
                 </div> -->
-              <div class="col-6 mb-3">
+              <div class="col-6 was-validated mb-3">
                 <label for="validationCustom" class="form-label"
                   >Estado:*</label
                 >
                 <select
                   class="form-select"
-                  :required="estado_cierre_id == 3"
+                  :required="
+                    estado_cierre_id == 3 && compromisos[1].descripcion != ''
+                  "
                   v-model="compromisos[1].estado_cierre_id"
                 >
                   <option :value="1">Eficaz</option>
                   <option :value="2">Ineficaz</option>
                 </select>
-                <div class="invalid-feedback">Please select a valid state.</div>
+                <div class="invalid-feedback">
+                  {{ mensaje_error }}
+                </div>
               </div>
             </div>
 
@@ -841,7 +850,11 @@
                 </div>
                 <div class="col-sm-12 col-md-6 mb-3">
                   <div
-                    v-if="$route.params.id == null"
+                    v-if="
+                      ($route.params.id != null &&
+                        asistencia.firma.length == 0) ||
+                      $route.params.id == null
+                    "
                     class="d-flex justify-content-end align-items-end w-100 h-100"
                   >
                     <label
@@ -1184,6 +1197,7 @@ export default {
   },
   data() {
     return {
+      disableName: false,
       emailValido: true,
       correo_responsable1: "",
       correo_responsable2: "",
@@ -1426,12 +1440,25 @@ export default {
       }
     },
     agregarAsistencia() {
-      this.asistencias.push({
-        nombre: "",
-        cargo: "",
-        firma: [],
-        show_pad: false,
-      });
+      const indexUltimaAsistencia = this.asistencias.length - 1;
+      if (
+        this.asistencias[indexUltimaAsistencia].cargo &&
+        /*  this.asistencias[indexUltimaAsistencia].firma_hash && */
+        this.asistencias[indexUltimaAsistencia].nombre
+      ) {
+        this.asistencias.push({
+          nombre: "",
+          cargo: "",
+          firma: [],
+          show_pad: false,
+        });
+        return;
+      }
+      this.showAlert(
+        "Debe llenar los campos requeridos de la asistencia ",
+        "error"
+      );
+      return;
     },
     deleteDynamic(array, index, identificador = null) {
       if (identificador != null) {
@@ -1725,6 +1752,7 @@ export default {
       if (item != null) {
         this.nit_documento = item.nit;
         this.nombre_contacto = item.nombre;
+        this.disableName = true;
       }
       let self = this;
       let config = this.configHeader();
@@ -1740,7 +1768,49 @@ export default {
       if (this.$route.params.id == undefined || this.hora_cierre == " ") {
         this.tomarHoraCierre();
       }
+      if (
+        this.estado_cierre_id == 3 &&
+        (this.interaccion_id == 5 || this.interaccion_id == 6)
+      ) {
+        let missedAsistencia = false;
+        this.compromisos.forEach((compromiso) => {
+          if (
+            compromiso.descripcion != "" &&
+            (!compromiso.responsable ||
+              !compromiso.estado_cierre_id ||
+              compromiso.estado_cierre_id == "0")
+          ) {
+            missedAsistencia = true;
+            this.showAlert(
+              "Debe llenar los campos requeridos en compromisos ",
+              "error"
+            );
+            return;
+          }
+        });
+        if (missedAsistencia) {
+          return;
+        }
+      }
+      if (this.estado_cierre_id == 3 && this.consulta_cierra_pqrsf == null) {
+        this.showAlert("Debe llenar los campos requeridos ", "error");
+        return;
+      }
       if (this.interaccion_id == 5 || this.interaccion_id == 6) {
+        let missedAsistencia = false;
+        this.compromisos.forEach((compromiso) => {
+          if (compromiso.descripcion != "" && !compromiso.responsable) {
+            this.showAlert(
+              "Debe llenar los campos requeridos en compromisos ",
+              "error"
+            );
+            return;
+          }
+        });
+        if (missedAsistencia) {
+          return;
+        }
+        let lastIndexAsistencia = this.asistencias.length - 1;
         if (
           this.alcance_visita == "" ||
           this.pqrsf_id == "" ||
@@ -1754,9 +1824,9 @@ export default {
           this.cargo_visitante == "" ||
           this.visitante == "" ||
           this.temasPrincipales[0].descripcion == "" ||
-          this.asistencias[0].nombre == "" ||
-          this.asistencias[0].cargo == "" ||
-          this.asistencias[0].firma_hash == ""
+          this.asistencias[lastIndexAsistencia].nombre == "" ||
+          this.asistencias[lastIndexAsistencia].cargo == "" ||
+          this.asistencias[lastIndexAsistencia].firma_hash == ""
         ) {
           this.showAlert("Debe llenar los campos requeridos ", "error");
           return;
@@ -1810,7 +1880,10 @@ export default {
       formulario.append("nit_documento", this.nit_documento);
       formulario.append("pqrsf_id", this.pqrsf_id);
       formulario.append("creacion_pqrsf", this.crea_pqrsf);
-      formulario.append("cierre_pqrsf", this.consulta_cierra_pqrsf);
+      formulario.append(
+        "cierre_pqrsf",
+        this.consulta_cierra_pqrsf == null ? "" : this.consulta_cierra_pqrsf
+      );
       formulario.append("responsable", this.consulta_responsable);
       if (this.interaccion_id == 5 || this.interaccion_id == 6) {
         formulario.append("compromisos", JSON.stringify(this.compromisos));
@@ -2055,6 +2128,9 @@ export default {
       if (item != null) {
         this.solicitante_id = item.id;
         this.consulta_solicitante = item.nombre;
+        if (item.id != 1) {
+          this.disableName = false;
+        }
       }
       let config = this.configHeader();
       axios
