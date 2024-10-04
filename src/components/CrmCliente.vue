@@ -1199,6 +1199,7 @@ export default {
     return {
       disableName: false,
       emailValido: true,
+      correo_responsablePqrsf: "",
       correo_responsable1: "",
       correo_responsable2: "",
       charLimit_tema: 3000,
@@ -1515,9 +1516,10 @@ export default {
         });
     },
     limpiarFormulario() {
-      (this.correo_responsable1 = ""),
-        (this.correo_responsable2 = ""),
-        (this.bloquea_campos = false);
+      this.correo_responsablePqrsf = "";
+      this.correo_responsable1 = "";
+      this.correo_responsable2 = "";
+      this.bloquea_campos = false;
       this.radicado = "";
       this.nombre_contacto = "";
       this.sede_id = "";
@@ -1846,6 +1848,10 @@ export default {
 
       let correosResponsables = {
         correos: [
+          {
+            correo: this.correo_responsablePqrsf,
+            observacion: "",
+          },
           {
             correo: this.correo_responsable1,
             observacion: this.compromisos[0].observacion,
@@ -2289,6 +2295,7 @@ export default {
           case 1:
             this.responsable_id = item.id;
             this.consulta_responsable = item.nombre;
+            this.correo_responsablePqrsf = item.email;
             break;
           case 2:
             this.cierra_pqrsf_id = item.id;
