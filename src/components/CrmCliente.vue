@@ -1081,6 +1081,7 @@ export default {
       this.hora_inicio = "";
     },
     getItem(id) {
+      this.limpiarFormulario()
       let self = this;
       self.loading = true;
       let config = this.configHeader();
