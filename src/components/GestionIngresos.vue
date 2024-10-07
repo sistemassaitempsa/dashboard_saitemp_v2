@@ -464,13 +464,14 @@
                             </div>
                         </div>
                     </div>
-                    <!--  <div class="col" style="margin:30px" v-if="permisos[23].autorizado">
+                    <div class="col" style="margin:30px" v-if="permisos[23].autorizado">
                         <div v-if="$route.params.id != undefined" class="btn">
-                            <button type="button" class="btn btn-md btn-success" aria-expanded="false">
+                            <button type="button" class="btn btn-md btn-success" aria-expanded="false"
+                                @click.prevent="exportarDocumentos">
                                 Exportar documentos
                             </button>
                         </div>
-                    </div> -->
+                    </div>
 
                     <div class="col" style="margin:30px" v-if="permisos[23].autorizado">
                         <div v-if="$route.params.id != undefined" class="btn-group" role="group"
@@ -1494,6 +1495,28 @@ export default {
                         self.showAlert(result.data.message, result.data.status)
                     });
             }
+        },
+        exportarDocumentos() {
+            const radicadoId = this.id_cliente
+            const idCliente = this.numero_identificacion
+            let self = this
+            axios({
+                url: self.URL_API + `api/v1/descargarZip/${radicadoId}/${idCliente}`,
+                method: 'GET',
+                responseType: 'blob', // Esto asegura que se maneje el archivo binario
+            })
+                .then((response) => {
+                    const url = window.URL.createObjectURL(new Blob([response.data]));
+                    const link = document.createElement('a');
+                    link.href = url;
+                    link.setAttribute('download', `archivos_cliente_${idCliente}.zip`);
+                    document.body.appendChild(link);
+                    link.click();
+                    link.remove();
+                })
+                .catch((error) => {
+                    console.error('Error al descargar el archivo ZIP:', error);
+                });
         },
         getRegistroIngreso(id_cliente) {
             let self = this
