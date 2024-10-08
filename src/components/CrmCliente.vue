@@ -8,12 +8,7 @@
           <h6 style="text-align: left">Radicado: {{ radicado }}</h6>
         </div>
         <div class="col" v-if="$route.params.id != null">
-          <button
-            type="button"
-            class="btn btn-success btn-sm"
-            style="float: left"
-            @click="limpiarFormulario()"
-          >
+          <button type="button" class="btn btn-success btn-sm" style="float: left" @click="limpiarFormulario()">
             Crear nuevo radicado
           </button>
         </div>
@@ -22,30 +17,16 @@
         <div class="row" v-if="$route.params.id != undefined">
           <div class="col mb-3">
             <label class="form-label">Fecha de radicado: </label>
-            <input
-              type="datetime-local"
-              class="form-control"
-              autocomplete="off"
-              id="fechaRadicado"
-              aria-describedby="emailHelp"
-              v-model="fecha_radicado"
-              disabled
-            />
+            <input type="datetime-local" class="form-control" autocomplete="off" id="fechaRadicado"
+              aria-describedby="emailHelp" v-model="fecha_radicado" disabled />
             <div class="invalid-feedback">
               {{ mensaje_error }}
             </div>
           </div>
           <div class="col mb-3">
             <label class="form-label">Fecha de cierre: </label>
-            <input
-              type="datetime-local"
-              class="form-control"
-              autocomplete="off"
-              id="fechaCierre"
-              aria-describedby="emailHelp"
-              v-model="fecha_cierre"
-              disabled
-            />
+            <input type="datetime-local" class="form-control" autocomplete="off" id="fechaCierre"
+              aria-describedby="emailHelp" v-model="fecha_cierre" disabled />
             <div class="invalid-feedback">
               {{ mensaje_error }}
             </div>
@@ -53,96 +34,45 @@
         </div>
         <div class="row">
           <div class="col mb-3">
-            <SearchList
-              nombreCampo="Sede*"
-              @getSedes="getSedes"
-              eventoCampo="getSedes"
-              nombreItem="nombre"
-              :registros="sedes"
-              placeholder="Seleccione una opción"
-              :consulta="consulta_sede"
-              :disabled="
-                $route.params.id != undefined && !permisos[32].autorizado
-              "
-            />
+            <SearchList nombreCampo="Sede*" @getSedes="getSedes" eventoCampo="getSedes" nombreItem="nombre"
+              :registros="sedes" placeholder="Seleccione una opción" :consulta="consulta_sede" :disabled="$route.params.id != undefined && !permisos[32].autorizado
+                " />
           </div>
 
           <div class="col mb-3">
-            <SearchList
-              nombreCampo="Proceso o área *"
-              @getProcesos="getProcesos"
-              eventoCampo="getProcesos"
-              nombreItem="nombre"
-              :registros="procesos"
-              placeholder="Seleccione una opción"
-              :consulta="consulta_proceso"
-              :disabled="
-                $route.params.id != undefined && !permisos[32].autorizado
-              "
-            />
+            <SearchList nombreCampo="Proceso o área *" @getProcesos="getProcesos" eventoCampo="getProcesos"
+              nombreItem="nombre" :registros="procesos" placeholder="Seleccione una opción" :consulta="consulta_proceso"
+              :disabled="$route.params.id != undefined && !permisos[32].autorizado
+                " />
           </div>
         </div>
         <div class="row">
           <div class="col mb-3">
-            <SearchList
-              nombreCampo="Solicitante *"
-              @getSolicitanteCrm="getSolicitanteCrm"
-              eventoCampo="getSolicitanteCrm"
-              nombreItem="nombre"
-              :registros="solicitantes"
-              placeholder="Seleccione una opción"
-              :consulta="consulta_solicitante"
-              :disabled="
-                $route.params.id != undefined && !permisos[32].autorizado
-              "
-            />
+            <SearchList nombreCampo="Solicitante *" @getSolicitanteCrm="getSolicitanteCrm"
+              eventoCampo="getSolicitanteCrm" nombreItem="nombre" :registros="solicitantes"
+              placeholder="Seleccione una opción" :consulta="consulta_solicitante" :disabled="$route.params.id != undefined && !permisos[32].autorizado
+                " />
           </div>
           <div class="col mb-3">
-            <SearchList
-              nombreCampo="Medio de atención *"
-              @getInteracciones="getInteracciones"
-              eventoCampo="getInteracciones"
-              nombreItem="nombre"
-              :registros="respuestas_interaccion"
-              placeholder="Seleccione una opción"
-              :consulta="consulta_interaccion"
-              :disabled="
-                $route.params.id != undefined && !permisos[32].autorizado
-              "
-            />
+            <SearchList nombreCampo="Medio de atención *" @getInteracciones="getInteracciones"
+              eventoCampo="getInteracciones" nombreItem="nombre" :registros="respuestas_interaccion"
+              placeholder="Seleccione una opción" :consulta="consulta_interaccion" :disabled="$route.params.id != undefined && !permisos[32].autorizado
+                " />
           </div>
         </div>
         <div class="row">
           <div class="col">
-            <SearchList
-              v-if="solicitante_id == 1 && $route.params.id == undefined"
-              nombreCampo="Nit/identificacion: *"
-              @getEmpresasCliente="getEmpresasCliente"
-              eventoCampo="getEmpresasCliente"
-              nombreItem="nit"
-              :consulta="nit_documento"
-              :registros="empresas_cliente"
-              placeholder="Seleccione una opción"
-              :disabled="
-                bloquea_campos &&
+            <SearchList v-if="solicitante_id == 1 && $route.params.id == undefined" nombreCampo="Nit/identificacion: *"
+              @getEmpresasCliente="getEmpresasCliente" eventoCampo="getEmpresasCliente" nombreItem="nit"
+              :consulta="nit_documento" :registros="empresas_cliente" placeholder="Seleccione una opción" :disabled="bloquea_campos &&
                 nit_documento != null &&
                 !permisos[32].autorizado
-              "
-            />
+                " />
             <div v-else>
               <label class="form-label">Nit/identificacion: * </label>
-              <input
-                type="text"
-                class="form-control"
-                autocomplete="off"
-                id="no-id"
-                aria-describedby="emailHelp"
-                v-model="nit_documento"
-                required
-                :disabled="
-                  $route.params.id != undefined && !permisos[32].autorizado
-                "
-              />
+              <input type="text" class="form-control" autocomplete="off" id="no-id" aria-describedby="emailHelp"
+                v-model="nit_documento" required :disabled="$route.params.id != undefined && !permisos[32].autorizado
+                  " />
               <div class="invalid-feedback">
                 {{ mensaje_error }}
               </div>
@@ -150,19 +80,10 @@
           </div>
           <div class="col mb-3">
             <label class="form-label">Nombre / razón social:* </label>
-            <input
-              type="text"
-              class="form-control"
-              autocomplete="off"
-              id="no-name"
-              aria-describedby="emailHelp"
-              v-model="nombre_contacto"
-              required
-              :disabled="
-                ($route.params.id != undefined && !permisos[32].autorizado) ||
+            <input type="text" class="form-control" autocomplete="off" id="no-name" aria-describedby="emailHelp"
+              v-model="nombre_contacto" required :disabled="($route.params.id != undefined && !permisos[32].autorizado) ||
                 disableName
-              "
-            />
+                " />
             <div class="invalid-feedback">
               {{ mensaje_error }}
             </div>
@@ -171,41 +92,19 @@
         <div class="row">
           <div class="col mb-3">
             <label class="form-label">Telefono de contacto:* </label>
-            <input
-              type="text"
-              class="form-control"
-              autocomplete="off"
-              id="no-tel"
-              aria-describedby="emailHelp"
-              v-model="telefono_contacto"
-              :disabled="
-                $route.params.id != undefined && !permisos[32].autorizado
-              "
-              required
-            />
+            <input type="text" class="form-control" autocomplete="off" id="no-tel" aria-describedby="emailHelp"
+              v-model="telefono_contacto" :disabled="$route.params.id != undefined && !permisos[32].autorizado
+                " required />
             <div class="invalid-feedback">
               {{ mensaje_error }}
             </div>
           </div>
           <div class="col mb-3">
             <label class="form-label">Correo de contacto:* </label>
-            <input
-              type="email"
-              class="form-control"
-              autocomplete="off"
-              id="no-email"
-              aria-describedby="emailHelp"
-              v-model="correo_contacto"
-              :disabled="
-                $route.params.id != undefined && !permisos[32].autorizado
-              "
-              required
-              @input="validateEmail"
-            />
-            <small
-              v-if="!emailValido && correo_contacto.length > 0"
-              class="text-danger"
-            >
+            <input type="email" class="form-control" autocomplete="off" id="no-email" aria-describedby="emailHelp"
+              v-model="correo_contacto" :disabled="$route.params.id != undefined && !permisos[32].autorizado
+                " required @input="validateEmail" />
+            <small v-if="!emailValido && correo_contacto.length > 0" class="text-danger">
               Por favor ingresa un correo válido.
             </small>
             <div class="invalid-feedback">
@@ -214,89 +113,42 @@
           </div>
         </div>
         <div class="row">
-          <div class="col mb-3">
-            <SearchList
-              nombreCampo="Estado *"
-              @getEstadoCierreCrm="getEstadoCierreCrm"
-              eventoCampo="getEstadoCierreCrm"
-              nombreItem="nombre"
-              :registros="estados_cierre"
-              placeholder="Seleccione una opción"
-              :consulta="consulta_estado_cierre"
-              :disabled="
-                $route.params.id != undefined && fecha_cierre != undefined
-              "
-            />
+          <div class="col-6 mb-3">
+            <SearchList nombreCampo="Estado *" @getEstadoCierreCrm="getEstadoCierreCrm" eventoCampo="getEstadoCierreCrm"
+              nombreItem="nombre" :registros="estados_cierre" placeholder="Seleccione una opción"
+              :consulta="consulta_estado_cierre" :disabled="$route.params.id != undefined && fecha_cierre != undefined
+                " />
           </div>
-          <div class="col mb-3">
-            <SearchList
-              nombreCampo="PQRSF *"
-              @getPQRSF="getPQRSF"
-              eventoCampo="getPQRSF"
-              nombreItem="nombre"
-              :registros="lista_pqrsf"
-              placeholder="Seleccione una opción"
-              :consulta="consulta_pqrsf"
-              :disabled="
-                $route.params.id != undefined && !permisos[32].autorizado
-              "
-            />
+          <div class="col mb-3" v-if="interaccion_id != 5 && interaccion_id != 6">
+            <SearchList nombreCampo="PQRSF *" @getPQRSF="getPQRSF" eventoCampo="getPQRSF" nombreItem="nombre"
+              :registros="lista_pqrsf" placeholder="Seleccione una opción" :consulta="consulta_pqrsf" :disabled="$route.params.id != undefined && !permisos[32].autorizado
+                " />
           </div>
         </div>
         <div class="row">
           <div class="col-6 mb-3">
-            <SearchList
-              nombreCampo="Responsable *"
-              @getUsuarios="getUsuarios"
-              eventoCampo="getUsuarios"
-              nombreItem="nombre"
-              :registros="usuarios"
-              placeholder="Seleccione una opción"
-              :consulta="consulta_responsable"
-              :index="1"
-              :disabled="
-                $route.params.id != undefined && !permisos[32].autorizado
-              "
-            />
+            <SearchList nombreCampo="Responsable *" @getUsuarios="getUsuarios" eventoCampo="getUsuarios"
+              nombreItem="nombre" :registros="usuarios" placeholder="Seleccione una opción"
+              :consulta="consulta_responsable" :index="1" :disabled="$route.params.id != undefined && !permisos[32].autorizado
+                " />
           </div>
-          <div
-            class="col-6 mb-3"
-            v-if="
-              (estado_cierre_id == 3 && $route.params.id != undefined) ||
-              (estado_cierre_id == 3 && $route.params.id == undefined)
-            "
-          >
-            <SearchList
-              nombreCampo="Cierra la PQRSF *"
-              @getUsuarios="getUsuarios"
-              eventoCampo="getUsuarios"
-              nombreItem="nombre"
-              :registros="usuarios"
-              placeholder="Seleccione una opción"
-              :consulta="consulta_cierra_pqrsf"
-              :disabled="
-                $route.params.id != undefined &&
+          <div class="col-6 mb-3" v-if="
+            (estado_cierre_id == 3 && $route.params.id != undefined) ||
+            (estado_cierre_id == 3 && $route.params.id == undefined)
+          ">
+            <SearchList nombreCampo="Cierra la PQRSF *" @getUsuarios="getUsuarios" eventoCampo="getUsuarios"
+              nombreItem="nombre" :registros="usuarios" placeholder="Seleccione una opción"
+              :consulta="consulta_cierra_pqrsf" :disabled="$route.params.id != undefined &&
                 consulta_cierra_pqrsf != null &&
                 fecha_cierre != undefined
-              "
-              :index="2"
-            />
+                " :index="2" />
           </div>
 
           <div class="col-6 mb-3" v-if="$route.params.id != undefined">
-            <label class="form-label">Crea PQRSF: </label>
-            <input
-              type="text"
-              class="form-control"
-              autocomplete="off"
-              id="no-pqr"
-              aria-describedby="emailHelp"
-              v-model="crea_pqrsf"
-              required
-              :disabled="
-                $route.params.id != undefined && !permisos[32].autorizado
-              "
-            />
+            <label class="form-label">Crea radicado: </label>
+            <input type="text" class="form-control" autocomplete="off" id="no-pqr" aria-describedby="emailHelp"
+              v-model="crea_pqrsf" required :disabled="$route.params.id != undefined && !permisos[32].autorizado
+                " />
             <div class="invalid-feedback">
               {{ mensaje_error }}
             </div>
@@ -304,20 +156,11 @@
         </div>
         <div class="row">
           <div class="col mb-3">
-            <label class="form-label">Observación PQRSF: *</label>
-            <textarea
-              class="form-control"
-              name=""
-              id="observacion_PQRSF"
-              rows="5"
-              v-model="observacion"
-              placeholder="Observación"
-              maxlength="3000"
-            ></textarea>
+            <label class="form-label">Observación:</label>
+            <textarea class="form-control" name="" id="observacion_PQRSF" rows="5" v-model="observacion"
+              placeholder="Observación" maxlength="3000"></textarea>
             <div class="d-flex justify-content-end">
-              <small class="char-count"
-                >{{ remainingCharsObservasion3 }}/3000</small
-              >
+              <small class="char-count">{{ remainingCharsObservasion3 }}/3000</small>
             </div>
             <div class="invalid-feedback">
               {{ mensaje_error }}
@@ -326,55 +169,27 @@
         </div>
         <div class="row"></div>
         <!-- columnas para visita -->
-        <h5
-          class="text-start mt-4"
-          v-if="interaccion_id == 5 || interaccion_id == 6"
-        >
+        <h5 class="text-start mt-4" v-if="interaccion_id == 5 || interaccion_id == 6">
           Formulario de visita:*
         </h5>
-        <div
-          v-if="interaccion_id == 5 || interaccion_id == 6"
-          class="border rounded p-4"
-        >
+        <div v-if="interaccion_id == 5 || interaccion_id == 6" class="border rounded p-4">
           <div class="row">
-            <div
-              v-if="interaccion_id == 5 || interaccion_id == 6"
-              :class="
-                $route.params.id !== undefined ? 'col-6 mb-3' : 'col-6 mb-3'
-              "
-            >
+            <div v-if="interaccion_id == 5 || interaccion_id == 6" :class="$route.params.id !== undefined ? 'col-6 mb-3' : 'col-6 mb-3'
+              ">
               <label class="form-label">Hora inicio de visita:* </label>
-              <input
-                type="time"
-                class="form-control"
-                autocomplete="off"
-                id="no-hora"
-                aria-describedby="emailHelp"
-                v-model="hora_inicio"
-                required
-              />
+              <input type="time" class="form-control" autocomplete="off" id="no-hora" aria-describedby="emailHelp"
+                v-model="hora_inicio" required />
               <div class="invalid-feedback">
                 {{ mensaje_error }}
               </div>
             </div>
-            <div
-              class="col-6 mb-3"
-              v-if="
-                $route.params.id != undefined &&
-                (interaccion_id == 5 || interaccion_id == 6)
-              "
-            >
+            <div class="col-6 mb-3" v-if="
+              $route.params.id != undefined &&
+              (interaccion_id == 5 || interaccion_id == 6)
+            ">
               <label class="form-label">Hora fin de visita:* </label>
-              <input
-                type="time"
-                class="form-control"
-                autocomplete="off"
-                id="no-hora-fin"
-                aria-describedby="emailHelp"
-                v-model="hora_cierre"
-                required
-                disabled
-              />
+              <input type="time" class="form-control" autocomplete="off" id="no-hora-fin" aria-describedby="emailHelp"
+                v-model="hora_cierre" required disabled />
               <div class="invalid-feedback">
                 {{ mensaje_error }}
               </div>
@@ -382,37 +197,20 @@
           </div>
           <div class="row">
             <div class="col-6 mb-3">
-              <SearchList
-                nombreCampo="Visita realizada por: *"
-                @getUsuarios="getUsuarios"
-                eventoCampo="getUsuarios"
-                nombreItem="nombre"
-                :registros="usuarios"
-                placeholder="Seleccione una opción"
-                :consulta="visitante"
-                :index="3"
-                :disabled="
-                  $route.params.id != undefined && !permisos[32].autorizado
-                "
-              />
+              <SearchList nombreCampo="Visita realizada por: *" @getUsuarios="getUsuarios" eventoCampo="getUsuarios"
+                nombreItem="nombre" :registros="usuarios" placeholder="Seleccione una opción" :consulta="visitante"
+                :index="3" :disabled="$route.params.id != undefined && !permisos[32].autorizado
+                  " />
               <div class="invalid-feedback">
                 {{ mensaje_error }}
               </div>
             </div>
 
             <div class="col mb-3">
-              <SearchList
-                nombreCampo="Cargo del visitante: *"
-                @getCargosPlanta="getCargosPlanta"
-                eventoCampo="getCargosPlanta"
-                nombreItem="cargo"
-                :registros="cargos_planta"
-                placeholder="Seleccione una opción"
-                :consulta="cargo_visitante"
-                :disabled="
-                  $route.params.id != undefined && !permisos[32].autorizado
-                "
-              />
+              <SearchList nombreCampo="Cargo del visitante: *" @getCargosPlanta="getCargosPlanta"
+                eventoCampo="getCargosPlanta" nombreItem="cargo" :registros="cargos_planta"
+                placeholder="Seleccione una opción" :consulta="cargo_visitante" :disabled="$route.params.id != undefined && !permisos[32].autorizado
+                  " />
               <div class="invalid-feedback">
                 {{ mensaje_error }}
               </div>
@@ -421,18 +219,9 @@
           <div class="row">
             <div class="col mb-3">
               <label class="form-label">Visita atendida por:* </label>
-              <input
-                type="text"
-                class="form-control"
-                autocomplete="off"
-                id="no-visitante"
-                aria-describedby="emailHelp"
-                v-model="visitado"
-                required
-                :disabled="
-                  $route.params.id != undefined && !permisos[32].autorizado
-                "
-              />
+              <input type="text" class="form-control" autocomplete="off" id="no-visitante" aria-describedby="emailHelp"
+                v-model="visitado" required :disabled="$route.params.id != undefined && !permisos[32].autorizado
+                  " />
               <div class="invalid-feedback">
                 {{ mensaje_error }}
               </div>
@@ -440,18 +229,9 @@
 
             <div class="col mb-3">
               <label class="form-label">Cargo del visitado:* </label>
-              <input
-                type="text"
-                class="form-control"
-                autocomplete="off"
-                id="no-visitado"
-                aria-describedby="emailHelp"
-                v-model="cargo_visitado"
-                required
-                :disabled="
-                  $route.params.id != undefined && !permisos[32].autorizado
-                "
-              />
+              <input type="text" class="form-control" autocomplete="off" id="no-visitado" aria-describedby="emailHelp"
+                v-model="cargo_visitado" required :disabled="$route.params.id != undefined && !permisos[32].autorizado
+                  " />
               <div class="invalid-feedback">
                 {{ mensaje_error }}
               </div>
@@ -460,18 +240,9 @@
           <div class="row">
             <div class="col mb-3">
               <label class="form-label">Objetivo de la visita:* </label>
-              <input
-                type="text"
-                class="form-control"
-                autocomplete="off"
-                id="no-objetivo"
-                aria-describedby="emailHelp"
-                v-model="objetivo_visita"
-                required
-                :disabled="
-                  $route.params.id != undefined && !permisos[32].autorizado
-                "
-              />
+              <input type="text" class="form-control" autocomplete="off" id="no-objetivo" aria-describedby="emailHelp"
+                v-model="objetivo_visita" required :disabled="$route.params.id != undefined && !permisos[32].autorizado
+                  " />
               <div class="invalid-feedback">
                 {{ mensaje_error }}
               </div>
@@ -479,18 +250,9 @@
 
             <div class="col mb-3">
               <label class="form-label">Alcance de la visita:* </label>
-              <input
-                type="text"
-                class="form-control"
-                autocomplete="off"
-                id="no-alcance"
-                aria-describedby="emailHelp"
-                v-model="alcance_visita"
-                required
-                :disabled="
-                  $route.params.id != undefined && !permisos[32].autorizado
-                "
-              />
+              <input type="text" class="form-control" autocomplete="off" id="no-alcance" aria-describedby="emailHelp"
+                v-model="alcance_visita" required :disabled="$route.params.id != undefined && !permisos[32].autorizado
+                  " />
               <div class="invalid-feedback">
                 {{ mensaje_error }}
               </div>
@@ -499,20 +261,10 @@
           <div class="row">
             <div class="col mb-3 position-relative">
               <label class="form-label">Tema de la visita:*</label>
-              <textarea
-                class="form-control"
-                required
-                name=""
-                id="temaArea"
-                rows="3"
-                v-model="temasPrincipales[0].descripcion"
-                placeholder="Tema"
-                @input="checkCharLimit"
-                maxlength="3000"
-                :disabled="
-                  $route.params.id != undefined && !permisos[32].autorizado
-                "
-              ></textarea>
+              <textarea class="form-control" required name="" id="temaArea" rows="3"
+                v-model="temasPrincipales[0].descripcion" placeholder="Tema" @input="checkCharLimit" maxlength="3000"
+                :disabled="$route.params.id != undefined && !permisos[32].autorizado
+                  "></textarea>
               <div class="d-flex justify-content-end">
                 <small class="char-count">{{ remainingChars }}/3000</small>
               </div>
@@ -528,35 +280,17 @@
               </div>
               <div class="col-3 mb-3" v-if="$route.params.id != undefined">
                 <label class="form-label">Fecha de apertura: </label>
-                <input
-                  type="datetime-local"
-                  class="form-control"
-                  autocomplete="off"
-                  id="no-fecha-open"
-                  aria-describedby="emailHelp"
-                  v-model="fecha_radicado"
-                  disabled
-                />
+                <input type="datetime-local" class="form-control" autocomplete="off" id="no-fecha-open"
+                  aria-describedby="emailHelp" v-model="fecha_radicado" disabled />
               </div>
             </div>
             <div class="row">
               <div class="col mb-3">
-                <textarea
-                  class="form-control"
-                  name=""
-                  id="compromiso1"
-                  rows="2"
-                  maxlength="4000"
-                  v-model="compromisos[0].descripcion"
-                  placeholder="Compromiso 1"
-                  :disabled="
-                    $route.params.id != undefined && !permisos[32].autorizado
-                  "
-                ></textarea>
+                <textarea class="form-control" name="" id="compromiso1" rows="2" maxlength="4000"
+                  v-model="compromisos[0].descripcion" placeholder="Compromiso 1" :disabled="$route.params.id != undefined && !permisos[32].autorizado
+                    "></textarea>
                 <div class="d-flex justify-content-end">
-                  <small class="char-count"
-                    >{{ remainingCharsCompromiso }}/4000</small
-                  >
+                  <small class="char-count">{{ remainingCharsCompromiso }}/4000</small>
                 </div>
                 <div class="invalid-feedback">
                   {{ mensaje_error }}
@@ -565,20 +299,11 @@
             </div>
             <div class="row">
               <div class="col-6 mb-3">
-                <SearchList
-                  nombreCampo="Responsable: *"
-                  @getUsuarios="getUsuarios"
-                  eventoCampo="getUsuarios"
-                  nombreItem="nombre"
-                  :registros="usuarios"
-                  placeholder="Seleccione una opción"
-                  :consulta="compromisos[0].responsable"
-                  :index="4"
-                  :valida_campo="compromisos[0].descripcion != ''"
-                  :disabled="
-                    $route.params.id != undefined && !permisos[32].autorizado
-                  "
-                />
+                <SearchList nombreCampo="Responsable: *" @getUsuarios="getUsuarios" eventoCampo="getUsuarios"
+                  nombreItem="nombre" :registros="usuarios" placeholder="Seleccione una opción"
+                  :consulta="compromisos[0].responsable" :index="4" :valida_campo="compromisos[0].descripcion != ''"
+                  :disabled="$route.params.id != undefined && !permisos[32].autorizado
+                    " />
 
                 <div class="invalid-feedback">
                   {{ mensaje_error }}
@@ -596,16 +321,9 @@
                   />
                 </div> -->
               <div class="col-6 was-validated mb-3">
-                <label for="validationCustom" class="form-label"
-                  >Estado:*</label
-                >
-                <select
-                  class="form-select"
-                  :required="
-                    estado_cierre_id == 3 && compromisos[0].descripcion != ''
-                  "
-                  v-model="compromisos[0].estado_cierre_id"
-                >
+                <label for="validationCustom" class="form-label">Estado:*</label>
+                <select class="form-select" :required="estado_cierre_id == 3 && compromisos[0].descripcion != ''
+                  " v-model="compromisos[0].estado_cierre_id">
                   <option :value="1">Eficaz</option>
                   <option :value="2">Ineficaz</option>
                 </select>
@@ -616,25 +334,12 @@
             </div>
             <div class="row">
               <div class="col mb-3">
-                <label class="form-label"
-                  >Observaciones para el responsable: *</label
-                >
-                <textarea
-                  class="form-control"
-                  name=""
-                  id="razon_social"
-                  rows="1"
-                  v-model="compromisos[0].observacion"
-                  placeholder="Observación"
-                  :disabled="
-                    $route.params.id != undefined && !permisos[32].autorizado
-                  "
-                  maxlength="3000"
-                ></textarea>
+                <label class="form-label">Observaciones para el responsable: *</label>
+                <textarea class="form-control" name="" id="razon_social" rows="1" v-model="compromisos[0].observacion"
+                  placeholder="Observación" :disabled="$route.params.id != undefined && !permisos[32].autorizado
+                    " maxlength="3000"></textarea>
                 <div class="d-flex justify-content-end">
-                  <small class="char-count"
-                    >{{ remainingCharsObservasion }}/3000</small
-                  >
+                  <small class="char-count">{{ remainingCharsObservasion }}/3000</small>
                 </div>
               </div>
             </div>
@@ -646,35 +351,17 @@
               </div>
               <div class="col-3 mb-3" v-if="$route.params.id != undefined">
                 <label class="form-label">Fecha de apertura: </label>
-                <input
-                  type="datetime-local"
-                  class="form-control"
-                  autocomplete="off"
-                  id="no-fecha-open2"
-                  aria-describedby="emailHelp"
-                  v-model="fecha_radicado"
-                  disabled
-                />
+                <input type="datetime-local" class="form-control" autocomplete="off" id="no-fecha-open2"
+                  aria-describedby="emailHelp" v-model="fecha_radicado" disabled />
               </div>
             </div>
             <div class="row">
               <div class="col mb-3">
-                <textarea
-                  class="form-control"
-                  name=""
-                  id="compromiso2"
-                  rows="2"
-                  v-model="compromisos[1].descripcion"
-                  placeholder="Compromiso 2"
-                  :disabled="
-                    $route.params.id != undefined && !permisos[32].autorizado
-                  "
-                  maxlength="4000"
-                ></textarea>
+                <textarea class="form-control" name="" id="compromiso2" rows="2" v-model="compromisos[1].descripcion"
+                  placeholder="Compromiso 2" :disabled="$route.params.id != undefined && !permisos[32].autorizado
+                    " maxlength="4000"></textarea>
                 <div class="d-flex justify-content-end">
-                  <small class="char-count"
-                    >{{ remainingCharsCompromiso2 }}/4000</small
-                  >
+                  <small class="char-count">{{ remainingCharsCompromiso2 }}/4000</small>
                 </div>
                 <div class="invalid-feedback">
                   {{ mensaje_error }}
@@ -683,20 +370,11 @@
             </div>
             <div class="row">
               <div class="col-6 mb-3">
-                <SearchList
-                  nombreCampo="Responsable: *"
-                  @getUsuarios="getUsuarios"
-                  eventoCampo="getUsuarios"
-                  nombreItem="nombre"
-                  :registros="usuarios"
-                  placeholder="Seleccione una opción"
-                  :consulta="compromisos[1].responsable"
-                  :index="5"
-                  :valida_campo="compromisos[1].descripcion != ''"
-                  :disabled="
-                    $route.params.id != undefined && !permisos[32].autorizado
-                  "
-                />
+                <SearchList nombreCampo="Responsable: *" @getUsuarios="getUsuarios" eventoCampo="getUsuarios"
+                  nombreItem="nombre" :registros="usuarios" placeholder="Seleccione una opción"
+                  :consulta="compromisos[1].responsable" :index="5" :valida_campo="compromisos[1].descripcion != ''"
+                  :disabled="$route.params.id != undefined && !permisos[32].autorizado
+                    " />
               </div>
               <!--     <div class="col-3 mb-3">
                   <label class="form-label">Fecha de cierre: </label>
@@ -710,16 +388,9 @@
                   />
                 </div> -->
               <div class="col-6 was-validated mb-3">
-                <label for="validationCustom" class="form-label"
-                  >Estado:*</label
-                >
-                <select
-                  class="form-select"
-                  :required="
-                    estado_cierre_id == 3 && compromisos[1].descripcion != ''
-                  "
-                  v-model="compromisos[1].estado_cierre_id"
-                >
+                <label for="validationCustom" class="form-label">Estado:*</label>
+                <select class="form-select" :required="estado_cierre_id == 3 && compromisos[1].descripcion != ''
+                  " v-model="compromisos[1].estado_cierre_id">
                   <option :value="1">Eficaz</option>
                   <option :value="2">Ineficaz</option>
                 </select>
@@ -731,24 +402,12 @@
 
             <div class="row">
               <div class="col mb-3">
-                <label class="form-label"
-                  >Observaciones para el responsable: *</label
-                >
-                <textarea
-                  class="form-control"
-                  name=""
-                  id="observacion_compromiso1"
-                  rows="1"
-                  v-model="compromisos[1].observacion"
-                  placeholder="Observación"
-                  :disabled="
-                    $route.params.id != undefined && !permisos[32].autorizado
-                  "
-                ></textarea>
+                <label class="form-label">Observaciones para el responsable: *</label>
+                <textarea class="form-control" name="" id="observacion_compromiso1" rows="1"
+                  v-model="compromisos[1].observacion" placeholder="Observación" :disabled="$route.params.id != undefined && !permisos[32].autorizado
+                    "></textarea>
                 <div class="d-flex justify-content-end">
-                  <small class="char-count"
-                    >{{ remainingCharsObservasion2 }}/3000</small
-                  >
+                  <small class="char-count">{{ remainingCharsObservasion2 }}/3000</small>
                 </div>
               </div>
             </div>
@@ -766,123 +425,65 @@
             <div class="row border rounded border-2">
               <div class="col mb-3">
                 <label class="form-label">Nombre:* </label>
-                <input
-                  type="text"
-                  class="form-control"
-                  autocomplete="off"
-                  id="no-name-asist"
-                  aria-describedby="emailHelp"
-                  v-model="asistencia.nombre"
-                  required
-                  :disabled="
-                    $route.params.id != undefined && !permisos[32].autorizado
-                  "
-                />
+                <input type="text" class="form-control" autocomplete="off" id="no-name-asist"
+                  aria-describedby="emailHelp" v-model="asistencia.nombre" required :disabled="$route.params.id != undefined && !permisos[32].autorizado
+                    " />
                 <div class="invalid-feedback">
                   {{ mensaje_error }}
                 </div>
               </div>
               <div class="col mb-3">
                 <label class="form-label">Cargo:* </label>
-                <input
-                  type="text"
-                  class="form-control"
-                  autocomplete="off"
-                  id="no-cargo"
-                  aria-describedby="emailHelp"
-                  v-model="asistencia.cargo"
-                  required
-                  :disabled="
-                    $route.params.id != undefined && !permisos[32].autorizado
-                  "
-                />
+                <input type="text" class="form-control" autocomplete="off" id="no-cargo" aria-describedby="emailHelp"
+                  v-model="asistencia.cargo" required :disabled="$route.params.id != undefined && !permisos[32].autorizado
+                    " />
                 <div class="invalid-feedback">
                   {{ mensaje_error }}
                 </div>
               </div>
               <div class="row">
                 <div class="col-sm-12 col-md-6 mb-3">
-                  <label for="exampleFormControlInput1" class="form-label"
-                    >Firma *:</label
-                  >
-                  <div
-                    v-if="
-                      $route.params.id != undefined &&
-                      asistencia.firma.length != 0
-                    "
-                    class="imagen_firma"
-                  >
+                  <label for="exampleFormControlInput1" class="form-label">Firma *:</label>
+                  <div v-if="
+                    $route.params.id != undefined &&
+                    asistencia.firma.length != 0
+                  " class="imagen_firma">
                     <img :src="URL_API + asistencia.firma" alt="" />
                   </div>
                   <div v-else class="input-group mb-3">
-                    <span class="input-group-text" id="basic-addon2"
-                      ><i
-                        class="bi bi-pen"
-                        style="cursor: pointer"
-                        @click="signature(asistencias, index)"
-                      ></i
-                    ></span>
-                    <input
-                      type="password"
-                      disabled
-                      class="form-control"
-                      placeholder=""
-                      aria-label="firma"
-                      v-model="asistencia.firma_hash"
-                      aria-describedby="basic-addon1"
-                    />
-                    <span class="input-group-text" id="basic-addon3"
-                      ><i
-                        class="bi bi-x-circle"
-                        style="cursor: pointer"
+                    <span class="input-group-text" id="basic-addon2"><i class="bi bi-pen" style="cursor: pointer"
+                        @click="signature(asistencias, index)"></i></span>
+                    <input type="password" disabled class="form-control" placeholder="" aria-label="firma"
+                      v-model="asistencia.firma_hash" aria-describedby="basic-addon1" />
+                    <span class="input-group-text" id="basic-addon3"><i class="bi bi-x-circle" style="cursor: pointer"
                         @click="
                           asistencia.firma = [];
-                          asistencia.firma_hash = '';
-                        "
-                      ></i
-                    ></span>
+                        asistencia.firma_hash = '';
+                        "></i></span>
                   </div>
-                  <FirmaDigital
-                    class="tochpad"
-                    v-if="asistencia.show_pad"
-                    @firma="firma($event, index)"
-                  />
+                  <FirmaDigital class="tochpad" v-if="asistencia.show_pad" @firma="firma($event, index)" />
                 </div>
                 <div class="col-sm-12 col-md-6 mb-3">
-                  <div
-                    v-if="
-                      ($route.params.id != null &&
-                        asistencia.firma.length == 0) ||
-                      $route.params.id == null
-                    "
-                    class="d-flex justify-content-end align-items-end w-100 h-100"
-                  >
-                    <label
-                      class="bi bi-trash-fill labelOption"
-                      v-if="index > 0"
-                      @click="
-                        deleteDynamicAsistencia(
-                          asistencias,
-                          index,
-                          'identificador'
-                        )
-                      "
-                    >
-                      Eliminar</label
-                    >
+                  <div v-if="
+                    ($route.params.id != null &&
+                      asistencia.firma.length == 0) ||
+                    $route.params.id == null
+                  " class="d-flex justify-content-end align-items-end w-100 h-100">
+                    <label class="bi bi-trash-fill labelOption" v-if="index > 0" @click="
+                      deleteDynamicAsistencia(
+                        asistencias,
+                        index,
+                        'identificador'
+                      )
+                      ">
+                      Eliminar</label>
                   </div>
                 </div>
               </div>
             </div>
-            <div
-              class="row trash justify-content-center align-items-center padding-1"
-            >
-              <label
-                v-if="index == asistencias.length - 1"
-                id="clasificador"
-                @click="agregarAsistencia()"
-                style="cursor: pointer"
-                ><i class="bi bi-plus-circle-fill"></i>
+            <div class="row trash justify-content-center align-items-center padding-1">
+              <label v-if="index == asistencias.length - 1" id="clasificador" @click="agregarAsistencia()"
+                style="cursor: pointer"><i class="bi bi-plus-circle-fill"></i>
                 Agregar asistencia
               </label>
             </div>
@@ -897,26 +498,14 @@
 
         <div v-if="consulta_evidencias.length > 0">
           <div class="d-flex justify-content-center p-5 gap-8 flex-wrap">
-            <div
-              class="card p-3 fontSize-5"
-              v-for="evidencia in consulta_evidencias"
-              :key="evidencia.id"
-              style="width: 18rem"
-            >
+            <div class="card p-3 fontSize-5" v-for="evidencia in consulta_evidencias" :key="evidencia.id"
+              style="width: 18rem">
               <div class="col d-flex justify-content-end">
-                <a
-                  :href="URL_API + evidencia.archivo"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  <button
-                    type="button"
-                    :class="
-                      evidencia.archivo != undefined
-                        ? 'btn btn-sm ver'
-                        : 'btn btn-sm btn-secondary'
-                    "
-                  >
+                <a :href="URL_API + evidencia.archivo" target="_blank" rel="noopener noreferrer">
+                  <button type="button" :class="evidencia.archivo != undefined
+                    ? 'btn btn-sm ver'
+                    : 'btn btn-sm btn-secondary'
+                    ">
                     <i class="bi bi-eye"> ver</i>
                   </button>
                 </a>
@@ -928,35 +517,20 @@
 
               <div class="col">
                 <div class="mb-3">
-                  <textarea
-                    class="form-control"
-                    id="exampleFormControlTextarea1"
-                    v-model="evidencia.descripcion"
-                    :disabled="!evidencia.edit"
-                  ></textarea>
+                  <textarea class="form-control" id="exampleFormControlTextarea1" v-model="evidencia.descripcion"
+                    :disabled="!evidencia.edit"></textarea>
                 </div>
               </div>
 
               <div class="col">
-                <div
-                  class="d-flex justify-content-between align-items-center p-1"
-                >
-                  <button
-                    type="button"
-                    class="btn btn-danger"
-                    @click="messageDelete(evidencia)"
-                  >
+                <div class="d-flex justify-content-between align-items-center p-1">
+                  <button type="button" class="btn btn-danger" @click="messageDelete(evidencia)">
                     <label class="bi bi-trash-fill labelOption">
                       Eliminar
                     </label>
                   </button>
-                  <button
-                    type="button"
-                    :class="
-                      evidencia.edit ? 'btn btn-success' : 'btn btn-warning'
-                    "
-                    @click="toggleEdit(evidencia)"
-                  >
+                  <button type="button" :class="evidencia.edit ? 'btn btn-success' : 'btn btn-warning'
+                    " @click="toggleEdit(evidencia)">
                     <label class="bi bi-pencil-square labelOption">
                       {{ evidencia.edit ? "Guardar" : "Editar" }}
                     </label>
@@ -967,77 +541,43 @@
           </div>
         </div>
         <div class="col">
-          <div
-            class="row"
-            style="text-align: left; clear: both; margin-top: 40px"
-          >
+          <div class="row" style="text-align: left; clear: both; margin-top: 40px">
             <h5 @click="adjuntos = !adjuntos" style="cursor: pointer">
               Cargar Archivos
-              <i v-if="adjuntos" class="bi bi-chevron-down"></i
-              ><i v-if="!adjuntos" class="bi bi-chevron-compact-up"></i>
+              <i v-if="adjuntos" class="bi bi-chevron-down"></i><i v-if="!adjuntos"
+                class="bi bi-chevron-compact-up"></i>
             </h5>
           </div>
           <div v-if="adjuntos">
-            <div
-              class="row obs"
-              v-for="(item, index) in evidencias"
-              :key="item.id"
-            >
+            <div class="row obs" v-for="(item, index) in evidencias" :key="item.id">
               <div class="row">
                 <div class="mb-3">
                   <div class="row">
                     <div class="col-5">
                       <div class="input-group">
-                        <input
-                          class="form-control"
-                          type="file"
-                          accept="image/*,.pdf, .msg, audio/*"
-                          @change="cargarArchivo($event, index)"
-                          id="formFileMultiple"
-                          required
-                        />
-                        <span
-                          style="cursor: pointer"
-                          class="btn btn-outline-secondary"
-                          @click="quitarAdjuntos(index)"
-                          id="basic-addon1"
-                          >Quitar imágenes</span
-                        >
+                        <input class="form-control" type="file" accept="image/*,.pdf, .msg, audio/*"
+                          @change="cargarArchivo($event, index)" id="formFileMultiple" required />
+                        <span style="cursor: pointer" class="btn btn-outline-secondary" @click="quitarAdjuntos(index)"
+                          id="basic-addon1">Quitar imágenes</span>
                       </div>
                     </div>
 
                     <div class="col-5">
-                      <textarea
-                        name=""
-                        id="novedades"
-                        class="form-control textareaControl"
-                        rows="1"
-                        v-model="item.observacion"
-                      ></textarea>
+                      <textarea name="" id="novedades" class="form-control textareaControl" rows="1"
+                        v-model="item.observacion"></textarea>
                     </div>
                     <div class="col-2 rightContent">
-                      <label
-                        class="bi bi-trash-fill labelOption"
-                        v-if="index > 0"
-                        @click="
-                          deleteDynamic(evidencias, index, 'identificador')
-                        "
-                      >
-                        Eliminar</label
-                      >
+                      <label class="bi bi-trash-fill labelOption" v-if="index > 0" @click="
+                        deleteDynamic(evidencias, index, 'identificador')
+                        ">
+                        Eliminar</label>
                     </div>
                   </div>
                 </div>
               </div>
-              <div
-                class="row trash justify-content-center align-items-center padding-1"
-              >
-                <label
-                  v-if="index == evidencias.length - 1"
-                  id="clasificador"
-                  @click="agregarObservacion()"
-                  style="cursor: pointer"
-                  ><i class="bi bi-plus-circle-fill"></i>
+              <div class="row trash justify-content-center align-items-center padding-1">
+                <label v-if="index == evidencias.length - 1" id="clasificador" @click="agregarObservacion()"
+                  style="cursor: pointer"><i class="bi bi-plus-circle-fill"></i>
                   Agregar archivo
                 </label>
               </div>
@@ -1046,23 +586,14 @@
         </div>
         <div class="row">
           <div class="col" v-if="$route.params.id != undefined">
-            <button
-              class="btn btn-success"
-              type="button"
-              @click="descargarInforme(2)"
-            >
+            <button class="btn btn-success" type="button" @click="descargarInforme(2)">
               Descargar PDF
             </button>
           </div>
           <div class="col">
             <div class="btn-group-vertical" role="group">
-              <button
-                id="btnGroupDrop1"
-                type="button"
-                class="btn btn-success dropdown-toggle"
-                data-bs-toggle="dropdown"
-                aria-expanded="false"
-              >
+              <button id="btnGroupDrop1" type="button" class="btn btn-success dropdown-toggle" data-bs-toggle="dropdown"
+                aria-expanded="false">
                 Guardar Formulario
               </button>
               <ul class="dropdown-menu" aria-labelledby="btnGroupDrop1">
@@ -1073,9 +604,7 @@
                   <a class="dropdown-item" href="#">Guardar y descargar PDF</a>
                 </li>
                 <li>
-                  <a class="dropdown-item" href="#" @click="save(3)"
-                    >Guardar sin enviar PDF</a
-                  >
+                  <a class="dropdown-item" href="#" @click="save(3)">Guardar sin enviar PDF</a>
                 </li>
               </ul>
             </div>
@@ -1083,43 +612,25 @@
         </div>
       </form>
     </div>
-    <div
-      class="row"
-      v-if="$route.params.id != undefined"
-      style="text-align: left; clear: both; margin-bottom: 40px"
-    >
+    <div class="row" v-if="$route.params.id != undefined" style="text-align: left; clear: both; margin-bottom: 40px">
       <h5 @click="envio_correo = !envio_correo" style="cursor: pointer">
-        Envío correo <i v-if="envio_correo" class="bi bi-chevron-down"></i
-        ><i v-if="!envio_correo" class="bi bi-chevron-compact-up"></i>
+        Envío correo <i v-if="envio_correo" class="bi bi-chevron-down"></i><i v-if="!envio_correo"
+          class="bi bi-chevron-compact-up"></i>
       </h5>
     </div>
-    <SolicitudNovedadesNomina
-      v-if="$route.params.id != undefined && envio_correo"
-      :menu="menu"
-      :reenvio_correo="reenvio_correo"
-      :adjuntos_candidato_string="adjuntos_candidato_string"
-      @lanzarLoading="lanzarLoading"
-      @correoEnviado="manejarCorreoEnviado"
-    />
+    <SolicitudNovedadesNomina v-if="$route.params.id != undefined && envio_correo" :menu="menu"
+      :reenvio_correo="reenvio_correo" :adjuntos_candidato_string="adjuntos_candidato_string"
+      @lanzarLoading="lanzarLoading" @correoEnviado="manejarCorreoEnviado" />
 
-    <div
-      class="row"
-      v-if="gestioningresocorreos.length > 0"
-      style="text-align: left; clear: both; margin-bottom: 40px"
-    >
-      <h5
-        @click="historico_correos = !historico_correos"
-        style="cursor: pointer"
-      >
+    <div class="row" v-if="gestioningresocorreos.length > 0" style="text-align: left; clear: both; margin-bottom: 40px">
+      <h5 @click="historico_correos = !historico_correos" style="cursor: pointer">
         Historico correos enviados
-        <i v-if="historico_correos" class="bi bi-chevron-compact-up"></i
-        ><i v-if="!historico_correos" class="bi bi-chevron-down"></i>
+        <i v-if="historico_correos" class="bi bi-chevron-compact-up"></i><i v-if="!historico_correos"
+          class="bi bi-chevron-down"></i>
       </h5>
     </div>
     <div class="table-responsive" v-if="!historico_correos">
-      <table
-        class="table table-striped table-hover table-bordered align-middle"
-      >
+      <table class="table table-striped table-hover table-bordered align-middle">
         <thead>
           <tr>
             <th scope="col">#</th>
@@ -1146,11 +657,7 @@
             <td>{{ item.adjunto }}</td>
             <td>{{ reformatearFecha(item.created_at) }}</td>
             <td scope="col">
-              <button
-                class="btn btn-success"
-                type="button"
-                @click="reenviar(item)"
-              >
+              <button class="btn btn-success" type="button" @click="reenviar(item)">
                 Reenviar
               </button>
             </td>
@@ -1160,14 +667,8 @@
     </div>
     <div class="row mt-4" v-if="latitud != null">
       <h3>Geolocalización <i class="bi bi-geo-alt"></i></h3>
-      <MapaVue
-        @coordenadas="coordenadas"
-        :showMap="showMap"
-        :latitud="latitud"
-        :longitud="longitud"
-        :label="label"
-        :marcador="marcador"
-      />
+      <MapaVue @coordenadas="coordenadas" :showMap="showMap" :latitud="latitud" :longitud="longitud" :label="label"
+        :marcador="marcador" />
     </div>
   </div>
 </template>
@@ -1580,6 +1081,7 @@ export default {
       this.hora_inicio = "";
     },
     getItem(id) {
+      this.limpiarFormulario()
       let self = this;
       self.loading = true;
       let config = this.configHeader();
@@ -1604,39 +1106,39 @@ export default {
         item.asistencias.length > 0
           ? item.asistencias
           : [
-              {
-                nombre: "",
-                cargo: "",
-                firma: [],
-                show_pad: false,
-                firma_hash: "",
-              },
-            ];
+            {
+              nombre: "",
+              cargo: "",
+              firma: [],
+              show_pad: false,
+              firma_hash: "",
+            },
+          ];
       this.compromisos =
         item.compromisos.length > 0
           ? item.compromisos
           : [
-              {
-                titulo: "compromiso1",
-                id: "",
-                descripcion: "",
-                estado_cierre_id: "",
-                fecha_cierre: "",
-                fecha_inicio: "",
-                responsable: "",
-                observacion: "",
-              },
-              {
-                titulo: "compromiso2",
-                id: "",
-                descripcion: "",
-                estado_cierre_id: "",
-                fecha_cierre: "",
-                fecha_inicio: "",
-                responsable: "",
-                observacion: "",
-              },
-            ];
+            {
+              titulo: "compromiso1",
+              id: "",
+              descripcion: "",
+              estado_cierre_id: "",
+              fecha_cierre: "",
+              fecha_inicio: "",
+              responsable: "",
+              observacion: "",
+            },
+            {
+              titulo: "compromiso2",
+              id: "",
+              descripcion: "",
+              estado_cierre_id: "",
+              fecha_cierre: "",
+              fecha_inicio: "",
+              responsable: "",
+              observacion: "",
+            },
+          ];
       this.formatearFechaCompromisos();
       this.alcance_visita = item.alcance;
       this.objetivo_visita = item.objetivo;
@@ -1770,6 +1272,8 @@ export default {
       if (this.$route.params.id == undefined || this.hora_cierre == " ") {
         this.tomarHoraCierre();
       }
+
+      //validacion de compromisos según si es visita o reunion
       if (
         this.estado_cierre_id == 3 &&
         (this.interaccion_id == 5 || this.interaccion_id == 6)
@@ -1794,11 +1298,15 @@ export default {
           return;
         }
       }
+      // Validación de PQRSF 
       if (this.estado_cierre_id == 3 && this.consulta_cierra_pqrsf == null) {
         this.showAlert("Debe llenar los campos requeridos ", "error");
         return;
       }
+
+      //validaciones para interacciones 5(Visita) y 6(Reunión)
       if (this.interaccion_id == 5 || this.interaccion_id == 6) {
+        this.pqrsf_id = 6
         let missedAsistencia = false;
         this.compromisos.forEach((compromiso) => {
           if (compromiso.descripcion != "" && !compromiso.responsable) {
@@ -1871,7 +1379,7 @@ export default {
         self.showAlert("Ingrese un correo de contacto valido", "error");
         return;
       }
-      // Agrega los datos del formulario como lo tienes actualmente
+      // Creacion del formulario con los datos que no corresponden a visita
       formulario.append("nombre_contacto", this.nombre_contacto);
       formulario.append("latitud", this.latitud);
       formulario.append("longitud", this.longitud);
@@ -1891,6 +1399,7 @@ export default {
         this.consulta_cierra_pqrsf == null ? "" : this.consulta_cierra_pqrsf
       );
       formulario.append("responsable", this.consulta_responsable);
+      //creacion del formulario de visita
       if (this.interaccion_id == 5 || this.interaccion_id == 6) {
         formulario.append("compromisos", JSON.stringify(this.compromisos));
         formulario.append(
@@ -1915,11 +1424,11 @@ export default {
           );
           Array.isArray(item.firma)
             ? item.firma.forEach(function (item2, index2) {
-                formulario.append(
-                  "asistencia[" + index + "][" + (index2 + 1) + "]",
-                  item2
-                );
-              })
+              formulario.append(
+                "asistencia[" + index + "][" + (index2 + 1) + "]",
+                item2
+              );
+            })
             : item.firma;
         });
       }
@@ -1985,10 +1494,10 @@ export default {
       axios
         .delete(
           self.URL_API +
-            "api/v1/eliminararevidencia/" +
-            this.$route.params.id +
-            "/" +
-            item.id,
+          "api/v1/eliminararevidencia/" +
+          this.$route.params.id +
+          "/" +
+          item.id,
           config
         )
         .then(function (result) {
@@ -2078,10 +1587,10 @@ export default {
       axios
         .get(
           self.URL_API +
-            "api/v1/consultacorreo/" +
-            self.menu_id +
-            "/" +
-            self.$route.params.id,
+          "api/v1/consultacorreo/" +
+          self.menu_id +
+          "/" +
+          self.$route.params.id,
           config
         )
         .then(function (result) {
@@ -2212,12 +1721,12 @@ export default {
       axios
         .get(
           self.URL_API +
-            "api/v1/gestioningresospdf/" +
-            self.menu_id +
-            "/" +
-            self.$route.params.id +
-            "/" +
-            this.idSeleccionado,
+          "api/v1/gestioningresospdf/" +
+          self.menu_id +
+          "/" +
+          self.$route.params.id +
+          "/" +
+          this.idSeleccionado,
           config
         )
         .then(function (result) {
@@ -2343,11 +1852,13 @@ export default {
   padding: 5px;
   top: 22px;
 }
+
 .bi bi-x {
   margin: 20px 0px 20px 0px;
   max-width: 400px;
   cursor: pointer;
 }
+
 .btn-group {
   overflow: auto;
 }
@@ -2355,9 +1866,11 @@ export default {
 span {
   height: 38px;
 }
+
 .botones {
   padding: 5px;
 }
+
 .adjunto {
   white-space: nowrap;
   margin-bottom: 10px;
@@ -2375,31 +1888,39 @@ label {
   display: flex;
   flex-direction: column;
 }
+
 .form_controlContainer {
   width: 100%;
 }
+
 .spanContainer {
   width: 20%;
   display: flex;
   justify-content: left;
 }
+
 .option_container {
   display: flex;
   gap: 0;
   width: 100%;
 }
+
 .labelOption {
   margin: 0;
 }
+
 .right {
   justify-content: right;
 }
+
 .left {
   justify-content: left;
 }
+
 .center {
   justify-content: center;
 }
+
 .labelBlock {
   display: block;
   width: 100%;
@@ -2407,19 +1928,24 @@ label {
   padding: 0.3em;
   padding-left: 0;
 }
+
 .padding-1 {
   padding: 0.5em;
 }
+
 .ver {
   background-color: #006b3f;
   color: white;
 }
+
 .fontSize-5 {
   font-size: 0.5em;
 }
+
 .gap-8 {
   gap: 6em;
 }
+
 .char-count {
   font-size: 12px;
   color: #6c757d;
