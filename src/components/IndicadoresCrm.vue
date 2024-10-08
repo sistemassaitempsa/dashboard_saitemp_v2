@@ -34,9 +34,14 @@ export default {
         return {
 
         }
-    }
+    },
+    methods: {
+        getDataByUser() {
 
+        }
+    }
 }
+
 </script>
 
 <style scoped>
