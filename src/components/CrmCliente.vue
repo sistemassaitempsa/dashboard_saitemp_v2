@@ -1379,7 +1379,7 @@ export default {
         self.showAlert("Ingrese un correo de contacto valido", "error");
         return;
       }
-      // Agrega los datos del formulario como lo tienes actualmente
+      // Creacion del formulario con los datos que no corresponden a visita
       formulario.append("nombre_contacto", this.nombre_contacto);
       formulario.append("latitud", this.latitud);
       formulario.append("longitud", this.longitud);
@@ -1399,6 +1399,7 @@ export default {
         this.consulta_cierra_pqrsf == null ? "" : this.consulta_cierra_pqrsf
       );
       formulario.append("responsable", this.consulta_responsable);
+      //creacion del formulario de visita
       if (this.interaccion_id == 5 || this.interaccion_id == 6) {
         formulario.append("compromisos", JSON.stringify(this.compromisos));
         formulario.append(
