@@ -1272,6 +1272,8 @@ export default {
       if (this.$route.params.id == undefined || this.hora_cierre == " ") {
         this.tomarHoraCierre();
       }
+
+      //validacion de compromisos según si es visita o reunion
       if (
         this.estado_cierre_id == 3 &&
         (this.interaccion_id == 5 || this.interaccion_id == 6)
@@ -1296,10 +1298,13 @@ export default {
           return;
         }
       }
+      // Validación de PQRSF 
       if (this.estado_cierre_id == 3 && this.consulta_cierra_pqrsf == null) {
         this.showAlert("Debe llenar los campos requeridos ", "error");
         return;
       }
+
+      //validaciones para interacciones 5(Visita) y 6(Reunión)
       if (this.interaccion_id == 5 || this.interaccion_id == 6) {
         this.pqrsf_id = 6
         let missedAsistencia = false;
