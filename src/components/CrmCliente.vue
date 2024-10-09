@@ -584,6 +584,25 @@
             </div>
           </div>
         </div>
+        <div class="col">
+          <div class="row" style="text-align: left; clear: both; margin-top: 40px">
+            <h5 @click="reenvioPdf = !reenvioPdf" style="cursor: pointer">
+              Reenviar PDF
+              <i v-if="reenvioPdf" class="bi bi-chevron-down"></i><i v-if="!reenvioPdf"
+                class="bi bi-chevron-compact-up"></i>
+            </h5>
+          </div>
+          <div v-if="reenvioPdf">
+            <div class="row">
+              <div class="col">
+                <h6>Usuario</h6>
+              </div>
+              <div class="col">
+                <h5>{{ correo_contacto }}</h5>
+              </div>
+            </div>
+          </div>
+        </div>
         <div class="row">
           <div class="col" v-if="$route.params.id != undefined">
             <button class="btn btn-success" type="button" @click="descargarInforme(2)">
@@ -698,6 +717,7 @@ export default {
   },
   data() {
     return {
+      reenvioPdf: false,
       disableName: false,
       emailValido: true,
       correo_responsablePqrsf: "",
