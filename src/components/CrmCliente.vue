@@ -727,6 +727,7 @@ export default {
           fecha_inicio: "",
           responsable: "",
           observacion: "",
+          responsable_id: "",
         },
         {
           titulo: "compromiso2",
@@ -736,6 +737,7 @@ export default {
           fecha_inicio: "",
           responsable: "",
           observacion: "",
+          responsable_id: "",
         },
       ],
       empresa_cliente_nombre: "",
@@ -1114,12 +1116,39 @@ export default {
               firma_hash: "",
             },
           ];
-      this.compromisos =
-        item.compromisos.length > 0
-          ? item.compromisos
-          : [
-            {
-              titulo: "compromiso1",
+      /*    this.compromisos = [
+           {
+             titulo: "compromiso1",
+             id: "",
+             descripcion: "",
+             estado_cierre_id: "",
+             fecha_cierre: "",
+             fecha_inicio: "",
+             responsable: "",
+             observacion: "",
+             responsable_id: "",
+           },
+           {
+             titulo: "compromiso2",
+             id: "",
+             descripcion: "",
+             estado_cierre_id: "",
+             fecha_cierre: "",
+             fecha_inicio: "",
+             responsable: "",
+             observacion: "",
+             responsable_id: ""
+           },
+         ]; */
+      if (item.compromisos.length > 0) {
+        for (let i = 0; i < 2; i++) {
+          const compromiso = item.compromisos[i]
+          if (compromiso) {
+            this.compromisos[i] = compromiso
+          }
+          else {
+            this.compromisos[i] = {
+              titulo: `compromiso${i + 1}`,
               id: "",
               descripcion: "",
               estado_cierre_id: "",
@@ -1127,18 +1156,38 @@ export default {
               fecha_inicio: "",
               responsable: "",
               observacion: "",
-            },
-            {
-              titulo: "compromiso2",
-              id: "",
-              descripcion: "",
-              estado_cierre_id: "",
-              fecha_cierre: "",
-              fecha_inicio: "",
-              responsable: "",
-              observacion: "",
-            },
-          ];
+              responsable_id: ""
+            }
+          }
+        }
+      }
+      /*   this.compromisos =
+          item.compromisos.length > 0
+            ? item.compromisos
+            : [
+              {
+                titulo: "compromiso1",
+                id: "",
+                descripcion: "",
+                estado_cierre_id: "",
+                fecha_cierre: "",
+                fecha_inicio: "",
+                responsable: "",
+                observacion: "",
+                responsable_id: "",
+              },
+              {
+                titulo: "compromiso2",
+                id: "",
+                descripcion: "",
+                estado_cierre_id: "",
+                fecha_cierre: "",
+                fecha_inicio: "",
+                responsable: "",
+                observacion: "",
+                responsable_id: ""
+              },
+            ]; */
       this.formatearFechaCompromisos();
       this.alcance_visita = item.alcance;
       this.objetivo_visita = item.objetivo;
@@ -1817,10 +1866,12 @@ export default {
           case 4:
             this.compromisos[0].responsable = item.nombre;
             this.correo_responsable1 = item.email;
+            this.compromisos[0].responsable_id = item.id
             break;
           case 5:
             this.compromisos[1].responsable = item.nombre;
             this.correo_responsable1 = item.email;
+            this.compromisos[1].responsable_id = item.id
             break;
         }
       }
