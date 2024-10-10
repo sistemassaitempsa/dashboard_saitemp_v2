@@ -1225,7 +1225,8 @@ export default {
               fecha_inicio: "",
               responsable: "",
               observacion: "",
-              responsable_id: ""
+              responsable_id: "",
+              email: ""
             }
           }
         }
