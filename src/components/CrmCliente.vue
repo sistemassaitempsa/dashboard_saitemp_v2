@@ -584,7 +584,7 @@
             </div>
           </div>
         </div>
-        <div class="col">
+        <div class="col" v-if="$route.params.id != undefined">
           <div class="row" style="text-align: left; clear: both; margin-top: 40px">
             <h5 @click="reenvioPdf = !reenvioPdf" style="cursor: pointer">
               Reenviar PDF
@@ -617,7 +617,8 @@
                   @change="agregarCorreosSeleccionados(compromiso.email, compromiso.observacion)">
               </div>
             </div>
-            <button class="btn btn-success" type="button">
+            <button class="btn btn-success" type="button" @click="reenviarCorreosSeleccionados">
+
               Reenviar PDF
             </button>
           </div>
@@ -917,6 +918,9 @@ export default {
       })
     },
     reenviarCorreosSeleccionados() {
+      this.enviarCorreos(this.id_registro, 1, this.correosSeleccionados)
+      this.correosSeleccionados = []
+      this.reenvioPdf = false
 
     },
     async validaLocalizacion() {
@@ -1072,7 +1076,11 @@ export default {
         });
     },
     limpiarFormulario() {
-      this.correo_responsablePqrsf = "";
+      this.correosSeleccionados = {
+        correos: [],
+      },
+        this.reenvioPdf = false,
+        this.correo_responsablePqrsf = "";
       this.correo_responsable1 = "";
       this.correo_responsable2 = "";
       this.bloquea_campos = false;
@@ -1636,6 +1644,7 @@ export default {
         });
     },
     enviarCorreos(id, tipoSave, correosResponsables) {
+      this.loading = true;
       let config = this.configHeader();
       axios
         .post(
@@ -1645,6 +1654,7 @@ export default {
         )
         .then((response) => {
           this.showAlert(response.data.message, response.data.status);
+          this.loading = false
         });
     },
     getSedes(item = null) {
