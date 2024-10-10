@@ -592,14 +592,14 @@
                 class="bi bi-chevron-compact-up"></i>
             </h5>
           </div>
-          <div v-if="reenvioPdf" class="border rounded p-4">
+          <div v-if="reenvioPdf" class="border rounded p-4 mb-3">
             <div class="row border-bottom p-4">
 
               <div class="col">
-                <h6>Cliente</h6>
+                <h6 class="text-start">Cliente</h6>
               </div>
               <div class="col">
-                <h6>{{ correo_contacto }}</h6>
+                <h6 class="text-start">{{ correo_contacto }}</h6>
               </div>
               <div class="col-2">
                 <input class="form-check-input" type="checkbox"
@@ -608,16 +608,16 @@
             </div>
             <div class="row border-bottom p-4" v-for="(compromiso, index) in compromisos" :key="index">
               <div class="col" v-if="compromiso.descripcion != ''">
-                <h6>{{ compromiso.responsable }}</h6>
+                <h6 class="text-start">{{ compromiso.responsable }}</h6>
               </div>
               <div class="col" v-if="compromiso.descripcion != ''">
-                <h6>{{ compromiso.email }}</h6>
+                <h6 class="text-start">{{ compromiso.email }}</h6>
               </div>
               <div class="col-2" v-if="compromiso.descripcion != ''"><input class="form-check-input" type="checkbox"
                   @change="agregarCorreosSeleccionados(compromiso.email, compromiso.observacion)">
               </div>
             </div>
-            <button class="btn btn-success" type="button" @click="reenviarCorreosSeleccionados">
+            <button class="btn btn-success mt-4" type="button" @click="reenviarCorreosSeleccionados">
 
               Reenviar PDF
             </button>
