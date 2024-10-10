@@ -464,7 +464,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col" style="margin:30px" v-if="permisos[23].autorizado">
+                    <div class="col" style="margin:30px" v-if="permisos[33].autorizado">
                         <div v-if="$route.params.id != undefined" class="btn">
                             <button type="button" class="btn btn-md btn-success" aria-expanded="false"
                                 @click.prevent="exportarDocumentos">

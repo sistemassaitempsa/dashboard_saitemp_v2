@@ -584,6 +584,45 @@
             </div>
           </div>
         </div>
+        <div class="col" v-if="$route.params.id != undefined">
+          <div class="row" style="text-align: left; clear: both; margin-top: 40px">
+            <h5 @click="reenvioPdf = !reenvioPdf" style="cursor: pointer">
+              Reenviar PDF
+              <i v-if="reenvioPdf" class="bi bi-chevron-down"></i><i v-if="!reenvioPdf"
+                class="bi bi-chevron-compact-up"></i>
+            </h5>
+          </div>
+          <div v-if="reenvioPdf" class="border rounded p-4">
+            <div class="row border-bottom p-4">
+
+              <div class="col">
+                <h6>Cliente</h6>
+              </div>
+              <div class="col">
+                <h6>{{ correo_contacto }}</h6>
+              </div>
+              <div class="col-2">
+                <input class="form-check-input" type="checkbox"
+                  @change="agregarCorreosSeleccionados(correo_contacto, observacion = '')">
+              </div>
+            </div>
+            <div class="row border-bottom p-4" v-for="(compromiso, index) in compromisos" :key="index">
+              <div class="col" v-if="compromiso.descripcion != ''">
+                <h6>{{ compromiso.responsable }}</h6>
+              </div>
+              <div class="col" v-if="compromiso.descripcion != ''">
+                <h6>{{ compromiso.email }}</h6>
+              </div>
+              <div class="col-2" v-if="compromiso.descripcion != ''"><input class="form-check-input" type="checkbox"
+                  @change="agregarCorreosSeleccionados(compromiso.email, compromiso.observacion)">
+              </div>
+            </div>
+            <button class="btn btn-success" type="button" @click="reenviarCorreosSeleccionados">
+
+              Reenviar PDF
+            </button>
+          </div>
+        </div>
         <div class="row">
           <div class="col" v-if="$route.params.id != undefined">
             <button class="btn btn-success" type="button" @click="descargarInforme(2)">
@@ -698,6 +737,10 @@ export default {
   },
   data() {
     return {
+      correosSeleccionados: {
+        correos: [],
+      },
+      reenvioPdf: false,
       disableName: false,
       emailValido: true,
       correo_responsablePqrsf: "",
@@ -727,6 +770,8 @@ export default {
           fecha_inicio: "",
           responsable: "",
           observacion: "",
+          responsable_id: "",
+          email: "",
         },
         {
           titulo: "compromiso2",
@@ -736,6 +781,8 @@ export default {
           fecha_inicio: "",
           responsable: "",
           observacion: "",
+          responsable_id: "",
+          email: "",
         },
       ],
       empresa_cliente_nombre: "",
@@ -863,6 +910,18 @@ export default {
         this.showMap = false;
         return false;
       }
+    },
+    agregarCorreosSeleccionados(correo, observacion) {
+      this.correosSeleccionados.correos.push({
+        correo: correo,
+        observacion: observacion
+      })
+    },
+    reenviarCorreosSeleccionados() {
+      this.enviarCorreos(this.id_registro, 1, this.correosSeleccionados)
+      this.correosSeleccionados = []
+      this.reenvioPdf = false
+
     },
     async validaLocalizacion() {
       try {
@@ -1017,7 +1076,11 @@ export default {
         });
     },
     limpiarFormulario() {
-      this.correo_responsablePqrsf = "";
+      this.correosSeleccionados = {
+        correos: [],
+      },
+        this.reenvioPdf = false,
+        this.correo_responsablePqrsf = "";
       this.correo_responsable1 = "";
       this.correo_responsable2 = "";
       this.bloquea_campos = false;
@@ -1060,6 +1123,7 @@ export default {
           fecha_cierre: "",
           fecha_inicio: "",
           observacion: "",
+          email: ""
         },
         {
           titulo: "compromiso2",
@@ -1068,6 +1132,7 @@ export default {
           fecha_cierre: "",
           fecha_inicio: "",
           observacion: "",
+          email: ""
         },
       ];
       this.temasPrincipales = [{ titulo: "tema1", descripcion: "" }];
@@ -1114,12 +1179,40 @@ export default {
               firma_hash: "",
             },
           ];
-      this.compromisos =
-        item.compromisos.length > 0
-          ? item.compromisos
-          : [
-            {
-              titulo: "compromiso1",
+      /*    this.compromisos = [
+           {
+             titulo: "compromiso1",
+             id: "",
+             descripcion: "",
+             estado_cierre_id: "",
+             fecha_cierre: "",
+             fecha_inicio: "",
+             responsable: "",
+             observacion: "",
+             responsable_id: "",
+           },
+           {
+             titulo: "compromiso2",
+             id: "",
+             descripcion: "",
+             estado_cierre_id: "",
+             fecha_cierre: "",
+             fecha_inicio: "",
+             responsable: "",
+             observacion: "",
+             responsable_id: ""
+           },
+         ]; */
+      if (item.compromisos.length > 0) {
+        for (let i = 0; i < 2; i++) {
+          const compromiso = item.compromisos[i]
+          if (compromiso) {
+            this.compromisos[i] = compromiso
+
+          }
+          else {
+            this.compromisos[i] = {
+              titulo: `compromiso${i + 1}`,
               id: "",
               descripcion: "",
               estado_cierre_id: "",
@@ -1127,18 +1220,38 @@ export default {
               fecha_inicio: "",
               responsable: "",
               observacion: "",
-            },
-            {
-              titulo: "compromiso2",
-              id: "",
-              descripcion: "",
-              estado_cierre_id: "",
-              fecha_cierre: "",
-              fecha_inicio: "",
-              responsable: "",
-              observacion: "",
-            },
-          ];
+              responsable_id: ""
+            }
+          }
+        }
+      }
+      /*   this.compromisos =
+          item.compromisos.length > 0
+            ? item.compromisos
+            : [
+              {
+                titulo: "compromiso1",
+                id: "",
+                descripcion: "",
+                estado_cierre_id: "",
+                fecha_cierre: "",
+                fecha_inicio: "",
+                responsable: "",
+                observacion: "",
+                responsable_id: "",
+              },
+              {
+                titulo: "compromiso2",
+                id: "",
+                descripcion: "",
+                estado_cierre_id: "",
+                fecha_cierre: "",
+                fecha_inicio: "",
+                responsable: "",
+                observacion: "",
+                responsable_id: ""
+              },
+            ]; */
       this.formatearFechaCompromisos();
       this.alcance_visita = item.alcance;
       this.objetivo_visita = item.objetivo;
@@ -1310,6 +1423,7 @@ export default {
         let missedAsistencia = false;
         this.compromisos.forEach((compromiso) => {
           if (compromiso.descripcion != "" && !compromiso.responsable) {
+            missedAsistencia = true;
             this.showAlert(
               "Debe llenar los campos requeridos en compromisos ",
               "error"
@@ -1361,11 +1475,11 @@ export default {
             observacion: "",
           },
           {
-            correo: this.correo_responsable1,
+            correo: this.compromisos[0].email,
             observacion: this.compromisos[0].observacion,
           },
           {
-            correo: this.correo_responsable2,
+            correo: this.compromisos[1].email,
             observacion: this.compromisos[1].observacion,
           },
         ],
@@ -1477,6 +1591,7 @@ export default {
           const rutaActual = self.$route.path;
           const nuevosParametros = { ...rutaActual.params, id: result.data.id };
           self.$router.replace({ ...rutaActual, params: nuevosParametros });
+
         })
         .then(() => {
           this.historicoCorreos();
@@ -1529,6 +1644,7 @@ export default {
         });
     },
     enviarCorreos(id, tipoSave, correosResponsables) {
+      this.loading = true;
       let config = this.configHeader();
       axios
         .post(
@@ -1538,6 +1654,7 @@ export default {
         )
         .then((response) => {
           this.showAlert(response.data.message, response.data.status);
+          this.loading = false
         });
     },
     getSedes(item = null) {
@@ -1816,11 +1933,13 @@ export default {
             break;
           case 4:
             this.compromisos[0].responsable = item.nombre;
-            this.correo_responsable1 = item.email;
+            this.compromisos[0].email = item.email;
+            this.compromisos[0].responsable_id = item.id
             break;
           case 5:
             this.compromisos[1].responsable = item.nombre;
-            this.correo_responsable1 = item.email;
+            this.compromisos[1].email = item.email;
+            this.compromisos[1].responsable_id = item.id
             break;
         }
       }
