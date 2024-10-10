@@ -242,7 +242,7 @@
               <label class="form-label">Objetivo de la visita:* </label>
               <input type="text" class="form-control" autocomplete="off" id="no-objetivo" aria-describedby="emailHelp"
                 v-model="objetivo_visita" required :disabled="$route.params.id != undefined && !permisos[32].autorizado
-                  " />
+                  " maxlength="200" />
               <div class="invalid-feedback">
                 {{ mensaje_error }}
               </div>
@@ -252,7 +252,7 @@
               <label class="form-label">Alcance de la visita:* </label>
               <input type="text" class="form-control" autocomplete="off" id="no-alcance" aria-describedby="emailHelp"
                 v-model="alcance_visita" required :disabled="$route.params.id != undefined && !permisos[32].autorizado
-                  " />
+                  " maxlength="500" />
               <div class="invalid-feedback">
                 {{ mensaje_error }}
               </div>
@@ -1159,6 +1159,7 @@ export default {
         .then(function (result) {
           self.llenarFormulario(result.data);
           self.historicoCorreos();
+          self.loading = false
         });
     },
     llenarFormulario(item) {
@@ -1297,7 +1298,6 @@ export default {
       this.consulta_responsable = item.responsable;
       this.fecha_radicado = this.formatearFecha(item.created_at);
       this.fecha_cierre = this.formatearFecha(item.fecha_cerrado);
-      this.loading = false;
       this.consulta_evidencias = item.Evidencias;
     },
     formatearFechaCompromisos() {
@@ -1416,7 +1416,7 @@ export default {
         }
       }
       // Validación de PQRSF 
-      if (this.estado_cierre_id == 3 && this.consulta_cierra_pqrsf == null) {
+      if (this.estado_cierre_id == 3 && this.consulta_cierra_pqrsf == null && this.cierra_pqrsf_id == "") {
         this.showAlert("Debe llenar los campos requeridos ", "error");
         return;
       }
