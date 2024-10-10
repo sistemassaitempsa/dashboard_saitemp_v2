@@ -772,6 +772,7 @@ export default {
           observacion: "",
           responsable_id: "",
           email: "",
+          id: ""
         },
         {
           titulo: "compromiso2",
@@ -783,6 +784,7 @@ export default {
           observacion: "",
           responsable_id: "",
           email: "",
+          id: ""
         },
       ],
       empresa_cliente_nombre: "",
@@ -1123,7 +1125,8 @@ export default {
           fecha_cierre: "",
           fecha_inicio: "",
           observacion: "",
-          email: ""
+          email: "",
+          id: "",
         },
         {
           titulo: "compromiso2",
@@ -1132,7 +1135,8 @@ export default {
           fecha_cierre: "",
           fecha_inicio: "",
           observacion: "",
-          email: ""
+          email: "",
+          id: ""
         },
       ];
       this.temasPrincipales = [{ titulo: "tema1", descripcion: "" }];
