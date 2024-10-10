@@ -242,7 +242,7 @@
               <label class="form-label">Objetivo de la visita:* </label>
               <input type="text" class="form-control" autocomplete="off" id="no-objetivo" aria-describedby="emailHelp"
                 v-model="objetivo_visita" required :disabled="$route.params.id != undefined && !permisos[32].autorizado
-                  " />
+                  " maxlength="200" />
               <div class="invalid-feedback">
                 {{ mensaje_error }}
               </div>
@@ -252,7 +252,7 @@
               <label class="form-label">Alcance de la visita:* </label>
               <input type="text" class="form-control" autocomplete="off" id="no-alcance" aria-describedby="emailHelp"
                 v-model="alcance_visita" required :disabled="$route.params.id != undefined && !permisos[32].autorizado
-                  " />
+                  " maxlength="500" />
               <div class="invalid-feedback">
                 {{ mensaje_error }}
               </div>
@@ -592,14 +592,14 @@
                 class="bi bi-chevron-compact-up"></i>
             </h5>
           </div>
-          <div v-if="reenvioPdf" class="border rounded p-4">
+          <div v-if="reenvioPdf" class="border rounded p-4 mb-3">
             <div class="row border-bottom p-4">
 
               <div class="col">
-                <h6>Cliente</h6>
+                <h6 class="text-start">Cliente</h6>
               </div>
               <div class="col">
-                <h6>{{ correo_contacto }}</h6>
+                <h6 class="text-start">{{ correo_contacto }}</h6>
               </div>
               <div class="col-2">
                 <input class="form-check-input" type="checkbox"
@@ -608,16 +608,16 @@
             </div>
             <div class="row border-bottom p-4" v-for="(compromiso, index) in compromisos" :key="index">
               <div class="col" v-if="compromiso.descripcion != ''">
-                <h6>{{ compromiso.responsable }}</h6>
+                <h6 class="text-start">{{ compromiso.responsable }}</h6>
               </div>
               <div class="col" v-if="compromiso.descripcion != ''">
-                <h6>{{ compromiso.email }}</h6>
+                <h6 class="text-start">{{ compromiso.email }}</h6>
               </div>
               <div class="col-2" v-if="compromiso.descripcion != ''"><input class="form-check-input" type="checkbox"
                   @change="agregarCorreosSeleccionados(compromiso.email, compromiso.observacion)">
               </div>
             </div>
-            <button class="btn btn-success" type="button" @click="reenviarCorreosSeleccionados">
+            <button class="btn btn-success mt-4" type="button" @click="reenviarCorreosSeleccionados">
 
               Reenviar PDF
             </button>
@@ -772,6 +772,7 @@ export default {
           observacion: "",
           responsable_id: "",
           email: "",
+          id: ""
         },
         {
           titulo: "compromiso2",
@@ -783,6 +784,7 @@ export default {
           observacion: "",
           responsable_id: "",
           email: "",
+          id: ""
         },
       ],
       empresa_cliente_nombre: "",
@@ -1123,7 +1125,8 @@ export default {
           fecha_cierre: "",
           fecha_inicio: "",
           observacion: "",
-          email: ""
+          email: "",
+          id: "",
         },
         {
           titulo: "compromiso2",
@@ -1132,7 +1135,8 @@ export default {
           fecha_cierre: "",
           fecha_inicio: "",
           observacion: "",
-          email: ""
+          email: "",
+          id: ""
         },
       ];
       this.temasPrincipales = [{ titulo: "tema1", descripcion: "" }];
@@ -1155,6 +1159,7 @@ export default {
         .then(function (result) {
           self.llenarFormulario(result.data);
           self.historicoCorreos();
+          self.loading = false
         });
     },
     llenarFormulario(item) {
@@ -1293,7 +1298,6 @@ export default {
       this.consulta_responsable = item.responsable;
       this.fecha_radicado = this.formatearFecha(item.created_at);
       this.fecha_cierre = this.formatearFecha(item.fecha_cerrado);
-      this.loading = false;
       this.consulta_evidencias = item.Evidencias;
     },
     formatearFechaCompromisos() {
@@ -1412,7 +1416,7 @@ export default {
         }
       }
       // Validación de PQRSF 
-      if (this.estado_cierre_id == 3 && this.consulta_cierra_pqrsf == null) {
+      if (this.estado_cierre_id == 3 && this.consulta_cierra_pqrsf == null && this.cierra_pqrsf_id == "") {
         this.showAlert("Debe llenar los campos requeridos ", "error");
         return;
       }
