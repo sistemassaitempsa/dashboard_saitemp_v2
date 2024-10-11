@@ -1157,9 +1157,9 @@ export default {
       axios
         .get(self.URL_API + "api/v1/seguimientocrmbyid/" + id, config)
         .then(function (result) {
+          self.loading = false
           self.llenarFormulario(result.data);
           self.historicoCorreos();
-          self.loading = false
         });
     },
     llenarFormulario(item) {
@@ -1476,6 +1476,10 @@ export default {
       let correosResponsables = {
         correos: [
           {
+            correo: this.correo_contacto,
+            observacion: ""
+          },
+          {
             correo: this.correo_responsablePqrsf,
             observacion: "",
           },
@@ -1573,16 +1577,14 @@ export default {
 
       axios
         .post(url, formulario, config)
-        .then(function (result) {
+        .then((result) => {
           self.getItem(result.data.id);
-
-          // Aquí se genera el PDF y se envía el correo una vez guardado el formulario
-          const id = result.data.id;
           self.showAlert(result.data.message, result.data.status);
+          const id = result.data.id;
           if (tipoSave == 1) {
             self
               .enviarCorreos(id, tipoSave, correosResponsables)
-              .then(function () {
+              .then(() => {
                 self.showAlert("correo enviado correctamente", "success");
               })
               .catch(function (error) {
