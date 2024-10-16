@@ -33,13 +33,13 @@
           </div>
         </div>
         <div class="row">
-          <div class="col mb-3">
+          <div class="col mb-3" id="no-sede" tabindex="0">
             <SearchList nombreCampo="Sede*" @getSedes="getSedes" eventoCampo="getSedes" nombreItem="nombre"
               :registros="sedes" placeholder="Seleccione una opción" :consulta="consulta_sede" :disabled="$route.params.id != undefined && !permisos[32].autorizado
                 " />
           </div>
 
-          <div class="col mb-3">
+          <div class="col mb-3" id="no-proceso" tabindex="0">
             <SearchList nombreCampo="Proceso o área *" @getProcesos="getProcesos" eventoCampo="getProcesos"
               nombreItem="nombre" :registros="procesos" placeholder="Seleccione una opción" :consulta="consulta_proceso"
               :disabled="$route.params.id != undefined && !permisos[32].autorizado
@@ -47,13 +47,13 @@
           </div>
         </div>
         <div class="row">
-          <div class="col mb-3">
+          <div class="col mb-3" id="no-solicitante" tabindex="0">
             <SearchList nombreCampo="Solicitante *" @getSolicitanteCrm="getSolicitanteCrm"
               eventoCampo="getSolicitanteCrm" nombreItem="nombre" :registros="solicitantes"
               placeholder="Seleccione una opción" :consulta="consulta_solicitante" :disabled="$route.params.id != undefined && !permisos[32].autorizado
                 " />
           </div>
-          <div class="col mb-3">
+          <div class="col mb-3" id="no-medio-atencion" tabindex="0">
             <SearchList nombreCampo="Medio de atención *" @getInteracciones="getInteracciones"
               eventoCampo="getInteracciones" nombreItem="nombre" :registros="respuestas_interaccion"
               placeholder="Seleccione una opción" :consulta="consulta_interaccion" :disabled="$route.params.id != undefined && !permisos[32].autorizado
@@ -61,7 +61,7 @@
           </div>
         </div>
         <div class="row">
-          <div class="col">
+          <div class="col" id="no-nit" tabindex="0">
             <SearchList v-if="solicitante_id == 1 && $route.params.id == undefined" nombreCampo="Nit/identificacion: *"
               @getEmpresasCliente="getEmpresasCliente" eventoCampo="getEmpresasCliente" nombreItem="nit"
               :consulta="nit_documento" :registros="empresas_cliente" placeholder="Seleccione una opción" :disabled="bloquea_campos &&
@@ -113,20 +113,20 @@
           </div>
         </div>
         <div class="row">
-          <div class="col-6 mb-3">
+          <div class="col-6 mb-3" id="no-estado-form" tabindex="0">
             <SearchList nombreCampo="Estado *" @getEstadoCierreCrm="getEstadoCierreCrm" eventoCampo="getEstadoCierreCrm"
               nombreItem="nombre" :registros="estados_cierre" placeholder="Seleccione una opción"
               :consulta="consulta_estado_cierre" :disabled="$route.params.id != undefined && fecha_cierre != undefined
                 " />
           </div>
-          <div class="col mb-3" v-if="interaccion_id != 5 && interaccion_id != 6">
+          <div class="col mb-3" v-if="interaccion_id != 5 && interaccion_id != 6" id="no-tipo-pqrsf" tabindex="0">
             <SearchList nombreCampo="PQRSF *" @getPQRSF="getPQRSF" eventoCampo="getPQRSF" nombreItem="nombre"
               :registros="lista_pqrsf" placeholder="Seleccione una opción" :consulta="consulta_pqrsf" :disabled="$route.params.id != undefined && !permisos[32].autorizado
                 " />
           </div>
         </div>
         <div class="row">
-          <div class="col-6 mb-3">
+          <div class="col-6 mb-3" id="no-respoonsable-form" tabindex="0">
             <SearchList nombreCampo="Responsable *" @getUsuarios="getUsuarios" eventoCampo="getUsuarios"
               nombreItem="nombre" :registros="usuarios" placeholder="Seleccione una opción"
               :consulta="consulta_responsable" :index="1" :disabled="$route.params.id != undefined && !permisos[32].autorizado
@@ -196,7 +196,7 @@
             </div>
           </div>
           <div class="row">
-            <div class="col-6 mb-3">
+            <div class="col-6 mb-3" id="no-visitante-sel" tabindex="0">
               <SearchList nombreCampo="Visita realizada por: *" @getUsuarios="getUsuarios" eventoCampo="getUsuarios"
                 nombreItem="nombre" :registros="usuarios" placeholder="Seleccione una opción" :consulta="visitante"
                 :index="3" :disabled="$route.params.id != undefined && !permisos[32].autorizado
@@ -206,7 +206,7 @@
               </div>
             </div>
 
-            <div class="col mb-3">
+            <div class="col mb-3" id="no-cargo-visitante" tabindex="0">
               <SearchList nombreCampo="Cargo del visitante: *" @getCargosPlanta="getCargosPlanta"
                 eventoCampo="getCargosPlanta" nombreItem="cargo" :registros="cargos_planta"
                 placeholder="Seleccione una opción" :consulta="cargo_visitante" :disabled="$route.params.id != undefined && !permisos[32].autorizado
@@ -1418,7 +1418,7 @@ export default {
       }
       // Validación de PQRSF 
       if (this.estado_cierre_id == 3 && this.consulta_cierra_pqrsf == null && this.cierra_pqrsf_id == "") {
-        this.showAlert("Debe llenar los campos requeridos ", "error");
+        this.showAlert("Para el campo 'Cierra la PQRS' debe seleccionar uno de la lista desplegable ", "error");
         return;
       }
 
@@ -1430,7 +1430,7 @@ export default {
           if (compromiso.descripcion != "" && !compromiso.responsable) {
             missedAsistencia = true;
             this.showAlert(
-              "Debe llenar los campos requeridos en compromisos ",
+              "Debe seleccionar de la lista los responsables de los compromisos ",
               "error"
             );
             return;
@@ -1441,35 +1441,127 @@ export default {
         }
         let lastIndexAsistencia = this.asistencias.length - 1;
         if (
-          this.alcance_visita == "" ||
-          this.pqrsf_id == "" ||
-          this.sede_id == "" ||
-          this.nombre_contacto == "" ||
-          this.nit_documento == "" ||
-          this.telefono_contacto == "" ||
-          this.objetivo_visita == "" ||
-          this.cargo_visitado == "" ||
-          this.visitado == "" ||
-          this.cargo_visitante == "" ||
-          this.visitante == "" ||
-          this.temasPrincipales[0].descripcion == "" ||
+          this.alcance_visita == "") {
+          this.validarCampoSeleccionado("Alcance visita", "no-alcance", 1)
+          return
+        }
+        if (this.sede_id == "") {
+          this.validarCampoSeleccionado("Sede", "no-sede", 2)
+          return
+        }
+        if (this.nombre_contacto == "") {
+          this.validarCampoSeleccionado("Nombre / razón social", "no-name", 1)
+          return
+        }
+        if (this.nit_documento == "" && this.solicitante_id == 1) {
+          this.validarCampoSeleccionado("Nit/identificacion", "no-nit", 2)
+          return
+        }
+        if (this.nit_documento == "" && this.solicitante_id == 2) {
+          this.validarCampoSeleccionado("Nit/identificacion", "no-nit", 1)
+          return
+        }
+        if (this.pqrsf_id == "") {
+          this.validarCampoSeleccionado("PQRSF", "no-tipo-pqrsf", 2)
+          return
+        }
+        if (this.telefono_contacto == "") {
+          this.validarCampoSeleccionado("Telefono de contacto", "no-tel", 1)
+          return
+        }
+        if (this.objetivo_visita == "") {
+          this.validarCampoSeleccionado("Objetivo de la visita", "no-objetivo", 1)
+          return
+        }
+        if (this.cargo_visitado == "") {
+          this.validarCampoSeleccionado("Cargo del visitado", "no-visitado", 1)
+          return
+        }
+        if (this.visitado == "") {
+          this.validarCampoSeleccionado("Visita atendida por", "no-visitante", 1)
+          return
+        }
+        if (this.cargo_visitante == "") {
+          this.validarCampoSeleccionado("Cargo del visitante", "no-cargo-visitante", 2)
+          return
+        }
+        if (this.visitante == "") {
+          this.validarCampoSeleccionado("Visita realizada por", "no-visitante-sel", 2)
+          return
+        }
+        if (this.temasPrincipales[0].descripcion == "") {
+          this.validarCampoSeleccionado("Tema", "temaArea", 1)
+          return
+        }
+
+        if (
           this.asistencias[lastIndexAsistencia].nombre == "" ||
           this.asistencias[lastIndexAsistencia].cargo == "" ||
           this.asistencias[lastIndexAsistencia].firma_hash == ""
         ) {
-          this.showAlert("Debe llenar los campos requeridos ", "error");
+          this.showAlert("Debe llenar los campos requeridos para la firma ", "error");
           return;
         }
+        if (this.estado_cierre_id == "") {
+          this.validarCampoSeleccionado("Estado", "no-estado-form", 2)
+          return
+        }
+        if (this.responsable_id == "") {
+          this.validarCampoSeleccionado("Responsable", "no-respoonsable-form", 2)
+          return
+        }
+        if (this.hora_inicio == "") {
+          this.validarCampoSeleccionado("Hora inicio de visita", "no-hora", 1)
+          return
+        }
+        if (this.proceso_id == "") {
+          this.validarCampoSeleccionado("Proceso o área", "no-proceso", 2)
+          return
+        }
+        if (this.solicitante_id == "") {
+          this.validarCampoSeleccionado("Solicitante", "no-solicitante", 2)
+          return
+        }
       } else {
-        if (
-          this.pqrsf_id == "" ||
-          this.sede_id == "" ||
-          this.nombre_contacto == "" ||
-          this.nit_documento == "" ||
-          this.telefono_contacto == ""
-        ) {
-          this.showAlert("Debe llenar los campos requeridos ", "error");
-          return;
+        if (this.sede_id == "") {
+          this.validarCampoSeleccionado("Sede", "no-sede", 2)
+          return
+        }
+        if (this.proceso_id == "") {
+          this.validarCampoSeleccionado("Proceso o área", "no-proceso", 2)
+          return
+        }
+        if (this.solicitante_id == "") {
+          this.validarCampoSeleccionado("Solicitante", "no-solicitante", 2)
+          return
+        }
+        if (this.nit_documento == "" && this.solicitante_id == 1) {
+          this.validarCampoSeleccionado("Nit/identificacion", "no-nit", 2)
+          return
+        }
+        if (this.nit_documento == "" && this.solicitante_id == 2) {
+          this.validarCampoSeleccionado("Nit/identificacion", "no-nit", 1)
+          return
+        }
+        if (this.nombre_contacto == "") {
+          this.validarCampoSeleccionado("Nombre / razón social", "no-name", 1)
+          return
+        }
+        if (this.telefono_contacto == "") {
+          this.validarCampoSeleccionado("Telefono de contacto", "no-tel", 1)
+          return
+        }
+        if (this.estado_cierre_id == "") {
+          this.validarCampoSeleccionado("Estado", "no-estado-form", 2)
+          return
+        }
+        if (this.pqrsf_id == "") {
+          this.validarCampoSeleccionado("PQRSF", "no-tipo-pqrsf", 2)
+          return
+        }
+        if (this.responsable_id == "") {
+          this.validarCampoSeleccionado("Responsable", "no-respoonsable-form", 2)
+          return
         }
       }
 
@@ -1831,6 +1923,26 @@ export default {
           "error"
         );
         return true;
+      }
+    },
+    validarCampoSeleccionado(mensaje, id_campo, tipo) {
+      if (tipo == 1) {
+        this.showAlert(`El campo ${mensaje} es obligatorio`, "error");
+        setTimeout(() => {
+          const input = document.getElementById(id_campo);
+          if (input) {
+            input.focus();
+          }
+        }, 0);
+      }
+      if (tipo == 2) {
+        this.showAlert(`En el campo "${mensaje}" debe seleccionar uno de la lista desplegable.`, "error");
+        setTimeout(() => {
+          const input = document.getElementById(id_campo);
+          if (input) {
+            input.focus();
+          }
+        }, 0);
       }
     },
     envioCorreo(id) {
