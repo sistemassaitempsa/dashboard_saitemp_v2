@@ -501,7 +501,7 @@
             <div class="card p-3 fontSize-5" v-for="evidencia in consulta_evidencias" :key="evidencia.id"
               style="width: 18rem">
               <div class="col d-flex justify-content-end">
-                <a :href="URL_API + evidencia.archivo" target="_blank" rel="noopener noreferrer">
+                <a :href="URL_API + `api/v1/verEvidencia/${evidencia.id}`" target="_blank" rel="noopener noreferrer">
                   <button type="button" :class="evidencia.archivo != undefined
                     ? 'btn btn-sm ver'
                     : 'btn btn-sm btn-secondary'
