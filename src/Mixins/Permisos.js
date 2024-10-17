@@ -56,8 +56,17 @@ export const Permisos = {
     this.getPermisos ();
   },
   methods: {
+
+    urlExterna () {
+      const urlCompleta = window.location.href;
+      if (urlCompleta.includes ('debidadiligencia.saitempsa.com')) {
+        this.URL_API =
+          'https://debidadiligencia.saitempsa.com:8484/aplicaciones/api/public/';
+      }
+    },
     getPermisos () {
       let self = this;
+      this.urlExterna();
       let config = this.configHeader ();
       axios
         .get (self.URL_API + 'api/v1/permisos', config)
