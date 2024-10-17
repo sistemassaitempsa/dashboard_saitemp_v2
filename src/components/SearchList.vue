@@ -17,11 +17,13 @@
           @input="filterResults(registro, registros, 'registros')"
           class="form-control"
           id="exampleInputEmail"
+          @blur="validarSeleccion()"
           :placeholder="placeholder"
           aria-describedby="emailHelp"
           v-model="registro"
           :disabled="disabled"
           :required="valida_campo"
+          :class="[{ 'is-invalid': error }, 'form-control']"
         />
         <span
           class="input-group-text"
@@ -106,6 +108,8 @@ export default {
       registro: "",
       registrosFilter: this.registros,
       mensaje_error: "¡Este campo debe ser diligenciado!",
+      error: false,
+      seleccionado: false,
     };
   },
 
@@ -132,6 +136,8 @@ export default {
       }
     },
     retornoValorCampo(item) {
+      this.seleccionado = true;
+      this.error = false;
       if (
         this.registro != "" &&
         this.nombreCampo != "Pais" &&
@@ -146,6 +152,14 @@ export default {
     },
     nombreItems(item) {
       return item[this.nombreItem];
+    },
+    validarSeleccion() {
+      if (!this.seleccionado) {
+        this.registro = "";
+        this.error = true;
+      } else {
+        this.error = false;
+      }
     },
     filterResults(value, array, nombrearray) {
       var search = null;
@@ -290,6 +304,10 @@ label {
 
 span {
   height: 38px;
+}
+
+.is-invalid {
+  border: 1px solid red;
 }
 
 /* Fin select con filtro personalizado */
