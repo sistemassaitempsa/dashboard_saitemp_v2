@@ -272,7 +272,7 @@
             "
           >
             <SearchList
-              nombreCampo="Cierra la PQRSF *"
+              nombreCampo="Cierra radicado *"
               @getUsuarios="getUsuarios"
               eventoCampo="getUsuarios"
               nombreItem="nombre"
@@ -1610,11 +1610,11 @@ export default {
     },
     limpiarFormulario() {
       this.responsable_id = "";
-      (this.correosSeleccionados = {
+      this.correosSeleccionados = {
         correos: [],
-      }),
-        (this.reenvioPdf = false),
-        (this.correo_responsablePqrsf = "");
+      };
+      this.reenvioPdf = false;
+      this.correo_responsablePqrsf = "";
       this.correo_responsable1 = "";
       this.correo_responsable2 = "";
       this.bloquea_campos = false;
@@ -1696,6 +1696,7 @@ export default {
     },
     llenarFormulario(item) {
       /* formulario visita */
+      this.correo_responsablePqrsf = item.responsable_email;
       this.responsable_id = item.responsable_id;
       this.latitud = item.latitud;
       this.longitud = item.longitud;
