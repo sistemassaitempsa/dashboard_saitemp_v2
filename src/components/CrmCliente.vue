@@ -1716,7 +1716,6 @@ export default {
         });
     },
     llenarFormulario(item) {
-      /* formulario visita */
       this.correo_responsablePqrsf = item.responsable_email;
       this.responsable_id = item.responsable_id;
       this.latitud = item.latitud;
