@@ -1430,6 +1430,7 @@ export default {
     },
   },
   created() {
+    this.urlExterna();
     this.getModulo();
   },
   async mounted() {

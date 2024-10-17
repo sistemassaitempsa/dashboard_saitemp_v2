@@ -543,7 +543,6 @@ export default {
     // var self = this
     this.urlExterna();
     this.getEstadosConcepto();
-    this.urlExterna();
     this.getCliente();
     if (this.$route.params.id == undefined) {
       this.setSupervisor();

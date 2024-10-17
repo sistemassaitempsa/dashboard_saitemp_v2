@@ -54,6 +54,7 @@ export default {
 
     },
     created() {
+        this.urlExterna();
         this.getItems()
     },
     methods: {
