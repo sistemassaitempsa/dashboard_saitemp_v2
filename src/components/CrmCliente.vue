@@ -1083,6 +1083,26 @@
                 />
               </div>
             </div>
+            <div class="row border-bottom p-4">
+              <div class="col">
+                <h6 class="text-start">Responsable radicado</h6>
+              </div>
+              <div class="col">
+                <h6 class="text-start">{{ correo_responsablePqrsf }}</h6>
+              </div>
+              <div class="col-2">
+                <input
+                  class="form-check-input"
+                  type="checkbox"
+                  @change="
+                    agregarCorreosSeleccionados(
+                      correo_responsablePqrsf,
+                      (observacion = '')
+                    )
+                  "
+                />
+              </div>
+            </div>
             <div
               class="row border-bottom p-4"
               v-for="(compromiso, index) in compromisos"
