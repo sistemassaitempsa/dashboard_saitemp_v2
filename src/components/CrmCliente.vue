@@ -1077,7 +1077,8 @@
                   @change="
                     agregarCorreosSeleccionados(
                       correo_contacto,
-                      (observacion = '')
+                      (observacion = ''),
+                      false
                     )
                   "
                 />
@@ -1097,7 +1098,8 @@
                   @change="
                     agregarCorreosSeleccionados(
                       correo_responsablePqrsf,
-                      (observacion = '')
+                      (observacion = ''),
+                      false
                     )
                   "
                 />
@@ -1121,7 +1123,8 @@
                   @change="
                     agregarCorreosSeleccionados(
                       compromiso.email,
-                      compromiso.observacion
+                      compromiso.observacion,
+                      true
                     )
                   "
                 />
@@ -1466,10 +1469,11 @@ export default {
         return false;
       }
     },
-    agregarCorreosSeleccionados(correo, observacion) {
+    agregarCorreosSeleccionados(correo, observacion, compromiso) {
       this.correosSeleccionados.correos.push({
         correo: correo,
         observacion: observacion,
+        compromiso: compromiso,
       });
     },
     reenviarCorreosSeleccionados() {
@@ -2154,18 +2158,22 @@ export default {
           {
             correo: this.correo_contacto,
             observacion: "",
+            compromiso: false,
           },
           {
             correo: this.correo_responsablePqrsf,
             observacion: "",
+            compromiso: false,
           },
           {
             correo: this.compromisos[0].email,
             observacion: this.compromisos[0].observacion,
+            compromiso: true,
           },
           {
             correo: this.compromisos[1].email,
             observacion: this.compromisos[1].observacion,
+            compromiso: true,
           },
         ],
       };
