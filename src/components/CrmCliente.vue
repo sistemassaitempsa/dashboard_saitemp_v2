@@ -314,6 +314,7 @@
             <vue-editor
               v-model="observacion"
               :editorToolbar="customToolbar"
+              @input="limitarCaracteres"
             ></vue-editor>
             <!-- <textarea
               class="form-control"
@@ -326,7 +327,7 @@
             ></textarea> -->
             <div class="d-flex justify-content-end">
               <small class="char-count"
-                >{{ remainingCharsObservasion3 }}/3000</small
+                >{{ remainingCharsObservasion3 }}/5000</small
               >
             </div>
             <div class="invalid-feedback">
@@ -1399,7 +1400,7 @@ export default {
       estado_cierre_id: "",
       consulta_estado_cierre: "",
       estados_cierre: [],
-      observacion: " ",
+      observacion: "",
       proceso_id: "",
       interaccion_id: "",
       nombre_contacto: "",
@@ -1739,6 +1740,11 @@ export default {
           self.llenarFormulario(result.data);
           self.historicoCorreos();
         });
+    },
+    limitarCaracteres() {
+      if (this.observacion.length > 5000) {
+        this.observacion = this.observacion.substring(0, 5000);
+      }
     },
     llenarFormulario(item) {
       this.correo_responsablePqrsf = item.responsable_email;
