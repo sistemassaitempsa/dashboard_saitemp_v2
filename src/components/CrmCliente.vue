@@ -308,9 +308,14 @@
           </div>
         </div>
         <div class="row">
+          <label class="form-label">Observación:</label>
+          <br />
           <div class="col mb-3">
-            <label class="form-label">Observación:</label>
-            <textarea
+            <vue-editor
+              v-model="observacion"
+              :editorToolbar="customToolbar"
+            ></vue-editor>
+            <!-- <textarea
               class="form-control"
               name=""
               id="observacion_PQRSF"
@@ -318,7 +323,7 @@
               v-model="observacion"
               placeholder="Observación"
               maxlength="3000"
-            ></textarea>
+            ></textarea> -->
             <div class="d-flex justify-content-end">
               <small class="char-count"
                 >{{ remainingCharsObservasion3 }}/3000</small
@@ -1267,6 +1272,7 @@
   </div>
 </template>
 <script>
+import { VueEditor } from "vue2-editor";
 import axios from "axios";
 import MapaVue from "./MapaVue.vue";
 import { Token } from "../Mixins/Token.js";
@@ -1285,6 +1291,7 @@ export default {
     SolicitudNovedadesNomina,
     FirmaDigital,
     MapaVue,
+    VueEditor,
   },
   mixins: [Token, Alerts, Permisos, Geolocal],
   props: {
@@ -1292,6 +1299,20 @@ export default {
   },
   data() {
     return {
+      customToolbar: [
+        ["bold", "italic", "underline"],
+        [{ list: "ordered" }, { list: "bullet" }],
+        [
+          { align: "" },
+          { align: "center" },
+          { align: "right" },
+          { align: "justify" },
+        ],
+        [{ color: [] }],
+        [{ indent: "-1" }, { indent: "+1" }],
+        [{ font: [] }],
+        [{ size: ["small", false, "large", "huge"] }],
+      ],
       correosSeleccionados: {
         correos: [],
       },
