@@ -308,9 +308,15 @@
           </div>
         </div>
         <div class="row">
+          <label class="form-label">Observación:</label>
+          <br />
           <div class="col mb-3">
-            <label class="form-label">Observación:</label>
-            <textarea
+            <vue-editor
+              v-model="observacion"
+              :editorToolbar="customToolbar"
+              @input="limitarCaracteres"
+            ></vue-editor>
+            <!-- <textarea
               class="form-control"
               name=""
               id="observacion_PQRSF"
@@ -318,10 +324,10 @@
               v-model="observacion"
               placeholder="Observación"
               maxlength="3000"
-            ></textarea>
+            ></textarea> -->
             <div class="d-flex justify-content-end">
               <small class="char-count"
-                >{{ remainingCharsObservasion3 }}/3000</small
+                >{{ remainingCharsObservasion3 }}/5000</small
               >
             </div>
             <div class="invalid-feedback">
@@ -1267,6 +1273,7 @@
   </div>
 </template>
 <script>
+import { VueEditor } from "vue2-editor";
 import axios from "axios";
 import MapaVue from "./MapaVue.vue";
 import { Token } from "../Mixins/Token.js";
@@ -1285,6 +1292,7 @@ export default {
     SolicitudNovedadesNomina,
     FirmaDigital,
     MapaVue,
+    VueEditor,
   },
   mixins: [Token, Alerts, Permisos, Geolocal],
   props: {
@@ -1292,6 +1300,20 @@ export default {
   },
   data() {
     return {
+      customToolbar: [
+        ["bold", "italic", "underline"],
+        [{ list: "ordered" }, { list: "bullet" }],
+        [
+          { align: "" },
+          { align: "center" },
+          { align: "right" },
+          { align: "justify" },
+        ],
+        [{ color: [] }],
+        [{ indent: "-1" }, { indent: "+1" }],
+        [{ font: [] }],
+        [{ size: ["small", false, "large", "huge"] }],
+      ],
       correosSeleccionados: {
         correos: [],
       },
@@ -1378,7 +1400,7 @@ export default {
       estado_cierre_id: "",
       consulta_estado_cierre: "",
       estados_cierre: [],
-      observacion: " ",
+      observacion: "",
       proceso_id: "",
       interaccion_id: "",
       nombre_contacto: "",
@@ -1718,6 +1740,11 @@ export default {
           self.llenarFormulario(result.data);
           self.historicoCorreos();
         });
+    },
+    limitarCaracteres() {
+      if (this.observacion.length > 5000) {
+        this.observacion = this.observacion.substring(0, 5000);
+      }
     },
     llenarFormulario(item) {
       this.correo_responsablePqrsf = item.responsable_email;
