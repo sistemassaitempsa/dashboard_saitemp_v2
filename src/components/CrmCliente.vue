@@ -535,124 +535,132 @@
             </div>
           </div>
           <div class="row border rounded">
-            <div class="row">
-              <div class="col align-self-center">
-                <label class="form-label">Compromiso 1:*</label>
-              </div>
-              <div class="col-3 mb-3" v-if="$route.params.id != undefined">
-                <label class="form-label">Fecha de apertura: </label>
-                <input
-                  type="datetime-local"
-                  class="form-control"
-                  autocomplete="off"
-                  id="no-fecha-open"
-                  aria-describedby="emailHelp"
-                  v-model="fecha_radicado"
-                  disabled
-                />
-              </div>
-            </div>
-            <div class="row">
-              <div class="col mb-3">
-                <textarea
-                  class="form-control"
-                  name=""
-                  id="compromiso1"
-                  rows="2"
-                  maxlength="4000"
-                  v-model="compromisos[0].descripcion"
-                  placeholder="Compromiso 1"
-                  :disabled="
-                    $route.params.id != undefined && !permisos[32].autorizado
-                  "
-                ></textarea>
-                <div class="d-flex justify-content-end">
-                  <small class="char-count"
-                    >{{ remainingCharsCompromiso }}/4000</small
-                  >
+            <div
+              v-for="(compromiso, index) in compromisos"
+              :key="index"
+              class="border rounded"
+            >
+              <div class="row">
+                <div class="col align-self-center">
+                  <label class="form-label">{{
+                    `"Compromiso ${index + 1}:  *`
+                  }}</label>
                 </div>
-                <div class="invalid-feedback">
-                  {{ mensaje_error }}
-                </div>
-              </div>
-            </div>
-            <div class="row">
-              <div class="col-6 mb-3">
-                <SearchList
-                  nombreCampo="Responsable: *"
-                  @getUsuarios="getUsuarios"
-                  eventoCampo="getUsuarios"
-                  nombreItem="nombre"
-                  :registros="usuarios"
-                  placeholder="Seleccione una opción"
-                  :consulta="compromisos[0].responsable"
-                  :index="4"
-                  :valida_campo="compromisos[0].descripcion != ''"
-                  :disabled="
-                    $route.params.id != undefined && !permisos[32].autorizado
-                  "
-                />
-
-                <div class="invalid-feedback">
-                  {{ mensaje_error }}
-                </div>
-              </div>
-              <!-- <div class="col-3 mb-3">
-                  <label class="form-label">Fecha de cierre: </label>
+                <div class="col-3 mb-3" v-if="$route.params.id != undefined">
+                  <label class="form-label">Fecha de apertura: </label>
                   <input
-                    type="date"
+                    type="datetime-local"
                     class="form-control"
                     autocomplete="off"
-                    id="exampleInputEmail1"
+                    id="no-fecha-open"
                     aria-describedby="emailHelp"
-                    v-model="compromisos[0].fecha_cierre"
+                    v-model="fecha_radicado"
+                    disabled
                   />
-                </div> -->
-              <div class="col-6 was-validated mb-3">
-                <label for="validationCustom" class="form-label"
-                  >Estado:*</label
-                >
-                <select
-                  class="form-select"
-                  :required="
-                    estado_cierre_id == 3 && compromisos[0].descripcion != ''
-                  "
-                  v-model="compromisos[0].estado_cierre_id"
-                >
-                  <option :value="1">Eficaz</option>
-                  <option :value="2">Ineficaz</option>
-                </select>
-                <div class="invalid-feedback">
-                  {{ mensaje_error }}
+                </div>
+              </div>
+              <div class="row">
+                <div class="col mb-3">
+                  <textarea
+                    class="form-control"
+                    name=""
+                    id="compromiso1"
+                    rows="2"
+                    maxlength="4000"
+                    v-model="compromiso.descripcion"
+                    :placeholder="'Compromiso ' + (index + 1)"
+                    :disabled="
+                      $route.params.id != undefined && !permisos[32].autorizado
+                    "
+                  ></textarea>
+                  <div class="d-flex justify-content-end">
+                    <small class="char-count"
+                      >{{ remainingCharsCompromiso(index) }}/4000</small
+                    >
+                  </div>
+                  <div class="invalid-feedback">
+                    {{ mensaje_error }}
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-6 mb-3">
+                  <SearchList
+                    nombreCampo="Responsable: *"
+                    @getUsuariosLideres="getUsuariosLideres"
+                    eventoCampo="getUsuariosLideres"
+                    nombreItem="nombre"
+                    :registros="usuarios"
+                    placeholder="Seleccione una opción"
+                    :consulta="compromiso.responsable"
+                    :index="index"
+                    :valida_campo="compromiso.descripcion != ''"
+                    :disabled="
+                      $route.params.id != undefined && !permisos[32].autorizado
+                    "
+                  />
+
+                  <div class="invalid-feedback">
+                    {{ mensaje_error }}
+                  </div>
+                </div>
+                <div class="col-6 was-validated mb-3">
+                  <label for="validationCustom" class="form-label"
+                    >Estado:*</label
+                  >
+                  <select
+                    class="form-select"
+                    :required="
+                      estado_cierre_id == 3 && compromiso.descripcion != ''
+                    "
+                    v-model="compromiso.estado_cierre_id"
+                  >
+                    <option :value="1">Eficaz</option>
+                    <option :value="2">Ineficaz</option>
+                  </select>
+                  <div class="invalid-feedback">
+                    {{ mensaje_error }}
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col mb-3">
+                  <label class="form-label"
+                    >Observaciones para el responsable: *</label
+                  >
+                  <textarea
+                    class="form-control"
+                    name=""
+                    id="razon_social"
+                    rows="1"
+                    v-model="compromiso.observacion"
+                    placeholder="Observación"
+                    :disabled="
+                      $route.params.id != undefined && !permisos[32].autorizado
+                    "
+                    maxlength="3000"
+                  ></textarea>
+                  <div class="d-flex justify-content-end">
+                    <small class="char-count"
+                      >{{ remainingCharsObservasion(index) }}/3000</small
+                    >
+                  </div>
                 </div>
               </div>
             </div>
-            <div class="row">
-              <div class="col mb-3">
-                <label class="form-label"
-                  >Observaciones para el responsable: *</label
-                >
-                <textarea
-                  class="form-control"
-                  name=""
-                  id="razon_social"
-                  rows="1"
-                  v-model="compromisos[0].observacion"
-                  placeholder="Observación"
-                  :disabled="
-                    $route.params.id != undefined && !permisos[32].autorizado
-                  "
-                  maxlength="3000"
-                ></textarea>
-                <div class="d-flex justify-content-end">
-                  <small class="char-count"
-                    >{{ remainingCharsObservasion }}/3000</small
-                  >
-                </div>
-              </div>
+            <div
+              class="row trash justify-content-center align-items-center padding-1"
+            >
+              <label
+                id="clasificador"
+                @click="agregarCompromiso()"
+                style="cursor: pointer"
+                ><i class="bi bi-plus-circle-fill"></i>
+                Agregar Compromiso
+              </label>
             </div>
           </div>
-          <div class="row border mt-1 rounded">
+          <!-- <div class="row border mt-1 rounded">
             <div class="row">
               <div class="col align-self-center">
                 <label class="form-label">Compromiso 2:*</label>
@@ -711,17 +719,6 @@
                   "
                 />
               </div>
-              <!--     <div class="col-3 mb-3">
-                  <label class="form-label">Fecha de cierre: </label>
-                  <input
-                    type="date"
-                    class="form-control"
-                    autocomplete="off"
-                    id="exampleInputEmail1"
-                    aria-describedby="emailHelp"
-                    v-model="compromisos[1].fecha_cierre"
-                  />
-                </div> -->
               <div class="col-6 was-validated mb-3">
                 <label for="validationCustom" class="form-label"
                   >Estado:*</label
@@ -765,7 +762,7 @@
                 </div>
               </div>
             </div>
-          </div>
+          </div> -->
         </div>
 
         <!-- finaliza aqui -->
@@ -1300,6 +1297,8 @@ export default {
   },
   data() {
     return {
+      limite_evidencias: "",
+      limite_compromisos: "",
       customToolbar: [
         ["bold", "italic", "underline"],
         [{ list: "ordered" }, { list: "bullet" }],
@@ -1341,18 +1340,6 @@ export default {
       compromisos: [
         {
           titulo: "compromiso1",
-          descripcion: "",
-          estado_cierre_id: "",
-          fecha_cierre: "",
-          fecha_inicio: "",
-          responsable: "",
-          observacion: "",
-          responsable_id: "",
-          email: "",
-          id: "",
-        },
-        {
-          titulo: "compromiso2",
           descripcion: "",
           estado_cierre_id: "",
           fecha_cierre: "",
@@ -1427,15 +1414,7 @@ export default {
     remainingChars() {
       return 0 + this.temasPrincipales[0].descripcion.length;
     },
-    remainingCharsCompromiso() {
-      return 0 + this.compromisos[0].descripcion.length;
-    },
-    remainingCharsObservasion() {
-      return 0 + this.compromisos[0].observacion.length;
-    },
-    remainingCharsCompromiso2() {
-      return 0 + this.compromisos[1].descripcion.length;
-    },
+
     remainingCharsObservasion2() {
       return 0 + this.compromisos[1].observacion.length;
     },
@@ -1457,6 +1436,7 @@ export default {
   created() {
     this.urlExterna();
     this.getModulo();
+    this.getLimites();
   },
   async mounted() {
     this.id_registro = this.$route.params.id;
@@ -1576,7 +1556,7 @@ export default {
     }, */
     agregarObservacion() {
       this.verLista = this.verLista + 1;
-      if (this.evidencias.length <= 10) {
+      if (this.evidencias.length < this.limite_evidencias) {
         this.evidencias.push({ body: "", file: [] });
       }
     },
@@ -1600,6 +1580,38 @@ export default {
         "error"
       );
       return;
+    },
+    agregarCompromiso() {
+      this.verLista = this.verLista + 1;
+      const indexUltimoCompromiso = this.compromisos.length - 1;
+      if (this.compromisos.length < this.limite_compromisos) {
+        this.compromisos.push({
+          titulo: `Compromiso ${2 + indexUltimoCompromiso}`,
+          descripcion: "",
+          estado_cierre_id: "",
+          fecha_cierre: "",
+          fecha_inicio: "",
+          responsable: "",
+          observacion: "",
+          responsable_id: "",
+          email: "",
+          id: "",
+        });
+      }
+      /*  const indexUltimoCompromiso = this.compromisos.length - 1;
+      if (
+        this.compromisos[indexUltimoCompromiso].descripcion == "" &&
+        this.compromisos[indexUltimoCompromiso].responsable_id == ""
+      ) {
+        console.log(this.compromisos[indexUltimoCompromiso].descripcion);
+       
+        return;
+      }
+      this.showAlert(
+        "Debe llenar los campos requeridos del compromiso anterior ",
+        "error"
+      );
+      return; */
     },
     deleteDynamic(array, index, identificador = null) {
       if (identificador != null) {
@@ -1707,16 +1719,6 @@ export default {
           email: "",
           id: "",
         },
-        {
-          titulo: "compromiso2",
-          descripcion: "",
-          estado_cierre_id: "",
-          fecha_cierre: "",
-          fecha_inicio: "",
-          observacion: "",
-          email: "",
-          id: "",
-        },
       ];
       this.temasPrincipales = [{ titulo: "tema1", descripcion: "" }];
       this.alcance_visita = "";
@@ -1742,8 +1744,8 @@ export default {
         });
     },
     limitarCaracteres() {
-      if (this.observacion.length > 5000) {
-        this.observacion = this.observacion.substring(0, 5000);
+      if (this.observacion.length > 4000) {
+        this.observacion = this.observacion.substring(0, 4000);
       }
     },
     llenarFormulario(item) {
@@ -1793,7 +1795,7 @@ export default {
            },
          ]; */
       if (item.compromisos.length > 0) {
-        for (let i = 0; i < 2; i++) {
+        for (let i = 0; i < item.compromisos.length; i++) {
           const compromiso = item.compromisos[i];
           if (compromiso) {
             this.compromisos[i] = compromiso;
@@ -1951,6 +1953,16 @@ export default {
       const segundos = now.getSeconds().toString().padStart(2, "0");
       const horaActual = `${horas}:${minutos}:${segundos}`;
       this.hora_cierre = horaActual;
+    },
+    getLimites() {
+      let self = this;
+      let config = this.configHeader();
+      axios
+        .get(self.URL_API + "api/v1/limitesCrm", config)
+        .then(function (result) {
+          self.limite_compromisos = result.data.limites.limite_compromisos;
+          self.limite_evidencias = result.data.limites.limite_evidencias;
+        });
     },
     getEmpresasCliente(item = null) {
       if (item != null) {
@@ -2192,19 +2204,15 @@ export default {
             observacion: "",
             compromiso: false,
           },
-          {
-            correo: this.compromisos[0].email,
-            observacion: this.compromisos[0].observacion,
-            compromiso: true,
-          },
-          {
-            correo: this.compromisos[1].email,
-            observacion: this.compromisos[1].observacion,
-            compromiso: true,
-          },
         ],
       };
-
+      this.compromisos.forEach((compromiso) => {
+        correosResponsables.correos.push({
+          correo: compromiso.email,
+          observacion: compromiso.descripcion,
+          compromiso: true,
+        });
+      });
       console.log(this.asistencias);
       let self = this;
       let config = this.configHeader();
@@ -2320,6 +2328,12 @@ export default {
         .catch(function (error) {
           console.error("Error al guardar el formulario:", error);
         });
+    },
+    remainingCharsCompromiso(index) {
+      return 0 + (this.compromisos[index]?.descripcion.length || 0);
+    },
+    remainingCharsObservasion(index) {
+      return 0 + (this.compromisos[index]?.observacion.length || 0);
     },
     eliminarDocumento(item) {
       let self = this;
@@ -2623,37 +2637,18 @@ export default {
           self.cargos_planta = result.data;
         });
     },
-    getUsuariosLideres(item = null, index = null) {
+    getUsuariosLideres(item = null, index) {
       if (item != null) {
-        switch (index) {
-          case 1:
-            this.responsable_id = item.id;
-            this.consulta_responsable = item.nombre;
-            break;
-          case 2:
-            this.cierra_pqrsf_id = item.id;
-            this.consulta_cierra_pqrsf = item.nombre;
-            break;
-          case 3:
-            this.visitante_id = item.id;
-            this.visitante = item.nombre;
-            break;
-          case 4:
-            this.compromisos[0].responsable = item.nombre;
-            this.correo_responsable1 = item.email;
-            break;
-          case 5:
-            this.compromisos[1].responsable = item.nombre;
-            this.correo_responsable2 = item.email;
-            break;
-        }
+        this.compromisos[index].responsable = item.nombre;
+        this.compromisos[index].email = item.email;
+        this.compromisos[index].responsable_id = item.id;
       }
       let self = this;
       let config = this.configHeader();
       axios
         .get(self.URL_API + "api/v1/userslist", config)
         .then(function (result) {
-          self.usuarios_lider = result.data.filter((user) => user.lider == 1);
+          self.usuarios = result.data;
         });
     },
     getUsuarios(item = null, index = null) {
@@ -2672,7 +2667,7 @@ export default {
             this.visitante_id = item.id;
             this.visitante = item.nombre;
             break;
-          case 4:
+          /*           case 4:
             this.compromisos[0].responsable = item.nombre;
             this.compromisos[0].email = item.email;
             this.compromisos[0].responsable_id = item.id;
@@ -2681,7 +2676,7 @@ export default {
             this.compromisos[1].responsable = item.nombre;
             this.compromisos[1].email = item.email;
             this.compromisos[1].responsable_id = item.id;
-            break;
+            break; */
         }
       }
       let self = this;
