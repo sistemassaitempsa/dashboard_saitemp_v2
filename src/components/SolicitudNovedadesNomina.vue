@@ -395,7 +395,6 @@ export default {
           self.$emit("lanzarLoading", false);
           self.$emit("correoEnviado");
           self.showAlert(result.data.message, result.data.status);
-
         });
     },
     cargarArchivo(event) {
@@ -666,5 +665,8 @@ svg {
 .error {
   float: left;
   color: red;
+}
+ul li {
+  list-style: decimal;
 }
 </style>

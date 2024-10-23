@@ -1,7 +1,7 @@
 <template>
   <div class="container" id="contenedor-formulario">
     <Loading :loading="loading" />
-    <div class="row" >
+    <div class="row">
       <div class="col-2">
         <img style="width: 80%" src="@/assets/logo1.png" alt="" />
       </div>
@@ -13,8 +13,13 @@
           CONTRAPARTES
         </h5>
       </div>
-      <div class="col-2 versionamiento" :style="'font-size:'+tamano_texto_version+'rem'">
-        <div class="row" v-for="item in versiones" :key="item.id"> <p>{{item.descripcion}}</p></div>
+      <div
+        class="col-2 versionamiento"
+        :style="'font-size:' + tamano_texto_version + 'rem'"
+      >
+        <div class="row" v-for="item in versiones" :key="item.id">
+          <p>{{ item.descripcion }}</p>
+        </div>
       </div>
     </div>
     <form class="was-validated" @submit.prevent="save()">
@@ -664,7 +669,7 @@
         </div>
       </div>
       <h6 class="tituloseccion" v-if="tipo_cliente == 1">Contratación</h6>
-      <div id="seccion"  v-if="tipo_cliente == 1">
+      <div id="seccion" v-if="tipo_cliente == 1">
         <div class="row">
           <div class="col mb-3">
             <label class="form-label" style="color: black"
@@ -1787,7 +1792,7 @@
         >
           <div class="col-2" v-if="$route.params.id != null">
             <a
-              :href="item.ruta != undefined ? URL_API + item.ruta: null"
+              :href="item.ruta != undefined ? URL_API + item.ruta : null"
               target="_blank"
               rel="noopener noreferrer"
               ><button
@@ -3924,8 +3929,8 @@ export default {
       consulta_contratacion_tipo_contrato: "",
       consulta_contratacion_pago_31: "",
       contratacion_pago_31_id: "",
-      versiones:[],
-      actividad_ciiu_disabled:true
+      versiones: [],
+      actividad_ciiu_disabled: true,
     };
   },
   computed: {
@@ -3972,7 +3977,7 @@ export default {
     this.getElementosPP();
     this.fileInputsCountCopia = [...this.fileInputsCount];
     this.scrollTop();
-    this.validarVersionamiento()
+    this.validarVersionamiento();
     if (
       this.$route.params.id != undefined &&
       this.$route.path != "/formularioregistro"
@@ -3999,7 +4004,7 @@ export default {
     }
   },
   methods: {
-    validarVersionamiento(){
+    validarVersionamiento() {
       let self = this;
       let config = this.configHeader();
       axios
@@ -5202,7 +5207,7 @@ export default {
     getActividadesCiiu(item = null) {
       var id = "";
       if (item != null && item.codigo != undefined) {
-        this.actividad_ciiu_disabled = false
+        this.actividad_ciiu_disabled = false;
         this.codigo_ciiu_id = item.id;
         this.consulta_codigo_ciiu = item.codigo;
         id = item.id;
@@ -7163,8 +7168,8 @@ export default {
         //     this.fileInputsCount = item.documentos_adjuntos
         // }
 
-      self.file = new Array(self.fileInputsCount.length)
-      self.fileInputsCount.forEach(function(item1, index){
+        self.file = new Array(self.fileInputsCount.length);
+        self.fileInputsCount.forEach(function (item1, index) {
           item.documentos_adjuntos.forEach(function (archivo) {
             if (archivo.tipo_documento_id == item1.id) {
               self
@@ -7507,14 +7512,13 @@ ul li {
   color: white;
 }
 
-.versionamiento .row p{
+.versionamiento .row p {
   border-bottom: rgba(0, 0, 0, 0.377) 1px solid;
-  padding:0px;
+  padding: 0px;
   margin: 0px;
   margin-top: 5px;
-  color: rgba(0, 0, 0, 0.377)
+  color: rgba(0, 0, 0, 0.377);
 }
-
 
 /* .orientacion{
     text-align: justify;

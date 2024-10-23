@@ -535,124 +535,132 @@
             </div>
           </div>
           <div class="row border rounded">
-            <div class="row">
-              <div class="col align-self-center">
-                <label class="form-label">Compromiso 1:*</label>
-              </div>
-              <div class="col-3 mb-3" v-if="$route.params.id != undefined">
-                <label class="form-label">Fecha de apertura: </label>
-                <input
-                  type="datetime-local"
-                  class="form-control"
-                  autocomplete="off"
-                  id="no-fecha-open"
-                  aria-describedby="emailHelp"
-                  v-model="fecha_radicado"
-                  disabled
-                />
-              </div>
-            </div>
-            <div class="row">
-              <div class="col mb-3">
-                <textarea
-                  class="form-control"
-                  name=""
-                  id="compromiso1"
-                  rows="2"
-                  maxlength="4000"
-                  v-model="compromisos[0].descripcion"
-                  placeholder="Compromiso 1"
-                  :disabled="
-                    $route.params.id != undefined && !permisos[32].autorizado
-                  "
-                ></textarea>
-                <div class="d-flex justify-content-end">
-                  <small class="char-count"
-                    >{{ remainingCharsCompromiso }}/4000</small
-                  >
+            <div
+              v-for="(compromiso, index) in compromisos"
+              :key="index"
+              class="border rounded"
+            >
+              <div class="row">
+                <div class="col align-self-center">
+                  <label class="form-label">{{
+                    `"Compromiso ${index + 1}:  *`
+                  }}</label>
                 </div>
-                <div class="invalid-feedback">
-                  {{ mensaje_error }}
-                </div>
-              </div>
-            </div>
-            <div class="row">
-              <div class="col-6 mb-3">
-                <SearchList
-                  nombreCampo="Responsable: *"
-                  @getUsuarios="getUsuarios"
-                  eventoCampo="getUsuarios"
-                  nombreItem="nombre"
-                  :registros="usuarios"
-                  placeholder="Seleccione una opción"
-                  :consulta="compromisos[0].responsable"
-                  :index="4"
-                  :valida_campo="compromisos[0].descripcion != ''"
-                  :disabled="
-                    $route.params.id != undefined && !permisos[32].autorizado
-                  "
-                />
-
-                <div class="invalid-feedback">
-                  {{ mensaje_error }}
-                </div>
-              </div>
-              <!-- <div class="col-3 mb-3">
-                  <label class="form-label">Fecha de cierre: </label>
+                <div class="col-3 mb-3" v-if="$route.params.id != undefined">
+                  <label class="form-label">Fecha de apertura: </label>
                   <input
-                    type="date"
+                    type="datetime-local"
                     class="form-control"
                     autocomplete="off"
-                    id="exampleInputEmail1"
+                    id="no-fecha-open"
                     aria-describedby="emailHelp"
-                    v-model="compromisos[0].fecha_cierre"
+                    v-model="fecha_radicado"
+                    disabled
                   />
-                </div> -->
-              <div class="col-6 was-validated mb-3">
-                <label for="validationCustom" class="form-label"
-                  >Estado:*</label
-                >
-                <select
-                  class="form-select"
-                  :required="
-                    estado_cierre_id == 3 && compromisos[0].descripcion != ''
-                  "
-                  v-model="compromisos[0].estado_cierre_id"
-                >
-                  <option :value="1">Eficaz</option>
-                  <option :value="2">Ineficaz</option>
-                </select>
-                <div class="invalid-feedback">
-                  {{ mensaje_error }}
+                </div>
+              </div>
+              <div class="row">
+                <div class="col mb-3">
+                  <textarea
+                    class="form-control"
+                    name=""
+                    id="compromiso1"
+                    rows="2"
+                    maxlength="4000"
+                    v-model="compromiso.descripcion"
+                    :placeholder="'Compromiso ' + (index + 1)"
+                    :disabled="
+                      $route.params.id != undefined && !permisos[32].autorizado
+                    "
+                  ></textarea>
+                  <div class="d-flex justify-content-end">
+                    <small class="char-count"
+                      >{{ remainingCharsCompromiso(index) }}/4000</small
+                    >
+                  </div>
+                  <div class="invalid-feedback">
+                    {{ mensaje_error }}
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-6 mb-3">
+                  <SearchList
+                    nombreCampo="Responsable: *"
+                    @getUsuariosLideres="getUsuariosLideres"
+                    eventoCampo="getUsuariosLideres"
+                    nombreItem="nombre"
+                    :registros="usuarios"
+                    placeholder="Seleccione una opción"
+                    :consulta="compromiso.responsable"
+                    :index="index"
+                    :valida_campo="compromiso.descripcion != ''"
+                    :disabled="
+                      $route.params.id != undefined && !permisos[32].autorizado
+                    "
+                  />
+
+                  <div class="invalid-feedback">
+                    {{ mensaje_error }}
+                  </div>
+                </div>
+                <div class="col-6 was-validated mb-3">
+                  <label for="validationCustom" class="form-label"
+                    >Estado:*</label
+                  >
+                  <select
+                    class="form-select"
+                    :required="
+                      estado_cierre_id == 3 && compromiso.descripcion != ''
+                    "
+                    v-model="compromiso.estado_cierre_id"
+                  >
+                    <option :value="1">Eficaz</option>
+                    <option :value="2">Ineficaz</option>
+                  </select>
+                  <div class="invalid-feedback">
+                    {{ mensaje_error }}
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col mb-3">
+                  <label class="form-label"
+                    >Observaciones para el responsable: *</label
+                  >
+                  <textarea
+                    class="form-control"
+                    name=""
+                    id="razon_social"
+                    rows="1"
+                    v-model="compromiso.observacion"
+                    placeholder="Observación"
+                    :disabled="
+                      $route.params.id != undefined && !permisos[32].autorizado
+                    "
+                    maxlength="3000"
+                  ></textarea>
+                  <div class="d-flex justify-content-end">
+                    <small class="char-count"
+                      >{{ remainingCharsObservasion(index) }}/3000</small
+                    >
+                  </div>
                 </div>
               </div>
             </div>
-            <div class="row">
-              <div class="col mb-3">
-                <label class="form-label"
-                  >Observaciones para el responsable: *</label
-                >
-                <textarea
-                  class="form-control"
-                  name=""
-                  id="razon_social"
-                  rows="1"
-                  v-model="compromisos[0].observacion"
-                  placeholder="Observación"
-                  :disabled="
-                    $route.params.id != undefined && !permisos[32].autorizado
-                  "
-                  maxlength="3000"
-                ></textarea>
-                <div class="d-flex justify-content-end">
-                  <small class="char-count"
-                    >{{ remainingCharsObservasion }}/3000</small
-                  >
-                </div>
-              </div>
+            <div
+              class="row trash justify-content-center align-items-center padding-1"
+            >
+              <label
+                id="clasificador"
+                @click="agregarCompromiso()"
+                style="cursor: pointer"
+                ><i class="bi bi-plus-circle-fill"></i>
+                Agregar Compromiso
+              </label>
             </div>
           </div>
-          <div class="row border mt-1 rounded">
+          <!-- <div class="row border mt-1 rounded">
             <div class="row">
               <div class="col align-self-center">
                 <label class="form-label">Compromiso 2:*</label>
@@ -711,17 +719,6 @@
                   "
                 />
               </div>
-              <!--     <div class="col-3 mb-3">
-                  <label class="form-label">Fecha de cierre: </label>
-                  <input
-                    type="date"
-                    class="form-control"
-                    autocomplete="off"
-                    id="exampleInputEmail1"
-                    aria-describedby="emailHelp"
-                    v-model="compromisos[1].fecha_cierre"
-                  />
-                </div> -->
               <div class="col-6 was-validated mb-3">
                 <label for="validationCustom" class="form-label"
                   >Estado:*</label
@@ -765,7 +762,7 @@
                 </div>
               </div>
             </div>
-          </div>
+          </div> -->
         </div>
 
         <!-- finaliza aqui -->
@@ -1145,7 +1142,65 @@
             </button>
           </div>
         </div>
+        <div class="row mt-5 mb-3">
+          <div class="col-3">
+            <div>
+              <label class="form-label">Registros guardados</label>
+              <select
+                class="form-select form-select-lg mb-3"
+                aria-label=".form-select-lg example"
+                v-model="selectedFormId"
+                @change="loadPartial(selectedFormId)"
+              >
+                <option disabled value="">Seleccionar</option>
+                <option
+                  v-for="form in formList"
+                  :key="form.nit_documento"
+                  :value="form.nit_documento"
+                >
+                  {{ form.nombre_contacto || form.nit_documento }}
+                </option>
+              </select>
+            </div>
+          </div>
+        </div>
         <div class="row">
+          <div class="col">
+            <div class="flexButtons">
+              <button
+                type="button"
+                class="btn btn-success"
+                @click="guardadoParcial"
+              >
+                Guardado parcial
+              </button>
+
+              <button
+                class="btn btn-danger dropdown-toggle dropdown-toggle-split"
+                data-bs-toggle="dropdown"
+                aria-expanded="false"
+                type="button"
+              >
+                Eliminar registro
+              </button>
+              <ul class="dropdown-menu">
+                <li v-if="formList.length === 0">
+                  <a href="#">No hay registros</a>
+                </li>
+                <li v-for="(form, index) in formList" :key="index">
+                  <a
+                    class="dropdown-item"
+                    style="cursor: pointer"
+                    @click="eliminarForm(form.nit_documento)"
+                  >
+                    {{
+                      form.nombre_contacto || "Formulario " + form.nit_documento
+                    }}
+                  </a>
+                </li>
+              </ul>
+            </div>
+          </div>
           <div class="col" v-if="$route.params.id != undefined">
             <button
               class="btn btn-success"
@@ -1300,6 +1355,12 @@ export default {
   },
   data() {
     return {
+      dropdownVisible: false,
+      selectedFormId: "",
+      formList: [],
+      formularios_guardados: [],
+      limite_evidencias: "",
+      limite_compromisos: "",
       customToolbar: [
         ["bold", "italic", "underline"],
         [{ list: "ordered" }, { list: "bullet" }],
@@ -1341,18 +1402,6 @@ export default {
       compromisos: [
         {
           titulo: "compromiso1",
-          descripcion: "",
-          estado_cierre_id: "",
-          fecha_cierre: "",
-          fecha_inicio: "",
-          responsable: "",
-          observacion: "",
-          responsable_id: "",
-          email: "",
-          id: "",
-        },
-        {
-          titulo: "compromiso2",
           descripcion: "",
           estado_cierre_id: "",
           fecha_cierre: "",
@@ -1427,15 +1476,7 @@ export default {
     remainingChars() {
       return 0 + this.temasPrincipales[0].descripcion.length;
     },
-    remainingCharsCompromiso() {
-      return 0 + this.compromisos[0].descripcion.length;
-    },
-    remainingCharsObservasion() {
-      return 0 + this.compromisos[0].observacion.length;
-    },
-    remainingCharsCompromiso2() {
-      return 0 + this.compromisos[1].descripcion.length;
-    },
+
     remainingCharsObservasion2() {
       return 0 + this.compromisos[1].observacion.length;
     },
@@ -1457,6 +1498,7 @@ export default {
   created() {
     this.urlExterna();
     this.getModulo();
+    this.getLimites();
   },
   async mounted() {
     this.id_registro = this.$route.params.id;
@@ -1467,6 +1509,7 @@ export default {
     if (this.$route.params.id == undefined) {
       this.geolocal();
     }
+    this.loadSavedForms();
   },
 
   methods: {
@@ -1539,6 +1582,13 @@ export default {
       // Extraer las primeras 5 posiciones (HH:MM) de la cadena recibida
       return hora.slice(0, 5); // Devolver solo '01:00'
     },
+    eliminarForm(id) {
+      this.formList = this.formList.filter((form) => form.nit_documento !== id);
+
+      localStorage.setItem("savedForms", JSON.stringify(this.formList));
+
+      this.showAlert("Formulario eliminado correctamente", "success");
+    },
     reformatearFecha(fechaOriginal) {
       const fechaHora = new Date(fechaOriginal);
       const año = fechaHora.getFullYear();
@@ -1576,7 +1626,7 @@ export default {
     }, */
     agregarObservacion() {
       this.verLista = this.verLista + 1;
-      if (this.evidencias.length <= 10) {
+      if (this.evidencias.length < this.limite_evidencias) {
         this.evidencias.push({ body: "", file: [] });
       }
     },
@@ -1600,6 +1650,38 @@ export default {
         "error"
       );
       return;
+    },
+    agregarCompromiso() {
+      this.verLista = this.verLista + 1;
+      const indexUltimoCompromiso = this.compromisos.length - 1;
+      if (this.compromisos.length < this.limite_compromisos) {
+        this.compromisos.push({
+          titulo: `Compromiso ${2 + indexUltimoCompromiso}`,
+          descripcion: "",
+          estado_cierre_id: "",
+          fecha_cierre: "",
+          fecha_inicio: "",
+          responsable: "",
+          observacion: "",
+          responsable_id: "",
+          email: "",
+          id: "",
+        });
+      }
+      /*  const indexUltimoCompromiso = this.compromisos.length - 1;
+      if (
+        this.compromisos[indexUltimoCompromiso].descripcion == "" &&
+        this.compromisos[indexUltimoCompromiso].responsable_id == ""
+      ) {
+        console.log(this.compromisos[indexUltimoCompromiso].descripcion);
+
+        return;
+      }
+      this.showAlert(
+        "Debe llenar los campos requeridos del compromiso anterior ",
+        "error"
+      );
+      return; */
     },
     deleteDynamic(array, index, identificador = null) {
       if (identificador != null) {
@@ -1707,16 +1789,6 @@ export default {
           email: "",
           id: "",
         },
-        {
-          titulo: "compromiso2",
-          descripcion: "",
-          estado_cierre_id: "",
-          fecha_cierre: "",
-          fecha_inicio: "",
-          observacion: "",
-          email: "",
-          id: "",
-        },
       ];
       this.temasPrincipales = [{ titulo: "tema1", descripcion: "" }];
       this.alcance_visita = "";
@@ -1793,7 +1865,7 @@ export default {
            },
          ]; */
       if (item.compromisos.length > 0) {
-        for (let i = 0; i < 2; i++) {
+        for (let i = 0; i < item.compromisos.length; i++) {
           const compromiso = item.compromisos[i];
           if (compromiso) {
             this.compromisos[i] = compromiso;
@@ -1951,6 +2023,16 @@ export default {
       const segundos = now.getSeconds().toString().padStart(2, "0");
       const horaActual = `${horas}:${minutos}:${segundos}`;
       this.hora_cierre = horaActual;
+    },
+    getLimites() {
+      let self = this;
+      let config = this.configHeader();
+      axios
+        .get(self.URL_API + "api/v1/limitesCrm", config)
+        .then(function (result) {
+          self.limite_compromisos = result.data.limites.limite_compromisos;
+          self.limite_evidencias = result.data.limites.limite_evidencias;
+        });
     },
     getEmpresasCliente(item = null) {
       if (item != null) {
@@ -2192,19 +2274,15 @@ export default {
             observacion: "",
             compromiso: false,
           },
-          {
-            correo: this.compromisos[0].email,
-            observacion: this.compromisos[0].observacion,
-            compromiso: true,
-          },
-          {
-            correo: this.compromisos[1].email,
-            observacion: this.compromisos[1].observacion,
-            compromiso: true,
-          },
         ],
       };
-
+      this.compromisos.forEach((compromiso) => {
+        correosResponsables.correos.push({
+          correo: compromiso.email,
+          observacion: compromiso.descripcion,
+          compromiso: true,
+        });
+      });
       console.log(this.asistencias);
       let self = this;
       let config = this.configHeader();
@@ -2320,6 +2398,129 @@ export default {
         .catch(function (error) {
           console.error("Error al guardar el formulario:", error);
         });
+    },
+    toggleDropdown() {
+      this.dropdownVisible = !this.dropdownVisible;
+    },
+    guardadoParcial() {
+      const formData = {
+        correo_responsable2: this.correo_responsable2,
+        correo_responsable1: this.correo_responsable1,
+        correo_responsablePqrsf: this.correo_responsablePqrsf,
+        visitante_id: this.visitante_id,
+        compromisos: this.compromisos,
+        empresa_cliente_nombre: this.empresa_cliente_nombre,
+        temasPrincipales: this.temasPrincipales,
+        consulta_empresa_cliente: this.consulta_empresa_cliente,
+        alcance_visita: this.alcance_visita,
+        objetivo_visita: this.objetivo_visita,
+        cargo_visitado: this.cargo_visitado,
+        visitado: this.visitado,
+        cargo_visitante: this.cargo_visitante,
+        visitante: this.visitante,
+        hora_inicio: this.hora_inicio,
+        consulta_proceso: this.consulta_proceso,
+        sede_id: this.sede_id,
+        consulta_sede: this.consulta_sede,
+        consulta_interaccion: this.consulta_interaccion,
+        solicitante_id: this.solicitante_id,
+        consulta_solicitante: this.consulta_solicitante,
+        telefono_contacto: this.telefono_contacto,
+        correo_contacto: this.correo_contacto,
+        estado_cierre_id: this.estado_cierre_id,
+        consulta_estado_cierre: this.consulta_estado_cierre,
+        observacion: this.observacion,
+        proceso_id: this.proceso_id,
+        interaccion_id: this.interaccion_id,
+        nombre_contacto: this.nombre_contacto,
+        nit_documento: this.nit_documento,
+        consulta_pqrsf: this.consulta_pqrsf,
+        pqrsf_id: this.pqrsf_id,
+        id_registro: this.id_registro,
+        cierra_pqrsf_id: this.cierra_pqrsf_id,
+        consulta_cierra_pqrsf: this.consulta_cierra_pqrsf,
+        responsable_id: this.responsable_id,
+        consulta_responsable: this.consulta_responsable,
+      };
+
+      // Obtener los formularios guardados
+      let savedForms = JSON.parse(localStorage.getItem("savedForms")) || [];
+
+      // Buscar si ya existe un formulario con el mismo nit_documento
+      const existingFormIndex = savedForms.findIndex(
+        (form) => form.nit_documento === formData.nit_documento
+      );
+
+      if (existingFormIndex !== -1) {
+        // Si el formulario ya existe, lo reemplazamos
+        savedForms[existingFormIndex] = formData;
+        this.showAlert("Formulario actualizado correctamente", "success");
+      } else {
+        // Si no existe, lo añadimos al array
+        savedForms.push(formData);
+        this.showAlert("Formulario guardado parcialmente", "success");
+      }
+
+      // Guardar los formularios actualizados en localStorage
+      localStorage.setItem("savedForms", JSON.stringify(savedForms));
+
+      // Recargar la lista de formularios guardados
+      this.loadSavedForms();
+    },
+    loadSavedForms() {
+      const savedForms = JSON.parse(localStorage.getItem("savedForms")) || [];
+      this.formList = savedForms;
+    },
+    loadPartial(nit_documento) {
+      const savedForms = JSON.parse(localStorage.getItem("savedForms")) || [];
+      const formData = savedForms.find(
+        (form) => form.nit_documento === nit_documento
+      );
+      if (formData) {
+        this.correo_responsable2 = formData.correo_responsable2 || "";
+        this.correo_responsable1 = formData.correo_responsable1 || "";
+        this.correo_responsablePqrsf = formData.correo_responsablePqrsf || "";
+        this.visitante_id = formData.visitante_id || "";
+        this.compromisos = formData.compromisos;
+        this.empresa_cliente_nombre = formData.empresa_cliente_nombre || "";
+        this.temasPrincipales = formData.temasPrincipales;
+        this.consulta_empresa_cliente = formData.consulta_empresa_cliente || "";
+        this.alcance_visita = formData.alcance_visita || "";
+        this.objetivo_visita = formData.objetivo_visita || "";
+        this.cargo_visitado = formData.cargo_visitado || "";
+        this.visitado = formData.visitado || "";
+        this.cargo_visitante = formData.cargo_visitante || "";
+        this.visitante = formData.visitante || "";
+        this.hora_inicio = formData.hora_inicio || "";
+        this.consulta_proceso = formData.consulta_proceso || "";
+        this.sede_id = formData.sede_id || "";
+        this.consulta_sede = formData.consulta_sede || "";
+        this.consulta_interaccion = formData.consulta_interaccion || "";
+        this.solicitante_id = formData.solicitante_id || "";
+        this.consulta_solicitante = formData.consulta_solicitante || "";
+        this.telefono_contacto = formData.telefono_contacto || "";
+        this.correo_contacto = formData.correo_contacto || "";
+        this.estado_cierre_id = formData.estado_cierre_id || "";
+        this.consulta_estado_cierre = formData.consulta_estado_cierre || "";
+        this.observacion = formData.observacion || "";
+        this.proceso_id = formData.proceso_id || "";
+        this.interaccion_id = formData.interaccion_id || "";
+        this.nombre_contacto = formData.nombre_contacto || "";
+        this.nit_documento = formData.nit_documento || "";
+        this.consulta_pqrsf = formData.consulta_pqrsf || "";
+        this.pqrsf_id = formData.pqrsf_id || "";
+        this.id_registro = formData.id_registro || "";
+        this.cierra_pqrsf_id = formData.cierra_pqrsf_id || "";
+        this.consulta_cierra_pqrsf = formData.consulta_cierra_pqrsf || "";
+        this.responsable_id = formData.responsable_id || "";
+        this.consulta_responsable = formData.consulta_responsable || "";
+      }
+    },
+    remainingCharsCompromiso(index) {
+      return 0 + (this.compromisos[index]?.descripcion.length || 0);
+    },
+    remainingCharsObservasion(index) {
+      return 0 + (this.compromisos[index]?.observacion.length || 0);
     },
     eliminarDocumento(item) {
       let self = this;
@@ -2623,37 +2824,18 @@ export default {
           self.cargos_planta = result.data;
         });
     },
-    getUsuariosLideres(item = null, index = null) {
+    getUsuariosLideres(item = null, index) {
       if (item != null) {
-        switch (index) {
-          case 1:
-            this.responsable_id = item.id;
-            this.consulta_responsable = item.nombre;
-            break;
-          case 2:
-            this.cierra_pqrsf_id = item.id;
-            this.consulta_cierra_pqrsf = item.nombre;
-            break;
-          case 3:
-            this.visitante_id = item.id;
-            this.visitante = item.nombre;
-            break;
-          case 4:
-            this.compromisos[0].responsable = item.nombre;
-            this.correo_responsable1 = item.email;
-            break;
-          case 5:
-            this.compromisos[1].responsable = item.nombre;
-            this.correo_responsable2 = item.email;
-            break;
-        }
+        this.compromisos[index].responsable = item.nombre;
+        this.compromisos[index].email = item.email;
+        this.compromisos[index].responsable_id = item.id;
       }
       let self = this;
       let config = this.configHeader();
       axios
         .get(self.URL_API + "api/v1/userslist", config)
         .then(function (result) {
-          self.usuarios_lider = result.data.filter((user) => user.lider == 1);
+          self.usuarios = result.data;
         });
     },
     getUsuarios(item = null, index = null) {
@@ -2672,7 +2854,7 @@ export default {
             this.visitante_id = item.id;
             this.visitante = item.nombre;
             break;
-          case 4:
+          /*           case 4:
             this.compromisos[0].responsable = item.nombre;
             this.compromisos[0].email = item.email;
             this.compromisos[0].responsable_id = item.id;
@@ -2681,7 +2863,7 @@ export default {
             this.compromisos[1].responsable = item.nombre;
             this.compromisos[1].email = item.email;
             this.compromisos[1].responsable_id = item.id;
-            break;
+            break; */
         }
       }
       let self = this;
@@ -2811,4 +2993,62 @@ label {
   color: #6c757d;
   margin-top: 10px;
 }
+.botonDesplegable {
+  background-color: #dc3545; /* Color de fondo */
+  color: white; /* Color del texto */
+  padding: 10px 20px; /* Espaciado interno */
+  border: none; /* Sin bordes */
+  border-radius: 4px; /* Bordes redondeados */
+  cursor: pointer; /* Cambiar cursor al pasar por encima */
+  font-size: 16px; /* Tamaño de fuente */
+  transition: background-color 0.3s ease; /* Transición para el hover */
+  position: relative;
+}
+
+.dropdown-button:hover {
+  background-color: #c82333; /* Color al hacer hover */
+}
+
+/* Estilos del menú desplegable */
+.listaDesplegable {
+  list-style: none; /* Sin viñetas */
+  padding: 0; /* Sin padding */
+  margin: 5px 0 0 0; /* Margen superior */
+  background-color: white; /* Fondo blanco */
+  border: 1px solid #ccc; /* Borde gris claro */
+  border-radius: 4px; /* Bordes redondeados */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Sombra para el menú */
+  position: absolute; /* Posición absoluta */
+  z-index: 900; /* Asegura que esté encima de otros elementos */
+  width: 500px; /* Ancho del menú */
+}
+
+/* Estilos para los ítems del menú */
+.dropdown-menu li {
+  border-bottom: 1px solid #f1f1f1; /* Borde inferior */
+}
+
+.dropdown-menu li:last-child {
+  border-bottom: none; /* Eliminar borde del último ítem */
+}
+
+.dropdown-menu a {
+  display: block; /* Se muestra como bloque completo */
+  padding: 10px; /* Espaciado interno */
+  text-decoration: none; /* Sin subrayado */
+  color: #333; /* Color del texto */
+  transition: background-color 0.3s ease; /* Transición suave para hover */
+}
+
+.dropdown-menu a:hover {
+  background-color: #f1f1f1; /* Fondo gris claro al hacer hover */
+  color: #000; /* Color de texto al hacer hover */
+}
+.flexButtons {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+/* Oculta el menú si no está visible */
 </style>
