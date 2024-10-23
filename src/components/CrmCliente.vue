@@ -1142,7 +1142,65 @@
             </button>
           </div>
         </div>
+        <div class="row mt-5 mb-3">
+          <div class="col-3">
+            <div>
+              <label class="form-label">Registros guardados</label>
+              <select
+                class="form-select form-select-lg mb-3"
+                aria-label=".form-select-lg example"
+                v-model="selectedFormId"
+                @change="loadPartial(selectedFormId)"
+              >
+                <option disabled value="">Seleccionar</option>
+                <option
+                  v-for="form in formList"
+                  :key="form.nit_documento"
+                  :value="form.nit_documento"
+                >
+                  {{ form.nombre_contacto || form.nit_documento }}
+                </option>
+              </select>
+            </div>
+          </div>
+        </div>
         <div class="row">
+          <div class="col">
+            <div class="flexButtons">
+              <button
+                type="button"
+                class="btn btn-success"
+                @click="guardadoParcial"
+              >
+                Guardado parcial
+              </button>
+
+              <button
+                class="btn btn-danger dropdown-toggle dropdown-toggle-split"
+                data-bs-toggle="dropdown"
+                aria-expanded="false"
+                type="button"
+              >
+                Eliminar registro
+              </button>
+              <ul class="dropdown-menu">
+                <li v-if="formList.length === 0">
+                  <a href="#">No hay registros</a>
+                </li>
+                <li v-for="(form, index) in formList" :key="index">
+                  <a
+                    class="dropdown-item"
+                    style="cursor: pointer"
+                    @click="eliminarForm(form.nit_documento)"
+                  >
+                    {{
+                      form.nombre_contacto || "Formulario " + form.nit_documento
+                    }}
+                  </a>
+                </li>
+              </ul>
+            </div>
+          </div>
           <div class="col" v-if="$route.params.id != undefined">
             <button
               class="btn btn-success"
@@ -1297,6 +1355,10 @@ export default {
   },
   data() {
     return {
+      dropdownVisible: false,
+      selectedFormId: "",
+      formList: [],
+      formularios_guardados: [],
       limite_evidencias: "",
       limite_compromisos: "",
       customToolbar: [
@@ -1447,6 +1509,7 @@ export default {
     if (this.$route.params.id == undefined) {
       this.geolocal();
     }
+    this.loadSavedForms();
   },
 
   methods: {
@@ -1518,6 +1581,13 @@ export default {
     formatearHora(hora) {
       // Extraer las primeras 5 posiciones (HH:MM) de la cadena recibida
       return hora.slice(0, 5); // Devolver solo '01:00'
+    },
+    eliminarForm(id) {
+      this.formList = this.formList.filter((form) => form.nit_documento !== id);
+
+      localStorage.setItem("savedForms", JSON.stringify(this.formList));
+
+      this.showAlert("Formulario eliminado correctamente", "success");
     },
     reformatearFecha(fechaOriginal) {
       const fechaHora = new Date(fechaOriginal);
@@ -1604,7 +1674,7 @@ export default {
         this.compromisos[indexUltimoCompromiso].responsable_id == ""
       ) {
         console.log(this.compromisos[indexUltimoCompromiso].descripcion);
-       
+
         return;
       }
       this.showAlert(
@@ -2329,6 +2399,123 @@ export default {
           console.error("Error al guardar el formulario:", error);
         });
     },
+    toggleDropdown() {
+      this.dropdownVisible = !this.dropdownVisible;
+    },
+    guardadoParcial() {
+      const formData = {
+        correo_responsable2: this.correo_responsable2,
+        correo_responsable1: this.correo_responsable1,
+        correo_responsablePqrsf: this.correo_responsablePqrsf,
+        visitante_id: this.visitante_id,
+        compromisos: this.compromisos,
+        empresa_cliente_nombre: this.empresa_cliente_nombre,
+        temasPrincipales: this.temasPrincipales,
+        consulta_empresa_cliente: this.consulta_empresa_cliente,
+        alcance_visita: this.alcance_visita,
+        objetivo_visita: this.objetivo_visita,
+        cargo_visitado: this.cargo_visitado,
+        visitado: this.visitado,
+        cargo_visitante: this.cargo_visitante,
+        visitante: this.visitante,
+        hora_inicio: this.hora_inicio,
+        consulta_proceso: this.consulta_proceso,
+        sede_id: this.sede_id,
+        consulta_sede: this.consulta_sede,
+        consulta_interaccion: this.consulta_interaccion,
+        solicitante_id: this.solicitante_id,
+        consulta_solicitante: this.consulta_solicitante,
+        telefono_contacto: this.telefono_contacto,
+        correo_contacto: this.correo_contacto,
+        estado_cierre_id: this.estado_cierre_id,
+        consulta_estado_cierre: this.consulta_estado_cierre,
+        observacion: this.observacion,
+        proceso_id: this.proceso_id,
+        interaccion_id: this.interaccion_id,
+        nombre_contacto: this.nombre_contacto,
+        nit_documento: this.nit_documento,
+        consulta_pqrsf: this.consulta_pqrsf,
+        pqrsf_id: this.pqrsf_id,
+        id_registro: this.id_registro,
+        cierra_pqrsf_id: this.cierra_pqrsf_id,
+        consulta_cierra_pqrsf: this.consulta_cierra_pqrsf,
+        responsable_id: this.responsable_id,
+        consulta_responsable: this.consulta_responsable,
+      };
+
+      // Obtener los formularios guardados
+      let savedForms = JSON.parse(localStorage.getItem("savedForms")) || [];
+
+      // Buscar si ya existe un formulario con el mismo nit_documento
+      const existingFormIndex = savedForms.findIndex(
+        (form) => form.nit_documento === formData.nit_documento
+      );
+
+      if (existingFormIndex !== -1) {
+        // Si el formulario ya existe, lo reemplazamos
+        savedForms[existingFormIndex] = formData;
+        this.showAlert("Formulario actualizado correctamente", "success");
+      } else {
+        // Si no existe, lo añadimos al array
+        savedForms.push(formData);
+        this.showAlert("Formulario guardado parcialmente", "success");
+      }
+
+      // Guardar los formularios actualizados en localStorage
+      localStorage.setItem("savedForms", JSON.stringify(savedForms));
+
+      // Recargar la lista de formularios guardados
+      this.loadSavedForms();
+    },
+    loadSavedForms() {
+      const savedForms = JSON.parse(localStorage.getItem("savedForms")) || [];
+      this.formList = savedForms;
+    },
+    loadPartial(nit_documento) {
+      const savedForms = JSON.parse(localStorage.getItem("savedForms")) || [];
+      const formData = savedForms.find(
+        (form) => form.nit_documento === nit_documento
+      );
+      if (formData) {
+        this.correo_responsable2 = formData.correo_responsable2 || "";
+        this.correo_responsable1 = formData.correo_responsable1 || "";
+        this.correo_responsablePqrsf = formData.correo_responsablePqrsf || "";
+        this.visitante_id = formData.visitante_id || "";
+        this.compromisos = formData.compromisos;
+        this.empresa_cliente_nombre = formData.empresa_cliente_nombre || "";
+        this.temasPrincipales = formData.temasPrincipales;
+        this.consulta_empresa_cliente = formData.consulta_empresa_cliente || "";
+        this.alcance_visita = formData.alcance_visita || "";
+        this.objetivo_visita = formData.objetivo_visita || "";
+        this.cargo_visitado = formData.cargo_visitado || "";
+        this.visitado = formData.visitado || "";
+        this.cargo_visitante = formData.cargo_visitante || "";
+        this.visitante = formData.visitante || "";
+        this.hora_inicio = formData.hora_inicio || "";
+        this.consulta_proceso = formData.consulta_proceso || "";
+        this.sede_id = formData.sede_id || "";
+        this.consulta_sede = formData.consulta_sede || "";
+        this.consulta_interaccion = formData.consulta_interaccion || "";
+        this.solicitante_id = formData.solicitante_id || "";
+        this.consulta_solicitante = formData.consulta_solicitante || "";
+        this.telefono_contacto = formData.telefono_contacto || "";
+        this.correo_contacto = formData.correo_contacto || "";
+        this.estado_cierre_id = formData.estado_cierre_id || "";
+        this.consulta_estado_cierre = formData.consulta_estado_cierre || "";
+        this.observacion = formData.observacion || "";
+        this.proceso_id = formData.proceso_id || "";
+        this.interaccion_id = formData.interaccion_id || "";
+        this.nombre_contacto = formData.nombre_contacto || "";
+        this.nit_documento = formData.nit_documento || "";
+        this.consulta_pqrsf = formData.consulta_pqrsf || "";
+        this.pqrsf_id = formData.pqrsf_id || "";
+        this.id_registro = formData.id_registro || "";
+        this.cierra_pqrsf_id = formData.cierra_pqrsf_id || "";
+        this.consulta_cierra_pqrsf = formData.consulta_cierra_pqrsf || "";
+        this.responsable_id = formData.responsable_id || "";
+        this.consulta_responsable = formData.consulta_responsable || "";
+      }
+    },
     remainingCharsCompromiso(index) {
       return 0 + (this.compromisos[index]?.descripcion.length || 0);
     },
@@ -2806,4 +2993,62 @@ label {
   color: #6c757d;
   margin-top: 10px;
 }
+.botonDesplegable {
+  background-color: #dc3545; /* Color de fondo */
+  color: white; /* Color del texto */
+  padding: 10px 20px; /* Espaciado interno */
+  border: none; /* Sin bordes */
+  border-radius: 4px; /* Bordes redondeados */
+  cursor: pointer; /* Cambiar cursor al pasar por encima */
+  font-size: 16px; /* Tamaño de fuente */
+  transition: background-color 0.3s ease; /* Transición para el hover */
+  position: relative;
+}
+
+.dropdown-button:hover {
+  background-color: #c82333; /* Color al hacer hover */
+}
+
+/* Estilos del menú desplegable */
+.listaDesplegable {
+  list-style: none; /* Sin viñetas */
+  padding: 0; /* Sin padding */
+  margin: 5px 0 0 0; /* Margen superior */
+  background-color: white; /* Fondo blanco */
+  border: 1px solid #ccc; /* Borde gris claro */
+  border-radius: 4px; /* Bordes redondeados */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Sombra para el menú */
+  position: absolute; /* Posición absoluta */
+  z-index: 900; /* Asegura que esté encima de otros elementos */
+  width: 500px; /* Ancho del menú */
+}
+
+/* Estilos para los ítems del menú */
+.dropdown-menu li {
+  border-bottom: 1px solid #f1f1f1; /* Borde inferior */
+}
+
+.dropdown-menu li:last-child {
+  border-bottom: none; /* Eliminar borde del último ítem */
+}
+
+.dropdown-menu a {
+  display: block; /* Se muestra como bloque completo */
+  padding: 10px; /* Espaciado interno */
+  text-decoration: none; /* Sin subrayado */
+  color: #333; /* Color del texto */
+  transition: background-color 0.3s ease; /* Transición suave para hover */
+}
+
+.dropdown-menu a:hover {
+  background-color: #f1f1f1; /* Fondo gris claro al hacer hover */
+  color: #000; /* Color de texto al hacer hover */
+}
+.flexButtons {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+/* Oculta el menú si no está visible */
 </style>
