@@ -1814,8 +1814,8 @@ export default {
         });
     },
     limitarCaracteres() {
-      if (this.observacion.length > 4000) {
-        this.observacion = this.observacion.substring(0, 4000);
+      if (this.observacion.length > 5000) {
+        this.observacion = this.observacion.substring(0, 5000);
       }
     },
     llenarFormulario(item) {
