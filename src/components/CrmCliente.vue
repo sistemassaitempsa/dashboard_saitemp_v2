@@ -615,6 +615,7 @@
                     "
                     v-model="compromiso.estado_cierre_id"
                   >
+                    <option value="">Seleccionar</option>
                     <option :value="1">Eficaz</option>
                     <option :value="2">Ineficaz</option>
                   </select>
@@ -1502,7 +1503,7 @@ export default {
   },
   async mounted() {
     this.id_registro = this.$route.params.id;
-
+    window.addEventListener("keydown", this.convinacionGuardado);
     if (this.id_registro !== undefined) {
       this.getItem(this.id_registro);
     }
@@ -1511,7 +1512,9 @@ export default {
     }
     this.loadSavedForms();
   },
-
+  beforeDestroy() {
+    window.removeEventListener("keydown", this.convinacionGuardado);
+  },
   methods: {
     coordenadas(item) {
       console.log(item);
@@ -2279,7 +2282,7 @@ export default {
       this.compromisos.forEach((compromiso) => {
         correosResponsables.correos.push({
           correo: compromiso.email,
-          observacion: compromiso.descripcion,
+          observacion: compromiso.observacion,
           compromiso: true,
         });
       });
@@ -2470,6 +2473,12 @@ export default {
     loadSavedForms() {
       const savedForms = JSON.parse(localStorage.getItem("savedForms")) || [];
       this.formList = savedForms;
+    },
+    convinacionGuardado(event) {
+      if (event.ctrlKey && event.key.toLowerCase() === "s") {
+        event.preventDefault();
+        this.guardadoParcial();
+      }
     },
     loadPartial(nit_documento) {
       const savedForms = JSON.parse(localStorage.getItem("savedForms")) || [];
