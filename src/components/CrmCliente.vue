@@ -327,7 +327,7 @@
             ></textarea> -->
             <div class="d-flex justify-content-end">
               <small class="char-count"
-                >{{ remainingCharsObservasion3 }}/5000</small
+                >{{ remainingCharsObservasion3 }}/6000</small
               >
             </div>
             <div class="invalid-feedback">
@@ -1170,14 +1170,14 @@
             <div class="flexButtons">
               <button
                 type="button"
-                class="btn btn-success"
+                class="btn btn-success buttonRigth"
                 @click="guardadoParcial"
               >
                 Guardado parcial
               </button>
 
               <button
-                class="btn btn-danger dropdown-toggle dropdown-toggle-split"
+                class="btn btn-danger dropdown-toggle dropdown-toggle-split buttonleft"
                 data-bs-toggle="dropdown"
                 aria-expanded="false"
                 type="button"
@@ -1817,8 +1817,8 @@ export default {
         });
     },
     limitarCaracteres() {
-      if (this.observacion.length > 5000) {
-        this.observacion = this.observacion.substring(0, 5000);
+      if (this.observacion.length > 6000) {
+        this.observacion = this.observacion.substring(0, 6000);
       }
     },
     llenarFormulario(item) {
@@ -3058,6 +3058,13 @@ label {
   justify-content: flex-start;
   align-items: center;
 }
-
+.buttonleft {
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+}
+.buttonRigth {
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+}
 /* Oculta el menú si no está visible */
 </style>
