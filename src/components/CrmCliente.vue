@@ -327,7 +327,7 @@
             ></textarea> -->
             <div class="d-flex justify-content-end">
               <small class="char-count"
-                >{{ remainingCharsObservasion3 }}/5000</small
+                >{{ remainingCharsObservasion3 }}/6000</small
               >
             </div>
             <div class="invalid-feedback">
@@ -615,6 +615,7 @@
                     "
                     v-model="compromiso.estado_cierre_id"
                   >
+                    <option value="">Seleccionar</option>
                     <option :value="1">Eficaz</option>
                     <option :value="2">Ineficaz</option>
                   </select>
@@ -1169,14 +1170,14 @@
             <div class="flexButtons">
               <button
                 type="button"
-                class="btn btn-success"
+                class="btn btn-success buttonRigth"
                 @click="guardadoParcial"
               >
                 Guardado parcial
               </button>
 
               <button
-                class="btn btn-danger dropdown-toggle dropdown-toggle-split"
+                class="btn btn-danger dropdown-toggle dropdown-toggle-split buttonleft"
                 data-bs-toggle="dropdown"
                 aria-expanded="false"
                 type="button"
@@ -1502,7 +1503,7 @@ export default {
   },
   async mounted() {
     this.id_registro = this.$route.params.id;
-
+    window.addEventListener("keydown", this.convinacionGuardado);
     if (this.id_registro !== undefined) {
       this.getItem(this.id_registro);
     }
@@ -1511,7 +1512,9 @@ export default {
     }
     this.loadSavedForms();
   },
-
+  beforeDestroy() {
+    window.removeEventListener("keydown", this.convinacionGuardado);
+  },
   methods: {
     coordenadas(item) {
       console.log(item);
@@ -1814,8 +1817,8 @@ export default {
         });
     },
     limitarCaracteres() {
-      if (this.observacion.length > 5000) {
-        this.observacion = this.observacion.substring(0, 5000);
+      if (this.observacion.length > 6000) {
+        this.observacion = this.observacion.substring(0, 6000);
       }
     },
     llenarFormulario(item) {
@@ -2279,7 +2282,7 @@ export default {
       this.compromisos.forEach((compromiso) => {
         correosResponsables.correos.push({
           correo: compromiso.email,
-          observacion: compromiso.descripcion,
+          observacion: compromiso.observacion,
           compromiso: true,
         });
       });
@@ -2470,6 +2473,12 @@ export default {
     loadSavedForms() {
       const savedForms = JSON.parse(localStorage.getItem("savedForms")) || [];
       this.formList = savedForms;
+    },
+    convinacionGuardado(event) {
+      if (event.ctrlKey && event.key.toLowerCase() === "s") {
+        event.preventDefault();
+        this.guardadoParcial();
+      }
     },
     loadPartial(nit_documento) {
       const savedForms = JSON.parse(localStorage.getItem("savedForms")) || [];
@@ -3049,6 +3058,13 @@ label {
   justify-content: flex-start;
   align-items: center;
 }
-
+.buttonleft {
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+}
+.buttonRigth {
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+}
 /* Oculta el menú si no está visible */
 </style>
