@@ -1148,7 +1148,7 @@
             <div>
               <label class="form-label">Registros guardados</label>
               <select
-                class="form-select form-select-lg mb-3"
+                class="form-select mb-3"
                 aria-label=".form-select-lg example"
                 v-model="selectedFormId"
                 @change="loadPartial(selectedFormId)"
