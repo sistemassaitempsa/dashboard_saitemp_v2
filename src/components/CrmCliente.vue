@@ -812,6 +812,37 @@
                 </div>
               </div>
               <div class="row">
+                <div class="col-6 mb-3">
+                  <label class="form-label">Correo de contacto: </label>
+                  <input
+                    type="email"
+                    class="form-control"
+                    autocomplete="off"
+                    id=" correoAsistencia"
+                    aria-describedby="emailHelp"
+                    v-model="asistencia.correo"
+                    :disabled="
+                      $route.params.id != undefined && !permisos[32].autorizado
+                    "
+                    @input="validateEmailAsistencia(index)"
+                  />
+                  <small
+                    v-if="
+                      asistencia.correo != null &&
+                      !asistencia.emailValido &&
+                      asistencia.correo.length > 0
+                    "
+                    class="text-danger"
+                  >
+                    Por favor ingresa un correo válido.
+                  </small>
+                  <div class="invalid-feedback">
+                    {{ mensaje_error }}
+                  </div>
+                </div>
+                <div class="col mb-3"></div>
+              </div>
+              <div class="row">
                 <div class="col-sm-12 col-md-6 mb-3">
                   <label for="exampleFormControlInput1" class="form-label"
                     >Firma *:</label
@@ -1124,11 +1155,13 @@
                 <input
                   class="form-check-input"
                   type="checkbox"
+                  :ref="'checkbox_' + index"
                   @change="
                     agregarCorreosSeleccionados(
                       compromiso.email,
                       compromiso.observacion,
-                      true
+                      true,
+                      index
                     )
                   "
                 />
@@ -1398,7 +1431,14 @@ export default {
       empresas_cliente: [],
       bloquea_campos: false,
       asistencias: [
-        { nombre: "", cargo: "", firma: [], show_pad: false, firma_hash: "" },
+        {
+          nombre: "",
+          cargo: "",
+          firma: [],
+          show_pad: false,
+          firma_hash: "",
+          emailValido: false,
+        },
       ],
       compromisos: [
         {
@@ -1412,6 +1452,7 @@ export default {
           responsable_id: "",
           email: "",
           id: "",
+          checked: false,
         },
       ],
       empresa_cliente_nombre: "",
@@ -1523,6 +1564,12 @@ export default {
       const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
       this.emailValido = regex.test(this.correo_contacto);
     },
+    validateEmailAsistencia(index) {
+      const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      this.asistencias[index].emailValido = regex.test(
+        this.asistencias[index].correo
+      );
+    },
     async geolocal() {
       try {
         // Llamar a obtenerGeolocalizacion y esperar la respuesta
@@ -1537,12 +1584,30 @@ export default {
         return false;
       }
     },
-    agregarCorreosSeleccionados(correo, observacion, compromiso) {
-      this.correosSeleccionados.correos.push({
-        correo: correo,
-        observacion: observacion,
-        compromiso: compromiso,
-      });
+    agregarCorreosSeleccionados(correo, observacion, compromiso, index) {
+      if (correo == "null" || correo == "" || correo == null) {
+        this.showAlert(
+          "Este usuario no tiene correo electrónico configurado.",
+          "error"
+        );
+        // Desmarca visualmente el checkbox
+        this.$refs["checkbox_" + index][0].checked = false;
+        return;
+      }
+      const correoIndex = this.correosSeleccionados.correos.findIndex(
+        (item) => item.correo === correo
+      );
+      if (correoIndex === -1) {
+        this.correosSeleccionados.correos.push({
+          correo: correo,
+          observacion: observacion,
+          compromiso: compromiso,
+        });
+      } else {
+        this.correosSeleccionados.correos.splice(correoIndex, 1);
+        this.compromisos[index].checked = false;
+        this.$refs["checkbox_" + index][0].checked = false;
+      }
     },
     reenviarCorreosSeleccionados() {
       this.enviarCorreos(this.id_registro, 1, this.correosSeleccionados);
@@ -1645,6 +1710,7 @@ export default {
           cargo: "",
           firma: [],
           show_pad: false,
+          id: "",
         });
         return;
       }
@@ -1779,7 +1845,14 @@ export default {
       this.evidencias = [{ observacion: "", file: [] }];
       this.adjuntos = false;
       this.asistencias = [
-        { nombre: "", cargo: "", firma: [], show_pad: false, firma_hash: "" },
+        {
+          nombre: "",
+          cargo: "",
+          firma: [],
+          show_pad: false,
+          firma_hash: "",
+          emailValido: false,
+        },
       ];
       this.compromisos = [
         {
@@ -1833,7 +1906,10 @@ export default {
       self.bloquea_campos = true;
       this.asistencias =
         item.asistencias.length > 0
-          ? item.asistencias
+          ? item.asistencias.map((asistencia) => ({
+              ...asistencia,
+              emailValido: /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(asistencia.correo), // true si es válido, false si no
+            }))
           : [
               {
                 nombre: "",
@@ -1841,6 +1917,7 @@ export default {
                 firma: [],
                 show_pad: false,
                 firma_hash: "",
+                emailValido: false,
               },
             ];
       /*    this.compromisos = [
@@ -1884,6 +1961,7 @@ export default {
               observacion: "",
               responsable_id: "",
               email: "",
+              checked: false,
             };
           }
         }
@@ -2057,8 +2135,6 @@ export default {
       if (this.$route.params.id == undefined || this.hora_cierre == " ") {
         this.tomarHoraCierre();
       }
-
-      //validacion de compromisos según si es visita o reunion
       if (
         this.estado_cierre_id == 3 &&
         (this.interaccion_id == 5 || this.interaccion_id == 6)
@@ -2286,6 +2362,13 @@ export default {
           compromiso: true,
         });
       });
+      this.asistencias.forEach((asistencia) => {
+        correosResponsables.correos.push({
+          correo: asistencia.correo,
+          observacion: "",
+          compromiso: false,
+        });
+      });
       console.log(this.asistencias);
       let self = this;
       let config = this.configHeader();
@@ -2336,6 +2419,8 @@ export default {
             JSON.stringify({
               nombre: item.nombre,
               cargo: item.cargo,
+              correo: item.correo ? item.correo : "",
+              id: item.id ? item.id : "",
             })
           );
           Array.isArray(item.firma)
@@ -2439,11 +2524,12 @@ export default {
         nit_documento: this.nit_documento,
         consulta_pqrsf: this.consulta_pqrsf,
         pqrsf_id: this.pqrsf_id,
-        id_registro: this.id_registro,
         cierra_pqrsf_id: this.cierra_pqrsf_id,
         consulta_cierra_pqrsf: this.consulta_cierra_pqrsf,
         responsable_id: this.responsable_id,
         consulta_responsable: this.consulta_responsable,
+        latitud: this.latitud,
+        longitud: this.longitud,
       };
 
       // Obtener los formularios guardados
@@ -2518,11 +2604,12 @@ export default {
         this.nit_documento = formData.nit_documento || "";
         this.consulta_pqrsf = formData.consulta_pqrsf || "";
         this.pqrsf_id = formData.pqrsf_id || "";
-        this.id_registro = formData.id_registro || "";
         this.cierra_pqrsf_id = formData.cierra_pqrsf_id || "";
         this.consulta_cierra_pqrsf = formData.consulta_cierra_pqrsf || "";
         this.responsable_id = formData.responsable_id || "";
         this.consulta_responsable = formData.consulta_responsable || "";
+        this.latitud = formData.latitud || "";
+        this.longitud = formData.longitud || "";
       }
     },
     remainingCharsCompromiso(index) {
