@@ -12,6 +12,7 @@
           :consulta="nombre"
           :registros="estados"
           placeholder="Seleccione una opción"
+          :valida_campo="false"
         />
       </div>
       <div class="col pt-5">
@@ -28,7 +29,7 @@
     <form action="save" @submit.prevent="save()" class="was-validated">
       <div class="row">
         <div class="col-6 mb-3">
-          <label class="form-label labelLeft">Nombre: </label>
+          <label class="form-label labelLeft">Nombre: * </label>
           <input
             :disabled="disabled"
             type="text"
@@ -37,6 +38,7 @@
             id="nombreEstado"
             aria-describedby="inputName"
             v-model="nombre"
+            required
           />
           <div class="invalid-feedback">
             {{ mensaje_error }}
@@ -59,7 +61,7 @@
                   id="inlineRadio1"
                   value="minutos"
                   v-model="tipo_tiempo"
-                  @change="tipo_tiempo"
+                  @change="changeTipoTiempo('minutos')"
                 />
                 <label class="form-check-label" for="inlineRadio1"
                   >Minutos</label
@@ -74,7 +76,7 @@
                   id="inlineRadio2"
                   value="horas"
                   v-model="tipo_tiempo"
-                  @change="tipo_tiempo"
+                  @change="changeTipoTiempo('horas')"
                 />
                 <label class="form-check-label" for="inlineRadio2">Horas</label>
               </div>
@@ -87,13 +89,14 @@
                   id="inlineRadio3"
                   value="dias"
                   v-model="tipo_tiempo"
-                  @change="tipo_tiempo"
+                  @change="changeTipoTiempo('dias')"
                 />
                 <label class="form-check-label" for="inlineRadio3">Dias</label>
               </div>
             </div>
             <div class="col">
               <input
+                required
                 :disabled="disabled"
                 type="number"
                 class="form-control"
@@ -106,7 +109,7 @@
           </div>
         </div>
         <div class="row border rounded">
-          <label for="" class="labelLeft">Responsables:</label>
+          <label for="" class="labelLeft">Responsables: *</label>
           <div class="col">
             <SearchList
               nombreCampo=""
@@ -208,18 +211,11 @@ export default {
       id_estado: "",
       loading: false,
       tiempo_respuesta: 0,
+      tiempo_respuesta_cambio: 0,
       nombre: "",
       disabled: true,
       tipo_tiempo: "minutos",
-      asignar_usuarios: [
-        { id: 1, nombre: "Daniel Botache" },
-        { id: 1, nombre: "Daniel Botache" },
-        { id: 1, nombre: "Daniel Botache" },
-        { id: 1, nombre: "Daniel Botache" },
-        { id: 1, nombre: "Daniel Botache" },
-        { id: 1, nombre: "Daniel Botache" },
-        { id: 1, nombre: "Daniel Botache" },
-      ],
+      asignar_usuarios: [],
     };
   },
   watch: {
@@ -228,12 +224,51 @@ export default {
     },
   },
   methods: {
+    changeTipoTiempo(option) {
+      this.tipo_tiempo = option;
+      if (this.id_estado == "") {
+        return;
+      } else {
+        switch (option) {
+          case "minutos":
+            this.tiempo_respuesta = this.tiempo_respuesta_cambio;
+            break;
+          case "horas":
+            this.tiempo_respuesta = Math.trunc(
+              this.tiempo_respuesta_cambio / 60
+            );
+            break;
+          case "dias":
+            this.tiempo_respuesta = Math.trunc(
+              this.tiempo_respuesta_cambio / 1440
+            );
+            break;
+          default:
+            break;
+        }
+      }
+    },
+
+    getResponsablesEstado(estado) {
+      let self = this;
+      let config = this.configHeader();
+      axios
+        .get(self.URL_API + `api/v1/estadoResponsableFirma/${estado}`, config)
+        .then(function (result) {
+          self.asignar_usuarios = result.data;
+          self.loading = false;
+        });
+    },
     getEstados(item = null) {
       if (item != null) {
+        this.loading = true;
         this.color = item.color;
         this.nombre = item.nombre;
         this.id_estado = item.id;
+        this.tiempo_respuesta = item.tiempo_respuesta;
+        this.tiempo_respuesta_cambio = item.tiempo_respuesta;
         this.disabled = false;
+        this.getResponsablesEstado(item.id).then(() => {});
       }
       let self = this;
       let config = this.configHeader();
@@ -248,7 +283,7 @@ export default {
         switch (index) {
           case 1:
             this.asignar_usuarios.push({
-              id: item.id,
+              usuario_id: item.id,
               nombre: item.nombre,
             });
 
@@ -278,6 +313,8 @@ export default {
       this.tiempo_respuesta = 0;
       this.tipo_tiempo = "minutos";
       this.asignar_usuarios = [];
+      this.usuario = "";
+      this.tiempo_respuesta_cambio = 0;
     },
     crearNuevoEstado() {
       this.limpiarFormulario();
@@ -285,18 +322,46 @@ export default {
     },
     save() {
       let self = this;
+      this.loading = true;
+      switch (this.tipo_tiempo) {
+        case "horas":
+          this.tiempo_respuesta = Math.trunc(this.tiempo_respuesta * 60);
+          break;
+        case "dias":
+          this.tiempo_respuesta = Math.trunc(this.tiempo_respuesta * 1440);
+          break;
+        default:
+          break;
+      }
+      const estadoForm = {
+        nombre: this.nombre,
+        color: this.color,
+        responsables: this.asignar_usuarios,
+        tiempo_respuesta: this.tiempo_respuesta,
+      };
       if (this.id_estado == "") {
-        const estadoForm = {
-          nombre: this.nombre,
-          color: this.color,
-          tiempo_respuesta: this.tiempo_respuesta,
-          responsables: this.asignar_usuarios,
-        };
         let config = this.configHeader();
         axios
           .post(self.URL_API + "api/v1/estadosfirma", estadoForm, config)
           .then((result) => {
+            this.limpiarFormulario();
             self.showAlert(result.data.message, result.data.status);
+            this.disabled = true;
+            this.loading = false;
+          });
+      } else {
+        let config = this.configHeader();
+        axios
+          .put(
+            self.URL_API + `api/v1/estadosfirma/${this.id_estado}`,
+            estadoForm,
+            config
+          )
+          .then((result) => {
+            this.limpiarFormulario();
+            self.showAlert(result.data.message, result.data.status);
+            this.disabled = true;
+            this.loading = false;
           });
       }
     },
