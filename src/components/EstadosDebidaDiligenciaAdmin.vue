@@ -2,189 +2,207 @@
   <div class="container">
     <Loading :loading="loading" />
     <h2>Administrar estados Debida Diligencia</h2>
-    <div class="row">
-      <div class="col">
-        <SearchList
-          nombreCampo="Estados"
-          nombreItem="nombre"
-          @getEstados="getEstados"
-          eventoCampo="getEstados"
-          :consulta="nombre"
-          :registros="estados"
-          placeholder="Seleccione una opción"
-          :valida_campo="false"
-        />
-      </div>
-      <div class="col pt-5">
-        <button
-          type="button"
-          class="btn btn-success"
-          style="float: left"
-          @click="crearNuevoEstado"
-        >
-          Añadir nuevo estado
-        </button>
-      </div>
-    </div>
-    <form action="save" @submit.prevent="save()" class="was-validated">
+    <div id="seccion">
       <div class="row">
-        <div class="col-6 mb-3">
-          <label class="form-label labelLeft">Nombre: * </label>
-          <input
-            :disabled="disabled"
-            type="text"
-            class="form-control"
-            autocomplete="off"
-            id="nombreEstado"
-            aria-describedby="inputName"
-            v-model="nombre"
-            required
+        <div class="col">
+          <SearchList
+            nombreCampo="Estados"
+            nombreItem="nombre"
+            @getEstados="getEstados"
+            eventoCampo="getEstados"
+            :consulta="nombre"
+            :registros="estados"
+            placeholder="Seleccione una opción"
+            :valida_campo="false"
           />
-          <div class="invalid-feedback">
-            {{ mensaje_error }}
-          </div>
         </div>
-        <div class="col-6">
-          <div class="row">
-            <div class="col">
-              <label class="form-label labelLeft">Tiempo: </label>
-            </div>
-          </div>
-          <div class="row d-flex align-items-center">
-            <div class="col">
-              <div class="form-check form-check-inline">
-                <input
-                  :disabled="disabled"
-                  class="form-check-input"
-                  type="radio"
-                  name="inlineRadioOptions"
-                  id="inlineRadio1"
-                  value="minutos"
-                  v-model="tipo_tiempo"
-                  @change="changeTipoTiempo('minutos')"
-                />
-                <label class="form-check-label" for="inlineRadio1"
-                  >Minutos</label
-                >
-              </div>
-              <div class="form-check form-check-inline">
-                <input
-                  :disabled="disabled"
-                  class="form-check-input"
-                  type="radio"
-                  name="inlineRadioOptions"
-                  id="inlineRadio2"
-                  value="horas"
-                  v-model="tipo_tiempo"
-                  @change="changeTipoTiempo('horas')"
-                />
-                <label class="form-check-label" for="inlineRadio2">Horas</label>
-              </div>
-              <div class="form-check form-check-inline">
-                <input
-                  :disabled="disabled"
-                  class="form-check-input"
-                  type="radio"
-                  name="inlineRadioOptions"
-                  id="inlineRadio3"
-                  value="dias"
-                  v-model="tipo_tiempo"
-                  @change="changeTipoTiempo('dias')"
-                />
-                <label class="form-check-label" for="inlineRadio3">Dias</label>
-              </div>
-            </div>
-            <div class="col">
-              <input
-                required
-                :disabled="disabled"
-                type="number"
-                class="form-control"
-                autocomplete="off"
-                id="tiempoEstado"
-                aria-describedby="inputTiempo"
-                v-model="tiempo_respuesta"
-              />
-            </div>
-          </div>
+        <div class="col pt-5">
+          <button
+            type="button"
+            class="btn btn-success"
+            style="float: left"
+            @click="crearNuevoEstado"
+          >
+            Añadir nuevo estado
+          </button>
         </div>
-        <div class="row border rounded">
-          <label for="" class="labelLeft">Responsables: *</label>
-          <div class="col">
-            <SearchList
-              nombreCampo=""
-              :valida_campo="false"
-              nombreItem="nombre"
-              eventoCampo="getUsuarios"
-              :consulta="usuario"
-              :registros="usuarios"
-              @getUsuarios="getUsuarios"
-              placeholder="Seleccione una opción"
-              :index="1"
+      </div>
+      <form action="save" @submit.prevent="save()" class="was-validated">
+        <div class="row">
+          <div class="col-6 mb-3">
+            <label class="form-label labelLeft">Nombre: * </label>
+            <input
               :disabled="disabled"
+              type="text"
+              class="form-control"
+              autocomplete="off"
+              id="nombreEstado"
+              aria-describedby="inputName"
+              v-model="nombre"
+              required
             />
-            <div class="row mt-4">
-              <div class="col-2">
-                <label class="form-label labelLeft">Color: </label>
+            <div class="invalid-feedback">
+              {{ mensaje_error }}
+            </div>
+          </div>
+          <div class="col-6">
+            <div class="row">
+              <div class="col">
+                <label class="form-label labelLeft">Tiempo: </label>
               </div>
-              <div class="col-2 d-flex align-items-center">
+            </div>
+            <div class="row d-flex align-items-center">
+              <div class="col">
+                <div class="form-check form-check-inline">
+                  <input
+                    :disabled="disabled"
+                    class="form-check-input"
+                    type="radio"
+                    name="inlineRadioOptions"
+                    id="inlineRadio1"
+                    value="minutos"
+                    v-model="tipo_tiempo"
+                    @change="changeTipoTiempo('minutos')"
+                  />
+                  <label class="form-check-label" for="inlineRadio1"
+                    >Minutos</label
+                  >
+                </div>
+                <div class="form-check form-check-inline">
+                  <input
+                    :disabled="disabled"
+                    class="form-check-input"
+                    type="radio"
+                    name="inlineRadioOptions"
+                    id="inlineRadio2"
+                    value="horas"
+                    v-model="tipo_tiempo"
+                    @change="changeTipoTiempo('horas')"
+                  />
+                  <label class="form-check-label" for="inlineRadio2"
+                    >Horas</label
+                  >
+                </div>
+                <div class="form-check form-check-inline">
+                  <input
+                    :disabled="disabled"
+                    class="form-check-input"
+                    type="radio"
+                    name="inlineRadioOptions"
+                    id="inlineRadio3"
+                    value="dias"
+                    v-model="tipo_tiempo"
+                    @change="changeTipoTiempo('dias')"
+                  />
+                  <label class="form-check-label" for="inlineRadio3"
+                    >Dias</label
+                  >
+                </div>
+              </div>
+              <div class="col">
                 <input
+                  required
                   :disabled="disabled"
-                  type="color"
+                  type="number"
                   class="form-control"
                   autocomplete="off"
-                  id="nombreEstado"
-                  aria-describedby="inputName"
-                  v-model="color"
+                  id="tiempoEstado"
+                  aria-describedby="inputTiempo"
+                  v-model="tiempo_respuesta"
                 />
-                <div class="invalid-feedback">
-                  {{ mensaje_error }}
+              </div>
+            </div>
+          </div>
+          <div class="row border rounded">
+            <label for="" class="labelLeft">Responsables: *</label>
+            <div class="col">
+              <SearchList
+                nombreCampo=""
+                :valida_campo="false"
+                nombreItem="nombre"
+                eventoCampo="getUsuarios"
+                :consulta="usuario"
+                :registros="usuarios"
+                @getUsuarios="getUsuarios"
+                placeholder="Seleccione una opción"
+                :index="1"
+                :disabled="disabled"
+              />
+              <div class="row mt-4">
+                <div class="col-2">
+                  <label class="form-label labelLeft">Color: </label>
+                </div>
+                <div class="col-2 d-flex align-items-center">
+                  <input
+                    :disabled="disabled"
+                    type="color"
+                    class="form-control"
+                    autocomplete="off"
+                    id="nombreEstado"
+                    aria-describedby="inputName"
+                    v-model="color"
+                  />
+                  <div class="invalid-feedback">
+                    {{ mensaje_error }}
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
-          <div class="col">
-            <div
-              class="mb-3"
-              style="
-                padding: 10px;
-                border: solid #d5dbdb 0.5px;
-                border-radius: 10px;
-              "
-            >
-              <button
-                type="button"
-                style="margin: 10px 10px 5px 10px"
-                id="btnMenu"
-                class="btn btn-sm"
-                data-bs-toggle="button"
-                v-for="(usuario, index) in asignar_usuarios"
-                :key="index"
+            <div class="col">
+              <div
+                class="mb-3"
+                style="
+                  padding: 10px;
+                  border: solid #d5dbdb 0.5px;
+                  border-radius: 10px;
+                "
               >
-                {{ usuario.nombre }}
-                <i
-                  class="bi bi-x"
-                  @click="asignar_usuarios.splice(index, 1)"
-                ></i>
+                <button
+                  type="button"
+                  style="margin: 10px 10px 5px 10px"
+                  id="btnMenu"
+                  class="btn btn-sm"
+                  data-bs-toggle="button"
+                  v-for="(usuario, index) in asignar_usuarios"
+                  :key="index"
+                >
+                  {{ usuario.nombre }}
+                  <i
+                    class="bi bi-x"
+                    @click="asignar_usuarios.splice(index, 1)"
+                  ></i>
+                </button>
+              </div>
+            </div>
+          </div>
+          <div class="row mt-4">
+            <div class="col-6">
+              <button
+                id="btnGroupDrop1"
+                type="button"
+                class="btn btn-danger"
+                aria-expanded="false"
+                :disabled="disabled"
+                @click="eliminarEstadoHandler"
+              >
+                Eliminar Estado
+              </button>
+            </div>
+            <div class="col-6">
+              <button
+                id="btnGroupDrop1"
+                type="submit"
+                class="btn btn-success"
+                aria-expanded="false"
+                :disabled="disabled"
+              >
+                Guardar Estado
               </button>
             </div>
           </div>
         </div>
-        <div class="row mt-4">
-          <div class="col-6"></div>
-          <div class="col-6">
-            <button
-              id="btnGroupDrop1"
-              type="submit"
-              class="btn btn-success"
-              aria-expanded="false"
-            >
-              Guardar Estado
-            </button>
-          </div>
-        </div>
-      </div>
-    </form>
+      </form>
+    </div>
   </div>
 </template>
 
@@ -257,6 +275,29 @@ export default {
         .then(function (result) {
           self.asignar_usuarios = result.data;
           self.loading = false;
+        });
+    },
+    async eliminarEstadoHandler() {
+      this.loading = true;
+      this.messageDelete(
+        "¿Está seguro que desea eliminar este estado?",
+        this.deleteEstado,
+        this.id_estado
+      );
+      setTimeout(() => {
+        this.limpiarFormulario();
+        this.loading = false;
+        this.disabled = true;
+      }, 2000);
+    },
+    deleteEstado(id) {
+      let self = this;
+      let config = this.configHeader();
+      axios
+        .delete(self.URL_API + "api/v1/estadosfirma/" + id, config)
+        .then(function (result) {
+          this.loading = false;
+          self.showAlert(result.data.message, result.data.status);
         });
     },
     getEstados(item = null) {
@@ -382,5 +423,13 @@ export default {
 #btnMenu {
   background-color: rgb(28, 146, 77);
   color: white;
+}
+#seccion {
+  border: solid #d5dbdb 0.5px;
+  padding: 30px;
+  margin-bottom: 30px;
+  border-radius: 10px;
+  box-shadow: rgba(0, 0, 0, 0.25) 0px 14px 28px,
+    rgba(0, 0, 0, 0.22) 0px 10px 10px;
 }
 </style>

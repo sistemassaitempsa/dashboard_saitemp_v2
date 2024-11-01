@@ -1,42 +1,45 @@
 // Mixin para mostrar mensajes de alerta como exito o error en una acción
 export const Alerts = {
-  data () {
+  data() {
     return {};
   },
   methods: {
-    showAlert (mensaje, icono) {
-      this.$swal ({
-        position: 'top',
+    showAlert(mensaje, icono) {
+      this.$swal({
+        position: "top",
         icon: icono,
         title: mensaje,
         showConfirmButton: false,
-        timer: icono == 'error' ? 3000 : 1500,
+        timer: icono == "error" ? 3000 : 1500,
       });
     },
-    showAlertConfirm (mensaje, icono) {
-      this.$swal ({
-        position: 'top',
+    showAlertConfirm(mensaje, icono) {
+      this.$swal({
+        position: "top",
         icon: icono,
         title: mensaje,
         showConfirmButton: true,
       });
     },
-    messageDelete (item, endpoint = null, titulo = null) {
-      let self = this;
-      var title = titulo == null ? "Estas seguro de elimiar el resgistro?" : titulo;
+    messageDelete(titulo = null, funcion, id) {
+      const self = this;
+      var title =
+        titulo == null ? "Estas seguro de elimiar el resgistro?" : titulo;
       this.$swal
-        .fire ({
+        .fire({
           title: title,
-          text: 'Esta operación no se puede revertir!',
-          icon: 'warning',
+          text: "Esta operación no se puede revertir!",
+          icon: "warning",
           showCancelButton: true,
-          confirmButtonColor: '#3085d6',
-          cancelButtonColor: '#d33',
-          confirmButtonText: 'Si, eliminar!',
+          confirmButtonColor: "#3085d6",
+          cancelButtonColor: "#d33",
+          confirmButtonText: "Si, eliminar!",
         })
-        .then (result => {
+        .then((result) => {
           if (result.isConfirmed) {
-            self.delete (item.id, endpoint);
+            funcion(id).then((result) => {
+              self.showAlert(result.data.message, result.data.status);
+            });
           }
         });
     },
@@ -48,5 +51,5 @@ export const Alerts = {
     },
   },
   computed: {},
-  created () {},
+  created() {},
 }; // MiMixin.js
