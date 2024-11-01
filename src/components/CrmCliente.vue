@@ -3123,7 +3123,13 @@ label {
 .dropdown-menu li {
   border-bottom: 1px solid #f1f1f1; /* Borde inferior */
 }
+.imagen_firma {
+  width: 100%;
+}
 
+.imagen_firma img {
+  width: 60%;
+}
 .dropdown-menu li:last-child {
   border-bottom: none; /* Eliminar borde del último ítem */
 }

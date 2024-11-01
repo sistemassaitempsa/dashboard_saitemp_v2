@@ -6,26 +6,31 @@
       <div class="col">
         <SearchList
           nombreCampo="Estados"
-          :valida_campo="true"
           nombreItem="nombre"
-          eventoCampo="getEstados"
-          :consulta="estado"
-          :registros="estados"
           @getEstados="getEstados"
+          eventoCampo="getEstados"
+          :consulta="nombre"
+          :registros="estados"
           placeholder="Seleccione una opción"
         />
       </div>
       <div class="col pt-5">
-        <button type="button" class="btn btn-success" style="float: left">
+        <button
+          type="button"
+          class="btn btn-success"
+          style="float: left"
+          @click="crearNuevoEstado"
+        >
           Añadir nuevo estado
         </button>
       </div>
     </div>
-    <form action="" class="was-validated">
+    <form action="save" @submit.prevent="save()" class="was-validated">
       <div class="row">
         <div class="col-6 mb-3">
           <label class="form-label labelLeft">Nombre: </label>
           <input
+            :disabled="disabled"
             type="text"
             class="form-control"
             autocomplete="off"
@@ -47,11 +52,14 @@
             <div class="col">
               <div class="form-check form-check-inline">
                 <input
+                  :disabled="disabled"
                   class="form-check-input"
                   type="radio"
                   name="inlineRadioOptions"
                   id="inlineRadio1"
-                  value="option1"
+                  value="minutos"
+                  v-model="tipo_tiempo"
+                  @change="tipo_tiempo"
                 />
                 <label class="form-check-label" for="inlineRadio1"
                   >Minutos</label
@@ -59,33 +67,40 @@
               </div>
               <div class="form-check form-check-inline">
                 <input
+                  :disabled="disabled"
                   class="form-check-input"
                   type="radio"
                   name="inlineRadioOptions"
                   id="inlineRadio2"
-                  value="option2"
+                  value="horas"
+                  v-model="tipo_tiempo"
+                  @change="tipo_tiempo"
                 />
                 <label class="form-check-label" for="inlineRadio2">Horas</label>
               </div>
               <div class="form-check form-check-inline">
                 <input
+                  :disabled="disabled"
                   class="form-check-input"
                   type="radio"
                   name="inlineRadioOptions"
                   id="inlineRadio3"
-                  value="option3"
+                  value="dias"
+                  v-model="tipo_tiempo"
+                  @change="tipo_tiempo"
                 />
                 <label class="form-check-label" for="inlineRadio3">Dias</label>
               </div>
             </div>
             <div class="col">
               <input
+                :disabled="disabled"
                 type="number"
                 class="form-control"
                 autocomplete="off"
                 id="tiempoEstado"
                 aria-describedby="inputTiempo"
-                v-model="tiempo"
+                v-model="tiempo_respuesta"
               />
             </div>
           </div>
@@ -103,6 +118,7 @@
               @getUsuarios="getUsuarios"
               placeholder="Seleccione una opción"
               :index="1"
+              :disabled="disabled"
             />
             <div class="row mt-4">
               <div class="col-2">
@@ -110,6 +126,7 @@
               </div>
               <div class="col-2 d-flex align-items-center">
                 <input
+                  :disabled="disabled"
                   type="color"
                   class="form-control"
                   autocomplete="off"
@@ -155,9 +172,8 @@
           <div class="col-6">
             <button
               id="btnGroupDrop1"
-              type="button"
-              class="btn btn-success dropdown-toggle"
-              data-bs-toggle="dropdown"
+              type="submit"
+              class="btn btn-success"
               aria-expanded="false"
             >
               Guardar Estado
@@ -173,17 +189,28 @@
 import SearchList from "./SearchList.vue";
 import Loading from "./Loading.vue";
 import axios from "axios";
+import { Token } from "../Mixins/Token.js";
+import { Alerts } from "../Mixins/Alerts.js";
 export default {
   components: {
     Loading,
     SearchList,
   },
+  mixins: [Token, Alerts],
   data() {
     return {
-      tiempo: 0,
+      mensaje_error: "",
+      URL_API: process.env.VUE_APP_URL_API,
+      usuario: "",
+      usuarios: [],
+      estados: [],
       color: "#9EAEAC",
+      id_estado: "",
       loading: false,
+      tiempo_respuesta: 0,
       nombre: "",
+      disabled: true,
+      tipo_tiempo: "minutos",
       asignar_usuarios: [
         { id: 1, nombre: "Daniel Botache" },
         { id: 1, nombre: "Daniel Botache" },
@@ -195,14 +222,36 @@ export default {
       ],
     };
   },
+  watch: {
+    $route() {
+      this.limpiarFormulario();
+    },
+  },
   methods: {
+    getEstados(item = null) {
+      if (item != null) {
+        this.color = item.color;
+        this.nombre = item.nombre;
+        this.id_estado = item.id;
+        this.disabled = false;
+      }
+      let self = this;
+      let config = this.configHeader();
+      axios
+        .get(self.URL_API + "api/v1/estadosfirma", config)
+        .then(function (result) {
+          self.estados = result.data;
+        });
+    },
     getUsuarios(item = null, index = null) {
       if (item != null) {
         switch (index) {
           case 1:
-            this.responsable_id = item.id;
-            this.consulta_responsable = item.nombre;
-            this.correo_responsablePqrsf = item.email;
+            this.asignar_usuarios.push({
+              id: item.id,
+              nombre: item.nombre,
+            });
+
             break;
           case 2:
             this.cierra_pqrsf_id = item.id;
@@ -212,16 +261,6 @@ export default {
             this.visitante_id = item.id;
             this.visitante = item.nombre;
             break;
-          /*           case 4:
-            this.compromisos[0].responsable = item.nombre;
-            this.compromisos[0].email = item.email;
-            this.compromisos[0].responsable_id = item.id;
-            break;
-          case 5:
-            this.compromisos[1].responsable = item.nombre;
-            this.compromisos[1].email = item.email;
-            this.compromisos[1].responsable_id = item.id;
-            break; */
         }
       }
       let self = this;
@@ -231,6 +270,35 @@ export default {
         .then(function (result) {
           self.usuarios = result.data;
         });
+    },
+    limpiarFormulario() {
+      this.id = "";
+      this.nombre = "";
+      this.color = "#9EAEAC";
+      this.tiempo_respuesta = 0;
+      this.tipo_tiempo = "minutos";
+      this.asignar_usuarios = [];
+    },
+    crearNuevoEstado() {
+      this.limpiarFormulario();
+      this.disabled = false;
+    },
+    save() {
+      let self = this;
+      if (this.id_estado == "") {
+        const estadoForm = {
+          nombre: this.nombre,
+          color: this.color,
+          tiempo_respuesta: this.tiempo_respuesta,
+          responsables: this.asignar_usuarios,
+        };
+        let config = this.configHeader();
+        axios
+          .post(self.URL_API + "api/v1/estadosfirma", estadoForm, config)
+          .then((result) => {
+            self.showAlert(result.data.message, result.data.status);
+          });
+      }
     },
   },
 };
