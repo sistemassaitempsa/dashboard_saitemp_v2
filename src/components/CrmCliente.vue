@@ -2135,6 +2135,9 @@ export default {
       if (this.$route.params.id == undefined || this.hora_cierre == " ") {
         this.tomarHoraCierre();
       }
+      if (this.estado_cierre_id == "") {
+        this.showAlert("Debe llenar el campo Estado* ", "error");
+      }
       if (
         this.estado_cierre_id == 3 &&
         (this.interaccion_id == 5 || this.interaccion_id == 6)
@@ -3123,7 +3126,13 @@ label {
 .dropdown-menu li {
   border-bottom: 1px solid #f1f1f1; /* Borde inferior */
 }
+.imagen_firma {
+  width: 100%;
+}
 
+.imagen_firma img {
+  width: 60%;
+}
 .dropdown-menu li:last-child {
   border-bottom: none; /* Eliminar borde del último ítem */
 }

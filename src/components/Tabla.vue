@@ -612,11 +612,16 @@
       <div
         class="col"
         style="margin-top: 35px"
-        v-if="ruta == '/navbar/gestion-ingresosl' && check.length > 0 && permisos[30].autorizado">
+        v-if="
+          ruta == '/navbar/gestion-ingresosl' &&
+          check.length > 0 &&
+          permisos[30].autorizado
+        "
+      >
         <select
           class="form-select form-select-sm"
           aria-label="Ejemplo de .form-select-sm"
-          @change="getEncargados(estado_ingreso2.id), lista_encargados = []"
+          @change="getEncargados(estado_ingreso2.id), (lista_encargados = [])"
           v-model="estado_ingreso2"
         >
           <option :value="item" v-for="item in estados_ingreso" :key="item.id">
@@ -627,7 +632,12 @@
       <div
         class="col"
         style="margin-top: 35px"
-        v-if="ruta == '/navbar/gestion-ingresosl' && check.length > 0 && permisos[30].autorizado">
+        v-if="
+          ruta == '/navbar/gestion-ingresosl' &&
+          check.length > 0 &&
+          permisos[30].autorizado
+        "
+      >
         <select
           class="form-select form-select-sm"
           aria-label="Ejemplo de .form-select-sm"
@@ -946,7 +956,13 @@
                     'color:black;background-color:' + item.color_estado_firma
                   "
                 >
-                  {{ item.nombre_estado_firma }}
+                  {{
+                    truncateText(
+                      item.nombre_estado_firma,
+                      maxCaracteres,
+                      item.id
+                    )
+                  }}
                 </button>
                 <button
                   type="button"
@@ -1046,7 +1062,10 @@
                   data-bs-toggle="dropdown"
                   aria-expanded="false"
                   :style="'color:black;background-color:' + item.color_estado"
-                  @click="getEncargados(item.estado_ingreso_id), (lista_encargados = [])"
+                  @click="
+                    getEncargados(item.estado_ingreso_id),
+                      (lista_encargados = [])
+                  "
                 >
                   <span class="visually-hidden">Toggle Dropdown</span>
                 </button>
@@ -1341,11 +1360,19 @@ export default {
   },
   methods: {
     asignacionMasiva() {
-        console.log(this.estado_ingreso2)
+      console.log(this.estado_ingreso2);
       let self = this;
       let config = this.configHeader();
       axios
-        .post(self.URL_API + "api/v1/asignacionmasivaformularioingreso/"+this.estado_ingreso2.id+'/'+ this.encargado2.usuario_id, this.check, config)
+        .post(
+          self.URL_API +
+            "api/v1/asignacionmasivaformularioingreso/" +
+            this.estado_ingreso2.id +
+            "/" +
+            this.encargado2.usuario_id,
+          this.check,
+          config
+        )
         .then(function (result) {
           self.showAlert(result.data.message, result.data.status);
         });
@@ -1405,12 +1432,12 @@ export default {
     },
     getEncargados(id) {
       let self = this;
-        let config = this.configHeader();
-        axios
-          .get(self.URL_API + "api/v1/responsableingresos/" + id, config)
-          .then(function (result) {
-            self.lista_encargados = result.data;
-          });
+      let config = this.configHeader();
+      axios
+        .get(self.URL_API + "api/v1/responsableingresos/" + id, config)
+        .then(function (result) {
+          self.lista_encargados = result.data;
+        });
     },
     truncateText(text, maxLength) {
       // if (!(id in this.lista_estados_id)) {
@@ -2051,14 +2078,14 @@ export default {
         });
     },
     confirmationMessage() {
-        // 'Está seguro de guardar la información del formulario?', 'Si', 'Cancelar', 'Información guardada con exito'
+      // 'Está seguro de guardar la información del formulario?', 'Si', 'Cancelar', 'Información guardada con exito'
       this.$swal({
         icon: "warning",
-        title: 'Está seguro de guardar la información del formulario?',
+        title: "Está seguro de guardar la información del formulario?",
         showDenyButton: true,
         showCancelButton: false,
-        confirmButtonText: 'Si',
-        denyButtonText: 'Cancelar',
+        confirmButtonText: "Si",
+        denyButtonText: "Cancelar",
       }).then((result) => {
         if (result.isConfirmed) {
           this.asignacionMasiva();
