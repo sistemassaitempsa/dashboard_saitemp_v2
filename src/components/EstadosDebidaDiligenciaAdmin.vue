@@ -258,7 +258,7 @@ export default {
             break;
           case "dias":
             this.tiempo_respuesta = Math.trunc(
-              this.tiempo_respuesta_cambio / 1440
+              this.tiempo_respuesta_cambio / 480
             );
             break;
           default:
@@ -369,7 +369,7 @@ export default {
           this.tiempo_respuesta = Math.trunc(this.tiempo_respuesta * 60);
           break;
         case "dias":
-          this.tiempo_respuesta = Math.trunc(this.tiempo_respuesta * 1440);
+          this.tiempo_respuesta = Math.trunc(this.tiempo_respuesta * 480);
           break;
         default:
           break;

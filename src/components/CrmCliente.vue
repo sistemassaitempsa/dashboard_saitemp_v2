@@ -2135,6 +2135,9 @@ export default {
       if (this.$route.params.id == undefined || this.hora_cierre == " ") {
         this.tomarHoraCierre();
       }
+      if (this.estado_cierre_id == "") {
+        this.showAlert("Debe llenar el campo Estado* ", "error");
+      }
       if (
         this.estado_cierre_id == 3 &&
         (this.interaccion_id == 5 || this.interaccion_id == 6)
