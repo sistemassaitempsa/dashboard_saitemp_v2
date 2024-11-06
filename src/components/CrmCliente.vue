@@ -2371,6 +2371,9 @@ export default {
           self.getItem(result.data.id);
           self.showAlert(result.data.message, result.data.status);
           const id = result.data.id;
+          const rutaActual = self.$route.path;
+          const nuevosParametros = { ...rutaActual.params, id: result.data.id };
+          self.$router.replace({ ...rutaActual, params: nuevosParametros });
           if (tipoSave == 1) {
             self
               .enviarCorreos(id, tipoSave, correosResponsables)
@@ -2385,9 +2388,6 @@ export default {
                 );
               });
           }
-          const rutaActual = self.$route.path;
-          const nuevosParametros = { ...rutaActual.params, id: result.data.id };
-          self.$router.replace({ ...rutaActual, params: nuevosParametros });
         })
         .then(() => {
           this.historicoCorreos();
