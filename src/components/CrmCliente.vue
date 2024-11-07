@@ -327,7 +327,7 @@
             ></textarea> -->
             <div class="d-flex justify-content-end">
               <small class="char-count"
-                >{{ remainingCharsObservasion3 }}/5000</small
+                >{{ remainingCharsObservasion3 }}/6000</small
               >
             </div>
             <div class="invalid-feedback">
@@ -615,6 +615,7 @@
                     "
                     v-model="compromiso.estado_cierre_id"
                   >
+                    <option value="">Seleccionar</option>
                     <option :value="1">Eficaz</option>
                     <option :value="2">Ineficaz</option>
                   </select>
@@ -809,6 +810,37 @@
                 <div class="invalid-feedback">
                   {{ mensaje_error }}
                 </div>
+              </div>
+              <div class="row">
+                <div class="col-6 mb-3">
+                  <label class="form-label">Correo de contacto: </label>
+                  <input
+                    type="email"
+                    class="form-control"
+                    autocomplete="off"
+                    id=" correoAsistencia"
+                    aria-describedby="emailHelp"
+                    v-model="asistencia.correo"
+                    :disabled="
+                      $route.params.id != undefined && !permisos[32].autorizado
+                    "
+                    @input="validateEmailAsistencia(index)"
+                  />
+                  <small
+                    v-if="
+                      asistencia.correo != null &&
+                      !asistencia.emailValido &&
+                      asistencia.correo.length > 0
+                    "
+                    class="text-danger"
+                  >
+                    Por favor ingresa un correo válido.
+                  </small>
+                  <div class="invalid-feedback">
+                    {{ mensaje_error }}
+                  </div>
+                </div>
+                <div class="col mb-3"></div>
               </div>
               <div class="row">
                 <div class="col-sm-12 col-md-6 mb-3">
@@ -1123,11 +1155,13 @@
                 <input
                   class="form-check-input"
                   type="checkbox"
+                  :ref="'checkbox_' + index"
                   @change="
                     agregarCorreosSeleccionados(
                       compromiso.email,
                       compromiso.observacion,
-                      true
+                      true,
+                      index
                     )
                   "
                 />
@@ -1147,7 +1181,7 @@
             <div>
               <label class="form-label">Registros guardados</label>
               <select
-                class="form-select form-select-lg mb-3"
+                class="form-select mb-3"
                 aria-label=".form-select-lg example"
                 v-model="selectedFormId"
                 @change="loadPartial(selectedFormId)"
@@ -1169,14 +1203,14 @@
             <div class="flexButtons">
               <button
                 type="button"
-                class="btn btn-success"
+                class="btn btn-success buttonRigth"
                 @click="guardadoParcial"
               >
                 Guardado parcial
               </button>
 
               <button
-                class="btn btn-danger dropdown-toggle dropdown-toggle-split"
+                class="btn btn-danger dropdown-toggle dropdown-toggle-split buttonleft"
                 data-bs-toggle="dropdown"
                 aria-expanded="false"
                 type="button"
@@ -1397,7 +1431,14 @@ export default {
       empresas_cliente: [],
       bloquea_campos: false,
       asistencias: [
-        { nombre: "", cargo: "", firma: [], show_pad: false, firma_hash: "" },
+        {
+          nombre: "",
+          cargo: "",
+          firma: [],
+          show_pad: false,
+          firma_hash: "",
+          emailValido: false,
+        },
       ],
       compromisos: [
         {
@@ -1411,6 +1452,7 @@ export default {
           responsable_id: "",
           email: "",
           id: "",
+          checked: false,
         },
       ],
       empresa_cliente_nombre: "",
@@ -1502,7 +1544,7 @@ export default {
   },
   async mounted() {
     this.id_registro = this.$route.params.id;
-
+    window.addEventListener("keydown", this.convinacionGuardado);
     if (this.id_registro !== undefined) {
       this.getItem(this.id_registro);
     }
@@ -1511,7 +1553,9 @@ export default {
     }
     this.loadSavedForms();
   },
-
+  beforeDestroy() {
+    window.removeEventListener("keydown", this.convinacionGuardado);
+  },
   methods: {
     coordenadas(item) {
       console.log(item);
@@ -1519,6 +1563,12 @@ export default {
     validateEmail() {
       const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
       this.emailValido = regex.test(this.correo_contacto);
+    },
+    validateEmailAsistencia(index) {
+      const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      this.asistencias[index].emailValido = regex.test(
+        this.asistencias[index].correo
+      );
     },
     async geolocal() {
       try {
@@ -1534,12 +1584,30 @@ export default {
         return false;
       }
     },
-    agregarCorreosSeleccionados(correo, observacion, compromiso) {
-      this.correosSeleccionados.correos.push({
-        correo: correo,
-        observacion: observacion,
-        compromiso: compromiso,
-      });
+    agregarCorreosSeleccionados(correo, observacion, compromiso, index) {
+      if (correo == "null" || correo == "" || correo == null) {
+        this.showAlert(
+          "Este usuario no tiene correo electrónico configurado.",
+          "error"
+        );
+        // Desmarca visualmente el checkbox
+        this.$refs["checkbox_" + index][0].checked = false;
+        return;
+      }
+      const correoIndex = this.correosSeleccionados.correos.findIndex(
+        (item) => item.correo === correo
+      );
+      if (correoIndex === -1) {
+        this.correosSeleccionados.correos.push({
+          correo: correo,
+          observacion: observacion,
+          compromiso: compromiso,
+        });
+      } else {
+        this.correosSeleccionados.correos.splice(correoIndex, 1);
+        this.compromisos[index].checked = false;
+        this.$refs["checkbox_" + index][0].checked = false;
+      }
     },
     reenviarCorreosSeleccionados() {
       this.enviarCorreos(this.id_registro, 1, this.correosSeleccionados);
@@ -1642,6 +1710,7 @@ export default {
           cargo: "",
           firma: [],
           show_pad: false,
+          id: "",
         });
         return;
       }
@@ -1776,7 +1845,14 @@ export default {
       this.evidencias = [{ observacion: "", file: [] }];
       this.adjuntos = false;
       this.asistencias = [
-        { nombre: "", cargo: "", firma: [], show_pad: false, firma_hash: "" },
+        {
+          nombre: "",
+          cargo: "",
+          firma: [],
+          show_pad: false,
+          firma_hash: "",
+          emailValido: false,
+        },
       ];
       this.compromisos = [
         {
@@ -1814,8 +1890,8 @@ export default {
         });
     },
     limitarCaracteres() {
-      if (this.observacion.length > 5000) {
-        this.observacion = this.observacion.substring(0, 5000);
+      if (this.observacion.length > 6000) {
+        this.observacion = this.observacion.substring(0, 6000);
       }
     },
     llenarFormulario(item) {
@@ -1830,7 +1906,10 @@ export default {
       self.bloquea_campos = true;
       this.asistencias =
         item.asistencias.length > 0
-          ? item.asistencias
+          ? item.asistencias.map((asistencia) => ({
+              ...asistencia,
+              emailValido: /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(asistencia.correo), // true si es válido, false si no
+            }))
           : [
               {
                 nombre: "",
@@ -1838,6 +1917,7 @@ export default {
                 firma: [],
                 show_pad: false,
                 firma_hash: "",
+                emailValido: false,
               },
             ];
       /*    this.compromisos = [
@@ -1881,6 +1961,7 @@ export default {
               observacion: "",
               responsable_id: "",
               email: "",
+              checked: false,
             };
           }
         }
@@ -2054,8 +2135,9 @@ export default {
       if (this.$route.params.id == undefined || this.hora_cierre == " ") {
         this.tomarHoraCierre();
       }
-
-      //validacion de compromisos según si es visita o reunion
+      if (this.estado_cierre_id == "") {
+        this.showAlert("Debe llenar el campo Estado* ", "error");
+      }
       if (
         this.estado_cierre_id == 3 &&
         (this.interaccion_id == 5 || this.interaccion_id == 6)
@@ -2279,8 +2361,15 @@ export default {
       this.compromisos.forEach((compromiso) => {
         correosResponsables.correos.push({
           correo: compromiso.email,
-          observacion: compromiso.descripcion,
+          observacion: compromiso.observacion,
           compromiso: true,
+        });
+      });
+      this.asistencias.forEach((asistencia) => {
+        correosResponsables.correos.push({
+          correo: asistencia.correo,
+          observacion: "",
+          compromiso: false,
         });
       });
       console.log(this.asistencias);
@@ -2333,6 +2422,8 @@ export default {
             JSON.stringify({
               nombre: item.nombre,
               cargo: item.cargo,
+              correo: item.correo ? item.correo : "",
+              id: item.id ? item.id : "",
             })
           );
           Array.isArray(item.firma)
@@ -2436,11 +2527,12 @@ export default {
         nit_documento: this.nit_documento,
         consulta_pqrsf: this.consulta_pqrsf,
         pqrsf_id: this.pqrsf_id,
-        id_registro: this.id_registro,
         cierra_pqrsf_id: this.cierra_pqrsf_id,
         consulta_cierra_pqrsf: this.consulta_cierra_pqrsf,
         responsable_id: this.responsable_id,
         consulta_responsable: this.consulta_responsable,
+        latitud: this.latitud,
+        longitud: this.longitud,
       };
       let savedForms = JSON.parse(localStorage.getItem("savedForms")) || [];
       const existingFormIndex = savedForms.findIndex(
@@ -2461,6 +2553,12 @@ export default {
     loadSavedForms() {
       const savedForms = JSON.parse(localStorage.getItem("savedForms")) || [];
       this.formList = savedForms;
+    },
+    convinacionGuardado(event) {
+      if (event.ctrlKey && event.key.toLowerCase() === "s") {
+        event.preventDefault();
+        this.guardadoParcial();
+      }
     },
     loadPartial(nit_documento) {
       const rutaActual = this.$route.path;
@@ -3082,7 +3180,13 @@ label {
 .dropdown-menu li {
   border-bottom: 1px solid #f1f1f1; /* Borde inferior */
 }
+.imagen_firma {
+  width: 100%;
+}
 
+.imagen_firma img {
+  width: 60%;
+}
 .dropdown-menu li:last-child {
   border-bottom: none; /* Eliminar borde del último ítem */
 }
@@ -3104,6 +3208,13 @@ label {
   justify-content: flex-start;
   align-items: center;
 }
-
+.buttonleft {
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+}
+.buttonRigth {
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+}
 /* Oculta el menú si no está visible */
 </style>

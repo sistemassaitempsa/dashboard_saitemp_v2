@@ -65,13 +65,12 @@ import CrmSeguimiento from "../components/CrmSeguimiento.vue";
 import PendientesCrm from "../components/PendientesCrm.vue";
 import IndicadoresSeya from "../components/IndicadoresSeya.vue";
 import Calendario from "../components/Calendario.vue";
-import GestionRiesgos from '../components/GestionRiesgos.vue';
-import ListaRiesgos from '../components/ListaRiesgos.vue';
-import GuiaRiesgos from '../components/GuiaRiesgos.vue';
-import Landing from '../components/Landing.vue';
-import Configuraciones from '../components/Configuraciones.vue';
-
-
+import GestionRiesgos from "../components/GestionRiesgos.vue";
+import ListaRiesgos from "../components/ListaRiesgos.vue";
+import GuiaRiesgos from "../components/GuiaRiesgos.vue";
+import Landing from "../components/Landing.vue";
+import Configuraciones from "../components/Configuraciones.vue";
+import EstadosDebidaDIligenciaAdmin from "../components/EstadosDebidaDiligenciaAdmin.vue";
 
 Vue.use(VueRouter);
 
@@ -362,6 +361,11 @@ const routes = [
         component: GestionIngresosl,
       },
       {
+        path: "estados-DDAdmin",
+        name: "estados-DDAdmin",
+        component: EstadosDebidaDIligenciaAdmin,
+      },
+      {
         path: "gestion-ingresosm",
         name: "gestion-ingresosm",
         component: GestionIngresosM,
@@ -431,10 +435,8 @@ const routes = [
       //   name: "navbar/*",
       //   component: NavBar,
       // },
-     
     ],
   },
-
 ];
 
 const router = new VueRouter({
