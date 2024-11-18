@@ -1948,7 +1948,10 @@ export default {
         for (let i = 0; i < item.compromisos.length; i++) {
           const compromiso = item.compromisos[i];
           if (compromiso) {
-            this.compromisos[i] = compromiso;
+            this.compromisos[i] = {
+              ...compromiso,
+              observacion: compromiso.observacion ?? "",
+            };
           } else {
             this.compromisos[i] = {
               titulo: `compromiso${i + 1}`,
