@@ -8,12 +8,12 @@
       <form>
         <div class="mb-3">
           <label for="exampleInputEmail1" class="form-label">Usuario</label>
-          <input type="text" class="form-control" id="exampleInputEmail1" aria-describedby="prueba" v-model="email" />
+          <input type="text" class="form-control" id="exampleInputEmail1" autocomplete="username" aria-describedby="prueba" v-model="email" />
         </div>
         <div class="mb-3">
           <label for="exampleInputPassword1" class="form-label">Contraseña</label>
           <i class="fa fa-search"></i>
-          <input :type="!contraseña ? 'password' : 'text'" class="form-control" id="exampleInputPassword1"
+          <input :type="!contraseña ? 'password' : 'text'" class="form-control" autocomplete="current-password" id="exampleInputPassword1"
             v-model="password" />
           <svg xmlns="http://www.w3.org/2000/svg" class="input-icon password" viewBox="0 0 20 20" fill="currentColor"
             @click="contraseña = !contraseña">

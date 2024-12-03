@@ -1,4 +1,4 @@
-<template>
+<!-- <template>
     <div class="container">
         <h1>Calendario</h1>
         <FullCalendar :options="calendarOptions" ref="calendar" @dateClick="handleDateClick" />
@@ -86,4 +86,4 @@ export default defineComponent({
     padding-top: 5px;
     padding-bottom: 5px;
 }
-</style>
+</style> -->

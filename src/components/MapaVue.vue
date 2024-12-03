@@ -1,36 +1,36 @@
 <template>
   <div class="container">
     <!-- <button @click="obtenerGeolocalizacion">Obtener Geolocalización</button> -->
-    <div id="mapa" style="height: 400px;"></div>
+    <div id="mapa" style="height: 400px"></div>
   </div>
 </template>
 
 <script>
-import 'leaflet/dist/leaflet.css'; // Importa los estilos de Leaflet
-import L from 'leaflet'; // Importa Leaflet
+import "leaflet/dist/leaflet.css"; // Importa los estilos de Leaflet
+import L from "leaflet"; // Importa Leaflet
 
 export default {
   props: {
     showMap: {
       type: Boolean,
-      default: false
+      default: false,
     },
     latitud: {
       type: String,
-      default: ''
+      default: "",
     },
     longitud: {
       type: String,
-      default: ''
+      default: "",
     },
     label: {
       type: String,
-      default: 'Ubicacion actual'
+      default: "Ubicacion actual",
     },
     marcador: {
       type: String,
-      default: ''
-    }
+      default: "",
+    },
   },
   data() {
     return {
@@ -43,8 +43,8 @@ export default {
       this.geolocalizacion = {
         latitud: this.latitud,
         longitud: this.longitud,
-      }
-      this.mostrarMapa()
+      };
+      this.mostrarMapa();
     },
     // geolocalizacion: 'mostrarMapa'
   },
@@ -52,20 +52,20 @@ export default {
     obtenerGeolocalizacion() {
       if ("geolocation" in navigator) {
         navigator.geolocation.getCurrentPosition(
-          position => {
+          (position) => {
             this.geolocalizacion = {
               latitud: position.coords.latitude,
-              longitud: position.coords.longitude
+              longitud: position.coords.longitude,
             };
-            this.$emit('coordenadas', this.geolocalizacion)
+            this.$emit("coordenadas", this.geolocalizacion);
             this.mostrarMapa();
           },
-          error => {
-            console.error('No se pudo obtener la geolocalización:', error);
+          (error) => {
+            console.error("No se pudo obtener la geolocalización:", error);
           }
         );
       } else {
-        console.error('Geolocalización no compatible con este navegador.');
+        console.error("Geolocalización no compatible con este navegador.");
       }
     },
     mostrarMapa() {
@@ -74,8 +74,10 @@ export default {
 
       if (!this.map) {
         // Crea el mapa Leaflet si aún no existe
-        this.map = L.map('mapa').setView([latitud, longitud], 15);
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(this.map);
+        this.map = L.map("mapa").setView([latitud, longitud], 15);
+        L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png").addTo(
+          this.map
+        );
       } else {
         // Si el mapa ya existe, simplemente actualiza la vista
         this.map.setView([latitud, longitud], 15);
@@ -89,15 +91,16 @@ export default {
       // });
       var customIcon = L.icon({
         iconUrl: this.marcador, // Imagen personalizada del marcador
-        iconSize: [150, ], // Tamaño del icono
+        iconSize: [150], // Tamaño del icono
         iconAnchor: [70, 80], // Punto de anclaje del icono (la parte inferior del icono)
-        popupAnchor: [0, -0] // Punto de anclaje del popup (la parte superior del icono)
+        popupAnchor: [0, -0], // Punto de anclaje del popup (la parte superior del icono)
       });
 
-      L.marker([latitud, longitud], { icon: customIcon }).addTo(this.map)
+      L.marker([latitud, longitud], { icon: customIcon })
+        .addTo(this.map)
         // .bindPopup(this.label)
         .openPopup();
-    }
+    },
   },
 };
 </script>

@@ -44,7 +44,7 @@ export default {
             search: '',
             datos: [],
             endpoint: 'historicoempleado',
-            campos: '',
+            campos: {},
             URL_API: process.env.VUE_APP_URL_API,
             massiveUpdate: false,
             tabla: [

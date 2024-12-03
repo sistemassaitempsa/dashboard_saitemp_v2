@@ -3,62 +3,86 @@
     <div class="container contenedor">
       <div class="signature">
         <div class="col-xs-12 col-md-12">
-          <VueSignaturePad id="signature" height="200px" ref="signaturePad" :options="options" />
+          <VueSignaturePad
+            id="signature"
+            height="200px"
+            ref="signaturePad"
+            :options="options"
+          />
         </div>
         <div class="buttons">
-          <button type="button" @click="back" class="btn btn-primary btn-sm">Deshacer</button>
-          <button type="button" @click="clear" class="btn btn-primary btn-sm btn-warning">Limpiar</button>
-          <button type="button" @click="save" class="btn btn-primary btn-sm btn-success">Firmar</button>
+          <button type="button" @click="back" class="btn btn-primary btn-sm">
+            Deshacer
+          </button>
+          <button
+            type="button"
+            @click="clear"
+            class="btn btn-primary btn-sm btn-warning"
+          >
+            Limpiar
+          </button>
+          <button
+            type="button"
+            @click="save"
+            class="btn btn-primary btn-sm btn-success"
+          >
+            Firmar
+          </button>
         </div>
       </div>
     </div>
   </div>
 </template>
-  
+
 <script>
 export default {
   props: {
-    signed: Boolean
+    signed: {
+      type: Boolean, // Define el tipo como Boolean
+      required: false, // Opcional, no es obligatorio
+      default: false, // Valor predeterminado
+    },
   },
   data() {
     return {
-      textArea: '',
+      textArea: "",
       options: {
         penColor: "#000000",
         velocityFilterWeight: 0,
       },
-    }
+    };
   },
-
   watch: {
-    signed: function () { // Valida que se haya llenado un campo de firma para limpiar el pad de firmas
+    signed: function () {
+      // Valida que se haya llenado un campo de firma para limpiar el pad de firmas
       if (this.signed) {
-        this.clear()
+        this.clear();
       }
-    }
+    },
   },
-  mounted() {
-  },
+  mounted() {},
   methods: {
-    back() { // Borra la ultima linea escrita en el pad
+    back() {
+      // Borra la ultima linea escrita en el pad
       this.$refs.signaturePad.undoSignature();
     },
-    clear() { // Limpia el pad de firmas
+    clear() {
+      // Limpia el pad de firmas
       this.$refs.signaturePad.clearSignature();
     },
-    save() { // convierte la firma en imagen codificada en base64
+    save() {
+      // convierte la firma en imagen codificada en base64
       const { isEmpty, data } = this.$refs.signaturePad.saveSignature();
       if (!isEmpty) {
         this.textArea = data;
         // this.prueba()
-        this.$emit('firma', this.textArea)
+        this.$emit("firma", this.textArea);
       }
     },
-
   },
 };
 </script>
-  
+
 <style>
 #signature {
   border: double 1px transparent;
@@ -82,4 +106,3 @@ export default {
   margin-top: 30px;
 }
 </style>
-  

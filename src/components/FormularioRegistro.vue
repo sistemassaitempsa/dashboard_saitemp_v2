@@ -1,37 +1,24 @@
 <template>
-   <div>
-     <DdFormularioCliente/>
-   </div>
+  <div>
+    <DdFormularioCliente />
+  </div>
 </template>
 <script>
-import DdFormularioCliente from './DdFormularioCliente.vue'
+import DdFormularioCliente from "./DdFormularioCliente.vue";
 export default {
-   name: '',
-   components: {
-     DdFormularioCliente
-   },
-   mixins: [],
-   props: {
-     
-   },
-   data() {
-     return {
-       
-     }
-   },
-   computed: {
-     
-   },
-   watch: {
-     
-   },
-   mounted() {
-     
-   },
-   methods: {
-     
-   }
+  name: "",
+  components: {
+    DdFormularioCliente,
+  },
+  mixins: [],
+  props: {},
+  data() {
+    return {};
+  },
+  computed: {},
+  watch: {},
+  mounted() {},
+  methods: {},
 };
 </script>
-<style lang='' scoped>
-</style>
+<style lang="" scoped></style>

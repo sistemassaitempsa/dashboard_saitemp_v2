@@ -8,10 +8,14 @@
 </template>
 <script>
 import axios from 'axios'
+import { Token } from '../Mixins/Token'
+// import pdfMake from "pdfmake/build/pdfmake";
+// import pdfFonts from "pdfmake/build/vfs_fonts";
+// pdfMake.vfs = pdfFonts.pdfMake.vfs;
 import pdfMake from "pdfmake/build/pdfmake";
 import pdfFonts from "pdfmake/build/vfs_fonts";
-import { Token } from '../Mixins/Token'
-pdfMake.vfs = pdfFonts.pdfMake.vfs;
+pdfMake.addVirtualFileSystem(pdfFonts);
+
 export default {
     name: '',
     components: {

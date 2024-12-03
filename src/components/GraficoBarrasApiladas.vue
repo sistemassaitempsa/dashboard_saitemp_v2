@@ -15,36 +15,43 @@ import {
   BarElement,
   CategoryScale,
   LinearScale,
-} from 'chart.js';
-import { Bar } from 'vue-chartjs';
+} from "chart.js";
+import { Bar } from "vue-chartjs";
 
-ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
+ChartJS.register(
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  Title,
+  Tooltip,
+  Legend
+);
 
 export default {
-  name: 'StackedBarChart',
+  name: "StackedBarChart",
   components: {
     Bar,
   },
   props: {
     labels_x: {
-      default: () => [],
-      type: Array,
+      default: () => [], // Arreglo vacío por defecto
+      type: Array, // Define que debe ser un arreglo
     },
     datosS: {
-      default: '',
-      type: String,
+      default: "", // Cadena vacía por defecto
+      type: String, // Define que debe ser una cadena
     },
     datosA: {
-      default: () => [],
-      type: Array,
+      default: () => [], // Arreglo vacío por defecto
+      type: Array, // Define que debe ser un arreglo
     },
     items: {
-      default: () => [],
-      type: Array,
+      default: () => [], // Arreglo vacío por defecto
+      type: Array, // Define que debe ser un arreglo
     },
     index: {
-      type: Number,
-      default: 0,
+      type: Number, // Define que debe ser un número
+      default: 0, // Valor predeterminado: 0
     },
   },
   data() {
@@ -65,7 +72,7 @@ export default {
             beginAtZero: true,
             // max: 2000,
             ticks: {
-              stepSize: 500
+              stepSize: 500,
             },
           },
         },
@@ -79,7 +86,7 @@ export default {
       this.loading = true;
     },
     loading(newVal) {
-      console.log(newVal)
+      console.log(newVal);
       this.graficosCargados();
     },
   },
@@ -102,40 +109,37 @@ export default {
       //     borderWidth: 1,
       //   };
       // });
-      let self = this
-      this.data.labels = []
-      this.data.labels = this.labels_x
-      var color = ''
-      self.data.datasets = []
+      let self = this;
+      this.data.labels = [];
+      this.data.labels = this.labels_x;
+      var color = "";
+      self.data.datasets = [];
       datos.forEach(function (item) {
-        color = self.getRandomColor()
-        self.data.datasets.push(
-          {
-            label: item.label,
-            data: item.data,
-            backgroundColor: [color],
-            borderColor: [color],
-            borderWidth: 1
-
-          }
-        )
-      })
+        color = self.getRandomColor();
+        self.data.datasets.push({
+          label: item.label,
+          data: item.data,
+          backgroundColor: [color],
+          borderColor: [color],
+          borderWidth: 1,
+        });
+      });
     },
     getRandomColor() {
       const allowedColors = [
-        'rgba(255, 99, 132, 0.8)',
-        'rgba(255, 159, 64, 0.8)',
-        'rgba(255, 205, 86, 0.8)',
-        'rgba(75, 192, 192, 0.8)',
-        'rgba(54, 162, 235, 0.8)',
-        'rgba(153, 102, 255, 0.8)',
-        'rgba(186, 157, 244, 0.8)',
-        'rgba(201, 153, 175, 0.8)',
+        "rgba(255, 99, 132, 0.8)",
+        "rgba(255, 159, 64, 0.8)",
+        "rgba(255, 205, 86, 0.8)",
+        "rgba(75, 192, 192, 0.8)",
+        "rgba(54, 162, 235, 0.8)",
+        "rgba(153, 102, 255, 0.8)",
+        "rgba(186, 157, 244, 0.8)",
+        "rgba(201, 153, 175, 0.8)",
       ];
       return allowedColors[Math.floor(Math.random() * allowedColors.length)];
     },
     graficosCargados() {
-      this.$emit('graficoCargado', this.loading, this.index);
+      this.$emit("graficoCargado", this.loading, this.index);
     },
     // generateRandomData() {
     //   const months = [

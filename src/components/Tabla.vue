@@ -1187,7 +1187,6 @@
 </template>
 
 <script>
-import Vue from "vue";
 import axios from "axios";
 import Modal from "./Modal.vue";
 import ConsultaContrato from "./ConsultaContrato.vue";
@@ -1208,35 +1207,81 @@ export default {
   },
   mixins: [Token, Alerts, Permisos, Scroll],
   props: {
-    tabla: [],
-    datos: [],
-    endpoint: {},
-    endpointexport: {},
-    heigth_container: {},
-    massiveUpdate: {},
-    campos: {},
-    listas: [],
+    tabla: {
+      type: Array,
+      required: true, // Cambia a true si es obligatorio
+      default: () => [], // Arreglo vacío como valor predeterminado
+    },
+    datos: {
+      type: Object,
+      required: false, // Cambia a true si es obligatorio
+      default: () => {}, // Arreglo vacío como valor predeterminado
+    },
+    endpoint: {
+      type: String,
+      required: false,
+      default: "", // Cadena vacía como valor predeterminado
+    },
+    endpointexport: {
+      type: String,
+      required: false,
+      default: "", // Cadena vacía como valor predeterminado
+    },
+    heigth_container: {
+      type: [String, Number], // Permite cadena o número
+      required: false,
+      default: "auto", // Valor predeterminado
+    },
+    massiveUpdate: {
+      type: Boolean, // Tipo booleano
+      required: false,
+      default: false, // Valor predeterminado
+    },
+    campos: {
+      type: {}, // Define que debe ser un arreglo
+      required: false,
+      default: () => ({}), // Valor predeterminado como arreglo vacío
+    },
+    listas: {
+      type: Array, // Define que debe ser un arreglo
+      required: false,
+      default: () => [], // Valor predeterminado como arreglo vacío
+    },
     userlogued: {
-      default: "",
+      type: [String, Object], // Puede ser cadena o un objeto
+      required: false,
+      default: "", // Valor predeterminado vacío
     },
     search: {
-      default: "",
-      type: String,
+      type: String, // Tipo cadena
+      required: false,
+      default: "", // Cadena vacía como valor predeterminado
     },
     search2: {
-      default: "",
-      type: String,
+      type: String, // Tipo cadena
+      required: false,
+      default: "", // Cadena vacía como valor predeterminado
     },
     editar: {
-      default: false,
-      type: Boolean,
+      type: Boolean, // Tipo booleano
+      required: false,
+      default: false, // Valor predeterminado
     },
     eliminar: {
-      default: false,
-      type: Boolean,
+      type: Boolean, // Tipo booleano
+      required: false,
+      default: false, // Valor predeterminado
     },
-    estados_firma: [],
-    estados_ingreso: [],
+    estados_firma: {
+      type: Array, // Define que debe ser un arreglo
+      required: false,
+      default: () => [], // Valor predeterminado como arreglo vacío
+    },
+    estados_ingreso: {
+      type: Array, // Define que debe ser un arreglo
+      required: false, // Cambia a true si es obligatorio
+      default: () => [], // Valor predeterminado como arreglo vacío
+    },
   },
   data() {
     return {
@@ -1584,11 +1629,11 @@ export default {
             this.operadores[i] === "" ||
             this.valores_comparar[i] === ""
           ) {
-            Vue.set(this.campo_, i, undefined);
-            Vue.set(this.operadores, i, undefined);
-            Vue.set(this.valores_comparar, i, undefined);
-            Vue.set(this.valores_comparar2, i, undefined);
-            Vue.set(this.indice_campos, i, undefined);
+            this.campo_, i, undefined;
+            this.operadores, i, undefined;
+            this.valores_comparar, i, undefined;
+            this.valores_comparar2, i, undefined;
+            this.indice_campos, i, undefined;
           }
         }
 

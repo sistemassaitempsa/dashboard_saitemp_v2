@@ -5,7 +5,7 @@
             <div class="card col-xs-12 col-md-6">
                 <h5>{{ accion }}</h5>
                 <form>
-                     <!-- Select con filtro personalizado -->
+                     Select con filtro personalizado 
                      <div class="row" id="contenedor-select"> 
                         <div class="mb-3">
                             <label for="exampleFormControlInput1" class="form-label">Departamento</label>
@@ -22,8 +22,8 @@
                             </div>
                         </div>
                     </div>
-                     <!-- Fin select con filtro personalizado -->
-                     <!-- Select con filtro personalizado -->
+                      Fin select con filtro personalizado 
+                      Select con filtro personalizado 
                      <div class="row" id="contenedor-select"> 
                         <div class="mb-3">
                             <label for="exampleFormControlInput1" class="form-label">Municipio</label>
@@ -40,7 +40,7 @@
                             </div>
                         </div>
                     </div>
-                     <!-- Fin select con filtro personalizado -->
+                     Fin select con filtro personalizado 
                     <div class="mb-3" v-if="municipiosSubregion.length > 0">
                         <div class="mb-3" style="padding:10px;border: solid #D5DBDB 0.5px;border-radius:10px">
                             <button type="button" style="margin:10px 10px 5px 10px" id="btnMunicipio" class="btn btn-sm"

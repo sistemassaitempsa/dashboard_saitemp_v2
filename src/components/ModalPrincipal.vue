@@ -18,7 +18,11 @@ export default {
   components: {},
   mixins: [Token, Permisos, Alerts],
   props: {
-    modal: Boolean,
+    modal: {
+      type: Boolean, // Define que debe ser un booleano
+      required: false, // No es obligatorio
+      default: false, // Valor predeterminado como falso
+    },
   },
   data() {
     return {
@@ -51,11 +55,10 @@ export default {
         if (message.actualiza_pagina == 1) {
           window.location.reload();
         }
-      } 
-      else if (message.visible == 1) {
+      } else if (message.visible == 1) {
         this.showModal(message);
-      } 
-       if (message.alerta == 1) {
+      }
+      if (message.alerta == 1) {
         this.showAlerta(message);
       }
     },

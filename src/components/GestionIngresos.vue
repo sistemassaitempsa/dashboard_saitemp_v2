@@ -1204,10 +1204,15 @@ export default {
   },
   mixins: [Token, Alerts, Scroll, Permisos],
   props: {
-    menu: [],
+    menu: {
+      type: Array, // Define el tipo como Array
+      required: false, // Cambia a true si siempre debe ser pasada
+      default: () => [], // Usa una función para retornar un arreglo vacío
+    },
     id_registro: {
-      type: Number,
-      default: 0,
+      type: Number, // Define el tipo como Number
+      required: false, // No es obligatorio
+      default: 0, // Valor por defecto
     },
   },
   data() {
@@ -1248,7 +1253,7 @@ export default {
       laboratorio: "",
       fecha_examen: "",
       examenes: "",
-      afirmacionNegacion: "",
+      afirmacionNegacion: [],
       mensaje_error: "¡Este campo debe ser diligenciado!",
       deshabilitar_boton: false,
       registroIngreso: [],
@@ -1272,10 +1277,10 @@ export default {
       informe_seleccion: "",
       // cambio_fecha: '',
       radicado: "",
-      estados_ingreso: "",
+      estados_ingreso: [],
       estado_ingreso_id: "",
       consulta_estado_ingreso: "",
-      lista_encargados: "",
+      lista_encargados: [],
       consulta_encargado: "",
       encargado_id: "",
       correo: "",
@@ -1310,7 +1315,7 @@ export default {
       seguimiento_estados: [],
       consulta_subsidio: "",
       consulta_vacante: "",
-      afirmacionNegacion_bonos: "",
+      afirmacionNegacion_bonos: [],
       afirmacionNegacion_vacante: "",
       tiposIdentificacion: [],
       consulta_tipo_identificacion: "",

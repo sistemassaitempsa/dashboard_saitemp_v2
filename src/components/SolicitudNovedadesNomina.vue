@@ -263,9 +263,21 @@ export default {
 
   mixins: [Token, Alerts],
   props: {
-    menu: [],
-    reenvio_correo: {},
-    adjuntos_candidato_string: [],
+    menu: {
+      type: Array, // Define que debe ser un arreglo
+      required: false, // No es obligatorio
+      default: () => [], // Valor predeterminado: arreglo vacío
+    },
+    reenvio_correo: {
+      type: Object, // Define que debe ser un objeto
+      required: false, // No es obligatorio
+      default: () => ({}), // Valor predeterminado: objeto vacío
+    },
+    adjuntos_candidato_string: {
+      type: Array, // Define que debe ser un arreglo
+      required: false, // No es obligatorio
+      default: () => [], // Valor predeterminado: arreglo vacío
+    },
   },
   data() {
     return {

@@ -2,19 +2,33 @@
   <div id="container2">
     <div class="container">
       <h2>Administrar Usuarios Directorio Activo</h2>
-      <div class="row" id="container" style="float: left; clear: both; color: #d06519">
+      <div
+        class="row"
+        id="container"
+        style="float: left; clear: both; color: #d06519"
+      >
         <div class="col-xs-12 col-md-12">
           <h5>
-            Mostrando {{ Object.values(this.users).length }} de {{ totalRegistros }} registros -
-            página {{ paginaActual }}
+            Mostrando {{ Object.values(this.users).length }} de
+            {{ totalRegistros }} registros - página {{ paginaActual }}
           </h5>
         </div>
       </div>
-      <div v-if="users.length > 0 || listaCantidad.length > 0" class="row" style="clear: both; margin-bottom: 20px">
+      <div
+        v-if="users.length > 0 || listaCantidad.length > 0"
+        class="row"
+        style="clear: both; margin-bottom: 20px"
+      >
         <div class="col-xs-3 col-md-4">
-          <label for="exampleFormControlInput1" class="form-label">Cantidad de registros a listar</label>
-          <select class="form-select form-select-sm" @change="getUsersDA()" v-model="cantidad"
-            aria-label="Default select example">
+          <label for="exampleFormControlInput1" class="form-label"
+            >Cantidad de registros a listar</label
+          >
+          <select
+            class="form-select form-select-sm"
+            @change="getUsersDA()"
+            v-model="cantidad"
+            aria-label="Default select example"
+          >
             <option>20</option>
             <option v-if="result.data.total > 50">50</option>
             <option v-if="result.data.total > 100">100</option>
@@ -23,41 +37,80 @@
           </select>
         </div>
       </div>
-      <div class="row" style="width:80%">
+      <div class="row" style="width: 80%">
         <div class="col-xs-4 col-md-6">
-          <label endpointEmpleadosfor="exampleInputEmail1" class="form-label">Buscar usuario</label>
-          <input type="text" class="form-control" autocomplete="off" id="exampleInputEmail1"
-            placeholder="Escriba nombre o usuario" aria-describedby="emailHelp" v-model="usuario" />
+          <label endpointEmpleadosfor="exampleInputEmail1" class="form-label"
+            >Buscar usuario</label
+          >
+          <input
+            type="text"
+            class="form-control"
+            autocomplete="off"
+            id="exampleInputEmail1"
+            placeholder="Escriba nombre o usuario"
+            aria-describedby="emailHelp"
+            v-model="usuario"
+          />
         </div>
         <div class="col-xs-4 col-md-3">
-          <button v-if="usuario != ''" type="button" style="margin-top: 35px;" @click="getUser(usuario), check = []"
-            class="btn btn-success btn-sm">
+          <button
+            v-if="usuario != ''"
+            type="button"
+            style="margin-top: 35px"
+            @click="getUser(usuario), (check = [])"
+            class="btn btn-success btn-sm"
+          >
             Buscar
           </button>
         </div>
         <div class="col-xs-4 col-md-3">
-          <button v-if="usuario != ''" type="button" style="margin-top: 35px;" @click="getUsersDA(), usuario = ''"
-            class="btn btn-success btn-sm">
+          <button
+            v-if="usuario != ''"
+            type="button"
+            style="margin-top: 35px"
+            @click="getUsersDA(), (usuario = '')"
+            class="btn btn-success btn-sm"
+          >
             Borrar búsqueda
           </button>
         </div>
       </div>
-      <div class="row" style="clear: both; text-align: left; width:50%">
+      <div class="row" style="clear: both; text-align: left; width: 50%">
         <div class="col-xs-4 col-md-4">
-          <button type="button" style="margin-top: 31px;" @click="selectAll((select_all = !select_all))"
-            class="btn btn-success btn-sm">
+          <button
+            type="button"
+            style="margin-top: 31px"
+            @click="selectAll((select_all = !select_all))"
+            class="btn btn-success btn-sm"
+          >
             Seleccionar todo
           </button>
         </div>
         <div v-if="check.length > 0" class="col-xs-4 col-md-4">
-          <label for="exampleFormControlInput1" class="form-label">Asignar rol:</label>
-          <select class="form-select form-select-sm" @change="rolId(rol_select)" v-model="rol_select"
-            aria-label="Default select example">
-            <option v-for="item, index in roles" :key="index">{{ item.nombre }}</option>
+          <label for="exampleFormControlInput1" class="form-label"
+            >Asignar rol:</label
+          >
+          <select
+            class="form-select form-select-sm"
+            @change="rolId(rol_select)"
+            v-model="rol_select"
+            aria-label="Default select example"
+          >
+            <option v-for="(item, index) in roles" :key="index">
+              {{ item.nombre }}
+            </option>
           </select>
         </div>
-        <div v-if="check.length > 0 && rol_select != ''" class="col-xs-4 col-md-4">
-          <button type="button" style="margin-top: 31px" @click="save()" class="btn btn-success btn-sm">
+        <div
+          v-if="check.length > 0 && rol_select != ''"
+          class="col-xs-4 col-md-4"
+        >
+          <button
+            type="button"
+            style="margin-top: 31px"
+            @click="save()"
+            class="btn btn-success btn-sm"
+          >
             Guardar usuarios
           </button>
         </div>
@@ -72,7 +125,9 @@
         <h5>Cargando por favor espere un momento.</h5>
       </div>
       <div v-else class="table-responsive">
-        <table class="table align-middle table-bordered table-striped table-hover">
+        <table
+          class="table align-middle table-bordered table-striped table-hover"
+        >
           <thead>
             <tr>
               <th scope="col">#</th>
@@ -87,16 +142,38 @@
               <th scope="row">{{ index }}</th>
               <td>
                 <div class="form-check form-check-inline">
-                  <input class="form-check-input" v-model="check" type="checkbox" :value="item" />
+                  <input
+                    class="form-check-input"
+                    v-model="check"
+                    type="checkbox"
+                    :value="item"
+                  />
                 </div>
               </td>
               <td>{{ item.nombre }}</td>
               <td>{{ item.usuario }}</td>
               <td>
-                <button v-if="item.rol != 'S. Administrador'" type="button"
-                  :class="item.registrado == true ? 'btn btn-warning btn-sm' : 'btn btn-success btn-sm'">
-                  <i :class="item.registrado == false ? 'bi bi-person-plus' : 'bi bi-person'"></i> {{ item.registrado ==
-                    false ? 'Usuario sin registrar' : 'Usuario registrado' }}
+                <button
+                  v-if="item.rol != 'S. Administrador'"
+                  type="button"
+                  :class="
+                    item.registrado == true
+                      ? 'btn btn-warning btn-sm'
+                      : 'btn btn-success btn-sm'
+                  "
+                >
+                  <i
+                    :class="
+                      item.registrado == false
+                        ? 'bi bi-person-plus'
+                        : 'bi bi-person'
+                    "
+                  ></i>
+                  {{
+                    item.registrado == false
+                      ? "Usuario sin registrar"
+                      : "Usuario registrado"
+                  }}
                 </button>
                 <!-- <button v-if="item.rol == 'S. Administrador' && roluserlogued == 'S. Administrador'" type="button"
                   :class="item.registrado == true ? 'btn btn-warning btn-sm' : 'btn btn-success btn-sm'">
@@ -108,23 +185,32 @@
           </tbody>
         </table>
       </div>
-      <PiePagina @response="response" :actualiced="actualiced" :cantidad="cantidad" :result="result" />
+      <PiePagina
+        @response="response"
+        :actualiced="actualiced"
+        :cantidad="cantidad"
+        :result="result"
+      />
     </div>
   </div>
 </template>
 <script>
-import axios from 'axios';
+import axios from "axios";
 import PiePagina from "./PiePagina.vue";
-import { Alerts } from '../Mixins/Alerts.js';
-import { Token } from '../Mixins/Token.js';
+import { Alerts } from "../Mixins/Alerts.js";
+import { Token } from "../Mixins/Token.js";
 export default {
   components: {
-    PiePagina
+    PiePagina,
   },
   props: {
-    menu: []
+    menu: {
+      type: Array,
+      required: false,
+      default: () => [],
+    },
   },
-  mixins: [Alerts,Token],
+  mixins: [Alerts, Token],
   data() {
     return {
       URL_API: process.env.VUE_APP_URL_API,
@@ -135,21 +221,21 @@ export default {
       check: [],
       select_all: false,
       roles: [],
-      rol_select: '',
-      rolId_: '',
-      totalRegistros: '',
-      paginaActual: '',
-      listaCantidad: '',
-      usuario: '',
-      ruta: '',
-      mensajeBoton: '',
+      rol_select: "",
+      rolId_: "",
+      totalRegistros: "",
+      paginaActual: "",
+      listaCantidad: "",
+      usuario: "",
+      ruta: "",
+      mensajeBoton: "",
       usersSystem: [],
       exist: false,
       spinner: true,
-    }
+    };
   },
   mounted() {
-    this.ruta = this.$route.path.substring(1)
+    this.ruta = this.$route.path.substring(1);
   },
   // watch: {
   //   ruta() {
@@ -157,9 +243,9 @@ export default {
   //   }
   // },
   created() {
-    this.getUsers()
-    this.getUsersDA()
-    this.getRoles()
+    this.getUsers();
+    this.getUsersDA();
+    this.getRoles();
   },
   methods: {
     // autorizado(menu) {
@@ -171,18 +257,18 @@ export default {
     //   }
     // },
     boton(item) {
-      let self = this
-      self.spinner = false
-      self.totalRegistros = item.data.total
-      self.paginaActual = item.data.current_page
+      let self = this;
+      self.spinner = false;
+      self.totalRegistros = item.data.total;
+      self.paginaActual = item.data.current_page;
       Object.values(item.data.data).forEach(function (item) {
-        item.registrado = false
+        item.registrado = false;
         self.usersSystem.forEach(function (item2) {
           if (item.usuario == item2.email) {
-            item.registrado = true
+            item.registrado = true;
           }
-        })
-      })
+        });
+      });
       this.users = Object.values(item.data.data);
       self.result = item;
     },
@@ -192,7 +278,7 @@ export default {
       axios
         .get(self.URL_API + "api/v1/ldapusers/" + self.cantidad, config)
         .then(function (result) {
-          self.boton(result)
+          self.boton(result);
         });
     },
     getUsers() {
@@ -201,32 +287,36 @@ export default {
       axios
         .get(self.URL_API + "api/v1/userslist", config)
         .then(function (result) {
-          self.usersSystem = result.data
+          self.usersSystem = result.data;
         });
     },
     getRoles() {
       let self = this;
       let config = this.configHeader();
-      axios.get(self.URL_API + "api/v1/roleslista", config).then(function (result) {
-        self.roles = result.data;
-      });
+      axios
+        .get(self.URL_API + "api/v1/roleslista", config)
+        .then(function (result) {
+          self.roles = result.data;
+        });
     },
     response(response) {
-      this.users = []
-      this.boton(response)
-      this.checks = []
+      this.users = [];
+      this.boton(response);
+      this.checks = [];
     },
     save() {
       let self = this;
       let config = this.configHeader();
-      let rol = { 'rol': this.rolId_ }
-      this.check.splice(0, 0, rol)
-      axios.post(self.URL_API + "api/v1/ldapusers", this.check, config).then(function (result) {
-        self.showAlert(result.data.message, result.data.status)
-        self.check = []
-        self.rolId_ = ''
-        self.rol_select = ''
-      });
+      let rol = { rol: this.rolId_ };
+      this.check.splice(0, 0, rol);
+      axios
+        .post(self.URL_API + "api/v1/ldapusers", this.check, config)
+        .then(function (result) {
+          self.showAlert(result.data.message, result.data.status);
+          self.check = [];
+          self.rolId_ = "";
+          self.rol_select = "";
+        });
     },
     selectAll() {
       let self = this;
@@ -239,8 +329,7 @@ export default {
         self.users.forEach(function (item) {
           self.check.push(item);
         });
-      }
-      else {
+      } else {
         document
           .querySelectorAll(".form-check input[type=checkbox]")
           .forEach(function (checkElement) {
@@ -249,7 +338,7 @@ export default {
         self.users.forEach(function (item) {
           self.check.pop(item);
         });
-        this.check = []
+        this.check = [];
       }
     },
     rolId(rol) {
@@ -268,18 +357,20 @@ export default {
     getUser(user) {
       let self = this;
       let config = this.configHeader();
-      axios.get(self.URL_API + "api/v1/ldapuserfilter/" + user, config).then(function (result) {
-        // self.users = result.data.data;
-        // self.result = result;
-        // self.totalRegistros = result.data.total
-        // self.paginaActual = result.data.current_page
-        self.boton(result)
-      });
+      axios
+        .get(self.URL_API + "api/v1/ldapuserfilter/" + user, config)
+        .then(function (result) {
+          // self.users = result.data.data;
+          // self.result = result;
+          // self.totalRegistros = result.data.total
+          // self.paginaActual = result.data.current_page
+          self.boton(result);
+        });
     },
-  }
+  },
 };
 </script>
-<style  scoped>
+<style scoped>
 .container {
   animation: fadeIn;
   animation-duration: 2s;

@@ -1385,7 +1385,11 @@ export default {
   },
   mixins: [Token, Alerts, Permisos, Geolocal],
   props: {
-    menu: [],
+    menu: {
+      type: Array,
+      required: false,
+      default: () => [],
+    },
   },
   data() {
     return {

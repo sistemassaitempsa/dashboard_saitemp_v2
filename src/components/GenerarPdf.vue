@@ -1,7 +1,8 @@
 <template>
   <div>
-    <button type="button" @click="exportPdfMake" class="btn btn-primary btn-sm"><i class="bi bi-filetype-pdf"></i>
-      Descargar pdf</button>
+    <button type="button" @click="exportPdfMake" class="btn btn-primary btn-sm">
+      <i class="bi bi-filetype-pdf"></i> Descargar pdf
+    </button>
   </div>
 </template>
 <script>
@@ -11,21 +12,39 @@ pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
 export default {
   props: {
-    formulario: {},
-    checks: [],
-    pasos_procedimiento: [],
-    empleados: [],
-    items:[]
+    formulario: {
+      type: Object, // Define que debe ser un objeto
+      required: false, // No es obligatorio
+      default: () => ({}), // Valor predeterminado: objeto vacío
+    },
+    checks: {
+      type: Array, // Define que debe ser un arreglo
+      required: false, // No es obligatorio
+      default: () => [], // Valor predeterminado: arreglo vacío
+    },
+    pasos_procedimiento: {
+      type: Array, // Define que debe ser un arreglo
+      required: false, // No es obligatorio
+      default: () => [], // Valor predeterminado: arreglo vacío
+    },
+    empleados: {
+      type: Array, // Define que debe ser un arreglo
+      required: false, // No es obligatorio
+      default: () => [], // Valor predeterminado: arreglo vacío
+    },
+    items: {
+      type: Array, // Define que debe ser un arreglo
+      required: false, // No es obligatorio
+      default: () => [], // Valor predeterminado: arreglo vacío
+    },
   },
   data() {
     return {
       variable:
         "SISTEMA INTEGRADO DE GESTIÓN PLANIFICACIÓN, EJECUCIÓN, SEGUIMIENTO Y CONTROL DE LAS ACTIVIDADES EN RIESGO ELÉCTRICO",
-      docDefinition: []
+      docDefinition: [],
     };
   },
-
-
 
   methods: {
     // agregarTareaAsignada(){
@@ -145,11 +164,70 @@ export default {
     //   })
     // },
     agregarGeneralidades() {
-      let self = this
-      let posicion = 4
-      if(this.formulario.estado == 'Cancelado'){
-      self.docDefinition.content[0].table.body.splice(posicion, 0,
-        [
+      let self = this;
+      let posicion = 4;
+      if (this.formulario.estado == "Cancelado") {
+        self.docDefinition.content[0].table.body.splice(
+          posicion,
+          0,
+          [
+            {
+              text: [
+                "Fecha de ejecución: ",
+                {
+                  text: this.formulario.fecha_ejecucion,
+                  bold: false,
+                },
+              ],
+
+              fontSize: 9,
+              bold: true,
+            },
+            {
+              text: [
+                "Estado de la orden de trabajo: ",
+                {
+                  text: this.formulario.estado,
+                  bold: false,
+                },
+              ],
+              fontSize: 9,
+              bold: true,
+            },
+            {
+              text: [
+                "¿Quién autoriza cancelación?: ",
+                {
+                  text: this.formulario.autoriza_cancelacion,
+                  bold: false,
+                },
+              ],
+              fontSize: 9,
+              colSpan: 2,
+              bold: true,
+            },
+            {},
+          ],
+          [
+            {
+              text: [
+                "Observaciones de cancelación: ",
+                {
+                  text: this.formulario.observacion_cancelacion,
+                  bold: false,
+                },
+              ],
+              colSpan: 4,
+              fontSize: 9,
+              bold: true,
+            },
+            {},
+            {},
+            {},
+          ]
+        );
+      } else {
+        self.docDefinition.content[0].table.body.splice(posicion, 0, [
           {
             text: [
               "Fecha de ejecución: ",
@@ -160,24 +238,15 @@ export default {
             ],
 
             fontSize: 9,
+            colSpan: 2,
             bold: true,
           },
+          {},
           {
             text: [
               "Estado de la orden de trabajo: ",
               {
                 text: this.formulario.estado,
-                bold: false,
-              },
-            ],
-            fontSize: 9,
-            bold: true,
-          },
-          {
-            text: [
-              "¿Quién autoriza cancelación?: ",
-              {
-                text: this.formulario.autoriza_cancelacion,
                 bold: false,
               },
             ],
@@ -185,191 +254,142 @@ export default {
             colSpan: 2,
             bold: true,
           },
-          {
-          },
-        ],
-        [
-          {
-            text: [
-              "Observaciones de cancelación: ",
-              {
-                text: this.formulario.observacion_cancelacion,
-                bold: false,
-              },
-            ],
-            colSpan: 4,
-            fontSize: 9,
-            bold: true,
-          },
           {},
-          {},
-          {},
-        ],
-      )
-        }
-        else{
-          self.docDefinition.content[0].table.body.splice(posicion, 0,
-          [
-          {
-            text: [
-              "Fecha de ejecución: ",
-              {
-                text: this.formulario.fecha_ejecucion,
-                bold: false,
-              },
-            ],
-
-            fontSize: 9,
-            colSpan:2,
-            bold: true,
-          },
-          {
-          },
-          {
-            text: [
-              "Estado de la orden de trabajo: ",
-              {
-                text: this.formulario.estado,
-                bold: false,
-              },
-            ],
-            fontSize: 9,
-            colSpan:2,
-            bold: true,
-          },
-          {
-          },
-        ],
-          )
-        }
+        ]);
+      }
     },
     agregarPasosProcedimiento() {
-      let self = this
-      let posicion = 17 // Posición en el arbol de nodos donde se van a ingresar los pasos del procedimiento
+      let self = this;
+      let posicion = 17; // Posición en el arbol de nodos donde se van a ingresar los pasos del procedimiento
       // Validación: si se va a imprimir un campo de pasos de procedimiento vacío es eliminado antes de ser imprimido para que no genere error
-      this.pasos = this.pasos_procedimiento
-      if (this.pasos[this.pasos.length - 1] == '') {
-        this.pasos.splice(this.pasos.length - 1, 1)
+      this.pasos = this.pasos_procedimiento;
+      if (this.pasos[this.pasos.length - 1] == "") {
+        this.pasos.splice(this.pasos.length - 1, 1);
       }
       // Fin validación
       this.pasos.forEach(function (element, index) {
         if (element != "") {
-          self.docDefinition.content[0].table.body.splice(posicion, 0,
-            [
-              {
-                text: [
-                  'Paso ' + (index + 1) + ': ',
-                  {
-                    text: element,
-                    bold: false,
-                  },
-                ],
-                border: [true, false, true, true],
-                colSpan: 4,
-                fontSize: 9,
-                bold: true,
-              },
-              {},
-              {},
-              {},
-            ],
-          )
-          posicion++
+          self.docDefinition.content[0].table.body.splice(posicion, 0, [
+            {
+              text: [
+                "Paso " + (index + 1) + ": ",
+                {
+                  text: element,
+                  bold: false,
+                },
+              ],
+              border: [true, false, true, true],
+              colSpan: 4,
+              fontSize: 9,
+              bold: true,
+            },
+            {},
+            {},
+            {},
+          ]);
+          posicion++;
         }
       });
     },
     agregarEmpleado() {
-      let self = this
-      let posicion = (25 + this.pasos_procedimiento.length) // posición de se van a ingresar los empleados en el arbol de nodos mas la última posición de los pasos
+      let self = this;
+      let posicion = 25 + this.pasos_procedimiento.length; // posición de se van a ingresar los empleados en el arbol de nodos mas la última posición de los pasos
       this.empleados.forEach(function (element) {
         if (element.cedula != "" && element.nombre != "" && element.firma != "")
-          self.docDefinition.content[0].table.body.splice(posicion, 0,
-            [
-              {
-                text: element.cedula,
-                alignment: "left",
-                fontSize: 10,
-                bold: false,
-                margin: [0, 5],
-              },
-              {
-                text: element.nombre,
-                alignment: "left",
-                colSpan: 2,
-                fontSize: 10,
-                bold: false,
-                margin: [0, 5],
-              },
-              {},
-              {
-                image:
-                  element.firma,
-                width: 100,
-                alignment: "center",
-              },
-            ],
-          )
-        ++posicion
+          self.docDefinition.content[0].table.body.splice(posicion, 0, [
+            {
+              text: element.cedula,
+              alignment: "left",
+              fontSize: 10,
+              bold: false,
+              margin: [0, 5],
+            },
+            {
+              text: element.nombre,
+              alignment: "left",
+              colSpan: 2,
+              fontSize: 10,
+              bold: false,
+              margin: [0, 5],
+            },
+            {},
+            {
+              image: element.firma,
+              width: 100,
+              alignment: "center",
+            },
+          ]);
+        ++posicion;
       });
     },
     agregarFirmasEncargados() {
-
       // Validación: para agregar la última posición de los pasos del procedimiento y la última posicion de los empleados en el arbol de nodos sino se agregaron la posición es cero
       if (this.pasos_procedimiento.length >= 0) {
-        var posicion1 = this.pasos_procedimiento.length
+        var posicion1 = this.pasos_procedimiento.length;
       } else {
-        posicion1 = 0
+        posicion1 = 0;
       }
       if (this.empleados.length >= 0) {
-        var posicion2 = this.empleados.length
-        if (this.empleados[this.empleados.length - 1].firma != '') {
-          posicion2 += 1
+        var posicion2 = this.empleados.length;
+        if (this.empleados[this.empleados.length - 1].firma != "") {
+          posicion2 += 1;
         }
       } else {
-        posicion2 = 0
+        posicion2 = 0;
       }
       // Fin validación
 
       //Se suman las posiciones de pasos del procedimiento y empleados mas la posición donde se van a ingresar las firmas de los encargados
-      var posicion = (26 + posicion1 + posicion2)
-      let sin_firma = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAu4AAACWCAYAAACB8w1PAAAAAXNSR0IArs4c6QAACYBJREFUeF7t27FtlVEQhNHdJoiJoARSegJBDVh2T6SUABExTVxLjkx+A3/SeQVcjc5OMPqlt+NHgAABAgQIECBAgMCbF9g3n1BAAgQIECBAgAABAgTGcFcCAgQIECBAgAABAgEBwz1wJBEJECBAgAABAgQIGO46QIAAAQIECBAgQCAgYLgHjiQiAQIECBAgQIAAAcNdBwgQIECAAAECBAgEBAz3wJFEJECAAAECBAgQIGC46wABAgQIECBAgACBgIDhHjiSiAQIECBAgAABAgQMdx0gQIAAAQIECBAgEBAw3ANHEpEAAQIECBAgQICA4a4DBAgQIECAAAECBAIChnvgSCISIECAAAECBAgQMNx1gAABAgQIECBAgEBAwHAPHElEAgQIECBAgAABAoa7DhAgQIAAAQIECBAICBjugSOJSIAAAQIECBAgQMBw1wECBAgQIECAAAECAQHDPXAkEQkQIECAAAECBAgY7jpAgAABAgQIECBAICBguAeOJCIBAgQIECBAgAABw10HCBAgQIAAAQIECAQEDPfAkUQkQIAAAQIECBAgYLjrAAECBAgQIECAAIGAgOEeOJKIBAgQIECAAAECBAx3HSBAgAABAgQIECAQEDDcA0cSkQABAgQIECBAgIDhrgMECBAgQIAAAQIEAgKGe+BIIhIgQIAAAQIECBAw3HWAAAECBAgQIECAQEDAcA8cSUQCBAgQIECAAAEChrsOECBAgAABAgQIEAgIGO6BI4lIgAABAgQIECBAwHDXAQIECBAgQIAAAQIBAcM9cCQRCRAgQIAAAQIECBjuOkCAAAECBAgQIEAgIGC4B44kIgECBAgQIECAAAHDXQcIECBAgAABAgQIBAQM98CRRCRAgAABAgQIECBguOsAAQIECBAgQIAAgYCA4R44kogECBAgQIAAAQIEDHcdIECAAAECBAgQIBAQMNwDRxKRAAECBAgQIECAgOGuAwQIECBAgAABAgQCAoZ74EgiEiBAgAABAgQIEDDcdYAAAQIECBAgQIBAQMBwDxxJRAIECBAgQIAAAQKGuw4QIECAAAECBAgQCAgY7oEjiUiAAAECBAgQIEDAcNcBAgQIECBAgAABAgEBwz1wJBEJECBAgAABAgQIGO46QIAAAQIECBAgQCAgYLgHjiQiAQIECBAgQIAAAcNdBwgQIECAAAECBAgEBAz3wJFEJECAAAECBAgQIGC46wABAgQIECBAgACBgIDhHjiSiAQIECBAgAABAgQMdx0gQIAAAQIECBAgEBAw3ANHEpEAAQIECBAgQICA4a4DBAgQIECAAAECBAIChnvgSCISIECAAAECBAgQMNx1gMBFgXPO5939efFJTxEgQIAAAQIEXgQMd0UgcEngnPN7Zj7MzJ/d/XjpWc8QIECAAAECBAx3HSBwS+Cc821mfrx67/vuPtx63zsECBAgQIAAAV/cdYDABYFzzuPMfHn11NPufr3wtCcIECBAgAABAr646wCBWwLnnHcz82tm3s/M35n5tLv/br3vHQIECBAgQICAL+46QOCigD+nXsT0FAECBAgQIPCfgOGuEAQIECBAgAABAgQCAoZ74EgiEiBAgAABAgQIEDDcdYAAAQIECBAgQIBAQMBwDxxJRAIECBAgQIAAAQKGuw4QIECAAAECBAgQCAgY7oEjiUiAAAECBAgQIEDAcNcBAgQIECBAgAABAgEBwz1wJBEJECBAgAABAgQIGO46QIAAAQIECBAgQCAgYLgHjiQiAQIECBAgQIAAAcNdBwgQIECAAAECBAgEBAz3wJFEJECAAAECBAgQIGC46wABAgQIECBAgACBgIDhHjiSiAQIECBAgAABAgQMdx0gQIAAAQIECBAgEBAw3ANHEpEAAQIECBAgQICA4a4DBAgQIECAAAECBAIChnvgSCISIECAAAECBAgQMNx1gAABAgQIECBAgEBAwHAPHElEAgQIECBAgAABAoa7DhAgQIAAAQIECBAICBjugSOJSIAAAQIECBAgQMBw1wECBAgQIECAAAECAQHDPXAkEQkQIECAAAECBAgY7jpAgAABAgQIECBAICBguAeOJCIBAgQIECBAgAABw10HCBAgQIAAAQIECAQEDPfAkUQkQIAAAQIECBAgYLjrAAECBAgQIECAAIGAgOEeOJKIBAgQIECAAAECBAx3HSBAgAABAgQIECAQEDDcA0cSkQABAgQIECBAgIDhrgMECBAgQIAAAQIEAgKGe+BIIhIgQIAAAQIECBAw3HWAAAECBAgQIECAQEDAcA8cSUQCBAgQIECAAAEChrsOECBAgAABAgQIEAgIGO6BI4lIgAABAgQIECBAwHDXAQIECBAgQIAAAQIBAcM9cCQRCRAgQIAAAQIECBjuOkCAAAECBAgQIEAgIGC4B44kIgECBAgQIECAAAHDXQcIECBAgAABAgQIBAQM98CRRCRAgAABAgQIECBguOsAAQIECBAgQIAAgYCA4R44kogECBAgQIAAAQIEDHcdIECAAAECBAgQIBAQMNwDRxKRAAECBAgQIECAgOGuAwQIECBAgAABAgQCAoZ74EgiEiBAgAABAgQIEDDcdYAAAQIECBAgQIBAQMBwDxxJRAIECBAgQIAAAQKGuw4QIECAAAECBAgQCAgY7oEjiUiAAAECBAgQIEDAcNcBAgQIECBAgAABAgEBwz1wJBEJECBAgAABAgQIGO46QIAAAQIECBAgQCAgYLgHjiQiAQIECBAgQIAAAcNdBwgQIECAAAECBAgEBAz3wJFEJECAAAECBAgQIGC46wABAgQIECBAgACBgIDhHjiSiAQIECBAgAABAgQMdx0gQIAAAQIECBAgEBAw3ANHEpEAAQIECBAgQICA4a4DBAgQIECAAAECBAIChnvgSCISIECAAAECBAgQMNx1gAABAgQIECBAgEBAwHAPHElEAgQIECBAgAABAoa7DhAgQIAAAQIECBAICBjugSOJSIAAAQIECBAgQMBw1wECBAgQIECAAAECAQHDPXAkEQkQIECAAAECBAgY7jpAgAABAgQIECBAICBguAeOJCIBAgQIECBAgAABw10HCBAgQIAAAQIECAQEDPfAkUQkQIAAAQIECBAgYLjrAAECBAgQIECAAIGAgOEeOJKIBAgQIECAAAECBAx3HSBAgAABAgQIECAQEDDcA0cSkQABAgQIECBAgIDhrgMECBAgQIAAAQIEAgKGe+BIIhIgQIAAAQIECBB4Bsp/HZfupH3NAAAAAElFTkSuQmCC"
-      let firma1 = this.formulario.encargado_firma == '' ? sin_firma : this.formulario.encargado_firma
-      let firma2 = this.formulario.gestor_firma == '' ? sin_firma : this.formulario.gestor_firma
-      let firma3 = this.formulario.aprobado_firma == '' ? sin_firma : this.formulario.aprobado_firma
+      var posicion = 26 + posicion1 + posicion2;
+      let sin_firma =
+        "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAu4AAACWCAYAAACB8w1PAAAAAXNSR0IArs4c6QAACYBJREFUeF7t27FtlVEQhNHdJoiJoARSegJBDVh2T6SUABExTVxLjkx+A3/SeQVcjc5OMPqlt+NHgAABAgQIECBAgMCbF9g3n1BAAgQIECBAgAABAgTGcFcCAgQIECBAgAABAgEBwz1wJBEJECBAgAABAgQIGO46QIAAAQIECBAgQCAgYLgHjiQiAQIECBAgQIAAAcNdBwgQIECAAAECBAgEBAz3wJFEJECAAAECBAgQIGC46wABAgQIECBAgACBgIDhHjiSiAQIECBAgAABAgQMdx0gQIAAAQIECBAgEBAw3ANHEpEAAQIECBAgQICA4a4DBAgQIECAAAECBAIChnvgSCISIECAAAECBAgQMNx1gAABAgQIECBAgEBAwHAPHElEAgQIECBAgAABAoa7DhAgQIAAAQIECBAICBjugSOJSIAAAQIECBAgQMBw1wECBAgQIECAAAECAQHDPXAkEQkQIECAAAECBAgY7jpAgAABAgQIECBAICBguAeOJCIBAgQIECBAgAABw10HCBAgQIAAAQIECAQEDPfAkUQkQIAAAQIECBAgYLjrAAECBAgQIECAAIGAgOEeOJKIBAgQIECAAAECBAx3HSBAgAABAgQIECAQEDDcA0cSkQABAgQIECBAgIDhrgMECBAgQIAAAQIEAgKGe+BIIhIgQIAAAQIECBAw3HWAAAECBAgQIECAQEDAcA8cSUQCBAgQIECAAAEChrsOECBAgAABAgQIEAgIGO6BI4lIgAABAgQIECBAwHDXAQIECBAgQIAAAQIBAcM9cCQRCRAgQIAAAQIECBjuOkCAAAECBAgQIEAgIGC4B44kIgECBAgQIECAAAHDXQcIECBAgAABAgQIBAQM98CRRCRAgAABAgQIECBguOsAAQIECBAgQIAAgYCA4R44kogECBAgQIAAAQIEDHcdIECAAAECBAgQIBAQMNwDRxKRAAECBAgQIECAgOGuAwQIECBAgAABAgQCAoZ74EgiEiBAgAABAgQIEDDcdYAAAQIECBAgQIBAQMBwDxxJRAIECBAgQIAAAQKGuw4QIECAAAECBAgQCAgY7oEjiUiAAAECBAgQIEDAcNcBAgQIECBAgAABAgEBwz1wJBEJECBAgAABAgQIGO46QIAAAQIECBAgQCAgYLgHjiQiAQIECBAgQIAAAcNdBwgQIECAAAECBAgEBAz3wJFEJECAAAECBAgQIGC46wABAgQIECBAgACBgIDhHjiSiAQIECBAgAABAgQMdx0gQIAAAQIECBAgEBAw3ANHEpEAAQIECBAgQICA4a4DBAgQIECAAAECBAIChnvgSCISIECAAAECBAgQMNx1gMBFgXPO5939efFJTxEgQIAAAQIEXgQMd0UgcEngnPN7Zj7MzJ/d/XjpWc8QIECAAAECBAx3HSBwS+Cc821mfrx67/vuPtx63zsECBAgQIAAAV/cdYDABYFzzuPMfHn11NPufr3wtCcIECBAgAABAr646wCBWwLnnHcz82tm3s/M35n5tLv/br3vHQIECBAgQICAL+46QOCigD+nXsT0FAECBAgQIPCfgOGuEAQIECBAgAABAgQCAoZ74EgiEiBAgAABAgQIEDDcdYAAAQIECBAgQIBAQMBwDxxJRAIECBAgQIAAAQKGuw4QIECAAAECBAgQCAgY7oEjiUiAAAECBAgQIEDAcNcBAgQIECBAgAABAgEBwz1wJBEJECBAgAABAgQIGO46QIAAAQIECBAgQCAgYLgHjiQiAQIECBAgQIAAAcNdBwgQIECAAAECBAgEBAz3wJFEJECAAAECBAgQIGC46wABAgQIECBAgACBgIDhHjiSiAQIECBAgAABAgQMdx0gQIAAAQIECBAgEBAw3ANHEpEAAQIECBAgQICA4a4DBAgQIECAAAECBAIChnvgSCISIECAAAECBAgQMNx1gAABAgQIECBAgEBAwHAPHElEAgQIECBAgAABAoa7DhAgQIAAAQIECBAICBjugSOJSIAAAQIECBAgQMBw1wECBAgQIECAAAECAQHDPXAkEQkQIECAAAECBAgY7jpAgAABAgQIECBAICBguAeOJCIBAgQIECBAgAABw10HCBAgQIAAAQIECAQEDPfAkUQkQIAAAQIECBAgYLjrAAECBAgQIECAAIGAgOEeOJKIBAgQIECAAAECBAx3HSBAgAABAgQIECAQEDDcA0cSkQABAgQIECBAgIDhrgMECBAgQIAAAQIEAgKGe+BIIhIgQIAAAQIECBAw3HWAAAECBAgQIECAQEDAcA8cSUQCBAgQIECAAAEChrsOECBAgAABAgQIEAgIGO6BI4lIgAABAgQIECBAwHDXAQIECBAgQIAAAQIBAcM9cCQRCRAgQIAAAQIECBjuOkCAAAECBAgQIEAgIGC4B44kIgECBAgQIECAAAHDXQcIECBAgAABAgQIBAQM98CRRCRAgAABAgQIECBguOsAAQIECBAgQIAAgYCA4R44kogECBAgQIAAAQIEDHcdIECAAAECBAgQIBAQMNwDRxKRAAECBAgQIECAgOGuAwQIECBAgAABAgQCAoZ74EgiEiBAgAABAgQIEDDcdYAAAQIECBAgQIBAQMBwDxxJRAIECBAgQIAAAQKGuw4QIECAAAECBAgQCAgY7oEjiUiAAAECBAgQIEDAcNcBAgQIECBAgAABAgEBwz1wJBEJECBAgAABAgQIGO46QIAAAQIECBAgQCAgYLgHjiQiAQIECBAgQIAAAcNdBwgQIECAAAECBAgEBAz3wJFEJECAAAECBAgQIGC46wABAgQIECBAgACBgIDhHjiSiAQIECBAgAABAgQMdx0gQIAAAQIECBAgEBAw3ANHEpEAAQIECBAgQICA4a4DBAgQIECAAAECBAIChnvgSCISIECAAAECBAgQMNx1gAABAgQIECBAgEBAwHAPHElEAgQIECBAgAABAoa7DhAgQIAAAQIECBAICBjugSOJSIAAAQIECBAgQMBw1wECBAgQIECAAAECAQHDPXAkEQkQIECAAAECBAgY7jpAgAABAgQIECBAICBguAeOJCIBAgQIECBAgAABw10HCBAgQIAAAQIECAQEDPfAkUQkQIAAAQIECBAgYLjrAAECBAgQIECAAIGAgOEeOJKIBAgQIECAAAECBAx3HSBAgAABAgQIECAQEDDcA0cSkQABAgQIECBAgIDhrgMECBAgQIAAAQIEAgKGe+BIIhIgQIAAAQIECBB4Bsp/HZfupH3NAAAAAElFTkSuQmCC";
+      let firma1 =
+        this.formulario.encargado_firma == ""
+          ? sin_firma
+          : this.formulario.encargado_firma;
+      let firma2 =
+        this.formulario.gestor_firma == ""
+          ? sin_firma
+          : this.formulario.gestor_firma;
+      let firma3 =
+        this.formulario.aprobado_firma == ""
+          ? sin_firma
+          : this.formulario.aprobado_firma;
       // NOTA: para previsialisar el pdf los campos de firma no puenden estar vacíos, por esto si no viene firma desde el formulario web se anexa una imagen en blanco para cada firma
-      this.docDefinition.content[0].table.body.splice(posicion, 0,
-        [
-          {
-            image: firma1,
-            width: 100,
-            alignment: "center",
-            border: [true, false, true, true],
-          },
-          {
-            image: firma2,
-            width: 100,
-            alignment: "center",
-            border: [true, false, true, true],
-            colSpan: 2,
-            rowSpan: 2
-
-          },
-          {
-
-          },
-          {
-            image: firma3,
-            width: 100,
-            alignment: "center",
-            border: [true, false, true, true],
-          },
-        ],)
+      this.docDefinition.content[0].table.body.splice(posicion, 0, [
+        {
+          image: firma1,
+          width: 100,
+          alignment: "center",
+          border: [true, false, true, true],
+        },
+        {
+          image: firma2,
+          width: 100,
+          alignment: "center",
+          border: [true, false, true, true],
+          colSpan: 2,
+          rowSpan: 2,
+        },
+        {},
+        {
+          image: firma3,
+          width: 100,
+          alignment: "center",
+          border: [true, false, true, true],
+        },
+      ]);
     },
     exportPdfMake() {
       this.docDefinition = {
         pageMargins: [40, 40, 40, 40],
         footer: function (currentPage, pageCount) {
-          return [{ text: 'Página ' + currentPage.toString() + ' de ' + pageCount, alignment: 'center' }];
+          return [
+            {
+              text: "Página " + currentPage.toString() + " de " + pageCount,
+              alignment: "center",
+            },
+          ];
         },
         content: [
           {
@@ -400,11 +420,25 @@ export default {
                   {},
                   {
                     ul: [
-                      { text: 'Código: GPR-FT-06', listType: 'none', fontSize: 8, margin: [0, 3], },
-                      { text: 'Versión: Original', listType: 'none', fontSize: 8, margin: [0, 3], },
-                      { text: 'Fecha: 25/11/2021', listType: 'none', fontSize: 8, margin: [0, 3], },
+                      {
+                        text: "Código: GPR-FT-06",
+                        listType: "none",
+                        fontSize: 8,
+                        margin: [0, 3],
+                      },
+                      {
+                        text: "Versión: Original",
+                        listType: "none",
+                        fontSize: 8,
+                        margin: [0, 3],
+                      },
+                      {
+                        text: "Fecha: 25/11/2021",
+                        listType: "none",
+                        fontSize: 8,
+                        margin: [0, 3],
+                      },
                     ],
-
                   },
                 ],
                 [
@@ -612,15 +646,11 @@ export default {
                     margin: [0, 5],
                     heights: [5],
                   },
-                  {
-
-                  },
+                  {},
                 ],
                 [
-                  {
-                  },
-                  {
-                  },
+                  {},
+                  {},
                   {
                     text: [
                       "Baja Tensión ≥ 25 V ≤ 1 KV: ",
@@ -661,27 +691,31 @@ export default {
                 ],
                 [
                   {
-                    text: this.checks[0].checked ? 'Instalar  |X|' : 'Instalar',
+                    text: this.checks[0].checked ? "Instalar  |X|" : "Instalar",
 
                     fontSize: 9,
                     bold: true,
                     // background: 'yellow'
                   },
                   {
-                    text: this.checks[1].checked ? 'Reparar  |X|' : 'Reparar',
+                    text: this.checks[1].checked ? "Reparar  |X|" : "Reparar",
 
                     fontSize: 9,
                     bold: true,
                   },
                   {
-                    text: this.checks[2].checked  ? 'Replantear  |X|' : 'Replantear',
+                    text: this.checks[2].checked
+                      ? "Replantear  |X|"
+                      : "Replantear",
 
                     fontSize: 9,
                     bold: true,
                     // background: 'yellow'
                   },
                   {
-                    text: this.checks[3].checked ? 'Supervisar  |X|' : 'Supervisar',
+                    text: this.checks[3].checked
+                      ? "Supervisar  |X|"
+                      : "Supervisar",
 
                     fontSize: 9,
                     bold: true,
@@ -689,51 +723,29 @@ export default {
                 ],
                 [
                   {
-                    text: this.checks[4].checked ? 'Normalizar  |X|' : 'Normalizar',
+                    text: this.checks[4].checked
+                      ? "Normalizar  |X|"
+                      : "Normalizar",
 
                     fontSize: 9,
                     bold: true,
                   },
                   {
-                    text: this.checks[5].checked ? 'Diagnosticar  |X|' : 'Diagnosticar',
+                    text: this.checks[5].checked
+                      ? "Diagnosticar  |X|"
+                      : "Diagnosticar",
 
                     fontSize: 9,
                     bold: true,
                   },
                   {
-                    text: this.checks[6].checked ? 'Revisar  |X|' : 'Revisar',
+                    text: this.checks[6].checked ? "Revisar  |X|" : "Revisar",
 
                     fontSize: 9,
                     bold: true,
                   },
                   {
-                    text: this.checks[7].checked ? 'Montaje  |X|' : 'Montaje',
-
-                    fontSize: 9,
-                    bold: true,
-                  },
-                ],
-                [
-                  {
-                    text: this.checks[8].checked ? 'Corte  |X|' : 'Corte',
-
-                    fontSize: 9,
-                    bold: true,
-                  },
-                  {
-                    text: this.checks[9].checked ? 'Desconexiones  |X|' : 'Desconexiones',
-
-                    fontSize: 9,
-                    bold: true,
-                  },
-                  {
-                    text: this.checks[10].checked ? 'Conexión  |X|' : 'Conexión',
-
-                    fontSize: 9,
-                    bold: true,
-                  },
-                  {
-                    text: this.checks[11].checked ? 'Suspensión  |X|' : 'Suspensión',
+                    text: this.checks[7].checked ? "Montaje  |X|" : "Montaje",
 
                     fontSize: 9,
                     bold: true,
@@ -741,13 +753,47 @@ export default {
                 ],
                 [
                   {
-                    text: this.checks[12].checked ? 'Reconexión  |X|' : 'Reconexión',
+                    text: this.checks[8].checked ? "Corte  |X|" : "Corte",
 
                     fontSize: 9,
                     bold: true,
                   },
                   {
-                    text: this.checks[13].checked ? 'Otra  |X|' : 'Otra',
+                    text: this.checks[9].checked
+                      ? "Desconexiones  |X|"
+                      : "Desconexiones",
+
+                    fontSize: 9,
+                    bold: true,
+                  },
+                  {
+                    text: this.checks[10].checked
+                      ? "Conexión  |X|"
+                      : "Conexión",
+
+                    fontSize: 9,
+                    bold: true,
+                  },
+                  {
+                    text: this.checks[11].checked
+                      ? "Suspensión  |X|"
+                      : "Suspensión",
+
+                    fontSize: 9,
+                    bold: true,
+                  },
+                ],
+                [
+                  {
+                    text: this.checks[12].checked
+                      ? "Reconexión  |X|"
+                      : "Reconexión",
+
+                    fontSize: 9,
+                    bold: true,
+                  },
+                  {
+                    text: this.checks[13].checked ? "Otra  |X|" : "Otra",
 
                     fontSize: 9,
                     bold: true,
@@ -813,9 +859,7 @@ export default {
                 ],
                 [
                   {
-                    text: [
-                      "Planos: ",
-                    ],
+                    text: ["Planos: "],
                     colSpan: 4,
                     fontSize: 9,
                     bold: true,
@@ -826,10 +870,13 @@ export default {
                 ],
                 [
                   {
-                    image: this.formulario.planos != '' ? this.formulario.planos : "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAu4AAACWCAYAAACB8w1PAAAAAXNSR0IArs4c6QAACYBJREFUeF7t27FtlVEQhNHdJoiJoARSegJBDVh2T6SUABExTVxLjkx+A3/SeQVcjc5OMPqlt+NHgAABAgQIECBAgMCbF9g3n1BAAgQIECBAgAABAgTGcFcCAgQIECBAgAABAgEBwz1wJBEJECBAgAABAgQIGO46QIAAAQIECBAgQCAgYLgHjiQiAQIECBAgQIAAAcNdBwgQIECAAAECBAgEBAz3wJFEJECAAAECBAgQIGC46wABAgQIECBAgACBgIDhHjiSiAQIECBAgAABAgQMdx0gQIAAAQIECBAgEBAw3ANHEpEAAQIECBAgQICA4a4DBAgQIECAAAECBAIChnvgSCISIECAAAECBAgQMNx1gAABAgQIECBAgEBAwHAPHElEAgQIECBAgAABAoa7DhAgQIAAAQIECBAICBjugSOJSIAAAQIECBAgQMBw1wECBAgQIECAAAECAQHDPXAkEQkQIECAAAECBAgY7jpAgAABAgQIECBAICBguAeOJCIBAgQIECBAgAABw10HCBAgQIAAAQIECAQEDPfAkUQkQIAAAQIECBAgYLjrAAECBAgQIECAAIGAgOEeOJKIBAgQIECAAAECBAx3HSBAgAABAgQIECAQEDDcA0cSkQABAgQIECBAgIDhrgMECBAgQIAAAQIEAgKGe+BIIhIgQIAAAQIECBAw3HWAAAECBAgQIECAQEDAcA8cSUQCBAgQIECAAAEChrsOECBAgAABAgQIEAgIGO6BI4lIgAABAgQIECBAwHDXAQIECBAgQIAAAQIBAcM9cCQRCRAgQIAAAQIECBjuOkCAAAECBAgQIEAgIGC4B44kIgECBAgQIECAAAHDXQcIECBAgAABAgQIBAQM98CRRCRAgAABAgQIECBguOsAAQIECBAgQIAAgYCA4R44kogECBAgQIAAAQIEDHcdIECAAAECBAgQIBAQMNwDRxKRAAECBAgQIECAgOGuAwQIECBAgAABAgQCAoZ74EgiEiBAgAABAgQIEDDcdYAAAQIECBAgQIBAQMBwDxxJRAIECBAgQIAAAQKGuw4QIECAAAECBAgQCAgY7oEjiUiAAAECBAgQIEDAcNcBAgQIECBAgAABAgEBwz1wJBEJECBAgAABAgQIGO46QIAAAQIECBAgQCAgYLgHjiQiAQIECBAgQIAAAcNdBwgQIECAAAECBAgEBAz3wJFEJECAAAECBAgQIGC46wABAgQIECBAgACBgIDhHjiSiAQIECBAgAABAgQMdx0gQIAAAQIECBAgEBAw3ANHEpEAAQIECBAgQICA4a4DBAgQIECAAAECBAIChnvgSCISIECAAAECBAgQMNx1gMBFgXPO5939efFJTxEgQIAAAQIEXgQMd0UgcEngnPN7Zj7MzJ/d/XjpWc8QIECAAAECBAx3HSBwS+Cc821mfrx67/vuPtx63zsECBAgQIAAAV/cdYDABYFzzuPMfHn11NPufr3wtCcIECBAgAABAr646wCBWwLnnHcz82tm3s/M35n5tLv/br3vHQIECBAgQICAL+46QOCigD+nXsT0FAECBAgQIPCfgOGuEAQIECBAgAABAgQCAoZ74EgiEiBAgAABAgQIEDDcdYAAAQIECBAgQIBAQMBwDxxJRAIECBAgQIAAAQKGuw4QIECAAAECBAgQCAgY7oEjiUiAAAECBAgQIEDAcNcBAgQIECBAgAABAgEBwz1wJBEJECBAgAABAgQIGO46QIAAAQIECBAgQCAgYLgHjiQiAQIECBAgQIAAAcNdBwgQIECAAAECBAgEBAz3wJFEJECAAAECBAgQIGC46wABAgQIECBAgACBgIDhHjiSiAQIECBAgAABAgQMdx0gQIAAAQIECBAgEBAw3ANHEpEAAQIECBAgQICA4a4DBAgQIECAAAECBAIChnvgSCISIECAAAECBAgQMNx1gAABAgQIECBAgEBAwHAPHElEAgQIECBAgAABAoa7DhAgQIAAAQIECBAICBjugSOJSIAAAQIECBAgQMBw1wECBAgQIECAAAECAQHDPXAkEQkQIECAAAECBAgY7jpAgAABAgQIECBAICBguAeOJCIBAgQIECBAgAABw10HCBAgQIAAAQIECAQEDPfAkUQkQIAAAQIECBAgYLjrAAECBAgQIECAAIGAgOEeOJKIBAgQIECAAAECBAx3HSBAgAABAgQIECAQEDDcA0cSkQABAgQIECBAgIDhrgMECBAgQIAAAQIEAgKGe+BIIhIgQIAAAQIECBAw3HWAAAECBAgQIECAQEDAcA8cSUQCBAgQIECAAAEChrsOECBAgAABAgQIEAgIGO6BI4lIgAABAgQIECBAwHDXAQIECBAgQIAAAQIBAcM9cCQRCRAgQIAAAQIECBjuOkCAAAECBAgQIEAgIGC4B44kIgECBAgQIECAAAHDXQcIECBAgAABAgQIBAQM98CRRCRAgAABAgQIECBguOsAAQIECBAgQIAAgYCA4R44kogECBAgQIAAAQIEDHcdIECAAAECBAgQIBAQMNwDRxKRAAECBAgQIECAgOGuAwQIECBAgAABAgQCAoZ74EgiEiBAgAABAgQIEDDcdYAAAQIECBAgQIBAQMBwDxxJRAIECBAgQIAAAQKGuw4QIECAAAECBAgQCAgY7oEjiUiAAAECBAgQIEDAcNcBAgQIECBAgAABAgEBwz1wJBEJECBAgAABAgQIGO46QIAAAQIECBAgQCAgYLgHjiQiAQIECBAgQIAAAcNdBwgQIECAAAECBAgEBAz3wJFEJECAAAECBAgQIGC46wABAgQIECBAgACBgIDhHjiSiAQIECBAgAABAgQMdx0gQIAAAQIECBAgEBAw3ANHEpEAAQIECBAgQICA4a4DBAgQIECAAAECBAIChnvgSCISIECAAAECBAgQMNx1gAABAgQIECBAgEBAwHAPHElEAgQIECBAgAABAoa7DhAgQIAAAQIECBAICBjugSOJSIAAAQIECBAgQMBw1wECBAgQIECAAAECAQHDPXAkEQkQIECAAAECBAgY7jpAgAABAgQIECBAICBguAeOJCIBAgQIECBAgAABw10HCBAgQIAAAQIECAQEDPfAkUQkQIAAAQIECBAgYLjrAAECBAgQIECAAIGAgOEeOJKIBAgQIECAAAECBAx3HSBAgAABAgQIECAQEDDcA0cSkQABAgQIECBAgIDhrgMECBAgQIAAAQIEAgKGe+BIIhIgQIAAAQIECBB4Bsp/HZfupH3NAAAAAElFTkSuQmCC",
+                    image:
+                      this.formulario.planos != ""
+                        ? this.formulario.planos
+                        : "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAu4AAACWCAYAAACB8w1PAAAAAXNSR0IArs4c6QAACYBJREFUeF7t27FtlVEQhNHdJoiJoARSegJBDVh2T6SUABExTVxLjkx+A3/SeQVcjc5OMPqlt+NHgAABAgQIECBAgMCbF9g3n1BAAgQIECBAgAABAgTGcFcCAgQIECBAgAABAgEBwz1wJBEJECBAgAABAgQIGO46QIAAAQIECBAgQCAgYLgHjiQiAQIECBAgQIAAAcNdBwgQIECAAAECBAgEBAz3wJFEJECAAAECBAgQIGC46wABAgQIECBAgACBgIDhHjiSiAQIECBAgAABAgQMdx0gQIAAAQIECBAgEBAw3ANHEpEAAQIECBAgQICA4a4DBAgQIECAAAECBAIChnvgSCISIECAAAECBAgQMNx1gAABAgQIECBAgEBAwHAPHElEAgQIECBAgAABAoa7DhAgQIAAAQIECBAICBjugSOJSIAAAQIECBAgQMBw1wECBAgQIECAAAECAQHDPXAkEQkQIECAAAECBAgY7jpAgAABAgQIECBAICBguAeOJCIBAgQIECBAgAABw10HCBAgQIAAAQIECAQEDPfAkUQkQIAAAQIECBAgYLjrAAECBAgQIECAAIGAgOEeOJKIBAgQIECAAAECBAx3HSBAgAABAgQIECAQEDDcA0cSkQABAgQIECBAgIDhrgMECBAgQIAAAQIEAgKGe+BIIhIgQIAAAQIECBAw3HWAAAECBAgQIECAQEDAcA8cSUQCBAgQIECAAAEChrsOECBAgAABAgQIEAgIGO6BI4lIgAABAgQIECBAwHDXAQIECBAgQIAAAQIBAcM9cCQRCRAgQIAAAQIECBjuOkCAAAECBAgQIEAgIGC4B44kIgECBAgQIECAAAHDXQcIECBAgAABAgQIBAQM98CRRCRAgAABAgQIECBguOsAAQIECBAgQIAAgYCA4R44kogECBAgQIAAAQIEDHcdIECAAAECBAgQIBAQMNwDRxKRAAECBAgQIECAgOGuAwQIECBAgAABAgQCAoZ74EgiEiBAgAABAgQIEDDcdYAAAQIECBAgQIBAQMBwDxxJRAIECBAgQIAAAQKGuw4QIECAAAECBAgQCAgY7oEjiUiAAAECBAgQIEDAcNcBAgQIECBAgAABAgEBwz1wJBEJECBAgAABAgQIGO46QIAAAQIECBAgQCAgYLgHjiQiAQIECBAgQIAAAcNdBwgQIECAAAECBAgEBAz3wJFEJECAAAECBAgQIGC46wABAgQIECBAgACBgIDhHjiSiAQIECBAgAABAgQMdx0gQIAAAQIECBAgEBAw3ANHEpEAAQIECBAgQICA4a4DBAgQIECAAAECBAIChnvgSCISIECAAAECBAgQMNx1gMBFgXPO5939efFJTxEgQIAAAQIEXgQMd0UgcEngnPN7Zj7MzJ/d/XjpWc8QIECAAAECBAx3HSBwS+Cc821mfrx67/vuPtx63zsECBAgQIAAAV/cdYDABYFzzuPMfHn11NPufr3wtCcIECBAgAABAr646wCBWwLnnHcz82tm3s/M35n5tLv/br3vHQIECBAgQICAL+46QOCigD+nXsT0FAECBAgQIPCfgOGuEAQIECBAgAABAgQCAoZ74EgiEiBAgAABAgQIEDDcdYAAAQIECBAgQIBAQMBwDxxJRAIECBAgQIAAAQKGuw4QIECAAAECBAgQCAgY7oEjiUiAAAECBAgQIEDAcNcBAgQIECBAgAABAgEBwz1wJBEJECBAgAABAgQIGO46QIAAAQIECBAgQCAgYLgHjiQiAQIECBAgQIAAAcNdBwgQIECAAAECBAgEBAz3wJFEJECAAAECBAgQIGC46wABAgQIECBAgACBgIDhHjiSiAQIECBAgAABAgQMdx0gQIAAAQIECBAgEBAw3ANHEpEAAQIECBAgQICA4a4DBAgQIECAAAECBAIChnvgSCISIECAAAECBAgQMNx1gAABAgQIECBAgEBAwHAPHElEAgQIECBAgAABAoa7DhAgQIAAAQIECBAICBjugSOJSIAAAQIECBAgQMBw1wECBAgQIECAAAECAQHDPXAkEQkQIECAAAECBAgY7jpAgAABAgQIECBAICBguAeOJCIBAgQIECBAgAABw10HCBAgQIAAAQIECAQEDPfAkUQkQIAAAQIECBAgYLjrAAECBAgQIECAAIGAgOEeOJKIBAgQIECAAAECBAx3HSBAgAABAgQIECAQEDDcA0cSkQABAgQIECBAgIDhrgMECBAgQIAAAQIEAgKGe+BIIhIgQIAAAQIECBAw3HWAAAECBAgQIECAQEDAcA8cSUQCBAgQIECAAAEChrsOECBAgAABAgQIEAgIGO6BI4lIgAABAgQIECBAwHDXAQIECBAgQIAAAQIBAcM9cCQRCRAgQIAAAQIECBjuOkCAAAECBAgQIEAgIGC4B44kIgECBAgQIECAAAHDXQcIECBAgAABAgQIBAQM98CRRCRAgAABAgQIECBguOsAAQIECBAgQIAAgYCA4R44kogECBAgQIAAAQIEDHcdIECAAAECBAgQIBAQMNwDRxKRAAECBAgQIECAgOGuAwQIECBAgAABAgQCAoZ74EgiEiBAgAABAgQIEDDcdYAAAQIECBAgQIBAQMBwDxxJRAIECBAgQIAAAQKGuw4QIECAAAECBAgQCAgY7oEjiUiAAAECBAgQIEDAcNcBAgQIECBAgAABAgEBwz1wJBEJECBAgAABAgQIGO46QIAAAQIECBAgQCAgYLgHjiQiAQIECBAgQIAAAcNdBwgQIECAAAECBAgEBAz3wJFEJECAAAECBAgQIGC46wABAgQIECBAgACBgIDhHjiSiAQIECBAgAABAgQMdx0gQIAAAQIECBAgEBAw3ANHEpEAAQIECBAgQICA4a4DBAgQIECAAAECBAIChnvgSCISIECAAAECBAgQMNx1gAABAgQIECBAgEBAwHAPHElEAgQIECBAgAABAoa7DhAgQIAAAQIECBAICBjugSOJSIAAAQIECBAgQMBw1wECBAgQIECAAAECAQHDPXAkEQkQIECAAAECBAgY7jpAgAABAgQIECBAICBguAeOJCIBAgQIECBAgAABw10HCBAgQIAAAQIECAQEDPfAkUQkQIAAAQIECBAgYLjrAAECBAgQIECAAIGAgOEeOJKIBAgQIECAAAECBAx3HSBAgAABAgQIECAQEDDcA0cSkQABAgQIECBAgIDhrgMECBAgQIAAAQIEAgKGe+BIIhIgQIAAAQIECBB4Bsp/HZfupH3NAAAAAElFTkSuQmCC",
                     width: 300,
                     alignment: "center",
-                    colSpan: 4
+                    colSpan: 4,
                   },
                   {},
                   {},
@@ -837,10 +884,7 @@ export default {
                 ],
                 [
                   {
-                    text: [
-                      "Descripción del Procedimiento (paso a paso): ",
-
-                    ],
+                    text: ["Descripción del Procedimiento (paso a paso): "],
                     border: [true, true, true, false],
                     colSpan: 4,
                     fontSize: 9,
@@ -1119,7 +1163,6 @@ export default {
                         text: this.formulario.encargado_nombre,
                         bold: false,
                       },
-
                     ],
                     border: [true, true, true, true],
                     fontSize: 9,
@@ -1150,21 +1193,17 @@ export default {
                     border: [true, true, true, true],
                     fontSize: 9,
                     bold: true,
-                  }
+                  },
                 ],
                 [
                   {
-                    text: [
-                      "Firma: ",
-                    ],
+                    text: ["Firma: "],
                     border: [true, true, true, false],
                     fontSize: 9,
                     bold: true,
                   },
                   {
-                    text: [
-                      "Firma: ",
-                    ],
+                    text: ["Firma: "],
                     border: [true, true, true, false],
                     colSpan: 2,
                     fontSize: 9,
@@ -1172,13 +1211,11 @@ export default {
                   },
                   {},
                   {
-                    text: [
-                      "Firma: ",
-                    ],
+                    text: ["Firma: "],
                     border: [true, true, true, false],
                     fontSize: 9,
                     bold: true,
-                  }
+                  },
                 ],
                 [
                   {
@@ -1217,25 +1254,22 @@ export default {
                     border: [true, true, true, true],
                     fontSize: 9,
                     bold: true,
-                  }
+                  },
                 ],
               ],
             },
           },
         ],
-
       };
       // this.agregarTareaAsignada()
-      this.agregarGeneralidades()
-      this.agregarPasosProcedimiento() // agrega pasos de procedimiento de manera dinámica al pdf
-      this.agregarEmpleado() // agrega empleados de manera dinámica al pdf
-      this.agregarFirmasEncargados() // agrega las firmas al pie del documento de forma dinámica para validar si vienen vacías
+      this.agregarGeneralidades();
+      this.agregarPasosProcedimiento(); // agrega pasos de procedimiento de manera dinámica al pdf
+      this.agregarEmpleado(); // agrega empleados de manera dinámica al pdf
+      this.agregarFirmasEncargados(); // agrega las firmas al pie del documento de forma dinámica para validar si vienen vacías
       // console.log(this.docDefinition.content[0].table.body) //descomentar para ver el array completo del pdf con sus respectivas posiciones
       pdfMake.createPdf(this.docDefinition).open();
     },
   },
 };
 </script>
-<style scoped>
-
-</style>
+<style scoped></style>

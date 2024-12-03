@@ -466,7 +466,11 @@ export default {
   },
   mixins: [Token, Alerts, Scroll, Geolocal],
   props: {
-    userlogued: {},
+    userlogued: {
+      type: Object, // Define el tipo como Object
+      required: false, // Opcional, no es obligatorio
+      default: () => ({}), // Proporciona un objeto vacío como valor predeterminado
+    },
   },
   data() {
     return {

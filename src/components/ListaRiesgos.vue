@@ -8,8 +8,8 @@
         :tabla="tabla"
         :endpoint="endpoint"
         :endpointexport="endpointexport"
-        />
-        <!-- @filtrando="filtrando" -->
+      />
+      <!-- @filtrando="filtrando" -->
     </div>
   </div>
 </template>
@@ -158,7 +158,6 @@ export default {
           tipo: "fecha",
           calculado: "false",
         },
-        
       ],
       filtro_gestion_ingresos: false,
     };

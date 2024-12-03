@@ -67,39 +67,63 @@
 <script>
 export default {
   props: {
-    nombreCampo: {},
-    placeholder: {},
-    registros: [],
-    nombreItem: {},
-    eventoCampo: {},
-    ubicacion: {},
+    nombreCampo: {
+      type: String, // Se asume que es un texto
+      required: false,
+      default: "", // Cadena vacía como valor predeterminado
+    },
+    placeholder: {
+      type: String, // Texto para el atributo placeholder
+      required: false,
+      default: "", // Cadena vacía como valor predeterminado
+    },
+    registros: {
+      type: Array, // Arreglo
+      required: false,
+      default: () => [], // Arreglo vacío por defecto
+    },
+    nombreItem: {
+      type: String, // Nombre de un ítem
+      required: false,
+      default: "", // Cadena vacía como valor predeterminado
+    },
+    eventoCampo: {
+      type: String, // Función para manejar eventos
+      required: false,
+      default: null, // No asigna una función predeterminada
+    },
+    ubicacion: {
+      type: Object, // Objeto para ubicaciones
+      required: false,
+      default: () => ({}), // Objeto vacío por defecto
+    },
     clearInput: {
-      type: Boolean,
-      default: false,
+      type: Boolean, // Valor booleano
+      default: false, // Falso por defecto
     },
     index: {
-      type: Number,
-      default: null,
+      type: Number, // Índice numérico
+      default: null, // Null por defecto
     },
     ordenCampo: {
-      type: Number,
-      default: null,
+      type: Number, // Orden del campo
+      default: null, // Null por defecto
     },
     archivos: {
-      type: Boolean,
-      default: false,
+      type: Boolean, // Si hay archivos
+      default: false, // Falso por defecto
     },
     disabled: {
-      type: Boolean,
-      default: false,
+      type: Boolean, // Si el campo está deshabilitado
+      default: false, // Falso por defecto
     },
     valida_campo: {
-      type: Boolean,
-      default: true,
+      type: Boolean, // Validación del campo
+      default: true, // Verdadero por defecto
     },
     consulta: {
-      type: String,
-      default: "",
+      type: String, // Consulta como cadena
+      default: "", // Cadena vacía como valor predeterminado
     },
   },
   data() {

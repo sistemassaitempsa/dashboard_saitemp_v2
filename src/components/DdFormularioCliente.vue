@@ -3585,12 +3585,15 @@ export default {
   mixins: [Scroll, Alerts, Token, Permisos],
   props: {
     userlogued: {
-      default: "",
+      type: Object, // Especifica el tipo como Object
+      required: false, // Opcional: define si es obligatorio
+      default: () => ({}), // Proporciona un objeto vacío como valor predeterminado
     },
   },
   data() {
     return {
       URL_API: process.env.VUE_APP_URL_API,
+      tamano_texto_version:'',
       proveedor: false,
       cliente: false,
       cliente_proveedor: [],
@@ -4011,6 +4014,7 @@ export default {
         .get(self.URL_API + "api/v1/versiondebidadiligencia", config)
         .then(function (result) {
           self.versiones = result.data;
+          self.tamano_texto_version = result.data[0].tamano_texto;
         });
     },
     validaCamposDinamicos(index, bandera = null) {
@@ -7503,7 +7507,7 @@ ul li {
   cursor: pointer;
 }
 
-.ct >>> span {
+.ct :deep(span) {
   padding: 10px 60px 10px 0px;
 }
 

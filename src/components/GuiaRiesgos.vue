@@ -2,7 +2,10 @@
   <div class="container">
     <h2>Criterio matriz riesgos</h2>
     <Loading :loading="loading" />
-    <table class="table table-bordered border-dark table-responsive" v-if="!loading">
+    <table
+      class="table table-bordered border-dark table-responsive"
+      v-if="!loading"
+    >
       <thead class="table-dark">
         <tr>
           <td scope="col" colspan="6">Matriz calificación de oportunidades</td>
@@ -47,7 +50,11 @@
         </tr>
       </tbody>
     </table>
-    <table class="table table-bordered border-dark" table-responsive v-if="!loading">
+    <table
+      class="table table-bordered border-dark"
+      table-responsive
+      v-if="!loading"
+    >
       <thead class="table-dark">
         <tr>
           <td scope="col" colspan="6">Matriz calificación de riesgo</td>
@@ -213,7 +220,7 @@ export default {
 .formatted-text {
   white-space: pre-line; /* Mantiene los saltos de línea del texto */
   /* Otros estilos opcionales como color, padding, etc. */
-  position:relative;
+  position: relative;
 }
 
 .popover {
@@ -221,12 +228,11 @@ export default {
   position: absolute;
   color: black;
   padding: 10px;
-  top:-60px;
-  left:30px;
+  top: -60px;
+  left: 30px;
 }
 
-table{
-    margin-bottom:50px
+table {
+  margin-bottom: 50px;
 }
-
 </style>

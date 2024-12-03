@@ -6,14 +6,16 @@ export const Socket = {
     };
   },
   mounted() {
-    var self = this
+    var self = this;
     setInterval(() => {
-      self.pila_notificaciones = JSON.parse(localStorage.getItem("pila"))
-      if(self.pila_notificaciones.length > 1){
-        self.pila_notificaciones.splice(0,1)
-        localStorage.setItem (
-          'pila',
-          JSON.stringify (this.pila_notificaciones)
+      const pila = localStorage.getItem("pila");
+      self.pila_notificaciones = pila ? JSON.parse(pila) : []; // Asegúrate de que sea un arreglo
+  
+      if (Array.isArray(self.pila_notificaciones) && self.pila_notificaciones.length > 1) {
+        self.pila_notificaciones.splice(0, 1);
+        localStorage.setItem(
+          "pila",
+          JSON.stringify(self.pila_notificaciones)
         );
       }
     }, 10000);
