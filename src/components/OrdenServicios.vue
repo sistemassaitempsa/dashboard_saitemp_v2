@@ -565,7 +565,7 @@ export default {
     this.getPersonasCargo();
     this.getEstadoCargo();
     // Si viene un id en la url, se consulta un cliente mediante este ID
-    if (this.$route.params.id != undefined) {
+    if (this.$route.params.id != '') {
       this.getCliente();
       // console.log(this.cargos.length)
       // if (this.cargos.length > 1) {
@@ -707,7 +707,7 @@ export default {
     guardarCargos() {
       let self = this;
       let config = this.configHeader();
-      if (this.$route.params.id != undefined) {
+      if (this.$route.params.id != '') {
         axios
           .put(
             self.URL_API + "api/v1/ordenserviciocargo/" + self.numero_documento,

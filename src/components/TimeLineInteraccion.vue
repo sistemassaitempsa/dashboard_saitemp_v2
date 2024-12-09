@@ -51,7 +51,9 @@ export default {
   computed: {},
   watch: {},
   mounted() {
-    this.getHistorial();
+    if(this.$route.params.id != ""){
+      this.getHistorial();
+    }
   },
   methods: {
     getHistorial() {

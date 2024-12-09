@@ -25,7 +25,7 @@
     <form class="was-validated" @submit.prevent="save()">
       <h6 class="tituloseccion">Información general</h6>
       <div id="seccion">
-        <p v-if="$route.params.id != undefined">
+        <p v-if="$route.params.id != ''">
           Radicado: {{ numero_radicado }}
         </p>
         <div class="row">
@@ -1724,12 +1724,13 @@
                 >Funciones del cargo:</label
               >
               <div class="col">
-                <EditorTextoHtml
+                <!-- <EditorTextoHtml
                   :consulta="consulta_textohtml[index]"
                   :index="index"
                   @retornoTexto="retornoTexto"
                   :showToolbar="true"
-                />
+                /> -->
+                <Tiptap v-model="consulta_textohtml[index]"/>
               </div>
               <div class="col-1 trash">
                 <i
@@ -1790,7 +1791,7 @@
           v-for="(item, index) in fileInputsCount"
           :key="index"
         >
-          <div class="col-2" v-if="$route.params.id != null">
+          <div class="col-2" v-if="$route.params.id != ''">
             <a
               :href="item.ruta != undefined ? URL_API + item.ruta : null"
               target="_blank"
@@ -3487,7 +3488,7 @@
         <div class="col" style="margin: 30px">
           <div class="btn-group">
             <button
-              v-if="ruta_id != undefined && permisos[21].autorizado"
+              v-if="ruta_id != '' && permisos[21].autorizado"
               class="registro_cambio2"
               :disabled="deshabilitar_boton"
               type="button"
@@ -3499,7 +3500,7 @@
               />
             </button>
             <button
-              v-if="ruta_id != undefined && permisos[22].autorizado"
+              v-if="ruta_id != '' && permisos[22].autorizado"
               class="registro_cambio"
               :disabled="deshabilitar_boton"
               type="button"
@@ -3511,7 +3512,7 @@
               />
             </button>
             <button
-              v-if="ruta_id == undefined && permisos[2].autorizado"
+              v-if="ruta_id == '' && permisos[2].autorizado"
               class="btn btn-success"
               :disabled="deshabilitar_boton"
               type="submit"
@@ -3519,7 +3520,7 @@
               Guardar
             </button>
             <button
-              v-if="ruta_id != undefined && permisos[3].autorizado"
+              v-if="ruta_id != '' && permisos[3].autorizado"
               class="registro_cambio"
               :disabled="deshabilitar_boton"
               type="button"
@@ -3539,10 +3540,10 @@
               <li v-if="permisos[1].autorizado" @click="hideBottons()">
                 Generar pdf
               </li>
-              <li v-if="permisos[0].autorizado && ruta_id != undefined">
+              <li v-if="permisos[0].autorizado && ruta_id != ''">
                 <hr class="dropdown-divider" />
               </li>
-              <li v-if="permisos[0].autorizado && ruta_id != undefined">
+              <li v-if="permisos[0].autorizado && ruta_id != ''">
                 <ConsultaContrato class="ct" :item_id="ruta_id" />
               </li>
             </ul>
@@ -3563,19 +3564,21 @@ import { Alerts } from "../Mixins/Alerts.js";
 import { Token } from "../Mixins/Token.js";
 import jsPDF from "jspdf";
 import html2canvas from "html2canvas";
-import EditorTextoHtml from "./EditorTextoHtml.vue";
+// import EditorTextoHtml from "./EditorTextoHtml.vue";
 import { Permisos } from "../Mixins/Permisos.js";
 import ConsultaContrato from "./ConsultaContrato.vue";
 import RegistroCambio from "./RegistroCambio.vue";
 import FlotanteInteraccionCliente from "./FlotanteInteraccionCliente.vue";
 import FlotanteSelecciondd from "./FlotanteSelecciondd.vue";
+import Tiptap from "./Tiptap.vue";
 
 export default {
   components: {
     SearchList,
     SearchTable,
     ListaMultiple,
-    EditorTextoHtml,
+    // EditorTextoHtml,
+    Tiptap,
     ConsultaContrato,
     Loading,
     RegistroCambio,
@@ -3982,7 +3985,7 @@ export default {
     this.scrollTop();
     this.validarVersionamiento();
     if (
-      this.$route.params.id != undefined &&
+      this.$route.params.id != '' &&
       this.$route.path != "/formularioregistro"
     ) {
       this.loading = true;
@@ -4467,7 +4470,7 @@ export default {
           .then(function (result) {
             if (
               result.data.nit != undefined &&
-              self.$route.params.id == undefined
+              self.$route.params.id == ""
             ) {
               self.showAlert(
                 "El nit ingresado ya se encuentra registrado en nuestra base de datos",
@@ -4477,7 +4480,7 @@ export default {
               return;
             } else if (
               result.data.numero_identificacion != undefined &&
-              self.$route.params.id == undefined
+              self.$route.params.id == ""
             ) {
               self.showAlert(
                 "El número de identificación ingresado ya se encuentra registrado en nuestra base de datos",
@@ -5569,7 +5572,7 @@ export default {
         this.array_lista_examenes.splice(i, 1);
         this.array_lista_recomendaciones.splice(i, 1);
       }
-      this.ruta_id = undefined;
+      this.ruta_id = '';
       this.tipo_cliente = "";
       this.cliente = false;
       this.consulta_tipo_cliente = "";

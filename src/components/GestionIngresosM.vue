@@ -25,11 +25,11 @@
     <form class="was-validated" @submit.prevent="save()">
       <!-- <h6 class="tituloseccion">Información general</h6> -->
       <div id="seccion">
-        <div class="row" v-if="$route.params.id != undefined">
+        <div class="row" v-if="$route.params.id != ''">
           <h6 style="text-align: left">Radicado: {{ radicado }}</h6>
         </div>
         <div class="row">
-          <div class="col" v-if="$route.params.id != undefined">
+          <div class="col" v-if="$route.params.id != ''">
             <label class="form-label">Fecha radicado</label>
             <input
               type="datetime-local"
@@ -643,7 +643,7 @@
         <div class="row">
           <div class="col" style="margin: 30px" v-if="permisos[23].autorizado">
             <div
-              v-if="$route.params.id != undefined"
+              v-if="$route.params.id != ''"
               class="btn-group"
               role="group"
               aria-label="Button group with nested dropdown"
@@ -675,7 +675,7 @@
 
           <div class="col" style="margin: 30px" v-if="permisos[23].autorizado">
             <div
-              v-if="$route.params.id != undefined"
+              v-if="$route.params.id != ''"
               class="btn-group"
               role="group"
               aria-label="Button group with nested dropdown"
@@ -714,7 +714,7 @@
           <div class="col">
             <button
               type="button"
-              v-if="$route.params.id != undefined"
+              v-if="$route.params.id != ''"
               style="background-color: #d4ac0d; color: white"
               @click="agregarPendientes()"
               class="btn m-4"
@@ -828,7 +828,7 @@
       </button>
       <div
         class="row"
-        v-if="$route.params.id != undefined"
+        v-if="$route.params.id != ''"
         style="text-align: left; clear: both; margin-bottom: 40px"
       >
         <h5 @click="envio_correo = !envio_correo" style="cursor: pointer">
@@ -837,7 +837,7 @@
         </h5>
       </div>
       <SolicitudNovedadesNomina
-        v-if="$route.params.id != undefined && envio_correo"
+        v-if="$route.params.id != '' && envio_correo"
         :menu="menu"
         :reenvio_correo="reenvio_correo"
         :adjuntos_candidato_string="adjuntos_candidato_string"
@@ -1429,9 +1429,10 @@ export default {
           }
           self.fileInputsCount = result.data;
           self.id_cliente = self.$route.params.id;
-          if (self.id_cliente != undefined) {
-            self.getRegistroIngreso(self.id_cliente);
-          }
+          // if (self.id_cliente != undefined) {
+          //   self.getRegistroIngreso(self.id_cliente);
+
+          // }
         });
     },
     getAfirmacionNegacion() {
@@ -1549,7 +1550,7 @@ export default {
       this.crearRegistroIngreso();
 
       var url = "";
-      if (this.$route.params.id != undefined) {
+      if (this.$route.params.id != '') {
         url =
           self.URL_API + "api/v1/formularioingreso/" + this.$route.params.id;
       } else {

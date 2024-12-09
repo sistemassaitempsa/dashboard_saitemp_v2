@@ -93,9 +93,9 @@ export default {
       default: null, // No asigna una función predeterminada
     },
     ubicacion: {
-      type: Object, // Objeto para ubicaciones
+      type: String, // Objeto para ubicaciones
       required: false,
-      default: () => ({}), // Objeto vacío por defecto
+      default: "", // Objeto vacío por defecto
     },
     clearInput: {
       type: Boolean, // Valor booleano

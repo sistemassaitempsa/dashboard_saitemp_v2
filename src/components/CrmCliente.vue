@@ -3,11 +3,11 @@
     <Loading :loading="loading" />
     <h2>Interacción cliente CRM</h2>
     <div id="seccion">
-      <div class="row" v-if="$route.params.id != undefined">
+      <div class="row" v-if="$route.params.id != ''">
         <div class="col">
           <h6 style="text-align: left">Radicado: {{ radicado }}</h6>
         </div>
-        <div class="col" v-if="$route.params.id != null">
+        <div class="col" v-if="$route.params.id != ''">
           <button
             type="button"
             class="btn btn-success btn-sm"
@@ -19,7 +19,7 @@
         </div>
       </div>
       <form class="was-validated" @submit.prevent="save()" autocomplete="off">
-        <div class="row" v-if="$route.params.id != undefined">
+        <div class="row" v-if="$route.params.id != ''">
           <div class="col mb-3">
             <label class="form-label">Fecha de radicado: </label>
             <input
@@ -61,9 +61,7 @@
               :registros="sedes"
               placeholder="Seleccione una opción"
               :consulta="consulta_sede"
-              :disabled="
-                $route.params.id != undefined && !permisos[32].autorizado
-              "
+              :disabled="$route.params.id != '' && !permisos[32].autorizado"
             />
           </div>
 
@@ -76,9 +74,7 @@
               :registros="procesos"
               placeholder="Seleccione una opción"
               :consulta="consulta_proceso"
-              :disabled="
-                $route.params.id != undefined && !permisos[32].autorizado
-              "
+              :disabled="$route.params.id != '' && !permisos[32].autorizado"
             />
           </div>
         </div>
@@ -92,9 +88,7 @@
               :registros="solicitantes"
               placeholder="Seleccione una opción"
               :consulta="consulta_solicitante"
-              :disabled="
-                $route.params.id != undefined && !permisos[32].autorizado
-              "
+              :disabled="$route.params.id != '' && !permisos[32].autorizado"
             />
           </div>
           <div class="col mb-3" id="no-medio-atencion" tabindex="0">
@@ -106,16 +100,14 @@
               :registros="respuestas_interaccion"
               placeholder="Seleccione una opción"
               :consulta="consulta_interaccion"
-              :disabled="
-                $route.params.id != undefined && !permisos[32].autorizado
-              "
+              :disabled="$route.params.id != '' && !permisos[32].autorizado"
             />
           </div>
         </div>
         <div class="row">
           <div class="col" id="no-nit" tabindex="0">
             <SearchList
-              v-if="solicitante_id == 1 && $route.params.id == undefined"
+              v-if="solicitante_id == 1 && $route.params.id == ''"
               nombreCampo="Nit/identificacion: *"
               @getEmpresasCliente="getEmpresasCliente"
               eventoCampo="getEmpresasCliente"
@@ -139,9 +131,7 @@
                 aria-describedby="emailHelp"
                 v-model="nit_documento"
                 required
-                :disabled="
-                  $route.params.id != undefined && !permisos[32].autorizado
-                "
+                :disabled="$route.params.id != '' && !permisos[32].autorizado"
               />
               <div class="invalid-feedback">
                 {{ mensaje_error }}
@@ -159,7 +149,7 @@
               v-model="nombre_contacto"
               required
               :disabled="
-                ($route.params.id != undefined && !permisos[32].autorizado) ||
+                ($route.params.id != '' && !permisos[32].autorizado) ||
                 disableName
               "
             />
@@ -178,9 +168,7 @@
               id="no-tel"
               aria-describedby="emailHelp"
               v-model="telefono_contacto"
-              :disabled="
-                $route.params.id != undefined && !permisos[32].autorizado
-              "
+              :disabled="$route.params.id != '' && !permisos[32].autorizado"
               required
             />
             <div class="invalid-feedback">
@@ -196,9 +184,7 @@
               id="no-email"
               aria-describedby="emailHelp"
               v-model="correo_contacto"
-              :disabled="
-                $route.params.id != undefined && !permisos[32].autorizado
-              "
+              :disabled="$route.params.id != '' && !permisos[32].autorizado"
               required
               @input="validateEmail"
             />
@@ -223,9 +209,7 @@
               :registros="estados_cierre"
               placeholder="Seleccione una opción"
               :consulta="consulta_estado_cierre"
-              :disabled="
-                $route.params.id != undefined && fecha_cierre != undefined
-              "
+              :disabled="$route.params.id != '' && fecha_cierre != undefined"
             />
           </div>
           <div
@@ -242,9 +226,7 @@
               :registros="lista_pqrsf"
               placeholder="Seleccione una opción"
               :consulta="consulta_pqrsf"
-              :disabled="
-                $route.params.id != undefined && !permisos[32].autorizado
-              "
+              :disabled="$route.params.id != '' && !permisos[32].autorizado"
             />
           </div>
         </div>
@@ -259,16 +241,14 @@
               placeholder="Seleccione una opción"
               :consulta="consulta_responsable"
               :index="1"
-              :disabled="
-                $route.params.id != undefined && !permisos[32].autorizado
-              "
+              :disabled="$route.params.id != '' && !permisos[32].autorizado"
             />
           </div>
           <div
             class="col-6 mb-3"
             v-if="
-              (estado_cierre_id == 3 && $route.params.id != undefined) ||
-              (estado_cierre_id == 3 && $route.params.id == undefined)
+              (estado_cierre_id == 3 && $route.params.id != '') ||
+              (estado_cierre_id == 3 && $route.params.id == '')
             "
           >
             <SearchList
@@ -280,7 +260,7 @@
               placeholder="Seleccione una opción"
               :consulta="consulta_cierra_pqrsf"
               :disabled="
-                $route.params.id != undefined &&
+                $route.params.id != '' &&
                 consulta_cierra_pqrsf != null &&
                 fecha_cierre != undefined
               "
@@ -288,7 +268,7 @@
             />
           </div>
 
-          <div class="col-6 mb-3" v-if="$route.params.id != undefined">
+          <div class="col-6 mb-3" v-if="$route.params.id != ''">
             <label class="form-label">Crea radicado: </label>
             <input
               type="text"
@@ -298,9 +278,7 @@
               aria-describedby="emailHelp"
               v-model="crea_pqrsf"
               required
-              :disabled="
-                $route.params.id != undefined && !permisos[32].autorizado
-              "
+              :disabled="$route.params.id != '' && !permisos[32].autorizado"
             />
             <div class="invalid-feedback">
               {{ mensaje_error }}
@@ -311,11 +289,12 @@
           <label class="form-label">Observación:</label>
           <br />
           <div class="col mb-3">
-            <vue-editor
+            <Tiptap v-model="observacion" @input="limitarCaracteres" />
+            <!-- <vue-editor
               v-model="observacion"
               :editorToolbar="customToolbar"
               @input="limitarCaracteres"
-            ></vue-editor>
+            ></vue-editor> -->
             <!-- <textarea
               class="form-control"
               name=""
@@ -350,9 +329,7 @@
           <div class="row">
             <div
               v-if="interaccion_id == 5 || interaccion_id == 6"
-              :class="
-                $route.params.id !== undefined ? 'col-6 mb-3' : 'col-6 mb-3'
-              "
+              :class="$route.params.id !== '' ? 'col-6 mb-3' : 'col-6 mb-3'"
             >
               <label class="form-label">Hora inicio de visita:* </label>
               <input
@@ -371,7 +348,7 @@
             <div
               class="col-6 mb-3"
               v-if="
-                $route.params.id != undefined &&
+                $route.params.id != '' &&
                 (interaccion_id == 5 || interaccion_id == 6)
               "
             >
@@ -402,9 +379,7 @@
                 placeholder="Seleccione una opción"
                 :consulta="visitante"
                 :index="3"
-                :disabled="
-                  $route.params.id != undefined && !permisos[32].autorizado
-                "
+                :disabled="$route.params.id != '' && !permisos[32].autorizado"
               />
               <div class="invalid-feedback">
                 {{ mensaje_error }}
@@ -420,9 +395,7 @@
                 :registros="cargos_planta"
                 placeholder="Seleccione una opción"
                 :consulta="cargo_visitante"
-                :disabled="
-                  $route.params.id != undefined && !permisos[32].autorizado
-                "
+                :disabled="$route.params.id != '' && !permisos[32].autorizado"
               />
               <div class="invalid-feedback">
                 {{ mensaje_error }}
@@ -440,9 +413,7 @@
                 aria-describedby="emailHelp"
                 v-model="visitado"
                 required
-                :disabled="
-                  $route.params.id != undefined && !permisos[32].autorizado
-                "
+                :disabled="$route.params.id != '' && !permisos[32].autorizado"
               />
               <div class="invalid-feedback">
                 {{ mensaje_error }}
@@ -459,9 +430,7 @@
                 aria-describedby="emailHelp"
                 v-model="cargo_visitado"
                 required
-                :disabled="
-                  $route.params.id != undefined && !permisos[32].autorizado
-                "
+                :disabled="$route.params.id != '' && !permisos[32].autorizado"
               />
               <div class="invalid-feedback">
                 {{ mensaje_error }}
@@ -479,9 +448,7 @@
                 aria-describedby="emailHelp"
                 v-model="objetivo_visita"
                 required
-                :disabled="
-                  $route.params.id != undefined && !permisos[32].autorizado
-                "
+                :disabled="$route.params.id != '' && !permisos[32].autorizado"
                 maxlength="200"
               />
               <div class="invalid-feedback">
@@ -499,9 +466,7 @@
                 aria-describedby="emailHelp"
                 v-model="alcance_visita"
                 required
-                :disabled="
-                  $route.params.id != undefined && !permisos[32].autorizado
-                "
+                :disabled="$route.params.id != '' && !permisos[32].autorizado"
                 maxlength="500"
               />
               <div class="invalid-feedback">
@@ -522,9 +487,7 @@
                 placeholder="Tema"
                 @input="checkCharLimit"
                 maxlength="3000"
-                :disabled="
-                  $route.params.id != undefined && !permisos[32].autorizado
-                "
+                :disabled="$route.params.id != '' && !permisos[32].autorizado"
               ></textarea>
               <div class="d-flex justify-content-end">
                 <small class="char-count">{{ remainingChars }}/3000</small>
@@ -546,7 +509,7 @@
                     `"Compromiso ${index + 1}:  *`
                   }}</label>
                 </div>
-                <div class="col-3 mb-3" v-if="$route.params.id != undefined">
+                <div class="col-3 mb-3" v-if="$route.params.id != ''">
                   <label class="form-label">Fecha de apertura: </label>
                   <input
                     type="datetime-local"
@@ -570,7 +533,7 @@
                     v-model="compromiso.descripcion"
                     :placeholder="'Compromiso ' + (index + 1)"
                     :disabled="
-                      $route.params.id != undefined && !permisos[32].autorizado
+                      $route.params.id != '' && !permisos[32].autorizado
                     "
                   ></textarea>
                   <div class="d-flex justify-content-end">
@@ -596,7 +559,7 @@
                     :index="index"
                     :valida_campo="compromiso.descripcion != ''"
                     :disabled="
-                      $route.params.id != undefined && !permisos[32].autorizado
+                      $route.params.id != '' && !permisos[32].autorizado
                     "
                   />
 
@@ -637,7 +600,7 @@
                     v-model="compromiso.observacion"
                     placeholder="Observación"
                     :disabled="
-                      $route.params.id != undefined && !permisos[32].autorizado
+                      $route.params.id != '' && !permisos[32].autorizado
                     "
                     maxlength="3000"
                   ></textarea>
@@ -785,9 +748,7 @@
                   aria-describedby="emailHelp"
                   v-model="asistencia.nombre"
                   required
-                  :disabled="
-                    $route.params.id != undefined && !permisos[32].autorizado
-                  "
+                  :disabled="$route.params.id != '' && !permisos[32].autorizado"
                 />
                 <div class="invalid-feedback">
                   {{ mensaje_error }}
@@ -803,9 +764,7 @@
                   aria-describedby="emailHelp"
                   v-model="asistencia.cargo"
                   required
-                  :disabled="
-                    $route.params.id != undefined && !permisos[32].autorizado
-                  "
+                  :disabled="$route.params.id != '' && !permisos[32].autorizado"
                 />
                 <div class="invalid-feedback">
                   {{ mensaje_error }}
@@ -822,7 +781,7 @@
                     aria-describedby="emailHelp"
                     v-model="asistencia.correo"
                     :disabled="
-                      $route.params.id != undefined && !permisos[32].autorizado
+                      $route.params.id != '' && !permisos[32].autorizado
                     "
                     @input="validateEmailAsistencia(index)"
                   />
@@ -849,8 +808,7 @@
                   >
                   <div
                     v-if="
-                      $route.params.id != undefined &&
-                      asistencia.firma.length != 0
+                      $route.params.id != '' && asistencia.firma.length != 0
                     "
                     class="imagen_firma"
                   >
@@ -893,9 +851,9 @@
                 <div class="col-sm-12 col-md-6 mb-3">
                   <div
                     v-if="
-                      ($route.params.id != null &&
+                      ($route.params.id != '' &&
                         asistencia.firma.length == 0) ||
-                      $route.params.id == null
+                      $route.params.id == ''
                     "
                     class="d-flex justify-content-end align-items-end w-100 h-100"
                   >
@@ -932,7 +890,7 @@
         </div>
         <!-- finaliza aqui -->
         <div class="row">
-          <div class="col" v-if="$route.params.id != null">
+          <div class="col" v-if="$route.params.id != ''">
             <label class="form-label labelBlock">Archivos adjuntos:</label>
           </div>
         </div>
@@ -954,7 +912,7 @@
                   <button
                     type="button"
                     :class="
-                      evidencia.archivo != undefined
+                      evidencia.archivo != ''
                         ? 'btn btn-sm ver'
                         : 'btn btn-sm btn-secondary'
                     "
@@ -1086,7 +1044,7 @@
             </div>
           </div>
         </div>
-        <div class="col" v-if="$route.params.id != undefined">
+        <div class="col" v-if="$route.params.id != ''">
           <div
             class="row"
             style="text-align: left; clear: both; margin-top: 40px"
@@ -1235,7 +1193,7 @@
               </ul>
             </div>
           </div>
-          <div class="col" v-if="$route.params.id != undefined">
+          <div class="col" v-if="$route.params.id != ''">
             <button
               class="btn btn-success"
               type="button"
@@ -1275,7 +1233,7 @@
     </div>
     <div
       class="row"
-      v-if="$route.params.id != undefined"
+      v-if="$route.params.id != ''"
       style="text-align: left; clear: both; margin-bottom: 40px"
     >
       <h5 @click="envio_correo = !envio_correo" style="cursor: pointer">
@@ -1284,7 +1242,7 @@
       </h5>
     </div>
     <SolicitudNovedadesNomina
-      v-if="$route.params.id != undefined && envio_correo"
+      v-if="$route.params.id != '' && envio_correo"
       :menu="menu"
       :reenvio_correo="reenvio_correo"
       :adjuntos_candidato_string="adjuntos_candidato_string"
@@ -1362,7 +1320,7 @@
   </div>
 </template>
 <script>
-import { VueEditor } from "vue2-editor";
+// import { VueEditor } from "vue2-editor";
 import axios from "axios";
 import MapaVue from "./MapaVue.vue";
 import { Token } from "../Mixins/Token.js";
@@ -1373,6 +1331,7 @@ import { Permisos } from "../Mixins/Permisos.js";
 import SolicitudNovedadesNomina from "./SolicitudNovedadesNomina.vue";
 import FirmaDigital from "./FirmaDigital.vue";
 import { Geolocal } from "../Mixins/Geolocal.js";
+import Tiptap from "./Tiptap.vue";
 
 export default {
   components: {
@@ -1381,7 +1340,8 @@ export default {
     SolicitudNovedadesNomina,
     FirmaDigital,
     MapaVue,
-    VueEditor,
+    Tiptap,
+    // VueEditor,
   },
   mixins: [Token, Alerts, Permisos, Geolocal],
   props: {
@@ -1549,10 +1509,10 @@ export default {
   async mounted() {
     this.id_registro = this.$route.params.id;
     window.addEventListener("keydown", this.convinacionGuardado);
-    if (this.id_registro !== undefined) {
+    if (this.id_registro !== "") {
       this.getItem(this.id_registro);
     }
-    if (this.$route.params.id == undefined) {
+    if (this.$route.params.id == "") {
       this.geolocal();
     }
     this.loadSavedForms();
@@ -2049,10 +2009,10 @@ export default {
         const fechaFormateada = this.formateoFechaSinHora(item.fecha_cierre);
         console.log(fechaFormateada);
         if (fechaFormateada) {
-          this.$set(this.compromisos, index, {
+          this.compromisos[index] = {
             ...item,
             fecha_cierre: fechaFormateada,
-          });
+          };
         }
       });
     },
@@ -2139,7 +2099,7 @@ export default {
         });
     },
     save(tipoSave) {
-      if (this.$route.params.id == undefined || this.hora_cierre == " ") {
+      if (this.$route.params.id == "" || this.hora_cierre == " ") {
         this.tomarHoraCierre();
       }
       if (this.estado_cierre_id == "") {
@@ -2579,7 +2539,7 @@ export default {
     loadPartial(nit_documento) {
       const rutaActual = this.$route.path;
       let deleteParam = false;
-      if (this.$route.params.id) {
+      if (this.$route.params.id != "") {
         delete this.$route.params.id;
         deleteParam = true;
       }
@@ -2787,19 +2747,21 @@ export default {
     },
     historicoCorreos() {
       var self = this;
-      var config = this.configHeader();
-      axios
-        .get(
-          self.URL_API +
-            "api/v1/consultacorreo/" +
-            self.menu_id +
-            "/" +
-            self.$route.params.id,
-          config
-        )
-        .then(function (result) {
-          self.gestioningresocorreos = result.data;
-        });
+      if (self.$route.params.id != "") {
+        var config = this.configHeader();
+        axios
+          .get(
+            self.URL_API +
+              "api/v1/consultacorreo/" +
+              self.menu_id +
+              "/" +
+              self.$route.params.id,
+            config
+          )
+          .then(function (result) {
+            self.gestioningresocorreos = result.data;
+          });
+      }
     },
     getModulo() {
       var self = this;
@@ -2818,7 +2780,7 @@ export default {
     },
     descargarInforme(id) {
       this.idSeleccionado = id;
-      if (this.$route.params.id !== undefined) {
+      if (this.$route.params.id !== "") {
         const urlDescarga =
           this.URL_API +
           "api/v1/seguimientocrmpdf/" +

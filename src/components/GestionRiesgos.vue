@@ -994,7 +994,14 @@
         </div>
       </div>
       <!-- :disabled="deshabilitar_boton" -->
-      <button class="btn btn-success m-4" type="submit" v-if="(permisos[35].autorizado && $route.params.id != undefined) || (permisos[36].autorizado && $route.params.id == undefined)">
+      <button
+        class="btn btn-success m-4"
+        type="submit"
+        v-if="
+          (permisos[35].autorizado && $route.params.id != '') ||
+          (permisos[36].autorizado && $route.params.id == '')
+        "
+      >
         Guardar formulario
       </button>
       <button
@@ -1092,7 +1099,7 @@ export default {
       divExpandido: false,
       seguimiento_guardado: [],
       contador: 0,
-      clasificaciones:[]
+      clasificaciones: [],
     };
   },
   computed: {},
@@ -1136,7 +1143,7 @@ export default {
     },
   },
   mounted() {
-    if (this.riesgo_id != undefined) {
+    if (this.riesgo_id != "") {
       this.reseteaTab();
       this.getApi(this.riesgo_id);
     } else {
@@ -1222,13 +1229,15 @@ export default {
       }
     },
     getItems(id) {
-      let self = this;
-      let config = this.configHeader();
-      axios
-        .get(self.URL_API + "api/v1/matrizriesgobyid/" + id, config)
-        .then(function (result) {
-          self.llenarFormulario(result.data);
-        });
+      if (id != undefined) {
+        let self = this;
+        let config = this.configHeader();
+        axios
+          .get(self.URL_API + "api/v1/matrizriesgobyid/" + id, config)
+          .then(function (result) {
+            self.llenarFormulario(result.data);
+          });
+      }
     },
     llenarFormulario(formulario) {
       this.nombre_riesgo = formulario.nombre_riesgo;
@@ -1248,7 +1257,6 @@ export default {
         this.clasificaciones,
         formulario.oportunidad_2
       );
-
 
       this.tipo_proceso = this.filteredArray(
         this.tipos_proceso,
@@ -1447,7 +1455,7 @@ export default {
       this.tab_amenaza = true;
       this.tab_oportunidad = false;
       this.id_registro = 0;
-      this.riesgo_id = undefined;
+      this.riesgo_id = "";
       this.indice = 0;
     },
     getNivelImpacto() {
@@ -1667,7 +1675,7 @@ export default {
     },
     getColorCeldaResultadoControl(item) {
       if (
-        (this.id_registro == 0 && this.riesgo_id == undefined) ||
+        (this.id_registro == 0 && this.riesgo_id == "") ||
         this.contador >= 4
       ) {
         this.resultado_control[this.indice].descripcion = item.control;
@@ -1745,7 +1753,7 @@ export default {
       let form = this.crearObjetoRiesgo();
       let config = this.configHeader();
       var url = "";
-      if (this.$route.params.id != undefined) {
+      if (this.$route.params.id != '') {
         var id = this.$route.params.id;
       } else if (this.id_registro != 0) {
         var id = this.id_registro;
@@ -1764,7 +1772,7 @@ export default {
       let config = this.configHeader();
       const form = new FormData();
       form.append("evidencia", self.file[0]);
-      if (this.$route.params.id != undefined) {
+      if (this.$route.params.id != '') {
         var id = this.$route.params.id;
       } else if (this.id_registro != 0) {
         var id = this.id_registro;

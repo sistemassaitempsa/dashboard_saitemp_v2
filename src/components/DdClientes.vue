@@ -2,6 +2,7 @@
   <div class="container">
     <NotificacionesSocket />
     <h2>Debida diligencia clientes</h2>
+    <!-- <Tiptap v-model="editorContent"/> -->
     <Tabla
       :datos="datos"
       :tabla="tabla"
@@ -20,10 +21,12 @@ import Tabla from "./Tabla.vue";
 import { Token } from "../Mixins/Token.js";
 import { Alerts } from "../Mixins/Alerts.js";
 import NotificacionesSocket from "./NotificacionSocket.vue";
+// import Tiptap from "./Tiptap.vue";
 export default {
   components: {
     Tabla,
     NotificacionesSocket,
+    // Tiptap
   },
   mixins: [Token, Alerts],
   props: {
@@ -31,6 +34,7 @@ export default {
   },
   data() {
     return {
+      editorContent:"",
       show_table: false,
       datos: [],
       endpoint: "consultaformulariocliente",
@@ -86,13 +90,18 @@ export default {
       listas: [],
       estados_firma: [],
       first_page_url: "",
+      editor:"",
     };
   },
   computed: {},
-  watch: {},
+  watch: {
+   editor(){
+    console.log(this.editor)
+   }
+  },
   mounted() {},
   created() {
-    this.urlExterna()
+    this.urlExterna();
     this.getEstadosFirma();
     this.getItems();
     this.llenarLista();

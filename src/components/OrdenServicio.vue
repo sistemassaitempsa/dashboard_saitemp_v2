@@ -527,12 +527,13 @@
                 >Especificaciones a tener en cuenta para vinculación:</label
               >
               <div class="col">
-                <EditorTextoHtml
+                <!-- <EditorTextoHtml
                   :consulta="consulta_textohtml_especificacion_v"
                   :index="1"
                   @retornoTexto="retornoTexto"
                   :showToolbar="true"
-                />
+                /> -->
+                <Tiptap v-model="consulta_textohtml_especificacion_v"/>
               </div>
             </div>
             <div
@@ -547,12 +548,13 @@
                 personal:</label
               >
               <div class="col">
-                <EditorTextoHtml
+                <!-- <EditorTextoHtml
                   :consulta="consulta_textohtml_especificacion_s"
                   :index="2"
                   @retornoTexto="retornoTexto"
                   :showToolbar="true"
-                />
+                /> -->
+                <Tiptap v-model="consulta_textohtml_especificacion_s"/>
               </div>
             </div>
             <div class="row cargos">
@@ -635,12 +637,13 @@
                     >Funciones del cargo:</label
                   >
                   <div class="col">
-                    <EditorTextoHtml
+                    <!-- <EditorTextoHtml
                       :consulta="consulta_textohtml_funciones"
                       :index="0"
                       @retornoTexto="retornoTexto"
                       :showToolbar="true"
-                    />
+                    /> -->
+                    <Tiptap v-model="consulta_textohtml_funciones"/>
                   </div>
                 </div>
                 <div class="row">
@@ -981,13 +984,15 @@
 <script>
 import axios from "axios";
 import SearchList from "./SearchList.vue";
-import EditorTextoHtml from "./EditorTextoHtml.vue";
+// import EditorTextoHtml from "./EditorTextoHtml.vue";
 import { Token } from "../Mixins/Token.js";
 import { Alerts } from "../Mixins/Alerts.js";
+import Tiptap from "./Tiptap.vue";
 export default {
   components: {
     SearchList,
-    EditorTextoHtml,
+    // EditorTextoHtml,
+    Tiptap
   },
   mixins: [Token, Alerts],
   props: {},

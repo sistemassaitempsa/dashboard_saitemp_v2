@@ -190,11 +190,12 @@
               >Descripción: *</label
             >
             <br />
-            <EditorTextoHtml
+            <!-- <EditorTextoHtml
               :enviar_correo="enviar_correo"
               @valida_campos="valida_campos"
               :cuerpo_mensaje="cuerpo_mensaje"
-            />
+            /> -->
+            <Tiptap v-model="cuerpo_mensaje" />
           </div>
         </div>
         <div class="row">
@@ -250,15 +251,17 @@
 </template>
 <script>
 import axios from "axios";
-import EditorTextoHtml from "./EditorTextoHtml.vue";
+// import EditorTextoHtml from "./EditorTextoHtml.vue";
 import Loading from "./Loading.vue";
 import { Alerts } from "../Mixins/Alerts.js";
 import { Token } from "../Mixins/Token.js";
+import Tiptap from "./Tiptap.vue";
 export default {
   name: "",
   components: {
-    EditorTextoHtml,
+    // EditorTextoHtml,
     Loading,
+    Tiptap,
   },
 
   mixins: [Token, Alerts],
@@ -387,7 +390,9 @@ export default {
       correo.append("cc", this.correos1);
       correo.append("cco", this.correos2);
       correo.append("modulo", this.menu_id);
-      correo.append("registro_id", this.$route.params.id);
+      if (this.$route.params.id != "") {
+        correo.append("registro_id", this.$route.params.id);
+      }
       correo.append("formulario_correo", 1);
 
       this.file.forEach(function (item, index) {

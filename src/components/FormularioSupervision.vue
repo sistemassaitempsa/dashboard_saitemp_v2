@@ -200,7 +200,7 @@
               v-for="(item, index) in observaciones"
               :key="item.id"
             >
-              <div class="mb-3" v-if="$route.params.id == undefined">
+              <div class="mb-3" v-if="$route.params.id == ''">
                 <label for="formFileMultiple" class="form-label"
                   >Adjuntar imágenes: *
                 </label>
@@ -228,7 +228,7 @@
                 v-for="(item2, index2) in observaciones[index].file"
                 :key="index2"
               >
-                <div class="card mb-3" v-if="$route.params.id != undefined">
+                <div class="card mb-3" v-if="$route.params.id != ''">
                   <div class="row g-0">
                     <div class="col-md-4">
                       <img
@@ -265,22 +265,23 @@
                   </button>
                 </div>
               </div>
-              <div class="row editor" v-if="$route.params.id == undefined">
+              <div class="row editor" v-if="$route.params.id == ''">
                 <div class="mb-3">
                   <label for="exampleInputEmail1" class="form-label"
                     >Observaciones:
                   </label>
                   <br />
                   <br />
-                  <EditorTextoHtml
+                  <!-- <EditorTextoHtml
                     :consulta="consulta_texto[index]"
                     :index="index"
                     @retornoTexto="retornoTexto"
                     :showToolbar="true"
-                  />
+                  /> -->
+                  <Tiptap v-model="consulta_texto[index]"/>
                 </div>
               </div>
-              <div class="col-1 trash" v-if="$route.params.id == undefined">
+              <div class="col-1 trash" v-if="$route.params.id == ''">
                 <i
                   class="bi bi-trash-fill"
                   v-if="index > 0"
@@ -289,7 +290,7 @@
               </div>
             </div>
             <span
-              v-if="$route.params.id == undefined"
+              v-if="$route.params.id == ''"
               id="clasificador"
               @click="agregarObservacion()"
               style="cursor: pointer"
@@ -303,7 +304,7 @@
             <label for="exampleFormControlInput1" class="form-label"
               >Firma *:</label
             >
-            <div v-if="$route.params.id != undefined" class="imagen_firma">
+            <div v-if="$route.params.id != ''" class="imagen_firma">
               <img :src="imagen_firma_supervisor" alt="" />
             </div>
             <div v-else class="input-group mb-3">
@@ -356,7 +357,7 @@
             <label for="exampleFormControlInput1" class="form-label"
               >Firma *:</label
             >
-            <div v-if="$route.params.id != undefined" class="imagen_firma">
+            <div v-if="$route.params.id != ''" class="imagen_firma">
               <img :src="imagen_firma_persona_contactada" alt="" />
             </div>
             <div v-else class="input-group mb-3">
@@ -406,7 +407,7 @@
             </div>
           </div>
         </div>
-        <div class="row" v-if="$route.params.id == undefined">
+        <div class="row" v-if="$route.params.id == ''">
           <div class="col-md-4 col-sm-6">
             <button
               type="submit"
@@ -442,7 +443,7 @@
   </div>
 </template>
 <script>
-import EditorTextoHtml from "./EditorTextoHtml.vue";
+// import EditorTextoHtml from "./EditorTextoHtml.vue";
 import axios from "axios";
 import SearchTable from "./SearchTable.vue";
 import SearchList from "./SearchList.vue";
@@ -454,15 +455,17 @@ import { Token } from "../Mixins/Token.js";
 import { Alerts } from "../Mixins/Alerts.js";
 import { Scroll } from "../Mixins/Scroll.js";
 import { Geolocal } from "../Mixins/Geolocal.js";
+import Tiptap from "./Tiptap.vue";
 export default {
   components: {
-    EditorTextoHtml,
+    // EditorTextoHtml,
     SearchTable,
     SearchList,
     FirmaDigital,
     Loading,
     NotificacionesSocket,
     MapaVue,
+    Tiptap
   },
   mixins: [Token, Alerts, Scroll, Geolocal],
   props: {
@@ -503,7 +506,7 @@ export default {
       signed: false,
       archivo_firma_supervisor: null,
       archivo_firma_persona_contactada: null,
-      consulta_texto: [],
+      consulta_texto: [""],
       observaciones: [{ body: "", file: [] }],
       estados_concepto: [],
       concepto_estado_formulario: [],
@@ -530,7 +533,7 @@ export default {
     /* 2222 */
   },
   mounted() {
-    if (this.$route.params.id == undefined) {
+    if (this.$route.params.id == '') {
       this.geolocal();
     }
   },
@@ -548,7 +551,7 @@ export default {
     this.urlExterna();
     this.getEstadosConcepto();
     this.getCliente();
-    if (this.$route.params.id == undefined) {
+    if (this.$route.params.id == "") {
       this.setSupervisor();
     }
     this.obtenerFechaHoraActual();
@@ -558,7 +561,7 @@ export default {
     this.getDepartamentos(43);
     this.loading = true;
     this.scrollTop(true);
-    if (this.$route.params.id != undefined) {
+    if (this.$route.params.id != "") {
       this.consultaFormulario(this.$route.params.id);
     }
     this.idPfd();
@@ -590,7 +593,7 @@ export default {
       }
     },
     idPfd() {
-      if (this.$route.params.id != undefined) {
+      if (this.$route.params.id != '') {
         this.idpdf = this.$route.params.id;
       }
     },
@@ -861,7 +864,7 @@ export default {
     },
     radios() {
       var self = this;
-      if (self.$route.params.id != undefined) {
+      if (self.$route.params.id != '') {
         self.concepto_estado_formulario = new Array(self.conceptos.length);
       } else {
         self.conceptos.forEach(function (item) {
@@ -903,7 +906,7 @@ export default {
         .then(function (result) {
           self.estados_concepto = result.data;
         });
-      if (this.$route.params.id == undefined) {
+      if (this.$route.params.id == '') {
         setTimeout(() => {
           self.loading = false;
           self.scrollAuto();
@@ -995,6 +998,7 @@ export default {
     consultaFormulario(id) {
       let self = this;
       let config = this.configHeader();
+      // console.log(config)
       axios
         .get(self.URL_API + "api/v1/formulariosupervision/" + id, config)
         .then(function (result) {

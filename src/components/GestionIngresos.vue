@@ -137,14 +137,14 @@
         <div
           class="row"
           v-if="
-            $route.params.id != undefined ||
+            $route.params.id != '' ||
             $route.path == '/navbar/gestion-ingresosl'
           "
         >
           <h6 style="text-align: left">Radicado: {{ radicado }}</h6>
         </div>
         <div class="row">
-          <div class="col" v-if="$route.params.id != undefined">
+          <div class="col" v-if="$route.params.id != ''">
             <label class="form-label">Fecha radicado</label>
             <input
               type="datetime-local"
@@ -827,7 +827,7 @@
         <div class="row">
           <div class="col" style="margin: 30px" v-if="permisos[23].autorizado">
             <div
-              v-if="$route.params.id != undefined"
+              v-if="$route.params.id != ''"
               class="btn-group"
               role="group"
               aria-label="Button group with nested dropdown"
@@ -862,7 +862,7 @@
             </div>
           </div>
           <div class="col" style="margin: 30px" v-if="permisos[33].autorizado">
-            <div v-if="$route.params.id != undefined" class="btn">
+            <div v-if="$route.params.id != ''" class="btn">
               <button
                 type="button"
                 class="btn btn-md btn-success"
@@ -876,7 +876,7 @@
 
           <div class="col" style="margin: 30px" v-if="permisos[23].autorizado">
             <div
-              v-if="$route.params.id != undefined"
+              v-if="$route.params.id != ''"
               class="btn-group"
               role="group"
               aria-label="Button group with nested dropdown"
@@ -931,7 +931,7 @@
           <div class="col">
             <button
               type="button"
-              v-if="$route.params.id != undefined"
+              v-if="$route.params.id != ''"
               style="background-color: #d4ac0d; color: white"
               @click="agregarPendientes()"
               class="btn m-4"
@@ -1066,7 +1066,7 @@
       </button>
       <div
         class="row"
-        v-if="$route.params.id != undefined"
+        v-if="$route.params.id != ''"
         style="text-align: left; clear: both; margin-bottom: 40px"
       >
         <h5 @click="envio_correo = !envio_correo" style="cursor: pointer">
@@ -1075,7 +1075,7 @@
         </h5>
       </div>
       <SolicitudNovedadesNomina
-        v-if="$route.params.id != undefined && envio_correo"
+        v-if="$route.params.id != '' && envio_correo"
         :menu="menu"
         :reenvio_correo="reenvio_correo"
         :adjuntos_candidato_string="adjuntos_candidato_string"
@@ -1549,7 +1549,9 @@ export default {
           item.opciones.forEach((element) => {
             if (element.url == ruta) {
               self.menu_id = element.id;
-              self.historicoCorreos();
+              if(self.$route.params.id != ""){
+                self.historicoCorreos();
+              }
             }
           });
         });
@@ -1596,7 +1598,7 @@ export default {
               self.showAlertmasBoton(result.data.message, result.data.status);
             } else if (
               result.data.no_apto == 2 &&
-              self.$route.params.id == undefined
+              self.$route.params.id == ""
             ) {
               document.getElementById("numero_identificacion").focus();
               self.numero_identificacion = "";
@@ -1727,16 +1729,29 @@ export default {
       axios
         .get(self.URL_API + "api/v1/archivosingreso", config)
         .then(function (result) {
-          if (self.$route.params.id == undefined) {
+          // if (self.$route.params.id == undefined) {
+          //   self.loading = false;
+          // }
+          // self.fileInputsCount = result.data;
+          // self.id_cliente = self.$route.params.id;
+          // if (self.id_registro != 0) {
+          //   self.id_cliente = self.id_registro;
+          // }
+          // if (self.id_cliente != undefined) {
+          //   self.getRegistroIngreso(self.id_cliente);
+          // }
+
+          if (self.$route.params.id == "") {
             self.loading = false;
-          }
-          self.fileInputsCount = result.data;
-          self.id_cliente = self.$route.params.id;
-          if (self.id_registro != 0) {
-            self.id_cliente = self.id_registro;
-          }
-          if (self.id_cliente != undefined) {
-            self.getRegistroIngreso(self.id_cliente);
+          } else {
+            self.fileInputsCount = result.data;
+            self.id_cliente = self.$route.params.id;
+            if (self.id_registro != 0) {
+              self.id_cliente = self.id_registro;
+            }
+            if (self.id_cliente != undefined) {
+              self.getRegistroIngreso(self.id_cliente);
+            }
           }
         });
     },
@@ -1862,7 +1877,7 @@ export default {
       this.crearRegistroIngreso();
 
       var url = "";
-      if (this.$route.params.id != undefined) {
+      if (this.$route.params.id != '') {
         url =
           self.URL_API + "api/v1/formularioingreso/" + this.$route.params.id;
       } else {
