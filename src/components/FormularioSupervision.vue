@@ -12,8 +12,6 @@
               <input
                 type="datetime-local"
                 class="form-control"
-                autocomplete="off"
-                id="exampleInput0"
                 aria-describedby="emailHelp"
                 v-model="fecha"
                 disabled
@@ -24,8 +22,6 @@
               <input
                 type="text"
                 class="form-control"
-                autocomplete="off"
-                id="exampleInput1"
                 @input="descripcion = formatInput($event.target.value)"
                 v-model="descripcion"
                 required
@@ -38,8 +34,6 @@
               <input
                 type="text"
                 class="form-control"
-                autocomplete="off"
-                id="exampleInput2"
                 aria-describedby="emailHelp"
                 v-model="supervisor"
                 disabled
@@ -50,8 +44,6 @@
               <input
                 type="text"
                 class="form-control"
-                autocomplete="off"
-                id="exampleInput3"
                 @input="contacto = formatInputCamelCase($event.target.value)"
                 aria-describedby="emailHelp"
                 v-model="contacto"
@@ -80,8 +72,6 @@
               <input
                 type="text"
                 class="form-control"
-                autocomplete="off"
-                id="exampleInput4"
                 @input="direccion = formatInputUpperCase($event.target.value)"
                 v-model="direccion"
                 required
@@ -210,7 +200,6 @@
                     type="file"
                     accept="image/*"
                     @change="cargarArchivo($event, index)"
-                    id="formFileMultiple"
                     multiple
                     required
                   />
@@ -253,7 +242,7 @@
                 >
                   <button type="button" class="btn adjunto">
                     <i class="bi bi-file-earmark-check"></i>
-                    {{ item2.name | truncate(10, "...") }}
+                    {{ truncate(item2.name, 10, "...") }}
                     {{ formatearPesoArchivo(item2.size) }}
                   </button>
                   <button
@@ -267,7 +256,7 @@
               </div>
               <div class="row editor" v-if="$route.params.id == ''">
                 <div class="mb-3">
-                  <label for="exampleInputEmail1" class="form-label"
+                  <label for="exampleInputEmail" class="form-label"
                     >Observaciones:
                   </label>
                   <br />
@@ -278,7 +267,7 @@
                     @retornoTexto="retornoTexto"
                     :showToolbar="true"
                   /> -->
-                  <Tiptap v-model="consulta_texto[index]"/>
+                  <Tiptap v-model="consulta_texto[index]" />
                 </div>
               </div>
               <div class="col-1 trash" v-if="$route.params.id == ''">
@@ -345,8 +334,6 @@
               <input
                 type="text"
                 class="form-control"
-                autocomplete="off"
-                id="exampleInput5"
                 aria-describedby="emailHelp"
                 v-model="supervisor"
                 disabled
@@ -398,8 +385,6 @@
               <input
                 type="text"
                 class="form-control"
-                autocomplete="off"
-                id="exampleInput6"
                 aria-describedby="emailHelp"
                 v-model="contacto"
                 disabled
@@ -465,7 +450,7 @@ export default {
     Loading,
     NotificacionesSocket,
     MapaVue,
-    Tiptap
+    Tiptap,
   },
   mixins: [Token, Alerts, Scroll, Geolocal],
   props: {
@@ -530,24 +515,18 @@ export default {
   },
   computed: {},
   watch: {
-    /* 2222 */
-  },
-  mounted() {
-    if (this.$route.params.id == '') {
-      this.geolocal();
-    }
-  },
-  filters: {
-    truncate(text, length, suffix) {
-      if (text.length > length) {
-        return text.substring(0, length) + suffix;
-      } else {
-        return text;
+    $route() {
+      if (this.$route.params.id == "") {
+        this.limpiarFormulario();
       }
     },
   },
+  mounted() {
+    if (this.$route.params.id == "") {
+      this.geolocal();
+    }
+  },
   created() {
-    // var self = this
     this.urlExterna();
     this.getEstadosConcepto();
     this.getCliente();
@@ -578,6 +557,10 @@ export default {
     coordenadas(item) {
       console.log(item);
     },
+    truncate(text, length, suffix = "...") {
+      if (typeof text !== "string") return text;
+      return text.length > length ? text.substring(0, length) + suffix : text;
+    },
     async geolocal() {
       try {
         // Llamar a obtenerGeolocalizacion y esperar la respuesta
@@ -593,7 +576,7 @@ export default {
       }
     },
     idPfd() {
-      if (this.$route.params.id != '') {
+      if (this.$route.params.id != "") {
         this.idpdf = this.$route.params.id;
       }
     },
@@ -689,7 +672,7 @@ export default {
           );
         });
       });
-      console.log(formulario);
+      
       let config = this.configHeader();
       axios
         .post(self.URL_API + "api/v1/formulariosupervision", formulario, config)
@@ -700,6 +683,7 @@ export default {
         });
     },
     limpiarFormulario() {
+      this.geolocal();
       this.getEstadosConcepto();
       this.concepto = [];
       this.campos_cliente = ["cod_cli", "nom_cli"];
@@ -730,7 +714,7 @@ export default {
       this.signed = false;
       this.archivo_firma_supervisor = null;
       this.archivo_firma_persona_contactada = null;
-      this.consulta_texto = [];
+      this.consulta_texto = [""];
       this.observaciones = [{ body: "", file: [] }];
       this.estados_concepto = [];
       this.concepto_estado_formulario = [];
@@ -742,6 +726,7 @@ export default {
       this.estados_epp = [];
       this.getEstadosEPP();
       this.observacionesepp = [];
+      this.supervisor = this.userlogued.nombres+" "+ this.userlogued.apellidos.replace("_","");
     },
     firma(firma) {
       if (this.show_pad1) {
@@ -779,7 +764,7 @@ export default {
     },
 
     signature(campo) {
-      console.log(campo);
+      
       if (campo == "firma_supervisor") {
         this.show_pad1 = !this.show_pad1;
         this.show_pad2 = false;
@@ -864,7 +849,7 @@ export default {
     },
     radios() {
       var self = this;
-      if (self.$route.params.id != '') {
+      if (self.$route.params.id != "") {
         self.concepto_estado_formulario = new Array(self.conceptos.length);
       } else {
         self.conceptos.forEach(function (item) {
@@ -906,7 +891,7 @@ export default {
         .then(function (result) {
           self.estados_concepto = result.data;
         });
-      if (this.$route.params.id == '') {
+      if (this.$route.params.id == "") {
         setTimeout(() => {
           self.loading = false;
           self.scrollAuto();

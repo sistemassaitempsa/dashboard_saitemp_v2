@@ -10,24 +10,30 @@
             :options="options"
           />
         </div>
-        <div class="buttons">
-          <button type="button" @click="back" class="btn btn-primary btn-sm">
-            Deshacer
-          </button>
-          <button
-            type="button"
-            @click="clear"
-            class="btn btn-primary btn-sm btn-warning"
-          >
-            Limpiar
-          </button>
-          <button
-            type="button"
-            @click="save"
-            class="btn btn-primary btn-sm btn-success"
-          >
-            Firmar
-          </button>
+        <div class="row buttons">
+          <div class="col">
+            <button type="button" @click="back" class="btn btn-primary btn-sm">
+              Deshacer
+            </button>
+          </div>
+          <div class="col">
+            <button
+              type="button"
+              @click="clear"
+              class="btn btn-primary btn-sm btn-warning"
+            >
+              Limpiar
+            </button>
+          </div>
+          <div class="col">
+            <button
+              type="button"
+              @click="save"
+              class="btn btn-primary btn-sm btn-success"
+            >
+              Firmar
+            </button>
+          </div>
         </div>
       </div>
     </div>
@@ -98,7 +104,7 @@ export default {
 }
 
 .buttons {
-  float: left;
+  margin-bottom: 30px;
 }
 
 .buttons button {

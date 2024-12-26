@@ -3,6 +3,7 @@ import App from './App.vue';
 import router from './router';
 import axios from 'axios';
 import VueAxios from 'vue-axios';
+import VueSignature from "vue-signature-pad";
 
 // Bibliotecas de terceros
 import VueCryptojs from 'vue-cryptojs';
@@ -39,6 +40,7 @@ app.use(router);
 app.use(VueAxios, axios);
 app.use(VueCryptojs);
 app.use(VueSweetalert2);
+app.use(VueSignature);
 app.component('flip-countdown', FlipCountdown);
 
 // Montar la aplicación

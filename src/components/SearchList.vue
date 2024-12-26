@@ -16,7 +16,6 @@
           autocomplete="nope"
           @input="filterResults(registro, registros, 'registros')"
           class="form-control"
-          id="exampleInputEmail"
           @blur="validarSeleccion()"
           :placeholder="placeholder"
           aria-describedby="emailHelp"

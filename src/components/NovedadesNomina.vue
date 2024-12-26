@@ -85,7 +85,7 @@
           v-for="(item, index) in fileInputsCount"
           :key="index"
         >
-          <div class="col-2" v-if="$route.params.id != null">
+          <div class="col-2" v-if="$route.params.id != ''">
             <a
               :href="URL_API + item.ruta"
               target="_blank"

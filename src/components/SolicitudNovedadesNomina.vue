@@ -190,12 +190,11 @@
               >Descripción: *</label
             >
             <br />
-            <!-- <EditorTextoHtml
+            <EditorTextoHtml
               :enviar_correo="enviar_correo"
               @valida_campos="valida_campos"
               :cuerpo_mensaje="cuerpo_mensaje"
-            /> -->
-            <Tiptap v-model="cuerpo_mensaje" />
+            />
           </div>
         </div>
         <div class="row">
@@ -251,17 +250,15 @@
 </template>
 <script>
 import axios from "axios";
-// import EditorTextoHtml from "./EditorTextoHtml.vue";
+import EditorTextoHtml from "./EditorTextoHtml.vue";
 import Loading from "./Loading.vue";
 import { Alerts } from "../Mixins/Alerts.js";
 import { Token } from "../Mixins/Token.js";
-import Tiptap from "./Tiptap.vue";
 export default {
   name: "",
   components: {
-    // EditorTextoHtml,
+    EditorTextoHtml,
     Loading,
-    Tiptap,
   },
 
   mixins: [Token, Alerts],

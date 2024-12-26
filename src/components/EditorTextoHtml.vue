@@ -1,29 +1,32 @@
 <template>
   <div>
-    <vue-editor
+    <!-- <vue-editor
       v-model="content"
       :editor-toolbar="showToolbar ? toolbarOptions : []"
-    ></vue-editor>
+    ></vue-editor> -->
+    <Tiptap v-model="content" />
   </div>
 </template>
 
 <script>
-import { VueEditor } from "vue2-editor";
+// import { VueEditor } from "vue2-editor";
+import Tiptap from "./Tiptap.vue";
 
 export default {
   components: {
-    VueEditor,
+    // VueEditor,
+    Tiptap
   },
   props: {
     enviar_correo: {},
     index: {
-      type: Number,
-      default: null,
-    },
-    showToolbar: {
       type: Boolean,
       default: false,
     },
+    // showToolbar: {
+    //   type: Boolean,
+    //   default: false,
+    // },
     consulta: {
       type: String,
       default: "",
@@ -37,9 +40,9 @@ export default {
   data() {
     return {
       content: "",
-      toolbarOptions: [
-        [{ list: "ordered" }, { list: "bullet" }, { list: "check" }],
-      ],
+      // toolbarOptions: [
+      //   [{ list: "ordered" }, { list: "bullet" }, { list: "check" }],
+      // ],
     };
   },
   watch: {

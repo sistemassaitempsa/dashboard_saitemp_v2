@@ -739,7 +739,7 @@
         >
           <div
             class="form-check col-1 m-0"
-            v-if="$route.params.id != null && permisos[24].autorizado"
+            v-if="$route.params.id != '' && permisos[24].autorizado"
           >
             <input
               class="form-check-input m-0"
@@ -754,7 +754,7 @@
             />
           </div>
 
-          <div class="col-2" v-if="$route.params.id != null">
+          <div class="col-2" v-if="$route.params.id != ''">
             <a
               :href="URL_API + item.ruta"
               target="_blank"

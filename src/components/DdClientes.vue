@@ -85,6 +85,18 @@ export default {
           tipo: "texto",
           calculado: "false",
         },
+        {
+          nombre: "Estado contrato",
+          orden: "DESC",
+          tipo: "texto",
+          calculado: "false",
+        },
+        {
+          nombre: "Estado firmas",
+          orden: "DESC",
+          tipo: "texto",
+          calculado: "false",
+        },
       ],
       ejecutivos_comerciales: [],
       listas: [],

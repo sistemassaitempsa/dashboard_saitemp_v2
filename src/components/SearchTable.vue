@@ -14,7 +14,6 @@
           @click="modal = true"
           autocomplete="off"
           class="form-control"
-          id="exampleInputEmail1"
           :placeholder="placeholder"
           aria-describedby="emailHelp"
           v-model="registro"

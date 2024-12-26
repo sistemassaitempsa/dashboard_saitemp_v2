@@ -49,157 +49,12 @@
           class="hidden-color-picker"
         />
       </div>
-      <!-- <div class="button-group">
-        <button
-          @click="editor.chain().focus().toggleBold().run()"
-          :disabled="!editor.can().chain().focus().toggleBold().run()"
-          :class="{ 'is-active': editor.isActive('bold') }"
-        >
-          <i class="bi bi-type-bold"></i>
-        </button>
-        <button
-          @click="editor.chain().focus().toggleItalic().run()"
-          :disabled="!editor.can().chain().focus().toggleItalic().run()"
-          :class="{ 'is-active': editor.isActive('italic') }"
-        >
-          <i class="bi bi-type-italic"></i>
-        </button>
-        <button
-          @click="editor.chain().focus().toggleStrike().run()"
-          :disabled="!editor.can().chain().focus().toggleStrike().run()"
-          :class="{ 'is-active': editor.isActive('strike') }"
-        >
-          <i class="bi bi-type-strikethrough"></i>
-        </button>
-        <button
-          @click="editor.chain().focus().toggleCode().run()"
-          :disabled="!editor.can().chain().focus().toggleCode().run()"
-          :class="{ 'is-active': editor.isActive('code') }"
-        >
-          <i class="bi bi-textarea-t"></i>
-        </button>
-        <button @click="editor.chain().focus().unsetAllMarks().run()">
-          Clear marks
-        </button>
-        <button @click="editor.chain().focus().clearNodes().run()">
-          Clear nodes
-        </button>
-        <button
-          @click="editor.chain().focus().setParagraph().run()"
-          :class="{ 'is-active': editor.isActive('paragraph') }"
-        >
-          Paragraph
-        </button>
-        <button
-          @click="editor.chain().focus().toggleHeading({ level: 1 }).run()"
-          :class="{ 'is-active': editor.isActive('heading', { level: 1 }) }"
-        >
-          H1
-        </button>
-        <button
-          @click="editor.chain().focus().toggleHeading({ level: 2 }).run()"
-          :class="{ 'is-active': editor.isActive('heading', { level: 2 }) }"
-        >
-          H2
-        </button>
-        <button
-          @click="editor.chain().focus().toggleHeading({ level: 3 }).run()"
-          :class="{ 'is-active': editor.isActive('heading', { level: 3 }) }"
-        >
-          H3
-        </button>
-        <button
-          @click="editor.chain().focus().toggleHeading({ level: 4 }).run()"
-          :class="{ 'is-active': editor.isActive('heading', { level: 4 }) }"
-        >
-          H4
-        </button>
-        <button
-          @click="editor.chain().focus().toggleHeading({ level: 5 }).run()"
-          :class="{ 'is-active': editor.isActive('heading', { level: 5 }) }"
-        >
-          H5
-        </button>
-        <button
-          @click="editor.chain().focus().toggleHeading({ level: 6 }).run()"
-          :class="{ 'is-active': editor.isActive('heading', { level: 6 }) }"
-        >
-          H6
-        </button>
-        <button
-          @click="editor.chain().focus().toggleBulletList().run()"
-          :class="{ 'is-active': editor.isActive('bulletList') }"
-        >
-          <i class="bi bi-list-ul"></i>
-        </button>
-        <button
-          @click="editor.chain().focus().toggleOrderedList().run()"
-          :class="{ 'is-active': editor.isActive('orderedList') }"
-        >
-          <i class="bi bi-list-ol"></i>
-        </button>
-        <button
-          @click="editor.chain().focus().toggleCodeBlock().run()"
-          :class="{ 'is-active': editor.isActive('codeBlock') }"
-        >
-          Code block
-        </button>
-        <button
-          @click="editor.chain().focus().toggleBlockquote().run()"
-          :class="{ 'is-active': editor.isActive('blockquote') }"
-        >
-          Blockquote
-        </button>
-        <button @click="editor.chain().focus().setHorizontalRule().run()">
-          <i class="bi bi-arrow-bar-down"></i>
-        </button>
-        <button @click="editor.chain().focus().setHardBreak().run()">
-          Hard break
-        </button>
-        <button
-          @click="editor.chain().focus().undo().run()"
-          :disabled="!editor.can().chain().focus().undo().run()"
-        >
-          <i class="bi bi-arrow-counterclockwise"></i>
-        </button>
-        <button
-          @click="editor.chain().focus().redo().run()"
-          :disabled="!editor.can().chain().focus().redo().run()"
-        >
-          <i class="bi bi-arrow-clockwise"></i>
-        </button>
-        <button @click="editor.chain().focus().setTextAlign('left').run()">
-          Left
-        </button>
-        <button @click="editor.chain().focus().setTextAlign('center').run()">
-          Center
-        </button>
-        <button @click="editor.chain().focus().setTextAlign('right').run()">
-          Right
-        </button>
-        <button @click="editor.chain().focus().setTextAlign('justify').run()">
-          Justify
-        </button>
-        <button @click="editor.chain().focus().unsetTextAlign().run()">
-          Unset text align
-        </button>
-      </div> -->
     </div>
     <editor-content :editor="editor" class="editor" />
   </div>
 </template>
 
 <script>
-// import StarterKit from "@tiptap/starter-kit";
-// import { Editor, EditorContent } from "@tiptap/vue-3";
-// import TextAlign from "@tiptap/extension-text-align";
-// import Document from "@tiptap/extension-document";
-// import Heading from "@tiptap/extension-heading";
-// import Paragraph from "@tiptap/extension-paragraph";
-// import Text from "@tiptap/extension-text";
-// import { Color } from "@tiptap/extension-color";
-// import TextStyle from "@tiptap/extension-text-style";
-// import Highlight from "@tiptap/extension-highlight";
 import StarterKit from "@tiptap/starter-kit";
 import { Editor, EditorContent } from "@tiptap/vue-3";
 import TextAlign from "@tiptap/extension-text-align"; // Personalizada
@@ -214,7 +69,7 @@ export default {
   props: {
     modelValue: {
       type: [String, null],
-      required: true,
+      required: false,
     },
   },
 
@@ -321,29 +176,6 @@ export default {
       ],
     };
   },
-
-  // mounted() {
-  //   this.editor = new Editor({
-  //     extensions: [
-  //       StarterKit,
-  //       Document,
-  //       Paragraph,
-  //       Text,
-  //       Heading,
-  //       Color,
-  //       TextStyle,
-  //       Highlight,
-  //       TextAlign.configure({
-  //         types: ["heading", "paragraph"],
-  //         defaultAlignment: "left",
-  //       }),
-  //     ],
-  //     content: this.modelValue,
-  //     onUpdate: ({ editor }) => {
-  //       this.$emit("update:modelValue", editor.getHTML());
-  //     },
-  //   });
-  // },
   mounted() {
     this.editor = new Editor({
       extensions: [
@@ -353,7 +185,7 @@ export default {
         Highlight, // Extensión personalizada
         TextAlign.configure({
           types: ["heading", "paragraph"],
-          defaultAlignment: "left",
+          defaultAlignment: 'left',
         }),
       ],
       content: this.modelValue,
@@ -409,34 +241,28 @@ export default {
 </script>
 
 <style scoped>
-/* Basic editor styles */
-/*  */
 .tiptap .control-group {
-  /* background-color: red; */
-  /* padding: 10px; */
   border: 1px solid gray;
   border-top-left-radius: 5px;
   border-top-right-radius: 5px;
   padding: 0px;
   margin: 0px;
   background-color: #074c6a;
-  /* overflow-x: auto; */
   width: 100%;
-}
-
-.tiptap .control-group {
   border-bottom: none;
 }
 
 .editor :deep(.ProseMirror){
   border: 1px solid gray;
-  height: 300px;
+  min-height: 300px;
   margin-bottom: 30px;
   border-bottom-left-radius: 5px;
   border-bottom-right-radius: 5px;
   outline: none;
   width: 100%;
-  overflow: hidden;
+  text-align: left;
+  padding: 10px;
+
 }
 
 .control-group {
@@ -488,4 +314,5 @@ a {
 .color-picker-icon:hover {
   color: #007bff; /* Cambia el color al pasar el mouse */
 }
+
 </style>

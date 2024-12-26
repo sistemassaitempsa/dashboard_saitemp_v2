@@ -956,7 +956,7 @@
         >
           <div
             class="form-check col-1 m-0"
-            v-if="$route.params.id != null && permisos[24].autorizado"
+            v-if="$route.params.id != '' && permisos[24].autorizado"
           >
             <input
               class="form-check-input m-0"
@@ -974,7 +974,7 @@
           <div
             class="col"
             v-if="
-              $route.params.id != null ||
+              $route.params.id != '' ||
               $route.path == '/navbar/gestion-ingresosl'
             "
           >

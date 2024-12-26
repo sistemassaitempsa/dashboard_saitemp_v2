@@ -53,6 +53,7 @@ import GuiaRiesgos from '../components/GuiaRiesgos.vue';
 import Landing from '../components/Landing.vue';
 import Configuraciones from '../components/Configuraciones.vue';
 import EstadosDebidaDIligenciaAdmin from '../components/EstadosDebidaDiligenciaAdmin.vue';
+import EditarCliente from '../components/EditarCliente.vue';
 
 // Configuración de rutas
 const routes = [
@@ -330,6 +331,11 @@ const routes = [
         path: 'configuraciones',
         name: 'configuraciones',
         component: Configuraciones,
+      },
+      {
+        path: 'editarCliente',
+        name: 'editarCliente',
+        component: EditarCliente,
       },
     ],
   },

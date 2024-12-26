@@ -131,7 +131,7 @@
               </div>
             </div>
             <div class="col">
-              <div class="mb-3" v-if="$route.params.id != null">
+              <div class="mb-3" v-if="$route.params.id != ''">
                 <label class="form-label">Estado</label>
                 <select
                   id="inputState2"

@@ -1,6 +1,16 @@
 <template>
   <div id="container2">
     <Loading :loading="loading" />
+    <div v-if="toogleModal">
+      <ModalResponsableDD
+        v-if="estado_firma_id"
+        :estado_firma_id="estado_firma_id"
+        :nombre_estado="nombre_estado"
+        @actualizaEstadoHijo="actualizaEstadoPadreDD"
+        @closeModalDD="closeModalDD"
+      />
+    </div>
+
     <div
       class="row"
       id="container"
@@ -944,7 +954,7 @@
               "
             >
               <!-- <button type="button" class="btn btn-success btn-sm " @click="$refs.consultaContrato.consulta()"> -->
-              <ConsultaContrato :item="item" />
+              <ConsultaContrato :item_id="item.id" :item="item" />
               <!-- </button> -->
             </td>
             <td v-if="ruta == '/navbar/debida-diligencia/clientes'">
@@ -984,7 +994,9 @@
                   >
                     <a
                       class="dropdown-item"
-                      @click="actualizaEstado(item.id, item2.id)"
+                      @click="
+                        actualizaEstadoDD(item.id, item2.id, item2.nombre)
+                      "
                       >{{ item2.nombre }}</a
                     >
                   </li>
@@ -998,6 +1010,48 @@
                         :to="'/navbar/timeLine/' + item.id"
                         >Historial actualizaciones</router-link
                       ></a
+                    >
+                  </li>
+                </ul>
+              </div>
+            </td>
+            <td v-if="ruta == '/navbar/debida-diligencia/clientes'">
+              <div class="btn-group">
+                <button
+                  type="button"
+                  class="btn"
+                  :style="
+                    'color:black;background-color:' + item.color_estado_firma
+                  "
+                >
+                  {{ truncateOwner(item.responsable, maxCaracteres) }}
+                </button>
+                <button
+                  type="button"
+                  class="btn dropdown-toggle dropdown-toggle-split"
+                  v-if="permisos[20].autorizado"
+                  data-bs-toggle="dropdown"
+                  aria-expanded="false"
+                  :style="
+                    'color:black;background-color:' + item.color_estado_firma
+                  "
+                  @click="
+                    getEncargadosDebidaDiligencia(item.estado_firma_id),
+                      (lista_encargados_debida_diligencia = [])
+                  "
+                >
+                  <span class="visually-hidden">Toggle Dropdown</span>
+                </button>
+                <ul class="dropdown-menu">
+                  <li
+                    style="cursor: pointer"
+                    v-for="(item2, index) in lista_encargados_debida_diligencia"
+                    :key="index"
+                  >
+                    <a
+                      class="dropdown-item"
+                      @click="actualizaResponsableDD(item.id, index)"
+                      >{{ item2.nombre }}</a
                     >
                   </li>
                 </ul>
@@ -1187,8 +1241,10 @@
 </template>
 
 <script>
+import Vue from "vue";
 import axios from "axios";
 import Modal from "./Modal.vue";
+import ModalResponsableDD from "./ModalResponsableDD.vue";
 import ConsultaContrato from "./ConsultaContrato.vue";
 import FlotanteFormularioIngreso from "./FlotanteFormularioIngreso.vue";
 import FlotanteFormularioRiesgos from "./FlotanteFormularioRiesgos.vue";
@@ -1204,6 +1260,7 @@ export default {
     Loading,
     FlotanteFormularioIngreso,
     FlotanteFormularioRiesgos,
+    ModalResponsableDD,
   },
   mixins: [Token, Alerts, Permisos, Scroll],
   props: {
@@ -1285,6 +1342,9 @@ export default {
   },
   data() {
     return {
+      nombre_estado: "",
+      toogleModal: false,
+      lista_encargados_debida_diligencia: [],
       URL_API: process.env.VUE_APP_URL_API,
       sorted: false,
       tabla2: [],
@@ -1333,6 +1393,7 @@ export default {
         "o_total_color",
         "a_color_resultado",
         "o_color_resultado",
+        "estado_firma_id",
       ], // este array contiene los nombres de las columnas queno queremos que se muestren en la tabla
       maxCaracteres: 20,
       lista_estados_id: {},
@@ -1347,6 +1408,8 @@ export default {
       endpoint_busqueda_rapida: "",
       estado_ingreso2: {},
       encargado2: {},
+      estado_firma_id: "",
+      formulario_dd_id: "",
     };
   },
 
@@ -1475,6 +1538,15 @@ export default {
         ...this.getDynamicStyle(item, index),
       };
     },
+    getEncargadosDebidaDiligencia(id) {
+      let self = this;
+      let config = this.configHeader();
+      axios
+        .get(self.URL_API + "api/v1/estadoResponsableFirma/" + id, config)
+        .then(function (result) {
+          self.lista_encargados_debida_diligencia = result.data;
+        });
+    },
     getEncargados(id) {
       let self = this;
       let config = this.configHeader();
@@ -1508,6 +1580,19 @@ export default {
       // return this.lista_estados_id[id];
       // return 'Estado'
     },
+    actualizaResponsableDD(item_id, index) {
+      this.$emit(
+        "actualizaResponsableDD",
+        item_id,
+        this.lista_encargados_debida_diligencia[index].usuario_id,
+        this.lista_encargados_debida_diligencia[index].nombre,
+        this.lista_encargados_debida_diligencia[index].email,
+        this.currentUrl
+      );
+      setTimeout(() => {
+        this.lista_encargados_debida_diligencia = [];
+      }, 1000);
+    },
     actualizaResponsable(item_id, index) {
       this.$emit(
         "actualizaResponsable",
@@ -1527,6 +1612,32 @@ export default {
     },
     actualizaEstado(item_id, estado) {
       this.$emit("actualizaEstado", item_id, estado, this.currentUrl);
+    },
+    closeModalDD() {
+      this.toogleModal = false;
+    },
+    actualizaEstadoPadreDD(
+      responsable_id,
+      estado_firma_id,
+      correo_responsable
+    ) {
+      this.toogleModal = false;
+      this.$emit(
+        "actualizaEstadoPadre",
+        this.formulario_dd_id,
+        estado_firma_id,
+        responsable_id,
+        correo_responsable,
+        this.currentUrl
+      );
+    },
+
+    actualizaEstadoDD(item_id, estado, nombre_estado) {
+      this.toogleModal = true;
+      this.formulario_dd_id = item_id;
+      this.estado_firma_id = estado;
+      this.nombre_estado = nombre_estado;
+      /*  this.$emit("actualizaEstado", item_id, estado, responsable_id, this.currentUrl); */
     },
     empleados() {
       if (this.ruta.split("/")[2] == "empleados") {
@@ -1575,6 +1686,7 @@ export default {
         self.valor_comparar2;
       this.base64consulta = btoa(cadena);
     },
+
     filtrar() {
       let self = this;
       this.scrollTop();
@@ -1629,11 +1741,11 @@ export default {
             this.operadores[i] === "" ||
             this.valores_comparar[i] === ""
           ) {
-            this.campo_, i, undefined;
-            this.operadores, i, undefined;
-            this.valores_comparar, i, undefined;
-            this.valores_comparar2, i, undefined;
-            this.indice_campos, i, undefined;
+            Vue.set(this.campo_, i, undefined);
+            Vue.set(this.operadores, i, undefined);
+            Vue.set(this.valores_comparar, i, undefined);
+            Vue.set(this.valores_comparar2, i, undefined);
+            Vue.set(this.indice_campos, i, undefined);
           }
         }
 
@@ -1845,6 +1957,8 @@ export default {
         year: "numeric",
         month: "short",
         day: "numeric",
+        hour: "numeric",
+        minute: "2-digit",
       };
       return valor.toLocaleDateString("es-ES", opciones);
     },
