@@ -1687,15 +1687,15 @@ export default {
           )
           .then(function (result) {
             if (
-              result.data.nit != undefined &&
-              self.$route.params.id == undefined
+              result.data.nit != '' &&
+              self.$route.params.id == ''
             ) {
               self.showAlertConfirm(self.mensaje_cliente, "success");
               self.cliente_existe = true;
               return;
             } else if (
-              result.data.numero_identificacion != undefined &&
-              self.$route.params.id == undefined
+              result.data.numero_identificacion != '' &&
+              self.$route.params.id == ''
             ) {
               self.showAlertConfirm(self.mensaje_cliente, "success");
               self.cliente_existe = true;

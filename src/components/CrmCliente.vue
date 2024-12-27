@@ -1177,7 +1177,7 @@
               </button>
               <ul class="dropdown-menu">
                 <li v-if="formList.length === 0">
-                  <a href="#">No hay registros</a>
+                  <a>No hay registros</a>
                 </li>
                 <li v-for="(form, index) in formList" :key="index">
                   <a
@@ -1215,13 +1215,13 @@
               </button>
               <ul class="dropdown-menu" aria-labelledby="btnGroupDrop1">
                 <li @click="save(1)">
-                  <a class="dropdown-item" href="#">Guardar y enviar PDF</a>
+                  <a class="dropdown-item">Guardar y enviar PDF</a>
                 </li>
                 <li @click="save(2)">
-                  <a class="dropdown-item" href="#">Guardar y descargar PDF</a>
+                  <a class="dropdown-item">Guardar y descargar PDF</a>
                 </li>
                 <li>
-                  <a class="dropdown-item" href="#" @click="save(3)"
+                  <a class="dropdown-item" @click="save(3)"
                     >Guardar sin enviar PDF</a
                   >
                 </li>
@@ -2419,7 +2419,7 @@ export default {
 
       var id = this.$route.params.id;
       var url =
-        id != null
+        id != ''
           ? `${self.URL_API}api/v1/seguimientocrm/${id}`
           : `${self.URL_API}api/v1/seguimientocrm`;
 

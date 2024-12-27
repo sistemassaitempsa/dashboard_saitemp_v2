@@ -69,7 +69,7 @@ export default {
 
     },
     mounted() {
-        this.search = this.$route.params.id
+        this.search = this.$route.params.id == '' ? undefined:this.$route.params.id
         this.getUser(this.search)
     },
     methods: {

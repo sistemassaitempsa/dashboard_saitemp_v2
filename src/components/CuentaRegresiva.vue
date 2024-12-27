@@ -1,10 +1,13 @@
 <template>
   <div v-if="actualizacion">
     <span :style="estilo_span">{{ mensaje_navbar }}</span>
-    <flip-countdown
-      :style="estilo_contador"
+    <Countdown
+      
       :deadline="deadline"
       :countdownSize="tamano_contador"
+      mainColor="#cca900"
+      secondFlipColor="#ffdc00"
+      :labelColor="estilo_contador"
       :labelSize="tamano_texto_contador"
       :days-label="'Días'"
       :hours-label="'Horas'"
@@ -13,7 +16,7 @@
       :labels="labelscountdown"
       @timeElapsed="timeElapsedHandler"
       :showDays="showDays"
-    ></flip-countdown>
+    ></Countdown>
   </div>
 </template>
 <script>
@@ -21,9 +24,10 @@ import axios from "axios";
 import { Token } from "../Mixins/Token";
 import { Alerts } from "@/Mixins/Alerts";
 import { Socket } from "../Mixins/Socket.js";
+import { Countdown } from "vue3-flip-countdown";
 
 export default {
-  components: {},
+  components: {Countdown},
   mixins: [Token, Alerts, Socket],
   props: {},
   data() {

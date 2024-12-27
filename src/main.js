@@ -9,7 +9,7 @@ import VueSignature from "vue-signature-pad";
 import VueCryptojs from 'vue-cryptojs';
 import VueSweetalert2 from 'vue-sweetalert2';
 import 'sweetalert2/dist/sweetalert2.min.css';
-import FlipCountdown from 'vue3-flip-countdown';
+import Countdown from "vue3-flip-countdown";
 
 // Echo y Pusher
 import Echo from 'laravel-echo';
@@ -41,7 +41,7 @@ app.use(VueAxios, axios);
 app.use(VueCryptojs);
 app.use(VueSweetalert2);
 app.use(VueSignature);
-app.component('flip-countdown', FlipCountdown);
+app.component('flip-countdown', Countdown);
 
 // Montar la aplicación
 app.mount('#app');

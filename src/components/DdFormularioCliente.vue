@@ -93,7 +93,7 @@
     <form class="was-validated" @submit.prevent="save()">
       <h6 class="tituloseccion">Información general</h6>
       <div id="seccion">
-        <p v-if="$route.params.id != undefined">
+        <p v-if="$route.params.id != ''">
           Radicado: {{ numero_radicado }}
         </p>
         <div class="row">
@@ -1930,7 +1930,7 @@
           v-for="(item, index) in fileInputsCount"
           :key="index"
         >
-          <div class="col-2" v-if="$route.params.id != null">
+          <div class="col-2" v-if="$route.params.id != ''">
             <a
               :href="item.ruta != undefined ? URL_API + item.ruta : null"
               target="_blank"
@@ -3550,10 +3550,10 @@
           </div>
         </div>
       </div>
-      <h6 v-if="$route.params.id != undefined" class="tituloseccion">
+      <h6 v-if="$route.params.id != ''" class="tituloseccion">
         Observaciones del responsable.
       </h6>
-      <div id="seccion" v-if="$route.params.id != undefined">
+      <div id="seccion" v-if="$route.params.id != ''">
         <div class="row">
           <div class="col-6">
             <SearchList
@@ -4324,7 +4324,7 @@ export default {
     this.scrollTop();
     this.validarVersionamiento();
     if (
-      this.$route.params.id != undefined &&
+      this.$route.params.id != '' &&
       this.$route.path != "/formularioregistro"
     ) {
       this.loading = true;
@@ -6632,7 +6632,7 @@ export default {
         );
         return true;
       }
-      if (this.novedad_servicio == "" && this.$route.params.id != undefined) {
+      if (this.novedad_servicio == "" && this.$route.params.id != '') {
         this.showAlert(
           "Error, debe diligenciar el campo Novedad en servicio",
           "error"
@@ -6844,7 +6844,7 @@ export default {
         this.crearCliente();
         let config = this.configHeader();
         var id = this.$route.params.id;
-        if (id == undefined) {
+        if (id == '') {
           axios
             .post(
               self.URL_API + "api/v1/formulariocliente",

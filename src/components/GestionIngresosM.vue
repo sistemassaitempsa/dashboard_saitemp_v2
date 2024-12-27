@@ -693,7 +693,6 @@
                   <li>
                     <a
                       class="dropdown-item"
-                      href="#"
                       @click.prevent="descargarInforme(1)"
                       >Descargar orden de servicio</a
                     >
@@ -701,7 +700,6 @@
                   <li>
                     <a
                       class="dropdown-item"
-                      href="#"
                       @click.prevent="descargarInforme(2)"
                       >Descargar informe de seleccion</a
                     >
@@ -1293,7 +1291,7 @@ export default {
               );
             } else if (
               result.data.numero_identificacion != undefined &&
-              self.$route.params.id == undefined
+              self.$route.params.id == ""
             ) {
               var fechaSinHora = new Date(
                 result.data.fecha_radicado
@@ -1424,7 +1422,7 @@ export default {
       axios
         .get(self.URL_API + "api/v1/archivosingreso", config)
         .then(function (result) {
-          if (self.$route.params.id == undefined) {
+          if (self.$route.params.id == "") {
             self.loading = false;
           }
           self.fileInputsCount = result.data;
@@ -1550,7 +1548,7 @@ export default {
       this.crearRegistroIngreso();
 
       var url = "";
-      if (this.$route.params.id != '') {
+      if (this.$route.params.id != "") {
         url =
           self.URL_API + "api/v1/formularioingreso/" + this.$route.params.id;
       } else {

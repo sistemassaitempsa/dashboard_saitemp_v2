@@ -1105,37 +1105,62 @@ export default {
   computed: {},
   watch: {
     $route() {
-      if (this.$route.params.id == undefined) {
+      if (this.$route.params.id == "") {
         this.LimpiarFormulario();
       }
     },
-    documento_registrado() {
-      this.getResultadoControl();
+    documento_registrado: {
+      handler(newVal, oldVal) {
+        this.getResultadoControl();
+      },
+      deep: true,
     },
-    clase_control() {
-      this.getResultadoControl();
+    clase_control: {
+      handler(newVal, oldVal) {
+        this.getResultadoControl();
+      },
+      deep: true,
     },
-    frecuencia_control() {
-      this.getResultadoControl();
+    frecuencia_control: {
+      handler(newVal, oldVal) {
+        this.getResultadoControl();
+      },
+      deep: true,
     },
-    tipo_control() {
-      this.getResultadoControl();
+    tipo_control: {
+      handler(newVal, oldVal) {
+        this.getResultadoControl();
+      },
+      deep: true,
     },
-    existe_evidencia() {
-      this.getResultadoControl();
+    existe_evidencia: {
+      handler(newVal, oldVal) {
+        this.getResultadoControl();
+      },
+      deep: true,
     },
-    ejecucion_eficas() {
-      this.getResultadoControl();
+    ejecucion_eficas: {
+      handler(newVal, oldVal) {
+        this.getResultadoControl();
+      },
+      deep: true,
     },
+   
     indice() {
       this.contador = 2;
       this.setIndice();
     },
-    impacto() {
-      this.setImpactoxProbabilidad();
+    probabilidad: {
+      handler(newVal, oldVal) {
+        this.setImpactoxProbabilidad();
+      },
+      deep: true,
     },
-    probabilidad() {
-      this.setImpactoxProbabilidad();
+    impacto: {
+      handler(newVal, oldVal) {
+        this.setImpactoxProbabilidad();
+      },
+      deep: true,
     },
     id_registro() {
       this.reseteaTab();
@@ -1684,7 +1709,7 @@ export default {
         this.setColorCelda_resultado ||
         this.contador >= 4 ||
         (!this.setColorCelda_resultado &&
-          this.$route.params.id == undefined &&
+          this.$route.params.id == "" &&
           this.contador >= 2)
       ) {
         this.resultado_control[this.indice].background = item.color;
@@ -1753,7 +1778,7 @@ export default {
       let form = this.crearObjetoRiesgo();
       let config = this.configHeader();
       var url = "";
-      if (this.$route.params.id != '') {
+      if (this.$route.params.id != "") {
         var id = this.$route.params.id;
       } else if (this.id_registro != 0) {
         var id = this.id_registro;
@@ -1772,7 +1797,7 @@ export default {
       let config = this.configHeader();
       const form = new FormData();
       form.append("evidencia", self.file[0]);
-      if (this.$route.params.id != '') {
+      if (this.$route.params.id != "") {
         var id = this.$route.params.id;
       } else if (this.id_registro != 0) {
         var id = this.id_registro;

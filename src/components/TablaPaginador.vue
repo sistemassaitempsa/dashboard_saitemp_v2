@@ -6,7 +6,6 @@
         <li class="page-item" :class="{ disabled: !pagination.prev_page_url }">
           <a
             class="page-link"
-            href="#"
             @click.prevent="irAtras(pagination.prev_page_url)"
           >
             Anterior
@@ -22,7 +21,6 @@
         >
           <a
             class="page-link"
-            href="#"
             @click.prevent="irPaginaexpecifica(page.url, page.label)"
           >
             {{ page.label }}
@@ -33,7 +31,6 @@
         <li class="page-item" :class="{ disabled: !pagination.next_page_url }">
           <a
             class="page-link"
-            href="#"
             @click.prevent="irSiguiente(pagination.next_page_url)"
           >
             Siguiente

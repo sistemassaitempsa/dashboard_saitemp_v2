@@ -139,7 +139,7 @@
               <div class="col">
                 <div class="mb-3">
                   <label for="exampleInputEmail1" class="form-label"
-                    >Estilo contador</label
+                    >Color contador</label
                   >
                   <div class="mb-3">
                     <input
@@ -284,7 +284,7 @@ export default {
         .then(function (result) {
           self.titulo = result.data.titulo;
           self.descripcion = result.data.contenido;
-          self.modal_visible = parseInt(result.data.visible);
+          self.modal_visible = result.data.visible == '1' ? true:false;
           self.id_modal = result.data.id;
         });
     },
@@ -300,7 +300,7 @@ export default {
           self.estilo_contador = result.data.estilo_contador;
           self.tamano_contador = result.data.tamano_contador;
           self.tamano_texto_contador = result.data.tamano_texto_contador;
-          self.contador_visible = parseInt(result.data.visible);
+          self.contador_visible = result.data.visible == '1' ? true:false;
           self.id_contador = result.data.id;
         });
     },
@@ -365,7 +365,7 @@ export default {
         .get(
           self.URL_API + "api/v1/ocultacontador", config)
         .then(function (result) {
-          self.contador_visible = parseInt(result.data)
+          self.contador_visible = result.data == '1' ? true:false
           self.modal_visible = 1
         });
     },

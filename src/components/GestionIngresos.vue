@@ -137,8 +137,7 @@
         <div
           class="row"
           v-if="
-            $route.params.id != '' ||
-            $route.path == '/navbar/gestion-ingresosl'
+            $route.params.id != '' || $route.path == '/navbar/gestion-ingresosl'
           "
         >
           <h6 style="text-align: left">Radicado: {{ radicado }}</h6>
@@ -894,7 +893,6 @@
                   <li>
                     <a
                       class="dropdown-item"
-                      href="#"
                       @click.prevent="descargarInforme(1)"
                       >Descargar orden de servicio</a
                     >
@@ -902,7 +900,6 @@
                   <li>
                     <a
                       class="dropdown-item"
-                      href="#"
                       @click.prevent="descargarInforme(2)"
                       >Descargar informe de seleccion</a
                     >
@@ -910,7 +907,6 @@
                   <li>
                     <a
                       class="dropdown-item"
-                      href="#"
                       @click.prevent="descargarInforme(3)"
                       >Descargar citación laboratorio</a
                     >
@@ -918,7 +914,6 @@
                   <li>
                     <a
                       class="dropdown-item"
-                      href="#"
                       @click.prevent="descargarInforme(4)"
                       >Descargar citación candidato</a
                     >
@@ -1549,7 +1544,7 @@ export default {
           item.opciones.forEach((element) => {
             if (element.url == ruta) {
               self.menu_id = element.id;
-              if(self.$route.params.id != ""){
+              if (self.$route.params.id != "") {
                 self.historicoCorreos();
               }
             }
@@ -1877,7 +1872,7 @@ export default {
       this.crearRegistroIngreso();
 
       var url = "";
-      if (this.$route.params.id != '') {
+      if (this.$route.params.id != "") {
         url =
           self.URL_API + "api/v1/formularioingreso/" + this.$route.params.id;
       } else {
