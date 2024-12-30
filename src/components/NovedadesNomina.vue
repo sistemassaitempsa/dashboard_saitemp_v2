@@ -246,6 +246,7 @@ export default {
   props: {},
   data() {
     return {
+      URL_API: process.env.VUE_APP_URL_API,
       razon_social: "",
       nit: "",
       digito_verificacion: "",
