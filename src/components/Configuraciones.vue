@@ -56,7 +56,7 @@
                     role="switch"
                     id="flexSwitchCheckDefault"
                     v-model="alerta"
-                      @input="modal_visible=false"
+                    @input="modal_visible = false"
                   />
                   <label class="form-check-label" for="flexSwitchCheckDefault"
                     >Alerta</label
@@ -228,9 +228,14 @@ export default {
   components: {},
   mixins: [Token, Alerts],
   props: {
-    actualizacion:{
-      type:Boolean,
-    }
+    actualizacion: {
+      type: Boolean,
+    },
+    menu: {
+      type: Array,
+      required: false,
+      default: () => [],
+    },
   },
   data() {
     return {
@@ -249,16 +254,16 @@ export default {
       tamano_contador: "",
       tamano_texto_contador: "",
       contador_visible: false,
-      alerta:false
+      alerta: false,
     };
   },
   computed: {},
   watch: {
-    actualizacion(){
-      if(this.actualizacion == false){
-       this.ocultaContador()
+    actualizacion() {
+      if (this.actualizacion == false) {
+        this.ocultaContador();
       }
-    }
+    },
   },
   mounted() {
     this.getModal();
@@ -284,7 +289,7 @@ export default {
         .then(function (result) {
           self.titulo = result.data.titulo;
           self.descripcion = result.data.contenido;
-          self.modal_visible = result.data.visible == '1' ? true:false;
+          self.modal_visible = result.data.visible == "1" ? true : false;
           self.id_modal = result.data.id;
         });
     },
@@ -300,7 +305,7 @@ export default {
           self.estilo_contador = result.data.estilo_contador;
           self.tamano_contador = result.data.tamano_contador;
           self.tamano_texto_contador = result.data.tamano_texto_contador;
-          self.contador_visible = result.data.visible == '1' ? true:false;
+          self.contador_visible = result.data.visible == "1" ? true : false;
           self.id_contador = result.data.id;
         });
     },
@@ -322,9 +327,9 @@ export default {
       var form = {
         titulo: this.titulo,
         descripcion: this.descripcion,
-        recarga_navegador: this.recarga_navegador == false ? 0:1,
-        modal_visible: this.modal_visible == false ? 0:1,
-        alerta: this.alerta == false ? 0:1,
+        recarga_navegador: this.recarga_navegador == false ? 0 : 1,
+        modal_visible: this.modal_visible == false ? 0 : 1,
+        alerta: this.alerta == false ? 0 : 1,
       };
       axios
         .post(
@@ -346,7 +351,7 @@ export default {
         estilo_contador: self.estilo_contador,
         tamano_contador: self.tamano_contador,
         tamano_texto_contador: self.tamano_texto_contador,
-        contador_visible: self.contador_visible == false ? 0:1,
+        contador_visible: self.contador_visible == false ? 0 : 1,
       };
       axios
         .post(
@@ -362,11 +367,10 @@ export default {
       let self = this;
       let config = this.configHeader();
       axios
-        .get(
-          self.URL_API + "api/v1/ocultacontador", config)
+        .get(self.URL_API + "api/v1/ocultacontador", config)
         .then(function (result) {
-          self.contador_visible = result.data == '1' ? true:false
-          self.modal_visible = 1
+          self.contador_visible = result.data == "1" ? true : false;
+          self.modal_visible = 1;
         });
     },
   },
