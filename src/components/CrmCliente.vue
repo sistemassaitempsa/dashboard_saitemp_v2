@@ -1396,6 +1396,7 @@ export default {
       bloquea_campos: false,
       asistencias: [
         {
+          correo: "",
           nombre: "",
           cargo: "",
           firma: [],
@@ -1840,17 +1841,18 @@ export default {
       this.hora_cierre = "";
       this.hora_inicio = "";
     },
-    getItem(id) {
+    async getItem(id) {
+      this.loading = true;
       this.limpiarFormulario();
       let self = this;
-      self.loading = true;
       let config = this.configHeader();
       axios
         .get(self.URL_API + "api/v1/seguimientocrmbyid/" + id, config)
         .then(function (result) {
-          self.loading = false;
           self.llenarFormulario(result.data);
           self.historicoCorreos();
+          self.loading = false;
+          return true;
         });
     },
     limitarCaracteres() {
@@ -2098,12 +2100,10 @@ export default {
           );
         });
     },
-    save(tipoSave) {
-      if (this.$route.params.id == "" || this.hora_cierre == " ") {
-        this.tomarHoraCierre();
-      }
+    validacionesCrm() {
       if (this.estado_cierre_id == "") {
         this.showAlert("Debe llenar el campo Estado* ", "error");
+        return false;
       }
       if (
         this.estado_cierre_id == 3 &&
@@ -2122,11 +2122,11 @@ export default {
               "Debe llenar los campos requeridos en compromisos ",
               "error"
             );
-            return;
+            return false;
           }
         });
         if (missedAsistencia) {
-          return;
+          return false;
         }
       }
       // Validación de PQRSF
@@ -2139,7 +2139,7 @@ export default {
           "Para el campo 'Cierra la PQRS' debe seleccionar uno de la lista desplegable ",
           "error"
         );
-        return;
+        return false;
       }
 
       //validaciones para interacciones 5(Visita) y 6(Reunión)
@@ -2153,40 +2153,40 @@ export default {
               "Debe seleccionar de la lista los responsables de los compromisos ",
               "error"
             );
-            return;
+            return false;
           }
         });
         if (missedAsistencia) {
-          return;
+          return false;
         }
         let lastIndexAsistencia = this.asistencias.length - 1;
         if (this.alcance_visita == "") {
           this.validarCampoSeleccionado("Alcance visita", "no-alcance", 1);
-          return;
+          return false;
         }
         if (this.sede_id == "") {
           this.validarCampoSeleccionado("Sede", "no-sede", 2);
-          return;
+          return false;
         }
         if (this.nombre_contacto == "") {
           this.validarCampoSeleccionado("Nombre / razón social", "no-name", 1);
-          return;
+          return false;
         }
         if (this.nit_documento == "" && this.solicitante_id == 1) {
           this.validarCampoSeleccionado("Nit/identificacion", "no-nit", 2);
-          return;
+          return false;
         }
         if (this.nit_documento == "" && this.solicitante_id == 2) {
           this.validarCampoSeleccionado("Nit/identificacion", "no-nit", 1);
-          return;
+          return false;
         }
         if (this.pqrsf_id == "") {
           this.validarCampoSeleccionado("PQRSF", "no-tipo-pqrsf", 2);
-          return;
+          return false;
         }
         if (this.telefono_contacto == "") {
           this.validarCampoSeleccionado("Telefono de contacto", "no-tel", 1);
-          return;
+          return false;
         }
         if (this.objetivo_visita == "") {
           this.validarCampoSeleccionado(
@@ -2194,11 +2194,11 @@ export default {
             "no-objetivo",
             1
           );
-          return;
+          return false;
         }
         if (this.cargo_visitado == "") {
           this.validarCampoSeleccionado("Cargo del visitado", "no-visitado", 1);
-          return;
+          return false;
         }
         if (this.visitado == "") {
           this.validarCampoSeleccionado(
@@ -2206,7 +2206,7 @@ export default {
             "no-visitante",
             1
           );
-          return;
+          return false;
         }
         if (this.cargo_visitante == "") {
           this.validarCampoSeleccionado(
@@ -2214,7 +2214,7 @@ export default {
             "no-cargo-visitante",
             2
           );
-          return;
+          return false;
         }
         if (this.visitante == "") {
           this.validarCampoSeleccionado(
@@ -2222,11 +2222,11 @@ export default {
             "no-visitante-sel",
             2
           );
-          return;
+          return false;
         }
         if (this.temasPrincipales[0].descripcion == "") {
           this.validarCampoSeleccionado("Tema", "temaArea", 1);
-          return;
+          return false;
         }
 
         if (
@@ -2238,11 +2238,11 @@ export default {
             "Debe llenar los campos requeridos para la firma ",
             "error"
           );
-          return;
+          return false;
         }
         if (this.estado_cierre_id == "") {
           this.validarCampoSeleccionado("Estado", "no-estado-form", 2);
-          return;
+          return false;
         }
         if (this.responsable_id == "") {
           this.validarCampoSeleccionado(
@@ -2250,56 +2250,56 @@ export default {
             "no-respoonsable-form",
             2
           );
-          return;
+          return false;
         }
         if (this.hora_inicio == "") {
           this.validarCampoSeleccionado("Hora inicio de visita", "no-hora", 1);
-          return;
+          return false;
         }
         if (this.proceso_id == "") {
           this.validarCampoSeleccionado("Proceso o área", "no-proceso", 2);
-          return;
+          return false;
         }
         if (this.solicitante_id == "") {
           this.validarCampoSeleccionado("Solicitante", "no-solicitante", 2);
-          return;
+          return false;
         }
       } else {
         if (this.sede_id == "") {
           this.validarCampoSeleccionado("Sede", "no-sede", 2);
-          return;
+          return false;
         }
         if (this.proceso_id == "") {
           this.validarCampoSeleccionado("Proceso o área", "no-proceso", 2);
-          return;
+          return false;
         }
         if (this.solicitante_id == "") {
           this.validarCampoSeleccionado("Solicitante", "no-solicitante", 2);
-          return;
+          return false;
         }
         if (this.nit_documento == "" && this.solicitante_id == 1) {
           this.validarCampoSeleccionado("Nit/identificacion", "no-nit", 2);
-          return;
+          return false;
         }
         if (this.nit_documento == "" && this.solicitante_id == 2) {
           this.validarCampoSeleccionado("Nit/identificacion", "no-nit", 1);
-          return;
+          return false;
         }
         if (this.nombre_contacto == "") {
           this.validarCampoSeleccionado("Nombre / razón social", "no-name", 1);
-          return;
+          return false;
         }
         if (this.telefono_contacto == "") {
           this.validarCampoSeleccionado("Telefono de contacto", "no-tel", 1);
-          return;
+          return false;
         }
         if (this.estado_cierre_id == "") {
           this.validarCampoSeleccionado("Estado", "no-estado-form", 2);
-          return;
+          return false;
         }
         if (this.pqrsf_id == "") {
           this.validarCampoSeleccionado("PQRSF", "no-tipo-pqrsf", 2);
-          return;
+          return false;
         }
         if (this.responsable_id == "") {
           this.validarCampoSeleccionado(
@@ -2307,10 +2307,15 @@ export default {
             "no-respoonsable-form",
             2
           );
-          return;
+          return false;
         }
       }
-
+      if (!this.emailValido || this.correo_contacto == "") {
+        self.showAlert("Ingrese un correo de contacto valido", "error");
+        return false;
+      }
+    },
+    crearCorreosResponsables() {
       let correosResponsables = {
         correos: [
           {
@@ -2325,28 +2330,33 @@ export default {
           },
         ],
       };
-      this.compromisos.forEach((compromiso) => {
-        correosResponsables.correos.push({
-          correo: compromiso.email,
-          observacion: compromiso.observacion,
-          compromiso: true,
+      if (this.compromisos[0].email != "") {
+        this.compromisos.forEach((compromiso) => {
+          correosResponsables.correos.push({
+            correo: compromiso.email,
+            observacion: compromiso.observacion,
+            compromiso: true,
+          });
         });
-      });
-      this.asistencias.forEach((asistencia) => {
-        correosResponsables.correos.push({
-          correo: asistencia.correo,
-          observacion: "",
-          compromiso: false,
-        });
-      });
-      console.log(this.asistencias);
-      let self = this;
-      let config = this.configHeader();
-      const formulario = new FormData();
-      if (!this.emailValido || this.correo_contacto == "") {
-        self.showAlert("Ingrese un correo de contacto valido", "error");
-        return;
       }
+      if (this.asistencias[0].nombre != "") {
+        this.asistencias.forEach((asistencia) => {
+          if (asistencia.correo != "")
+            correosResponsables.correos.push({
+              correo: asistencia.correo,
+              observacion: "",
+              compromiso: false,
+            });
+        });
+      }
+
+      return correosResponsables;
+    },
+    crearFormulario() {
+      console.log(this.asistencias);
+
+      const formulario = new FormData();
+
       // Creacion del formulario con los datos que no corresponden a visita
       formulario.append("nombre_contacto", this.nombre_contacto);
       formulario.append("latitud", this.latitud);
@@ -2414,48 +2424,42 @@ export default {
           );
         });
       });
-
-      // Asistencias
-
+      return formulario;
+    },
+    async save(tipoSave) {
+      this.loading = true;
+      let self = this;
+      let config = this.configHeader();
+      if (this.$route.params.id == "" || this.hora_cierre == " ") {
+        this.tomarHoraCierre();
+      }
+      const validaciones = this.validacionesCrm();
+      if (validaciones == false) {
+        return;
+      }
+      const correosResponsables = this.crearCorreosResponsables();
+      const formulario = this.crearFormulario();
       var id = this.$route.params.id;
       var url =
-        id != ''
+        id != ""
           ? `${self.URL_API}api/v1/seguimientocrm/${id}`
           : `${self.URL_API}api/v1/seguimientocrm`;
 
-      axios
-        .post(url, formulario, config)
-        .then((result) => {
-          self.getItem(result.data.id);
-          self.showAlert(result.data.message, result.data.status);
-          const id = result.data.id;
-          const rutaActual = self.$route.path;
-          const nuevosParametros = { ...rutaActual.params, id: result.data.id };
-          self.$router.replace({ ...rutaActual, params: nuevosParametros });
-          if (tipoSave == 1) {
-            self
-              .enviarCorreos(id, tipoSave, correosResponsables)
-              .then(() => {
-                self.showAlert("correo enviado correctamente", "success");
-              })
-              .catch(function (error) {
-                console.log(error);
-                self.showAlert(
-                  "Error al enviar correo verifique el correo de contacto",
-                  "error"
-                );
-              });
-          }
-        })
-        .then(() => {
-          this.historicoCorreos();
-          if (tipoSave == 2) {
-            this.descargarInforme(2);
-          }
-        })
-        .catch(function (error) {
-          console.error("Error al guardar el formulario:", error);
-        });
+      const response = await axios.post(url, formulario, config);
+
+      await self.getItem(response.data.id);
+      this.loading = true;
+      self.showAlert(response.data.message, response.data.status);
+      id = response.data.id;
+      const rutaActual = self.$route.path;
+      const nuevosParametros = { ...rutaActual.params, id: response.data.id };
+      self.$router.replace({ ...rutaActual, params: nuevosParametros });
+      if (tipoSave == 1) {
+        await this.enviarCorreos(id, tipoSave, correosResponsables);
+      } else if (tipoSave == 2) {
+        this.descargarInforme(2);
+      }
+      this.historicoCorreos();
     },
     toggleDropdown() {
       this.dropdownVisible = !this.dropdownVisible;
@@ -2690,19 +2694,15 @@ export default {
           }
         });
     },
-    enviarCorreos(id, tipoSave, correosResponsables) {
-      this.loading = true;
+    async enviarCorreos(id, tipoSave, correosResponsables) {
       let config = this.configHeader();
-      axios
-        .post(
-          this.URL_API + "api/v1/seguimientocrmpdf/" + id + "/" + tipoSave,
-          correosResponsables,
-          config
-        )
-        .then((response) => {
-          this.showAlert(response.data.message, response.data.status);
-          this.loading = false;
-        });
+      const response = await axios.post(
+        this.URL_API + "api/v1/seguimientocrmpdf/" + id + "/" + tipoSave,
+        correosResponsables,
+        config
+      );
+
+      this.showAlert(response.data.message, response.data.status);
     },
     getSedes(item = null) {
       if (item != null) {
