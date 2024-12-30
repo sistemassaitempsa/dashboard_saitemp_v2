@@ -87,7 +87,7 @@
           <h5>Conteo regresivo</h5>
           <form class="was-validated" @submit.prevent="saveContador()">
             <div class="row">
-              <di class="col">
+              <div class="col">
                 <div class="mb-3">
                   <label for="exampleInputEmail1" class="form-label"
                     >mensaje</label
@@ -101,8 +101,8 @@
                     required
                   />
                 </div>
-              </di>
-              <di class="col">
+              </div>
+              <div class="col">
                 <div class="mb-3">
                   <label for="exampleInputEmail1" class="form-label"
                     >Fecha y hora actualización</label
@@ -116,7 +116,7 @@
                     required
                   />
                 </div>
-              </di>
+              </div>
             </div>
             <div class="row">
               <div class="col">
