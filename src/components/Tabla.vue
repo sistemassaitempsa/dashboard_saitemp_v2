@@ -526,11 +526,7 @@
         </button>
       </div>
     </div>
-    <div
-      v-if="!sin_registros && items_tabla2.length > 0"
-      class="row"
-      style="clear: both"
-    >
+    <div class="row" style="clear: both">
       <div
         v-if="ruta != '/navbar/procesosespeciales'"
         class="col-xs-3 col-md-3"
@@ -658,6 +654,40 @@
             {{ item.nombre }}
           </option>
         </select>
+      </div>
+      <div
+        v-if="ruta == '/navbar/gestion-ingresosl'"
+        class="col-2"
+        style="margin-top: 35px"
+      >
+        <div class="form-check form-switch">
+          <label for="flexSwitchCheckDefault" class="form-check-label"
+            >Ordenar por prioridad fecha ingreso</label
+          >
+          <input
+            :checked="filtro.ordenar_prioridad"
+            @change="filtrarFechaIngreso"
+            class="form-check-input"
+            type="checkbox"
+            id="flexSwitchCheckDefault"
+          />
+        </div>
+      </div>
+      <div
+        v-if="ruta == '/navbar/gestion-ingresosl'"
+        class="col-1"
+        style="margin-top: 35px"
+      >
+        <div class="form-check form-switch">
+          <label for="filtromios" class="form-check-label">Filtrar mios</label>
+          <input
+            :checked="filtro.filtro_mios"
+            @change="filtrarMios"
+            class="form-check-input"
+            type="checkbox"
+            id="filtromios"
+          />
+        </div>
       </div>
       <div v-if="cantidad >= 20" class="col-xs-3 col-md-3">
         <button
@@ -1342,6 +1372,10 @@ export default {
   },
   data() {
     return {
+      filtro: {
+        ordenar_prioridad: false,
+        filtro_mios: false,
+      },
       nombre_estado: "",
       toogleModal: false,
       lista_encargados_debida_diligencia: [],
@@ -1394,7 +1428,9 @@ export default {
         "a_color_resultado",
         "o_color_resultado",
         "estado_firma_id",
-      ], // este array contiene los nombres de las columnas queno queremos que se muestren en la tabla
+        "hora_confirmacion",
+        "responsable_id",
+      ], // este array contiene los nombres de las columnas que no queremos que se muestren en la tabla
       maxCaracteres: 20,
       lista_estados_id: {},
       lista_encargados: [],
@@ -1458,6 +1494,10 @@ export default {
       this.label_busqueda_rapida = "Búsqueda por radicado";
       this.endpoint_busqueda_rapida = "buscarradicado";
     }
+    this.filtro.ordenar_prioridad = JSON.parse(
+      localStorage.getItem("ordenar_prioridad")
+    );
+    this.filtro.filtro_mios = JSON.parse(localStorage.getItem("filtro_mios"));
   },
   created() {
     this.empleados();
@@ -1465,6 +1505,10 @@ export default {
       this.spinner = false;
       this.sinregistros = "Realiza una búsqueda para ver los registros";
     }
+    this.filtro.ordenar_prioridad = JSON.parse(
+      localStorage.getItem("ordenar_prioridad")
+    );
+    this.filtro.filtro_mios = JSON.parse(localStorage.getItem("filtro_mios"));
   },
   methods: {
     asignacionMasiva() {
@@ -1900,6 +1944,7 @@ export default {
         return 0;
       });
     },
+
     update(item) {
       this.check = [];
       item.currentUrl = this.currentUrl;
@@ -2133,6 +2178,16 @@ export default {
       if (pag != null) {
         let self = this;
         let config = this.configHeader();
+        if (pag.includes("filtrofechaingreso")) {
+          axios.post(pag, this.filtro, config).then(function (result) {
+            self.links = result.data;
+            // self.llenarTabla(result)
+            self.items_tabla2 = Object.values(result.data.data); // se está llenando la tabla con los datos cuando se pagina
+            // desde acá porque en la función llenartabla() está dando error al llenar la tabla
+            self.loading = false;
+          });
+          return;
+        }
         axios.get(pag, config).then(function (result) {
           self.links = result.data;
           // self.llenarTabla(result)
@@ -2235,6 +2290,17 @@ export default {
           self.llenarTabla(result);
           self.loading = false;
         });
+    },
+
+    filtrarFechaIngreso() {
+      this.filtro.ordenar_prioridad = !this.filtro.ordenar_prioridad;
+      localStorage.setItem("ordenar_prioridad", this.filtro.ordenar_prioridad);
+      this.$emit("filtrarFechaIngreso", this.filtro);
+    },
+    filtrarMios() {
+      this.filtro.filtro_mios = !this.filtro.filtro_mios;
+      localStorage.setItem("filtro_mios", this.filtro.filtro_mios);
+      this.$emit("filtrarFechaIngreso", this.filtro);
     },
     confirmationMessage() {
       // 'Está seguro de guardar la información del formulario?', 'Si', 'Cancelar', 'Información guardada con exito'
