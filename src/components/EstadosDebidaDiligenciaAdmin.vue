@@ -199,6 +199,12 @@
                 Guardar Estado
               </button>
             </div>
+            <div class="row">
+              <ListaEstados
+                :lista="estados"
+                @cambiarOrden="cambiarOrdenEstados"
+              ></ListaEstados>
+            </div>
           </div>
         </div>
       </form>
@@ -212,14 +218,19 @@ import Loading from "./Loading.vue";
 import axios from "axios";
 import { Token } from "../Mixins/Token.js";
 import { Alerts } from "../Mixins/Alerts.js";
+import ListaEstados from "./ListaEstados.vue";
+
 export default {
   components: {
     Loading,
     SearchList,
+    ListaEstados,
   },
   mixins: [Token, Alerts],
   data() {
     return {
+      estados1: [],
+      estados2: [],
       mensaje_error: "",
       URL_API: process.env.VUE_APP_URL_API,
       usuario: "",
@@ -241,7 +252,27 @@ export default {
       this.limpiarFormulario();
     },
   },
+  async mounted() {
+    this.getEstados();
+  },
+  created() {
+    this.getEstados();
+  },
   methods: {
+    async cambiarOrdenEstados(lista) {
+      let self = this;
+      let config = this.configHeader();
+      this.loading = true;
+      const formLista = { estados: lista };
+      const response = await axios.put(
+        self.URL_API + `api/v1/estadosfirma`,
+        formLista,
+        config
+      );
+      this.getEstados();
+      this.showAlert(response.data.message, response.data.status);
+      this.loading = false;
+    },
     changeTipoTiempo(option) {
       this.tipo_tiempo = option;
       if (this.id_estado == "") {
@@ -296,8 +327,8 @@ export default {
       axios
         .delete(self.URL_API + "api/v1/estadosfirma/" + id, config)
         .then(function (result) {
-          this.loading = false;
           self.showAlert(result.data.message, result.data.status);
+          console.log(result);
         });
     },
     getEstados(item = null) {
@@ -348,7 +379,7 @@ export default {
         });
     },
     limpiarFormulario() {
-      this.id = "";
+      this.id_estado = "";
       this.nombre = "";
       this.color = "#9EAEAC";
       this.tiempo_respuesta = 0;
@@ -356,6 +387,7 @@ export default {
       this.asignar_usuarios = [];
       this.usuario = "";
       this.tiempo_respuesta_cambio = 0;
+      this.estados = [];
     },
     crearNuevoEstado() {
       this.limpiarFormulario();
@@ -380,6 +412,11 @@ export default {
         responsables: this.asignar_usuarios,
         tiempo_respuesta: this.tiempo_respuesta,
       };
+      if (this.asignar_usuarios.length == 0) {
+        this.showAlert("Debe asignar por lo menos un responsable", "error");
+        this.loading = false;
+        return;
+      }
       if (this.id_estado == "") {
         let config = this.configHeader();
         axios
