@@ -1,8 +1,8 @@
 <template>
   <div class="container">
+    <Loading :loading="loading" />
     <NotificacionesSocket />
     <h2>Debida diligencia clientes</h2>
-    <!-- <Tiptap v-model="editorContent"/> -->
     <Tabla
       :datos="datos"
       :tabla="tabla"
@@ -11,22 +11,23 @@
       :listas="listas"
       :endpointexport="endpointexport"
       :estados_firma="estados_firma"
-      @actualizaEstado="actualizaEstado"
+      @actualizaResponsableDD="actualizaResponsableDD"
+      @actualizaEstadoPadre="actualizaEstado"
     />
   </div>
 </template>
 <script>
 import axios from "axios";
 import Tabla from "./Tabla.vue";
+import Loading from "./Loading.vue";
 import { Token } from "../Mixins/Token.js";
 import { Alerts } from "../Mixins/Alerts.js";
 import NotificacionesSocket from "./NotificacionSocket.vue";
-// import Tiptap from "./Tiptap.vue";
 export default {
   components: {
+    Loading,
     Tabla,
     NotificacionesSocket,
-    // Tiptap
   },
   mixins: [Token, Alerts],
   props: {
@@ -34,7 +35,7 @@ export default {
   },
   data() {
     return {
-      editorContent:"",
+      loading: false,
       show_table: false,
       datos: [],
       endpoint: "consultaformulariocliente",
@@ -86,13 +87,13 @@ export default {
           calculado: "false",
         },
         {
-          nombre: "Estado contrato",
+          nombre: "Estado firmas",
           orden: "DESC",
           tipo: "texto",
           calculado: "false",
         },
         {
-          nombre: "Estado firmas",
+          nombre: "Corregir por",
           orden: "DESC",
           tipo: "texto",
           calculado: "false",
@@ -102,15 +103,10 @@ export default {
       listas: [],
       estados_firma: [],
       first_page_url: "",
-      editor:"",
     };
   },
   computed: {},
-  watch: {
-   editor(){
-    console.log(this.editor)
-   }
-  },
+  watch: {},
   mounted() {},
   created() {
     this.urlExterna();
@@ -120,21 +116,84 @@ export default {
     this.getEjecutivosComerciales();
   },
   methods: {
-    actualizaEstado(item_id, estado, currenturl = null) {
+    actualizaResponsableDD(
+      item_id,
+      responsable_id,
+      responsable_ingreso,
+      email_reponsable,
+      currenturl = null
+    ) {
+      let correosSeleccionados = {
+        correos: [],
+      };
+      if (email_reponsable) {
+        correosSeleccionados.correos.push({
+          correo: email_reponsable,
+          observacion: "",
+          corregir: false,
+        });
+      }
+      this.loading = true;
       let self = this;
       let config = this.configHeader();
+      axios
+        .get(
+          self.URL_API +
+            "api/v1/actualizaResponsableCliente/" +
+            item_id +
+            "/" +
+            responsable_id +
+            "/" +
+            responsable_ingreso,
+          config
+        )
+        .then(function (result) {
+          self.estadoActualizado(currenturl);
+          self.showAlert(result.data.message, result.data.status);
+          if (result.data.status == "success") {
+            self.enviarCorreos(item_id, correosSeleccionados);
+          }
+          self.loading = false;
+        });
+    },
+    actualizaEstado(
+      item_id,
+      estado,
+      responsable_id,
+      correo_responsable,
+      currenturl = null
+    ) {
+      this.loading = true;
+      let self = this;
+      let config = this.configHeader();
+      let correosSeleccionados = {
+        correos: [],
+      };
+      if (correo_responsable) {
+        correosSeleccionados.correos.push({
+          correo: correo_responsable,
+          observacion: "",
+          corregir: false,
+        });
+      }
       axios
         .get(
           self.URL_API +
             "api/v1/actualizaestadofirma/" +
             item_id +
             "/" +
-            estado,
+            estado +
+            "/" +
+            responsable_id,
           config
         )
         .then(function (result) {
           self.estadoActualizado(currenturl);
           self.showAlert(result.data.message, result.data.status);
+          if (result.data.status == "success") {
+            self.enviarCorreos(item_id, correosSeleccionados);
+          }
+          self.loading = false;
         });
     },
     llenarLista() {
@@ -164,6 +223,20 @@ export default {
       axios.get(currentUrl, config).then(function (result) {
         self.datos = result;
       });
+    },
+    enviarCorreos(id, correosResponsables) {
+      this.loading = true;
+      let config = this.configHeader();
+      axios
+        .post(
+          this.URL_API + "api/v1/enviarCorreoDD/" + id,
+          correosResponsables,
+          config
+        )
+        .then((response) => {
+          this.showAlert(response.data.message, response.data.status);
+          this.loading = false;
+        });
     },
     getEjecutivosComerciales() {
       let self = this;

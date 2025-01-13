@@ -1744,7 +1744,7 @@ export default {
           if (self.id_registro != 0) {
             self.id_cliente = self.id_registro;
           }
-          if (self.id_cliente != "") {
+          if (self.id_cliente != "" && self.id_cliente != undefined) {
             self.getRegistroIngreso(self.id_cliente);
           }
         });
