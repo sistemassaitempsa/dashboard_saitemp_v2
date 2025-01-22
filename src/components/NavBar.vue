@@ -309,23 +309,44 @@ export default {
       });
     },
     userLogued() {
+      const userType = localStorage.getItem("user_type");
+      console.log("hicelog");
       let self = this;
       let config = this.configHeader();
-      axios
-        .get(self.URL_API + "api/v1/userlogued", config)
-        .then(function (result) {
-          if (result.data[0] != undefined) {
-            self.userlogued = result.data[0];
-            self.user_id = result.data[0].usuario_id;
-            self.autoriced = true;
-            self.getMenu();
-          } else {
+      if (userType == 2) {
+        axios
+          .get(self.URL_API + "api/v1/userloguedCandidatos", config)
+          .then(function (result) {
+            if (result.data[0] != undefined) {
+              self.userlogued = result.data[0];
+              self.user_id = result.data[0].usuario_id;
+              self.autoriced = true;
+              self.getMenu();
+            } else {
+              self.$router.push("/loginCandidatos");
+            }
+          })
+          .catch(function (error) {
+            console.log(error);
+            self.$router.push("/loginCandidatos");
+          });
+      } else {
+        axios
+          .get(self.URL_API + "api/v1/userlogued", config)
+          .then(function (result) {
+            if (result.data[0] != undefined) {
+              self.userlogued = result.data[0];
+              self.user_id = result.data[0].usuario_id;
+              self.autoriced = true;
+              self.getMenu();
+            } else {
+              self.$router.push("/");
+            }
+          })
+          .catch(function () {
             self.$router.push("/");
-          }
-        })
-        .catch(function () {
-          self.$router.push("/");
-        });
+          });
+      }
     },
     getMenu() {
       let self = this;

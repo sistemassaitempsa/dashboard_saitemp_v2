@@ -8,24 +8,43 @@
       <form>
         <div class="mb-3">
           <label for="exampleInputEmail1" class="form-label">Usuario</label>
-          <input type="text" class="form-control" id="exampleInputEmail1" autocomplete="username" aria-describedby="prueba" v-model="email" />
+          <input
+            type="text"
+            class="form-control"
+            id="exampleInputEmail1"
+            autocomplete="username"
+            aria-describedby="prueba"
+            v-model="email"
+          />
         </div>
         <div class="mb-3">
-          <label for="exampleInputPassword1" class="form-label">Contraseña</label>
+          <label for="exampleInputPassword1" class="form-label"
+            >Contraseña</label
+          >
           <i class="fa fa-search"></i>
-          <input :type="!contraseña ? 'password' : 'text'" class="form-control" autocomplete="current-password" id="exampleInputPassword1"
-            v-model="password" />
-          <svg xmlns="http://www.w3.org/2000/svg" class="input-icon password" viewBox="0 0 20 20" fill="currentColor"
-            @click="contraseña = !contraseña">
+          <input
+            :type="!contraseña ? 'password' : 'text'"
+            class="form-control"
+            autocomplete="current-password"
+            id="exampleInputPassword1"
+            v-model="password"
+          />
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="input-icon password"
+            viewBox="0 0 20 20"
+            fill="currentColor"
+            @click="contraseña = !contraseña"
+          >
             <path d="M10 12a2 2 0 100-4 2 2 0 000 4z" />
-            <path fill-rule="evenodd"
+            <path
+              fill-rule="evenodd"
               d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z"
-              clip-rule="evenodd" />
+              clip-rule="evenodd"
+            />
           </svg>
         </div>
-        <button class="btn btn-success" @click="login()">
-          Ingresar
-        </button>
+        <button class="btn btn-success" @click="login()">Ingresar</button>
       </form>
     </div>
     <router-view />
@@ -33,23 +52,23 @@
 </template>
 <script>
 import axios from "axios";
-import { Alerts } from '../Mixins/Alerts.js';
-import { Token } from '../Mixins/Token.js';
+import { Alerts } from "../Mixins/Alerts.js";
+import { Token } from "../Mixins/Token.js";
 
-export default ({
+export default {
   mixins: [Token, Alerts],
   data() {
     return {
       email: "",
       password: "",
       URL_API: process.env.VUE_APP_URL_API,
-      contraseña: false
-    }
+      contraseña: false,
+    };
   },
   created() {
-    this.urlExterna()
+    this.urlExterna();
     var hashActual = window.location.hash;
-    var nuevoHash = '?' + hashActual;
+    var nuevoHash = "?" + hashActual;
     history.replaceState(null, null, nuevoHash);
   },
   methods: {
@@ -62,19 +81,19 @@ export default ({
           if (result.data.access_token != undefined) {
             localStorage.setItem("access_token", result.data.access_token);
             localStorage.setItem("marca_temporalnc", result.data.marca);
+            localStorage.setItem("user_type", "0");
             self.$router.push("/navbar/landing");
-          }
-          else if (result.data.status == "error") {
+          } else if (result.data.status == "error") {
             self.showAlert(result.data.message, result.data.status);
           }
         })
         .catch(function (error) {
-          console.log(error)
+          console.log(error);
           self.showAlert(error.status, error.message);
         });
     },
-  }
-})
+  },
+};
 </script>
 <style scoped>
 .card {
@@ -84,7 +103,8 @@ export default ({
   padding: 20px;
   background-color: rgba(239, 237, 237, 0.642);
   min-width: 350px;
-  box-shadow: rgba(0, 0, 0, 0.25) 0px 14px 28px, rgba(0, 0, 0, 0.22) 0px 10px 10px;
+  box-shadow: rgba(0, 0, 0, 0.25) 0px 14px 28px,
+    rgba(0, 0, 0, 0.22) 0px 10px 10px;
 }
 
 label {
