@@ -250,7 +250,7 @@ export default {
 
   created() {
     this.urlExterna();
-    if (this.$route.params.id != '') {
+    if (this.$route.params.id != "") {
       this.getUser();
     }
     this.userLogued();
@@ -276,7 +276,7 @@ export default {
       this.file.forEach(function (item, index) {
         form.append("archivo" + index, item);
       });
-      if (this.$route.params.id != '') {
+      if (this.$route.params.id != "") {
         form.append("estado_id", this.estadoId_);
         form.append("id_user", this.$route.params.id);
         accion = "user";
@@ -357,6 +357,7 @@ export default {
     userLogued() {
       let self = this;
       let config = this.configHeader();
+
       axios
         .get(self.URL_API + "api/v1/userlogued", config)
         .then(function (result) {
