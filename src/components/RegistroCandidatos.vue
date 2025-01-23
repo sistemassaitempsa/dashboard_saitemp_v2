@@ -17,7 +17,7 @@
                 @blur="isFocusNombre = false"
                 required
               />
-              <label :class="{ active: isFocusNombre || nombre }"
+              <label :class="{ active: isFocusNombre || cliente.nombre }"
                 >Nombres *</label
               >
             </div>
@@ -30,7 +30,7 @@
                 @blur="isFocusApellidos = false"
                 required
               />
-              <label :class="{ active: isFocusApellidos || apellidos }"
+              <label :class="{ active: isFocusApellidos || cliente.apellidos }"
                 >Apellidos *</label
               >
             </div>
@@ -45,7 +45,8 @@
                 @blur="isFocusNumDoc = false"
                 required
               />
-              <label :class="{ active: isFocusNumDoc || numero_documento }"
+              <label
+                :class="{ active: isFocusNumDoc || cliente.numero_documento }"
                 >Número de documento *</label
               >
             </div>
@@ -94,7 +95,7 @@
               />
               <label
                 :class="{
-                  active: isFocusTel || telefono,
+                  active: isFocusTel || cliente.telefono,
                 }"
                 >Teléfono *</label
               >
@@ -112,7 +113,7 @@
               />
               <label
                 :class="{
-                  active: isFocusEmail || email,
+                  active: isFocusEmail || cliente.email,
                 }"
                 >Correo electrónico *</label
               >
@@ -146,7 +147,7 @@
               />
               <label
                 :class="{
-                  active: isFocusPassword || password,
+                  active: isFocusPassword || cliente.password,
                 }"
                 >Contraseña *</label
               >
@@ -155,14 +156,16 @@
               <input
                 type="text"
                 class="form-control"
-                v-model="password_confirmation"
+                v-model="cliente.password_confirmation"
                 @focus="isFocusPasswordConfirmation = true"
                 @blur="isFocusPasswordConfirmation = false"
                 required
               />
               <label
                 :class="{
-                  active: isFocusPasswordConfirmation || password_confirmation,
+                  active:
+                    isFocusPasswordConfirmation ||
+                    cliente.password_confirmation,
                 }"
                 >Confirme contraseña *</label
               >
@@ -199,18 +202,16 @@
 import { defineEmits } from "vue";
 import { ref } from "vue";
 import axios from "axios";
-import { useToken } from "../composables/useToken";
 import { onMounted, onBeforeMount } from "vue";
 import { reactive } from "vue";
+import { useAlerts } from "@/composables/useAlerts";
 
 //variables
-const { configHeader } = useToken();
+const { showAlert } = useAlerts();
 const URL_API = process.env.VUE_APP_URL_API;
 const emit = defineEmits(["toogleRegisterChild"]);
 const numero_documento_confirmation = ref("");
 const email_confirmation = ref("");
-const password_confirmation = ref("");
-const telefono = ref("");
 const tiposDocumentos = ref([]);
 const cliente = reactive({
   nombre: "",
@@ -218,6 +219,7 @@ const cliente = reactive({
   numero_documento: "",
   email: "",
   password: "",
+  password_confirmation: "",
   telefono: "",
   doc_tip_id: "01",
 });
@@ -236,20 +238,22 @@ const emitLoginToggle = () => {
   emit("toogleRegisterChild");
 };
 const getTiposDocumento = async () => {
-  const response = await axios.get(
-    URL_API + "api/v1/tipoIdFormularioEmpleado",
-    configHeader()
-  );
+  const response = await axios.get(URL_API + "api/v1/tipoIdFormularioEmpleado");
   tiposDocumentos.value = response.data;
 };
 const saveForm = async () => {
-  const response = await axios.post(
-    URL_API + "api/v1/registerCandidatos",
-    cliente,
-    configHeader()
-  );
-  if (response) {
-    console.log("temporal");
+  try {
+    const response = await axios.post(
+      URL_API + "api/v1/registerCandidatos",
+      cliente
+    );
+
+    showAlert(response.data.message, response.data.status);
+  } catch (error) {
+    if (error.status == 422) {
+      showAlert(error.response.data.message, "error");
+      console.log(error);
+    }
   }
 };
 
