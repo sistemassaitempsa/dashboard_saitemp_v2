@@ -11,7 +11,7 @@
             <div class="col floating-label-group">
               <input
                 type="text"
-                v-model="nombre"
+                v-model="cliente.nombre"
                 class="form-control"
                 @focus="isFocusNombre = true"
                 @blur="isFocusNombre = false"
@@ -25,7 +25,7 @@
               <input
                 type="text"
                 class="form-control"
-                v-model="apellidos"
+                v-model="cliente.apellidos"
                 @focus="isFocusApellidos = true"
                 @blur="isFocusApellidos = false"
                 required
@@ -40,7 +40,7 @@
               <input
                 type="text"
                 class="form-control"
-                v-model="numero_documento"
+                v-model="cliente.numero_documento"
                 @focus="isFocusNumDoc = true"
                 @blur="isFocusNumDoc = false"
                 required
@@ -69,15 +69,26 @@
           </div>
           <div class="row">
             <div class="col">
-              <select class="form-select" name="" id="">
-                <option value="">Tipo de documento *</option>
+              <select
+                class="form-select"
+                name=""
+                id=""
+                v-model="cliente.doc_tip_id"
+              >
+                <option
+                  v-for="tipo_doc in tiposDocumentos"
+                  :value="tipo_doc.cod_tip"
+                  :key="tipo_doc.cod_tip"
+                >
+                  {{ tipo_doc.des_tip }}
+                </option>
               </select>
             </div>
             <div class="col floating-label-group">
               <input
                 type="text"
                 class="form-control"
-                v-model="telefono"
+                v-model="cliente.telefono"
                 @focus="isFocusTel = true"
                 @blur="isFocusTel = false"
               />
@@ -94,7 +105,7 @@
               <input
                 type="text"
                 class="form-control"
-                v-model="email"
+                v-model="cliente.email"
                 @focus="isFocusEmail = true"
                 @blur="isFocusEmail = false"
                 required
@@ -128,7 +139,7 @@
               <input
                 type="text"
                 class="form-control"
-                v-model="password"
+                v-model="cliente.password"
                 @focus="isFocusPassword = true"
                 @blur="isFocusPassword = false"
                 required
@@ -159,7 +170,7 @@
           </div>
           <div class="row mb-4">
             <div class="col">
-              <button class="btn btn-success" @click="getTiposDocumento">
+              <button class="btn btn-success" @click="saveForm">
                 Registrarse
               </button>
             </div>
@@ -184,16 +195,32 @@
   </transition>
 </template>
 <script setup>
+//imports
 import { defineEmits } from "vue";
 import { ref } from "vue";
+import axios from "axios";
+import { useToken } from "../composables/useToken";
+import { onMounted, onBeforeMount } from "vue";
+import { reactive } from "vue";
+
+//variables
+const { configHeader } = useToken();
+const URL_API = process.env.VUE_APP_URL_API;
 const emit = defineEmits(["toogleRegisterChild"]);
-const emitLoginToggle = () => {
-  emit("toogleRegisterChild");
-};
-const nombre = ref("");
-const apellidos = ref("");
-const numero_documento = ref("");
 const numero_documento_confirmation = ref("");
+const email_confirmation = ref("");
+const password_confirmation = ref("");
+const telefono = ref("");
+const tiposDocumentos = ref([]);
+const cliente = reactive({
+  nombre: "",
+  apellidos: "",
+  numero_documento: "",
+  email: "",
+  password: "",
+  telefono: "",
+  doc_tip_id: "01",
+});
 const isFocusNombre = ref(false);
 const isFocusApellidos = ref(false);
 const isFocusNumDoc = ref(false);
@@ -203,12 +230,34 @@ const isFocusEmail = ref(false);
 const isFocusEmailConfirmation = ref(false);
 const isFocusPassword = ref(false);
 const isFocusPasswordConfirmation = ref(false);
-const email = ref("");
-const email_confirmation = ref("");
-const password = ref("");
-const password_confirmation = ref("");
-const telefono = ref("");
-const getTiposDocumento = async () => {};
+
+//funciones
+const emitLoginToggle = () => {
+  emit("toogleRegisterChild");
+};
+const getTiposDocumento = async () => {
+  const response = await axios.get(
+    URL_API + "api/v1/tipoIdFormularioEmpleado",
+    configHeader()
+  );
+  tiposDocumentos.value = response.data;
+};
+const saveForm = async () => {
+  const response = await axios.post(
+    URL_API + "api/v1/registerCandidatos",
+    cliente,
+    configHeader()
+  );
+  if (response) {
+    console.log("temporal");
+  }
+};
+
+//ciclo de vida
+onBeforeMount(() => {
+  getTiposDocumento();
+});
+onMounted(() => {});
 </script>
 
 <style scoped>
