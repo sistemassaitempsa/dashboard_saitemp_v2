@@ -92,9 +92,14 @@
         </form>
       </div>
     </transition>
-    <div v-if="toogleRegister">
-      <RegistroCandidatos></RegistroCandidatos>
-    </div>
+
+    <transition name="fadeInUpBig" appear>
+      <div v-if="toogleRegister">
+        <RegistroCandidatos
+          @toogleRegisterChild="toogleLoginrHandler"
+        ></RegistroCandidatos>
+      </div>
+    </transition>
     <router-view />
   </div>
 </template>
@@ -129,8 +134,12 @@ export default {
   },
   methods: {
     toogleRegisterHandler() {
-      this.toogleLogin = false;
-      this.toogleRegister = true;
+      this.toogleLogin = !this.toogleLogin;
+      this.toogleRegister = !this.toogleRegister;
+    },
+    toogleLoginrHandler() {
+      this.toogleRegister = !this.toogleRegister;
+      this.toogleLogin = !this.toogleLogin;
     },
     async login() {
       let self = this;
@@ -150,7 +159,7 @@ export default {
         }
       } catch (error) {
         console.log(error);
-        self.showAlert(error.status, error.message);
+        self.showAlert(error.message, "error");
       }
     },
   },
@@ -270,5 +279,12 @@ button {
 }
 .fadeOutUpBig-leave-active {
   animation: fadeOutUpBig 1s; /* Animate.css: animación de salida */
+}
+
+.fadeInUpBig-enter-active {
+  animation: fadeInUpBig 1s; /* Animate.css: animación de entrada */
+}
+.fadeInUpBig-leave-active {
+  animation: fadeOutDownBig 1s; /* Animate.css: animación de salida */
 }
 </style>
