@@ -170,8 +170,7 @@ export default {
   padding: 0px;
   height: 100vh;
   position: relative;
-  overflow: hidden;
-  width: 100vw;
+  width: 100%;
 }
 .card {
   width: 30em;
@@ -203,7 +202,7 @@ h2 {
   margin: 20px 0px 20px 0px;
 }
 video {
-  width: 100%;
+  box-sizing: content-box;
 }
 button {
   width: 100%;
@@ -270,9 +269,12 @@ button {
 .videoContainer {
   z-index: 0;
   position: absolute;
-
   width: 100%;
+  overflow: hidden;
   opacity: 0.3;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 .fadeOutUpBig-enter-active {
   animation: fadeInDownBig 1s; /* Animate.css: animación de entrada */
@@ -286,5 +288,16 @@ button {
 }
 .fadeInUpBig-leave-active {
   animation: fadeOutDownBig 1s; /* Animate.css: animación de salida */
+}
+@media (max-width: 768px) {
+  .containerPrincipal {
+    overflow: auto;
+  }
+}
+
+@media (max-width: 480px) {
+  .containerPrincipal {
+    overflow: auto;
+  }
 }
 </style>
