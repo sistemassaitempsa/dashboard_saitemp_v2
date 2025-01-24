@@ -264,6 +264,7 @@ export default {
                 });
 
         },
+        //prueba
         saveCategoria() {
             var self = this
             this.validaCamposCategoriasMenu()
