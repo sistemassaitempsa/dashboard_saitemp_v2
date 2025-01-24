@@ -9,6 +9,7 @@ export const useValidation = () => {
   // Estados reactivas para los mensajes de error
   const emailError = ref("");
   const passwordError = ref("");
+  const numeroDocumentoError = ref("");
 
   /**
    * validateEmail - Valida el formato del email.
@@ -52,7 +53,20 @@ export const useValidation = () => {
       return true;
     }
   };
-
+  const validateNumeroDocumento = (numeroDocumento) => {
+    const numeroDocumentoRegex = /^\d{4,}$/;
+    if (!numeroDocumento) {
+      numeroDocumentoError.value = "El número de documento es requerido.";
+      return false;
+    } else if (!numeroDocumentoRegex.test(numeroDocumento)) {
+      numeroDocumentoError.value =
+        "El número de documento debe tener al menos 4 caracteres y contener solo números.";
+      return false;
+    } else {
+      numeroDocumentoError.value = "";
+      return true;
+    }
+  };
   /**
    * validateForm - Valida todo el formulario.
    *
@@ -62,14 +76,19 @@ export const useValidation = () => {
   const validateForm = (form) => {
     const isEmailValid = validateEmail(form.email);
     const isPasswordValid = validatePassword(form.password);
-    return isEmailValid && isPasswordValid;
+    const isNumeroDocumentoValid = validateNumeroDocumento(
+      form.numero_documento
+    );
+    return isEmailValid && isPasswordValid && isNumeroDocumentoValid;
   };
 
   return {
     emailError,
     passwordError,
+    numeroDocumentoError,
     validateEmail,
     validatePassword,
+    validateNumeroDocumento,
     validateForm,
   };
 };
