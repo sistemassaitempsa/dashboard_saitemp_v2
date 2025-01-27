@@ -307,7 +307,10 @@ const getTiposDocumento = async () => {
   tiposDocumentos.value = response.data;
 };
 const validatePasswordConfimation = () => {
-  if (cliente.password_confirmation != cliente.password) {
+  if (cliente.password_confirmation == "") {
+    errorConfirmationPassword.value = "Campo requerido";
+    errorConfirmationPasswordStyle.value = true;
+  } else if (cliente.password_confirmation != cliente.password) {
     errorConfirmationPassword.value = "Las contraseñas deben ser idénticas";
     errorConfirmationPasswordStyle.value = true;
   } else {
@@ -316,7 +319,10 @@ const validatePasswordConfimation = () => {
   }
 };
 const validateEmailConfimation = () => {
-  if (email_confirmation.value != cliente.email) {
+  if (email_confirmation.value == "") {
+    errorConfirmationEmail.value = "Campo requerido";
+    errorConfirmationEmailStyle.value = true;
+  } else if (email_confirmation.value != cliente.email) {
     errorConfirmationEmail.value = "Los correos deben ser idénticos";
     errorConfirmationEmailStyle.value = true;
   } else {
@@ -326,7 +332,10 @@ const validateEmailConfimation = () => {
 };
 
 const validateNumeroDocConfimation = () => {
-  if (numero_documento_confirmation.value != cliente.numero_documento) {
+  if (numero_documento_confirmation.value == "") {
+    errorConfirmationNumDoc.value = "Campo requerido";
+    errorConfirmationStyle.value = true;
+  } else if (numero_documento_confirmation.value != cliente.numero_documento) {
     errorConfirmationNumDoc.value =
       "Los números de documento deben ser idénticos";
     errorConfirmationStyle.value = true;
@@ -366,6 +375,9 @@ onBeforeMount(() => {
   validateEmail(cliente.email);
   validatePassword(cliente.password);
   validateNumeroDocumento(cliente.numero_documento);
+  validatePasswordConfimation();
+  validateEmailConfimation();
+  validateNumeroDocConfimation();
 });
 onMounted(() => {});
 </script>
