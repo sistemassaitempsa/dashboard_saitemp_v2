@@ -310,7 +310,6 @@ export default {
     },
     userLogued() {
       const userType = localStorage.getItem("user_type");
-      console.log("hicelog");
       let self = this;
       let config = this.configHeader();
       if (userType == 2) {

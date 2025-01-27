@@ -66,9 +66,15 @@
             </div>
           </div>
           <div class="row mb-3">
-            <h6 for="exampleInputPassword1" class="labelPassword">
-              ¿Olvidó su contraseña?
-            </h6>
+            <router-link to="/recuperarcontrasena">
+              <h6
+                for="exampleInputPassword1"
+                class="labelPassword"
+                @click="goToRecoverPassword"
+              >
+                ¿Olvidó su contraseña?
+              </h6>
+            </router-link>
           </div>
           <div class="row mb-3">
             <div class="col">
@@ -141,6 +147,9 @@ export default {
       this.toogleRegister = !this.toogleRegister;
       this.toogleLogin = !this.toogleLogin;
     },
+    /*    goToRecoverPassword() {
+      self.$router.push("/recuperarcontrasena");
+    }, */
     async login() {
       let self = this;
       let username = { email: this.email, password: this.password };

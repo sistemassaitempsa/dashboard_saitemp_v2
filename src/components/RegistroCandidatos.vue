@@ -482,16 +482,6 @@ onMounted(() => {});
 }
 
 /* Botón de Registro */
-.btn-success {
-  background-color: #28a745;
-  border-color: #28a745;
-  transition: background-color 0.3s, border-color 0.3s;
-}
-
-.btn-success:hover {
-  background-color: #218838;
-  border-color: #1e7e34;
-}
 
 /* Enlace a Login */
 .spanRegister {
