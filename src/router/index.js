@@ -56,6 +56,7 @@ import EstadosDebidaDIligenciaAdmin from "../components/EstadosDebidaDiligenciaA
 import EditarCliente from "../components/EditarCliente.vue";
 import InicioSesionCandidatos from "@/components/InicioSesionCandidatos.vue";
 import RecoverPassword from "@/components/RecoverPassword.vue";
+import FormularioInfoCandidatos from "@/components/FormularioInfoCandidatos.vue";
 
 // Configuración de rutas
 const routes = [
@@ -68,6 +69,11 @@ const routes = [
     path: "/loginCandidatos",
     name: "loginCandidatos",
     component: InicioSesionCandidatos,
+  },
+  {
+    path: "/formularioinfocandidato",
+    name: "formularioinfocandidato",
+    component: FormularioInfoCandidatos,
   },
   {
     path: "/recuperarcontrasena",
