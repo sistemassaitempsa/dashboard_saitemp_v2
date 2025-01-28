@@ -2022,7 +2022,6 @@ export default {
       if (fechaOriginal != null) {
         const fecha = new Date(fechaOriginal);
         if (isNaN(fecha.getTime())) {
-          console.error("Fecha inválida: ", fechaOriginal);
           return fechaOriginal;
         }
         const year = fecha.getFullYear();

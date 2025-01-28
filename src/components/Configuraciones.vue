@@ -1,7 +1,6 @@
 <template>
   <div class="container">
     <h2>Configuraciones adicionales</h2>
-
     <div class="row">
       <div class="col-xs-12 col-md-6">
         <div class="card">

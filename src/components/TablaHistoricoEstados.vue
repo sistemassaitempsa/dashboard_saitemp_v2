@@ -33,7 +33,7 @@
       </thead>
       <tbody>
         <tr
-          v-for="(dato, index) in filteredDatos"
+          v-for="(dato, index) in datosformateados"
           :key="index"
           :class="{ 'bg-light-gray': index % 2 === 1 }"
         >
@@ -47,7 +47,7 @@
           >
             <RouterLink
               v-if="key == 'radicado'"
-              :to="`${linkRegistro}${datos[index].id}`"
+              :to="`${linkRegistro}${columnasocultas[index].id}`"
               class="link-offset-2 link-underline link-underline-opacity-0"
             >
               {{ valor }}
@@ -55,9 +55,11 @@
             <label for="" v-else>
               {{ valor }}
             </label>
-
             <!--  {{ key != "id" ? valor : null }} -->
           </td>
+          <div style="display: flex; gap:1em; align-content: center;">
+            <button type="button" class="btn btn-success" v-for="item in acciones" :key="item" @click="accion(item,columnasocultas[index].id)">{{item.nombre}}</button>
+          </div>
         </tr>
       </tbody>
     </table>
@@ -68,6 +70,10 @@
 export default {
   name: "TablaHistoricoEstados",
   props: {
+    datosformateados:{
+      type:Array,
+      required: true
+    },
     total_registros: {
       type: Number,
       required: true,
@@ -76,13 +82,17 @@ export default {
       type: String,
       required: false,
     },
-    datos: {
+    columnasocultas: {
       type: Array,
       required: true,
     },
     columnas: {
       type: Array,
       required: true,
+    },
+    acciones: {
+      type: Array,
+      required: false,
     },
   },
   data() {
@@ -91,23 +101,15 @@ export default {
     };
   },
   computed: {
-    filteredDatos() {
-      return this.datos.map((item) => ({
-        radicado: item.radicado,
-        responsable_final: item.responsable_final,
-        nombre_estado: item.nombre_estado,
-        created_at: item.created_at,
-        updated_at: item.updated_at,
-        Tiempo: item.Tiempo,
-        tiempo_estimado: item.tiempo_estimado,
-        oportuno: item.oportuno,
-      }));
-    },
+   
   },
   methods: {
     verificarConsultaFiltro() {
       this.$emit("cantidadRegistros", this.cantidad_registros);
     },
+    accion(item, id){
+      this.$router.push(item.url+id);
+    }
   },
 };
 </script>

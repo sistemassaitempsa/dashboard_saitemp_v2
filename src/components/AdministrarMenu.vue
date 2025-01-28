@@ -171,7 +171,7 @@ export default {
 
     },
     data() {
-        return {
+        return {//prueba coomit
             URL_API: process.env.VUE_APP_URL_API,
             endpoint1: 'categoriasMenu',
             endpoint2: 'menus',

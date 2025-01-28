@@ -165,6 +165,7 @@
 /* eslint-disable */
 import axios from "axios";
 import { Token } from "../Mixins/Token";
+import { Permisos } from "../Mixins/Permisos";
 import { Alerts } from "@/Mixins/Alerts";
 import CuentaRegresiva from "../components/CuentaRegresiva";
 import ModalPrincipal from "../components/ModalPrincipal";
@@ -176,7 +177,7 @@ export default {
     ModalPrincipal,
     NotificacionesSocket,
   },
-  mixins: [Token, Alerts],
+  mixins: [Token, Alerts, Permisos],
   data() {
     return {
       username: "",
@@ -202,6 +203,7 @@ export default {
         seconds: "Segundos",
       },
       actualizacion: true,
+      documento_identidad:'',
     };
   },
   watch: {
@@ -303,9 +305,23 @@ export default {
       localStorage.setItem("menu_lateral", this.menu_lateral);
     },
     actualizar() {
+      // if( userlogued.rol != 'Cliente'){
+
+      // }else{
+
+      // }
+      let ruta = "";
+      let id = "";
+      if (this.permisos[34].autorizado) {
+        ruta = "editarUsuario";
+        id = this.user_id;
+      } else {
+        ruta = "cliente";
+        id = this.documento_identidad;
+      }
       this.$router.push({
-        name: "editarUsuario",
-        params: { id: this.user_id },
+        name: ruta,
+        params: { id: id },
       });
     },
     userLogued() {
@@ -317,6 +333,7 @@ export default {
           if (result.data[0] != undefined) {
             self.userlogued = result.data[0];
             self.user_id = result.data[0].usuario_id;
+            self.documento_identidad = result.data[0].documento_identidad;
             self.autoriced = true;
             self.getMenu();
           } else {
@@ -337,8 +354,7 @@ export default {
           self.menu.forEach(function (item, index) {
             self.option.push(index);
           });
-        })
-        .catch(function () {});
+        });
     },
     asideExpand() {
       this.expand = !this.expand;

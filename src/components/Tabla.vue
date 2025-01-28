@@ -1271,7 +1271,6 @@
 </template>
 
 <script>
-import Vue from "vue";
 import axios from "axios";
 import Modal from "./Modal.vue";
 import ModalResponsableDD from "./ModalResponsableDD.vue";
@@ -1785,11 +1784,11 @@ export default {
             this.operadores[i] === "" ||
             this.valores_comparar[i] === ""
           ) {
-            Vue.set(this.campo_, i, undefined);
-            Vue.set(this.operadores, i, undefined);
-            Vue.set(this.valores_comparar, i, undefined);
-            Vue.set(this.valores_comparar2, i, undefined);
-            Vue.set(this.indice_campos, i, undefined);
+            this.campo_[i] = undefined;
+            this.operadores[i] = undefined;
+            this.valores_comparar[i] = undefined;
+            this.valores_comparar2[i] = undefined;
+            this.indice_campos[i] = undefined;
           }
         }
 
