@@ -176,25 +176,22 @@ export default {
 </script>
 <style scoped>
 .containerPrincipal {
-  padding: 0px;
-  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  min-height: 100vh;
   position: relative;
-  width: 100%;
 }
 .card {
-  width: 30em;
+  width: 90%;
+  max-width: 30em;
   margin: auto;
-  margin-top: 5vh;
-  padding: 2.5em;
+  padding: 2em;
   background-color: rgba(239, 237, 237, 1);
-  min-width: 350px;
   box-shadow: rgba(0, 0, 0, 0.25) 0px 14px 28px,
     rgba(0, 0, 0, 0.22) 0px 10px 10px;
-  position: absolute;
+  position: relative;
   z-index: 100;
-  left: 35%;
-  animation: fadeInDownBig; /* referring directly to the animation's @keyframe declaration */
-  animation-duration: 1s;
 }
 
 label {
@@ -308,5 +305,10 @@ button {
   .containerPrincipal {
     overflow: auto;
   }
+}
+.videoBackground {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 </style>
