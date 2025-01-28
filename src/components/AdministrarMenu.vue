@@ -171,7 +171,7 @@ export default {
 
     },
     data() {
-        return {
+        return {//prueba coomit
             URL_API: process.env.VUE_APP_URL_API,
             endpoint1: 'categoriasMenu',
             endpoint2: 'menus',
@@ -264,6 +264,7 @@ export default {
                 });
 
         },
+        //prueba
         saveCategoria() {
             var self = this
             this.validaCamposCategoriasMenu()

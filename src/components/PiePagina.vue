@@ -48,9 +48,9 @@ export default {
   mixins: [Token],
   props: {
     result: {
-      type: [Array, Object], // Define que debe ser un arreglo
+      type: [Object], // Define que debe ser un arreglo
       required: false, // No es obligatorio
-      default: () => [], // Arreglo vacío como valor predeterminado
+      default: () => {}, // Arreglo vacío como valor predeterminado
     },
     cantidad: {
       type: Number, // Define que debe ser un número

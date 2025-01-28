@@ -51,11 +51,10 @@
         </button>
       </div>
       <div
-        v-if="users.length > 0"
         class="row"
         style="clear: both; margin-bottom: 20px"
       >
-        <div class="col-xs-3 col-md-4">
+        <div class="col-xs-3 col-md-4"  v-if="users.length > 0">
           <label for="exampleFormControlInput1" class="form-label"
             >Cantidad de registros a listar</label
           >
@@ -70,6 +69,20 @@
             <option>20</option>
             <option>30</option>
           </select>
+        </div>
+        <div class="col" style="margin-top: 30px;">
+          <div class="form-check form-switch">
+            <input
+              class="form-check-input"
+              type="checkbox"
+              role="switch"
+              id="flexSwitchCheckDefault"
+              v-model="tipo_usuario"
+            />
+            <label class="form-check-label" for="flexSwitchCheckDefault">{{
+              mensaje_tipo_usuario
+            }}</label>
+          </div>
         </div>
       </div>
       <div v-if="spinner">
@@ -109,7 +122,7 @@
                   type="button"
                   v-if="item.rol != 'S. Administrador'"
                   class="btn btn-warning btn-sm"
-                  @click="actualizar(item.id_user)"
+                  @click="actualizar(item.id_user, item.nit)"
                 >
                   <i class="bi bi-pencil-square"></i>
                 </button>
@@ -120,7 +133,7 @@
                   "
                   type="button"
                   class="btn btn-warning btn-sm"
-                  @click="actualizar(item.id_user)"
+                  @click="actualizar(item.id_user, item.nit)"
                 >
                   <i class="bi bi-pencil-square"></i>
                 </button>
@@ -193,16 +206,29 @@ export default {
       percentaje2: 30, // Valor inicial del porcentaje
       percentaje3: 45, // Valor inicial del porcentaje
       loading: false,
+      tipo_usuario: false,
+      mensaje_tipo_usuario: "Usuarios cliente",
+      nit:''
     };
   },
   mounted() {
     this.ruta = this.$route.path.substring(1);
   },
-  // watch: {
-  //   ruta() {
-  //     this.autorizado(this.menu)
-  //   }
-  // },
+  watch: {
+    // ruta() {
+    //   this.autorizado(this.menu)
+    // }
+    tipo_usuario() {
+      // this.mensaje_tipo_usuario = this.tipo_usuario == true ? "Usuarios internos" : "Usuarios cliente";
+      if (this.tipo_usuario) {
+        this.mensaje_tipo_usuario = "Usuarios internos";
+        this.getUsers()
+      } else {
+        this.mensaje_tipo_usuario = "Usuarios cliente";
+        this.getUsers()
+      }
+    },
+  },
   created() {
     this.getUsers();
     this.userLogued();
@@ -235,7 +261,7 @@ export default {
       let self = this;
       let config = this.configHeader();
       axios
-        .get(self.URL_API + "api/v1/users/" + self.cantidad, config)
+        .get(self.URL_API + "api/v1/users/" + self.cantidad + "/"+self.tipo_usuario, config) //se anexa un 0 a la consulta para el tipo de usuario
         .then(function (result) {
           self.users = result.data.data;
           self.result = result;
@@ -287,8 +313,12 @@ export default {
           self.getUsers();
         });
     },
-    actualizar(id) {
-      this.$router.push({ name: "editarUsuario", params: { id: id } });
+    actualizar(id, nit) {
+      if(this.tipo_usuario){
+        this.$router.push({ name: "cliente", params: { id: nit } });
+      }else{
+        this.$router.push({ name: "editarUsuario", params: { id: id } });
+      }
     },
     userLogued() {
       let self = this;
