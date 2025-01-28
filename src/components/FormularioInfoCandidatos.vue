@@ -3,9 +3,12 @@
     <Loading :loading="loading" />
 
     <h2>Registro de datos personales</h2>
-
     <div id="seccion">
       <form @submit.prevent="submitForm" class="row g-3">
+        <p>
+          Ingrese la información requerida en cada sección, para desplegar una
+          seccion debe hacer clic en ella.
+        </p>
         <div class="row">
           <div class="col">
             <h5
@@ -1169,6 +1172,56 @@
             </h5>
           </div>
         </div>
+        <div class="info_container" v-if="experiencia_laboral">
+          <div v-for="(experiencia, index) in experiencias" :key="index">
+            <div class="row">
+              <h6>Experiencia {{ index + 1 }}</h6>
+            </div>
+            <div class="row">
+              <div class="col">
+                <label for="" class="form-label"> Empresa:* </label>
+                <input type="text" class="form-control" />
+              </div>
+              <div class="col">
+                <SearchList
+                  nombreCampo="Sector:*"
+                  @selectTipoId="selectTipoId"
+                  eventoCampo="selectTipoId"
+                  nombreItem="des_tip"
+                  :consulta="nom_tip_doc"
+                  :registros="consulta_tipo_id"
+                  placeholder="Seleccione una opción"
+                />
+              </div>
+            </div>
+            <div class="row">
+              <div class="col">
+                <label for="" class="form-label"> Cargo:* </label>
+                <input type="text" class="form-control" />
+              </div>
+              <div class="col">
+                <label for="" class="form-label"> Motivo del retiro:* </label>
+                <input type="text" class="form-control" />
+              </div>
+            </div>
+            <div class="row">
+              <div class="col">
+                <label for="" class="form-label">Funciones:*</label>
+                <textarea name="" id="" class="form-control"></textarea>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col">
+                <label for="" class="form-label">Fecha inicio</label>
+                <input type="date" class="form-control" />
+              </div>
+              <div class="col">
+                <label for="" class="form-label">Fecha fin</label>
+                <input type="date" class="form-control" />
+              </div>
+            </div>
+          </div>
+        </div>
         <button type="submit">Enviar</button>
       </form>
     </div>
@@ -1185,6 +1238,7 @@ import axios from "axios";
 // Variables reactivas
 const loading = ref(false);
 const mensaje_error = "¡Este campo debe ser diligenciado!";
+const experiencias = ref([1]);
 const consulta_etnia = ref([]);
 const est_civ_name = ref("");
 const consulta_estado_civil = ref([]);
