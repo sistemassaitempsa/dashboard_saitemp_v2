@@ -29,8 +29,10 @@ import GestionCliente from '../components/GestionCliente.vue';
 import FormularioSupervision from '../components/FormularioSupervision.vue';
 import MapaVue from '../components/MapaVue.vue';
 import ClienteSupervision from '../components/ClienteSupervision.vue';
+// import OrdenServicio from '../components/OrdenServicioantiguo.vue';
 import OrdenServicio from '../components/OrdenServicio.vue';
 import OrdenServicios from '../components/OrdenServicios.vue';
+import ListaServicio from '../components/ListaServicio.vue';
 import SolicitudesOrdenServicio from '../components/SolicitudesOrdenServicio.vue';
 import PieChar from '../components/PieChar.vue';
 import GraficosGerencia from '../components/GraficosGerencia.vue';
@@ -54,6 +56,7 @@ import Landing from '../components/Landing.vue';
 import Configuraciones from '../components/Configuraciones.vue';
 import EstadosDebidaDIligenciaAdmin from '../components/EstadosDebidaDiligenciaAdmin.vue';
 import EditarCliente from '../components/EditarCliente.vue';
+import Cliente from '../components/Cliente.vue';
 
 // Configuración de rutas
 const routes = [
@@ -193,7 +196,7 @@ const routes = [
         component: ConsultaNN,
       },
       {
-        path: 'estados-cliente',
+        path: 'estados-cliente/:?',
         name: 'estados-cliente',
         component: GestionCliente,
       },
@@ -213,9 +216,14 @@ const routes = [
         component: ClienteSupervision,
       },
       {
-        path: 'orden-servicio',
+        path: 'orden-servicio/:id?',
         name: 'orden-servicio',
         component: OrdenServicio,
+      },
+      {
+        path: 'lista-servicios/:id?',
+        name: 'lista-servicios',
+        component: ListaServicio,
       },
       {
         path: 'orden-servicios/:id?',
@@ -336,6 +344,11 @@ const routes = [
         path: 'editarCliente',
         name: 'editarCliente',
         component: EditarCliente,
+      },
+      {
+        path: 'cliente/:id?',
+        name: 'cliente',
+        component: Cliente,
       },
     ],
   },

@@ -34,20 +34,9 @@
       v-if="seguimiento.length > 0"
     >
       <div v-if="!divExpandido">Seguimiento guardado</div>
-      <div v-for="(item, index) in seguimiento" :key="index">
-        <div v-if="divExpandido" style="text-align: left">
-          {{ item.estado }}
-        </div>
-        <div v-if="divExpandido" style="text-align: left">
-          {{ item.actualiza }}
-        </div>
-        <div v-if="divExpandido" style="text-align: left">
-          {{ reformatearFecha(item.updated_at) }}
-        </div>
-        <div v-if="divExpandido" style="text-align: left">
-          {{ item.observaciones }}
-        </div>
-        <hr v-if="divExpandido" />
+
+      <div v-if="divExpandido" style="text-align: left">
+        <ModalHistoricoActualizaciones></ModalHistoricoActualizaciones>
       </div>
     </div>
     <div
@@ -93,7 +82,7 @@
     <form class="was-validated" @submit.prevent="save()">
       <h6 class="tituloseccion">Información general</h6>
       <div id="seccion">
-        <p v-if="$route.params.id != ''">
+        <p v-if="$route.params.id != undefined">
           Radicado: {{ numero_radicado }}
         </p>
         <div class="row">
@@ -106,6 +95,7 @@
               :consulta="consulta_estado_firma"
               :registros="estados_firma_debida_diligencia"
               placeholder="Seleccione una opción"
+              :disabled="bloquea_campos && !permisos[2].autorizado"
             />
           </div>
           <div class="col">
@@ -1863,13 +1853,12 @@
                 >Funciones del cargo:</label
               >
               <div class="col">
-                <!-- <EditorTextoHtml
+                <EditorTextoHtml
                   :consulta="consulta_textohtml[index]"
                   :index="index"
                   @retornoTexto="retornoTexto"
                   :showToolbar="true"
-                /> -->
-                <Tiptap v-model="consulta_textohtml[index]"/>
+                />
               </div>
               <div class="col-1 trash">
                 <i
@@ -1930,7 +1919,7 @@
           v-for="(item, index) in fileInputsCount"
           :key="index"
         >
-          <div class="col-2" v-if="$route.params.id != ''">
+          <div class="col-2" v-if="$route.params.id != null">
             <a
               :href="item.ruta != undefined ? URL_API + item.ruta : null"
               target="_blank"
@@ -3550,10 +3539,10 @@
           </div>
         </div>
       </div>
-      <h6 v-if="$route.params.id != ''" class="tituloseccion">
+      <h6 v-if="$route.params.id != undefined" class="tituloseccion">
         Observaciones del responsable.
       </h6>
-      <div id="seccion" v-if="$route.params.id != ''">
+      <div id="seccion" v-if="$route.params.id != undefined">
         <div class="row">
           <div class="col-6">
             <SearchList
@@ -3828,6 +3817,7 @@
 </template>
 <script>
 import axios from "axios";
+import ModalHistoricoActualizaciones from "./ModalHistoricoActualizaciones.vue";
 import ModalCorreos from "./ModalCorreos.vue";
 import SearchList from "./SearchList.vue";
 import SearchTable from "./SearchTable.vue";
@@ -3838,8 +3828,7 @@ import { Alerts } from "../Mixins/Alerts.js";
 import { Token } from "../Mixins/Token.js";
 /* import jsPDF from "jspdf";
 import html2canvas from "html2canvas"; */
-// import EditorTextoHtml from "./EditorTextoHtml.vue";
-import Tiptap from "./Tiptap.vue";
+import EditorTextoHtml from "./EditorTextoHtml.vue";
 import { Permisos } from "../Mixins/Permisos.js";
 import ConsultaContrato from "./ConsultaContrato.vue";
 import RegistroCambio from "./RegistroCambio.vue";
@@ -3854,13 +3843,13 @@ export default {
     SearchList,
     SearchTable,
     ListaMultiple,
-    // EditorTextoHtml,
-    Tiptap,
+    EditorTextoHtml,
     ConsultaContrato,
     Loading,
     RegistroCambio,
     FlotanteInteraccionCliente,
     FlotanteSelecciondd,
+    ModalHistoricoActualizaciones,
   },
   mixins: [Scroll, Alerts, Token, Permisos],
   props: {
@@ -4324,7 +4313,7 @@ export default {
     this.scrollTop();
     this.validarVersionamiento();
     if (
-      this.$route.params.id != '' &&
+      this.$route.params.id != undefined &&
       this.$route.path != "/formularioregistro"
     ) {
       this.loading = true;
@@ -4529,6 +4518,7 @@ export default {
     },
     agregarCamposCliente() {
       var self = this;
+      self.registroCliente.correoResponsable = this.correoResponsable;
       self.registroCliente.consulta_departamento_rut =
         this.consulta_departamento_rut;
       self.registroCliente.consulta_municipio_rut = this.consulta_municipio_rut;
@@ -5143,7 +5133,12 @@ export default {
     },
     getTipoContrato(item = null) {
       if (item != null) {
-        item.id = item.id.toString().padStart(2, "0");
+        /*    if (item.id == 0 || item.id == "CT") {
+          item.id = item.id.toString();
+        } else { */
+        item.tip_con = item.tip_con.toString().padStart(2, "0");
+        /*    }
+         */
         var nombreExistente = this.tipos_contratos_agregados.some(function (
           objeto
         ) {
@@ -5151,7 +5146,7 @@ export default {
         });
         if (!nombreExistente) {
           this.tipos_contratos_agregados.push({
-            id: item.id,
+            id: item.tip_con,
             nombre: item.nombre,
           });
         }
@@ -6632,7 +6627,7 @@ export default {
         );
         return true;
       }
-      if (this.novedad_servicio == "" && this.$route.params.id != '') {
+      if (this.novedad_servicio == "" && this.$route.params.id != undefined) {
         this.showAlert(
           "Error, debe diligenciar el campo Novedad en servicio",
           "error"
@@ -6844,7 +6839,7 @@ export default {
         this.crearCliente();
         let config = this.configHeader();
         var id = this.$route.params.id;
-        if (id == '') {
+        if (id == undefined) {
           axios
             .post(
               self.URL_API + "api/v1/formulariocliente",
@@ -6903,6 +6898,7 @@ export default {
     },
     crearCliente() {
       this.registroCliente = {
+        responsable_corregir: this.consulta_encargado_corregir,
         consulta_estado_firma: this.consulta_estado_firma,
         novedad_servicio: this.novedad_servicio,
         usuario_corregir_id: this.encargado_id,
@@ -7049,33 +7045,33 @@ export default {
         );
         const tipoArchivoId = data.tipo_cliente_id || data.tipo_proveedor_id;
         this.getTipoArchivo(tipoArchivoId, data);
-        if (
+        /*  if (
           data.contrato?.length > 0 &&
           !data.contrato[0].ruta_contrato &&
           data.contrato[0].transaccion_id
-        ) {
-          await axios.get(
+        ) { */
+        /*  await axios.get(
             `${apiUrl}api/v1/consultaFirmantes/${data.contrato[0].transaccion_id}`,
             config
           );
           await axios.get(
             `${apiUrl}api/v1/consultaProcesoFirma/${data.contrato[0].transaccion_id}`,
             config
-          );
-          const { data: updatedData } = await axios.get(
+          ); */
+        /*     const { data: updatedData } = await axios.get(
             `${apiUrl}api/v1/formulariocliente/${id}`,
             config
           );
           const updatedTipoArchivoId =
             updatedData.tipo_cliente_id || updatedData.tipo_proveedor_id;
           this.getTipoArchivo(updatedTipoArchivoId, updatedData);
-        }
+        } */
       } catch (error) {
         console.error("Error al consultar el formulario:", error);
       } finally {
         // Asegurar que el scroll se habilite siempre
         document.body.style.overflow = "auto";
-        this.loading = false;
+        /*     this.loading = false; */
       }
     },
     convertFile(url) {
@@ -7183,6 +7179,7 @@ export default {
       if (item.codigo_ciiu_id != "") {
         this.getActividadesCiiu(item.codigo_ciiu_id);
       }
+      this.correoResponsable = item.correoResponsable;
       this.consulta_departamento_rut = item.consulta_departamento_rut;
       this.consulta_municipio_rut = item.consulta_municipio_rut;
       this.novedad_servicio = item.novedad_servicio;
@@ -7763,11 +7760,11 @@ export default {
         });
 
         item.tipos_contrato.forEach((element) => {
-          if (element.id >= 1 && element.id <= 9) {
-            element.id = "0" + element.id;
+          if (element.tip_con >= 1 && element.tip_con <= 9) {
+            element.tip_con = "0" + element.tip_con;
           }
           this.tipos_contratos_agregados.push({
-            id: element.id,
+            id: element.tip_con,
             nombre: element.nombre,
           });
         });
@@ -7930,6 +7927,7 @@ export default {
           this.tipo_origen_fondo = item.origen_fondos.tipo_origen_fondos_id;
           this.otro_tipo_origen_fondos = item.origen_fondos.otro_origen;
         }
+        this.loading = false;
       } catch (error) {
         console.log(error);
       }
@@ -8129,9 +8127,9 @@ ul li {
   cursor: pointer;
 }
 
-/* .ct >>> span {
+.ct >>> span {
   padding: 10px 60px 10px 0px;
-} */
+}
 
 #btnMenu {
   background-color: rgb(28, 146, 77);

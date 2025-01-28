@@ -100,9 +100,11 @@
             </div>
             <div class="col animationHistorico">
               <TablaHistoricoEstados
-                :datos="filteredDatos"
+                :columnasocultas="columnasocultas"
+                :datosformateados="datosformateados"
                 :total_registros="total_registros_pie"
                 :columnas="columnas"
+                :acciones="acciones"
                 :linkRegistro="'/navbar/debida-diligencia/formulario-clientes/'"
                 @cantidadRegistros="cantidadRegistrosLista"
               ></TablaHistoricoEstados>
@@ -150,6 +152,7 @@
           "Tiempo(min)",
           "Tiempo estimado(min)",
           "Oportuno",
+          "Acciones"
         ],
         page_label: "",
         pagination: {},
@@ -231,13 +234,16 @@
           "Noviembre",
           "Diciembre",
         ],
+        acciones:[
+        {nombre:"Ver registro",url:"formulario-clientes/"},
+      ]
       };
     },
     computed: {
       rows() {
         return this.chunk(this.items, 3);
       },
-      filteredDatos() {
+      datosformateados() {
         return this.datos.map((item) => ({
           radicado: item.radicado,
           responsable_final: item.responsable_final,
@@ -251,9 +257,13 @@
           Tiempo: item.tiempo,
           tiempo_estimado: item.tiempo_estimado,
           oportuno: this.formatearOportuno(item.oportuno),
-          id: item.id,
         }));
       },
+      columnasocultas() {
+      return this.datos.map((item) => ({
+        id: item.id,
+      }));
+    },
     },
     watch: {},
     mounted() {
@@ -264,7 +274,6 @@
       this.getDatos();
       this.getEstados();
       this.getResponsables();
-      //   this.empleadosActivos()
     },
     methods: {
       async allLoad() {

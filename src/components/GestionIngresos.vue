@@ -1724,29 +1724,16 @@ export default {
       axios
         .get(self.URL_API + "api/v1/archivosingreso", config)
         .then(function (result) {
-          // if (self.$route.params.id == undefined) {
-          //   self.loading = false;
-          // }
-          // self.fileInputsCount = result.data;
-          // self.id_cliente = self.$route.params.id;
-          // if (self.id_registro != 0) {
-          //   self.id_cliente = self.id_registro;
-          // }
-          // if (self.id_cliente != undefined) {
-          //   self.getRegistroIngreso(self.id_cliente);
-          // }
-
-          if (self.$route.params.id == "") {
+          if (self.$route.params.id == '') {
             self.loading = false;
-          } else {
-            self.fileInputsCount = result.data;
-            self.id_cliente = self.$route.params.id;
-            if (self.id_registro != 0) {
-              self.id_cliente = self.id_registro;
-            }
-            if (self.id_cliente != undefined) {
-              self.getRegistroIngreso(self.id_cliente);
-            }
+          }
+          self.fileInputsCount = result.data;
+          self.id_cliente = self.$route.params.id;
+          if (self.id_registro != 0) {
+            self.id_cliente = self.id_registro;
+          }
+          if (self.id_cliente != "" && self.id_cliente != undefined) {
+            self.getRegistroIngreso(self.id_cliente);
           }
         });
     },

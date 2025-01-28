@@ -13,6 +13,7 @@
       @actualizaEstado="actualizaEstado"
       @actualizaResponsable="actualizaResponsable"
       @filtrando="filtrando"
+      @filtrarFechaIngreso="filtroFechaIngreso"
     />
   </div>
 </template>
@@ -31,13 +32,13 @@ export default {
   mixins: [Token, Alerts],
   props: {
     userlogued: {
-      type: Object,
-      required: false,
-      default: () => ({}),
+      default: "",
     },
   },
   data() {
     return {
+      filtro: {},
+      filtro_rapido: false,
       show_table: false,
       datos: [],
       endpoint: "formularioingreso",
@@ -61,6 +62,12 @@ export default {
           nombre: "Tipo servicio",
           orden: "DESC",
           tipo: "texto",
+          calculado: "false",
+        },
+        {
+          nombre: "Fecha actualizacion",
+          orden: "DESC",
+          tipo: "fecha",
           calculado: "false",
         },
         {
@@ -162,7 +169,20 @@ export default {
   watch: {},
   mounted() {},
   created() {
-    this.getItems();
+    if (
+      localStorage.getItem("ordenar_prioridad") ||
+      localStorage.getItem("filtro_mios")
+    ) {
+      this.filtro = {
+        ordenar_prioridad: JSON.parse(
+          localStorage.getItem("ordenar_prioridad")
+        ),
+        filtro_mios: JSON.parse(localStorage.getItem("filtro_mios")),
+      };
+      this.filtroFechaIngreso(this.filtro);
+    } else {
+      this.getItems();
+    }
     this.getEstadosIngreso();
 
     var self = this;
@@ -176,6 +196,29 @@ export default {
     clearInterval(this.interval);
   },
   methods: {
+    filtroFechaIngreso(filtro, url = null) {
+      this.filtro = filtro;
+      let self = this;
+      let config = this.configHeader();
+      this.filtro_rapido = true;
+      if (url != null && url != "") {
+        axios.post(url, filtro, config).then(function (result) {
+          self.first_page_url = result.data.first_page_url.replace('"');
+          self.datos = result;
+        });
+      } else {
+        axios
+          .post(
+            self.URL_API + "api/v1/formularioIngreso/filtrofechaingreso/" + 500,
+            filtro,
+            config
+          )
+          .then(function (result) {
+            self.first_page_url = result.data.first_page_url.replace('"');
+            self.datos = result;
+          });
+      }
+    },
     filtrando(boolean, url) {
       this.pagina_filtro = url;
       this.filtro_gestion_ingresos = boolean;
@@ -253,6 +296,12 @@ export default {
       }
       let self = this;
       let config = this.configHeader();
+      if (this.filtro_rapido) {
+        axios.post(currentUrl, this.filtro, config).then(function (result) {
+          self.datos = result;
+        });
+        return;
+      }
       axios.get(currentUrl, config).then(function (result) {
         self.datos = result;
       });
