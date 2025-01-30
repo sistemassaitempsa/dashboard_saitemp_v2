@@ -156,6 +156,7 @@
       :class="{ ancho_componente: anchocomponente }"
       :userlogued="userlogued"
       :menu="menu"
+      :user_type="user_type"
       @getMenu="getMenu"
       :actualizacion="actualizacion"
     />
@@ -180,6 +181,7 @@ export default {
   mixins: [Token, Alerts, Permisos],
   data() {
     return {
+      user_type: "",
       username: "",
       collapse: false,
       expand: false,
@@ -335,6 +337,7 @@ export default {
         );
         if (response.data) {
           self.userlogued = response.data;
+          self.user_type = response.data.tipo_usuario_id;
           if (response.data.tipo_usuario_id == "3") {
             self.user_id = response.data.id;
             self.documento_identidad = response.data.num_doc;
