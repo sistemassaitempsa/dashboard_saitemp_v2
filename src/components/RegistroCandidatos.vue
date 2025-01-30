@@ -172,7 +172,7 @@
           <div class="row">
             <div class="col floating-label-group">
               <input
-                type="text"
+                type="password"
                 class="form-control"
                 v-model="cliente.password"
                 @focus="isFocusPassword = true"
@@ -193,7 +193,7 @@
             </div>
             <div class="col floating-label-group">
               <input
-                type="text"
+                type="password"
                 class="form-control"
                 v-model="cliente.password_confirmation"
                 @focus="isFocusPasswordConfirmation = true"
@@ -349,7 +349,10 @@ const saveForm = async () => {
     validateForm(cliente) &&
     errorConfirmationPasswordStyle.value == false &&
     errorConfirmationEmailStyle.value == false &&
-    errorConfirmationStyle.value == false
+    errorConfirmationStyle.value == false &&
+    cliente.nombre != "" &&
+    cliente.apellidos != "" &&
+    cliente.telefono != ""
   ) {
     try {
       const response = await axios.post(
@@ -365,7 +368,7 @@ const saveForm = async () => {
       }
     }
   } else {
-    console.log("error");
+    showAlert("Verifique los campos necesarios", "error");
   }
 };
 

@@ -3,7 +3,7 @@
     <NotificacionesSocket />
     <nav
       class="navbar navbar-expand-lg navbar-dark gradient-background"
-      style="heigth: 100px"
+      style="height: 100px"
     >
       <div class="container-fluid">
         <a class="navbar-brand" href="">
@@ -48,7 +48,7 @@
               :style="actualizacion ? 'padding-top: 15px' : ''"
             >
               <router-link class="nav-link active" to=""
-                >{{ saludo }} {{ userlogued.nombres }}</router-link
+                >{{ saludo }} {{ nombre }}</router-link
               >
             </li>
             <li>
@@ -186,6 +186,7 @@ export default {
       saludo: "Bienvenido",
       ruta: "",
       menu: [],
+      nombre: "",
       userlogued: { nombres: "", rol: "" },
       logo: [],
       user_id: "",
@@ -324,45 +325,52 @@ export default {
         params: { id: id },
       });
     },
-    userLogued() {
-      const userType = localStorage.getItem("user_type");
+    async userLogued() {
       let self = this;
       let config = this.configHeader();
-      if (userType == 2) {
-        axios
-          .get(self.URL_API + "api/v1/userloguedCandidatos", config)
-          .then(function (result) {
-            if (result.data[0] != undefined) {
-              self.userlogued = result.data[0];
-              self.user_id = result.data[0].usuario_id;
-              self.autoriced = true;
-              self.getMenu();
-            } else {
-              self.$router.push("/loginCandidatos");
-            }
-          })
-          .catch(function (error) {
-            console.log(error);
-            self.$router.push("/loginCandidatos");
-          });
-      } else {
-        axios
-          .get(self.URL_API + "api/v1/userlogued", config)
-          .then(function (result) {
-            if (result.data[0] != undefined) {
-              self.userlogued = result.data[0];
-              self.user_id = result.data[0].usuario_id;
-              self.documento_identidad = result.data[0].documento_identidad;
-              self.autoriced = true;
-              self.getMenu();
-            } else {
-              self.$router.push("/");
-            }
-          })
-          .catch(function () {
-            self.$router.push("/");
-          });
+      try {
+        const response = await axios.get(
+          self.URL_API + "api/v1/userlogued",
+          config
+        );
+        if (response.data) {
+          self.userlogued = response.data;
+          if (response.data.tipo_usuario_id == "3") {
+            self.user_id = response.data.id;
+            self.documento_identidad = response.data.num_doc;
+            self.nombre = response.data.primer_nombre.concat(
+              " ",
+              response.data.primer_apellido
+            );
+          } else if (response.data.tipo_usuario_id == "1") {
+            self.user_id = response.data.usuario_id;
+            self.documento_identidad = response.data.documento_identidad;
+            self.nombre = response.data.nombres;
+          }
+          self.autoriced = true;
+          self.getMenu();
+        } else {
+          self.$router.push("/");
+        }
+      } catch (error) {
+        console.log(error);
+        self.$router.push("/");
       }
+
+      /* .then(function (result) {
+          if (result.data[0] != undefined) {
+            self.userlogued = result.data[0];
+            self.user_id = result.data[0].usuario_id;
+            self.documento_identidad = result.data[0].documento_identidad;
+            self.autoriced = true;
+            self.getMenu();
+          } else {
+            self.$router.push("/");
+          }
+        })
+        .catch(function () {
+          self.$router.push("/");
+        }); */
     },
     getMenu() {
       let self = this;

@@ -160,8 +160,6 @@ export default {
         );
         if (response.data.access_token != undefined) {
           localStorage.setItem("access_token", response.data.access_token);
-          localStorage.setItem("marca_temporalnc", response.data.marca);
-          localStorage.setItem("user_type", response.data.user_type);
           self.$router.push("/navbar/landing");
         } else if (response.data.status == "error") {
           self.showAlert(response.data.message, response.data.status);
