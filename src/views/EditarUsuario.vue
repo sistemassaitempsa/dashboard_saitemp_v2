@@ -2,15 +2,18 @@
     <div>
         <FormularioUsuario :titulo="titulo" v-if="user_type == 1" />
         <Cliente :titulo="titulo" v-if="user_type == 2"/>
+        <EditarUsuarioCandidato v-if="user_type == 3" />
     </div>
 </template>
 <script>
 import Cliente from '@/components/Cliente.vue';
-import FormularioUsuario from '@/components/FormularioUsuario.vue';
+import FormularioUsuario from "@/components/FormularioUsuario.vue";
+import EditarUsuarioCandidato from "@/components/EditarUsuarioCandidato.vue";
 export default {
     components: {
         FormularioUsuario,
-        Cliente
+        Cliente,
+        EditarUsuarioCandidato,
     },
     props:{
         user_type:{
@@ -24,11 +27,7 @@ export default {
         };
     },
 
-    methods: {
-
-    },
+  methods: {},
 };
 </script>
-<style scoped>
-
-</style>
+<style scoped></style>

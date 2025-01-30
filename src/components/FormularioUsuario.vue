@@ -357,10 +357,11 @@ export default {
     userLogued() {
       let self = this;
       let config = this.configHeader();
-
       axios
         .get(self.URL_API + "api/v1/userlogued", config)
+        .get(self.URL_API + "api/v1/userlogued", config)
         .then(function (result) {
+          self.roluserlogued = result.data.rol;
           self.roluserlogued = result.data.rol;
         })
         .catch(function (error) {

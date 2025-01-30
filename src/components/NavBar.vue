@@ -90,9 +90,18 @@
         <hr />
       </div>
     </div>
-    <ModalPrincipal @actualizacion="actualizacion = true" :modal="actualizacion" />
-    <router-view :class="{ ancho_componente: anchocomponente }" :userlogued="userlogued" :menu="menu"
-      :user_type="user_type" @getMenu="getMenu" :actualizacion="actualizacion" />
+    <ModalPrincipal
+      @actualizacion="actualizacion = true"
+      :modal="actualizacion"
+    />
+    <router-view
+      :class="{ ancho_componente: anchocomponente }"
+      :userlogued="userlogued"
+      :menu="menu"
+      :user_type="user_type"
+      @getMenu="getMenu"
+      :actualizacion="actualizacion"
+    />
   </div>
 </template>
 <script>
@@ -261,7 +270,6 @@ export default {
       });
     },
     async userLogued() {
-    async userLogued() {
       let self = this;
       let config = this.configHeader();
       try {
@@ -271,6 +279,7 @@ export default {
         );
         if (response.data) {
           self.userlogued = response.data;
+          self.user_type = response.data.tipo_usuario_id;
           if (response.data.tipo_usuario_id == "3") {
             self.user_id = response.data.id;
             self.documento_identidad = response.data.num_doc;
