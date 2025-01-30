@@ -1,7 +1,10 @@
 <template>
   <div v-if="autoriced">
     <NotificacionesSocket />
-    <nav class="navbar navbar-expand-lg navbar-dark gradient-background" style="heigth: 100px">
+    <nav
+      class="navbar navbar-expand-lg navbar-dark gradient-background"
+      style="height: 100px"
+    >
       <div class="container-fluid">
         <a class="navbar-brand" href="">
           <!-- <img
@@ -23,8 +26,14 @@
             : 'collapse navbar-collapse'
           " id="navbarNav">
           <ul class="navbar-nav">
-            <li class="nav-item" @click="collapese" :style="actualizacion ? 'padding-top: 15px' : ''">
-              <router-link class="nav-link active" to="">{{ saludo }} {{ userlogued.nombres }}</router-link>
+            <li
+              class="nav-item"
+              @click="collapese"
+              :style="actualizacion ? 'padding-top: 15px' : ''"
+            >
+              <router-link class="nav-link active" to=""
+                >{{ saludo }} {{ nombre }}</router-link
+              >
             </li>
             <li>
               <CuentaRegresiva @timeElapsed="actualizacion = false" />
@@ -112,6 +121,7 @@ export default {
       saludo: "Bienvenido",
       ruta: "",
       menu: [],
+      nombre: "",
       userlogued: { nombres: "", rol: "" },
       logo: [],
       user_id: "",
@@ -251,6 +261,7 @@ export default {
       });
     },
     async userLogued() {
+    async userLogued() {
       let self = this;
       let config = this.configHeader();
       try {
@@ -260,8 +271,6 @@ export default {
         );
         if (response.data) {
           self.userlogued = response.data;
-          self.user_type = response.data.tipo_usuario_id;
-          
           if (response.data.tipo_usuario_id == "3") {
             self.user_id = response.data.id;
             self.documento_identidad = response.data.num_doc;
@@ -283,6 +292,21 @@ export default {
         console.log(error);
         self.$router.push("/");
       }
+
+      /* .then(function (result) {
+          if (result.data[0] != undefined) {
+            self.userlogued = result.data[0];
+            self.user_id = result.data[0].usuario_id;
+            self.documento_identidad = result.data[0].documento_identidad;
+            self.autoriced = true;
+            self.getMenu();
+          } else {
+            self.$router.push("/");
+          }
+        })
+        .catch(function () {
+          self.$router.push("/");
+        }); */
     },
     getMenu() {
       let self = this;
