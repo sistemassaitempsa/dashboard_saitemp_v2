@@ -9,103 +9,101 @@
         class="videoBackground"
       ></video>
     </div>
-    <transition name="fadeOutUpBig" appear>
-      <div v-if="toogleLogin" :class="classCardLogin">
-        <div class="logo">
-          <img src="@/assets/logo1.png" alt="" />
-        </div>
-        <h2>Acceso candidatos</h2>
-        <form>
-          <div class="row mb-3">
-            <div class="col">
-              <label for="exampleInputEmail1" class="form-label"
-                >Usuario/correo electrónico:</label
-              >
-              <input
-                type="text"
-                class="form-control"
-                id="exampleInputEmail1"
-                autocomplete="username"
-                aria-describedby="prueba"
-                v-model="email"
-              />
-            </div>
-          </div>
 
-          <div class="row mb-3">
-            <div class="col">
-              <label for="exampleInputPassword1" class="form-label"
-                >Contraseña:</label
-              >
-              <i class="fa fa-search"></i>
-              <div class="positionRelative">
-                <input
-                  :type="!contraseña ? 'password' : 'text'"
-                  class="form-control"
-                  autocomplete="current-password"
-                  id="exampleInputPassword1"
-                  v-model="password"
-                />
-                <div class="positionAbsolute">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    class="input-icon password"
-                    viewBox="0 0 20 20"
-                    fill="currentColor"
-                    @click="contraseña = !contraseña"
-                  >
-                    <path d="M10 12a2 2 0 100-4 2 2 0 000 4z" />
-                    <path
-                      fill-rule="evenodd"
-                      d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z"
-                      clip-rule="evenodd"
-                    />
-                  </svg>
-                </div>
+    <div v-if="toogleLogin" :class="classCardLogin">
+      <div class="logo">
+        <img src="@/assets/logo1.png" alt="" />
+      </div>
+      <h2>Acceso candidatos</h2>
+      <form>
+        <div class="row mb-3">
+          <div class="col">
+            <label for="exampleInputEmail1" class="form-label"
+              >Usuario/correo electrónico:</label
+            >
+            <input
+              type="text"
+              class="form-control"
+              id="exampleInputEmail1"
+              autocomplete="username"
+              aria-describedby="prueba"
+              v-model="email"
+            />
+          </div>
+        </div>
+
+        <div class="row mb-3">
+          <div class="col">
+            <label for="exampleInputPassword1" class="form-label"
+              >Contraseña:</label
+            >
+            <i class="fa fa-search"></i>
+            <div class="positionRelative">
+              <input
+                :type="!contraseña ? 'password' : 'text'"
+                class="form-control"
+                autocomplete="current-password"
+                id="exampleInputPassword1"
+                v-model="password"
+              />
+              <div class="positionAbsolute">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  class="input-icon password"
+                  viewBox="0 0 20 20"
+                  fill="currentColor"
+                  @click="contraseña = !contraseña"
+                >
+                  <path d="M10 12a2 2 0 100-4 2 2 0 000 4z" />
+                  <path
+                    fill-rule="evenodd"
+                    d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z"
+                    clip-rule="evenodd"
+                  />
+                </svg>
               </div>
             </div>
           </div>
-          <div class="row mb-3">
-            <router-link to="/recuperarcontrasena">
-              <h6
+        </div>
+        <div class="row mb-3">
+          <router-link to="/recuperarcontrasena">
+            <h6
+              for="exampleInputPassword1"
+              class="labelPassword"
+              @click="goToRecoverPassword"
+            >
+              ¿Olvidó su contraseña?
+            </h6>
+          </router-link>
+        </div>
+        <div class="row mb-3">
+          <div class="col">
+            <button class="btn btn-success" @click="login()">Ingresar</button>
+          </div>
+        </div>
+        <div class="row mb-2">
+          <div class="col">
+            <label for=""
+              >¿Aún no tiene cuenta?
+              <span
+                @click="toogleRegisterHandler"
                 for="exampleInputPassword1"
-                class="labelPassword"
-                @click="goToRecoverPassword"
+                class="spanRegister"
               >
-                ¿Olvidó su contraseña?
-              </h6>
-            </router-link>
+                Registrese aquí
+              </span></label
+            >
           </div>
-          <div class="row mb-3">
-            <div class="col">
-              <button class="btn btn-success" @click="login()">Ingresar</button>
-            </div>
-          </div>
-          <div class="row mb-2">
-            <div class="col">
-              <label for=""
-                >¿Aún no tiene cuenta?
-                <span
-                  @click="toogleRegisterHandler"
-                  for="exampleInputPassword1"
-                  class="spanRegister"
-                >
-                  Registrese aquí
-                </span></label
-              >
-            </div>
-          </div>
-        </form>
-      </div>
-    </transition>
+        </div>
+      </form>
+    </div>
 
-    <transition name="fadeInUpBig" appear>
-      <div v-if="toogleRegister">
-        <RegistroCandidatos
-          @toogleRegisterChild="toogleLoginrHandler"
-        ></RegistroCandidatos>
-      </div>
-    </transition>
+    <div class="registerContainer" v-if="toogleRegister">
+      <RegistroCandidatos
+        @toogleRegisterChild="toogleLoginrHandler"
+      ></RegistroCandidatos>
+    </div>
+
     <router-view />
   </div>
 </template>
@@ -273,6 +271,7 @@ button {
 .videoContainer {
   z-index: 0;
   position: absolute;
+  height: 100%;
   width: 100%;
   overflow: hidden;
   opacity: 0.3;
@@ -293,9 +292,15 @@ button {
 .fadeInUpBig-leave-active {
   animation: fadeOutDownBig 1s; /* Animate.css: animación de salida */
 }
+.registerContainer {
+  width: 60%;
+}
 @media (max-width: 768px) {
   .containerPrincipal {
     overflow: auto;
+  }
+  .registerContainer {
+    width: 100%;
   }
 }
 

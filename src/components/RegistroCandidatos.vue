@@ -88,7 +88,7 @@
             </div>
           </div>
           <div class="row">
-            <div class="col">
+            <div class="col floating-label-group">
               <select
                 class="form-select"
                 name=""
@@ -212,11 +212,26 @@
                 >Confirme contraseña *</label
               >
               <div
-                v-if="errorConfirmationPasswordStyle"
+                v-show="errorConfirmationPasswordStyle"
                 class="invalid-feedback"
               >
                 {{ errorConfirmationPassword }}
               </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="form-check">
+              <label class="form-check-label">
+                <input
+                  type="checkbox"
+                  class="form-check-input"
+                  name=""
+                  id=""
+                  value="checkedValue"
+                  checked
+                />
+                Autoriza y acepta la po
+              </label>
             </div>
           </div>
           <div class="row mb-4">
@@ -281,6 +296,7 @@ const cliente = reactive({
   telefono: "",
   doc_tip_id: "01",
 });
+/* const autorizacion = ref(false); */
 const error = "Campo requerido";
 const errorConfirmationNumDoc = ref("");
 const errorConfirmationEmail = ref("");
@@ -399,23 +415,21 @@ onMounted(() => {});
     rgba(0, 0, 0, 0.22) 0px 10px 10px;
   border-radius: 10px;
   z-index: 100;
-  position: absolute;
-  left: 15%;
+  position: relative;
 }
 
 /* Contenedor del Logo y Formulario */
 .principalContainerRegister {
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 5em;
   width: 100%;
 }
 
 /* Logo */
 .logoRegister {
-  width: 15em;
+  width: 10em;
   margin: auto;
 }
 
