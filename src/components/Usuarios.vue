@@ -4,85 +4,38 @@
       <h2>Administrar Usuarios</h2>
       <div class="row" style="width: 80%; margin-bottom: 30px">
         <div class="col-xs-4 col-md-6">
-          <label endpointEmpleadosfor="exampleInputEmail1" class="form-label"
-            >Buscar usuario</label
-          >
-          <input
-            type="text"
-            class="form-control"
-            autocomplete="off"
-            id="exampleInputEmail1"
-            placeholder="Escriba nombre o usuario"
-            aria-describedby="emailHelp"
-            v-model="usuario"
-          />
+          <label endpointEmpleadosfor="exampleInputEmail1" class="form-label">Buscar usuario</label>
+          <input type="text" class="form-control" autocomplete="off" id="exampleInputEmail1"
+            placeholder="Escriba nombre o usuario" aria-describedby="emailHelp" v-model="usuario" />
         </div>
         <div class="col-xs-4 col-md-3">
-          <button
-            v-if="usuario != ''"
-            type="button"
-            style="margin-top: 35px"
-            @click="getUser(usuario)"
-            class="btn btn-success btn-sm"
-          >
+          <button v-if="usuario != ''" type="button" style="margin-top: 35px" @click="getUser(usuario)"
+            class="btn btn-success btn-sm">
             Buscar
           </button>
         </div>
         <div class="col-xs-4 col-md-3">
-          <button
-            v-if="usuario != ''"
-            type="button"
-            style="margin-top: 35px"
-            @click="getUsers(), (usuario = '')"
-            class="btn btn-success btn-sm"
-          >
+          <button v-if="usuario != ''" type="button" style="margin-top: 35px" @click="getUsers(), (usuario = '')"
+            class="btn btn-success btn-sm">
             Borrar búsqueda
           </button>
         </div>
       </div>
       <div class="row">
-        <button
-          type="button"
-          id="newUser"
-          class="col-xs-12 col-md-2 btn btn-success"
-          @click="nuevoUsuario()"
-        >
+        <button type="button" id="newUser" class="col-xs-12 col-md-2 btn btn-success" @click="nuevoUsuario()">
           <i class="bi bi-file-earmark-plus"></i> Insertar usuario
         </button>
       </div>
-      <div
-        class="row"
-        style="clear: both; margin-bottom: 20px"
-      >
-        <div class="col-xs-3 col-md-4"  v-if="users.length > 0">
-          <label for="exampleFormControlInput1" class="form-label"
-            >Cantidad de registros a listar</label
-          >
-          <select
-            class="form-select form-select-sm"
-            @change="getUsers()"
-            v-model="cantidad"
-            aria-label="Default select example"
-          >
+      <div class="row" style="clear: both; margin-bottom: 20px">
+        <div class="col-xs-3 col-md-4" v-if="users.length > 0">
+          <label for="exampleFormControlInput1" class="form-label">Cantidad de registros a listar</label>
+          <select class="form-select form-select-sm" @change="getUsers()" v-model="cantidad"
+            aria-label="Default select example">
             <option>5</option>
             <option>10</option>
             <option>20</option>
             <option>30</option>
           </select>
-        </div>
-        <div class="col" style="margin-top: 30px;">
-          <div class="form-check form-switch">
-            <input
-              class="form-check-input"
-              type="checkbox"
-              role="switch"
-              id="flexSwitchCheckDefault"
-              v-model="tipo_usuario"
-            />
-            <label class="form-check-label" for="flexSwitchCheckDefault">{{
-              mensaje_tipo_usuario
-            }}</label>
-          </div>
         </div>
       </div>
       <div v-if="spinner">
@@ -95,9 +48,7 @@
         <h5>Cargando por favor espere un momento.</h5>
       </div>
       <div v-else class="table-responsive">
-        <table
-          class="table align-middle table-bordered table-striped table-hover"
-        >
+        <table class="table align-middle table-bordered table-striped table-hover">
           <thead>
             <tr>
               <th scope="col">#</th>
@@ -118,44 +69,26 @@
               <td>{{ item.estado }}</td>
               <td>{{ item.rol }}</td>
               <td>
-                <button
-                  type="button"
-                  v-if="item.rol != 'S. Administrador'"
-                  class="btn btn-warning btn-sm"
-                  @click="actualizar(item.id_user, item.nit)"
-                >
+                <button type="button" v-if="item.rol != 'S. Administrador'" class="btn btn-warning btn-sm"
+                  @click="actualizar(item.id_user)">
                   <i class="bi bi-pencil-square"></i>
                 </button>
-                <button
-                  v-if="
-                    item.rol == 'S. Administrador' &&
-                    roluserlogued == 'S. Administrador'
-                  "
-                  type="button"
-                  class="btn btn-warning btn-sm"
-                  @click="actualizar(item.id_user, item.nit)"
-                >
+                <button v-if="
+                  item.rol == 'S. Administrador' &&
+                  roluserlogued == 'S. Administrador'
+                " type="button" class="btn btn-warning btn-sm" @click="actualizar(item.id_user)">
                   <i class="bi bi-pencil-square"></i>
                 </button>
               </td>
               <td>
-                <button
-                  v-if="item.rol != 'S. Administrador'"
-                  type="button"
-                  class="btn btn-danger btn-sm"
-                  @click="messageDelete(item.id_user)"
-                >
+                <button v-if="item.rol != 'S. Administrador'" type="button" class="btn btn-danger btn-sm"
+                  @click="messageDelete(item.id_user)">
                   <i class="bi bi-trash"></i>
                 </button>
-                <button
-                  v-if="
-                    item.rol == 'S. Administrador' &&
-                    roluserlogued == 'S. Administrador'
-                  "
-                  type="button"
-                  class="btn btn-danger btn-sm"
-                  @click="messageDelete(item.id_user)"
-                >
+                <button v-if="
+                  item.rol == 'S. Administrador' &&
+                  roluserlogued == 'S. Administrador'
+                " type="button" class="btn btn-danger btn-sm" @click="messageDelete(item.id_user)">
                   <i class="bi bi-trash"></i>
                 </button>
               </td>
@@ -163,12 +96,7 @@
           </tbody>
         </table>
       </div>
-      <PiePagina
-        @response="response"
-        :actualiced="actualiced"
-        :cantidad="cantidad"
-        :result="result"
-      />
+      <PiePagina @response="response" :actualiced="actualiced" :cantidad="cantidad" :result="result" />
     </div>
   </div>
 </template>
@@ -208,7 +136,6 @@ export default {
       loading: false,
       tipo_usuario: false,
       mensaje_tipo_usuario: "Usuarios cliente",
-      nit:''
     };
   },
   mounted() {
@@ -218,29 +145,12 @@ export default {
     // ruta() {
     //   this.autorizado(this.menu)
     // }
-    tipo_usuario() {
-      // this.mensaje_tipo_usuario = this.tipo_usuario == true ? "Usuarios internos" : "Usuarios cliente";
-      if (this.tipo_usuario) {
-        this.mensaje_tipo_usuario = "Usuarios internos";
-        this.getUsers()
-      } else {
-        this.mensaje_tipo_usuario = "Usuarios cliente";
-        this.getUsers()
-      }
-    },
   },
   created() {
     this.getUsers();
     this.userLogued();
   },
   methods: {
-    // autorizado(menu) {
-    //   let autoriced = ''
-    //   autoriced = menu.filter(menus => menus.url === this.ruta);
-    //   if (autoriced.length == 0) {
-    //     this.$router.go(-1);
-    //   }
-    // },
     response(response) {
       this.users = response.data.data;
       this.links = response.data;
@@ -261,7 +171,7 @@ export default {
       let self = this;
       let config = this.configHeader();
       axios
-        .get(self.URL_API + "api/v1/users/" + self.cantidad + "/"+self.tipo_usuario, config) //se anexa un 0 a la consulta para el tipo de usuario
+        .get(self.URL_API + "api/v1/users/" + self.cantidad, config) //se anexa un 0 a la consulta para el tipo de usuario
         .then(function (result) {
           self.users = result.data.data;
           self.result = result;
@@ -313,12 +223,8 @@ export default {
           self.getUsers();
         });
     },
-    actualizar(id, nit) {
-      if(this.tipo_usuario){
-        this.$router.push({ name: "cliente", params: { id: nit } });
-      }else{
-        this.$router.push({ name: "editarUsuario", params: { id: id } });
-      }
+    actualizar(id) {
+      this.$router.push({ name: "editarUsuario", params: { id: id } });
     },
     userLogued() {
       let self = this;
