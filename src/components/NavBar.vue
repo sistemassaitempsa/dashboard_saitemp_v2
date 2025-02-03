@@ -1,10 +1,7 @@
 <template>
   <div v-if="autoriced">
     <NotificacionesSocket />
-    <nav
-      class="navbar navbar-expand-lg navbar-dark gradient-background"
-      style="height: 100px"
-    >
+    <nav class="navbar navbar-expand-lg navbar-dark gradient-background" style="heigth: 100px">
       <div class="container-fluid">
         <a class="navbar-brand" href="">
           <!-- <img
@@ -13,77 +10,39 @@
               :width="logo.ancho"
               class="d-inline-block align-text-top"
             /> -->
-          <img
-            src="@/assets/logo2.png"
-            width="60px"
-            class="d-inline-block align-text-top"
-            alt=""
-          />
+          <img src="@/assets/logo2.png" width="60px" class="d-inline-block align-text-top" alt="" />
           <!-- Acá va el nombre-->
         </a>
-        <button
-          class="navbar-toggler"
-          type="button"
-          data-bs-toggle="collapse"
-          data-bs-target="#navbarSupportedContent"
-          aria-controls="navbarSupportedContent"
-          aria-expanded="false"
-          aria-label="Toggle navigation"
-          @click="collapese"
-        >
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+          aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"
+          @click="collapese">
           <span class="navbar-toggler-icon"></span>
         </button>
-        <div
-          :class="
-            collapse
-              ? 'collapse navbar-collapse show'
-              : 'collapse navbar-collapse'
-          "
-          id="navbarNav"
-        >
+        <div :class="collapse
+            ? 'collapse navbar-collapse show'
+            : 'collapse navbar-collapse'
+          " id="navbarNav">
           <ul class="navbar-nav">
-            <li
-              class="nav-item"
-              @click="collapese"
-              :style="actualizacion ? 'padding-top: 15px' : ''"
-            >
-              <router-link class="nav-link active" to=""
-                >{{ saludo }} {{ nombre }}</router-link
-              >
+            <li class="nav-item" @click="collapese" :style="actualizacion ? 'padding-top: 15px' : ''">
+              <router-link class="nav-link active" to="">{{ saludo }} {{ userlogued.nombres }}</router-link>
             </li>
             <li>
               <CuentaRegresiva @timeElapsed="actualizacion = false" />
             </li>
-            <li
-              class="nav-item contrasena"
-              id="menu-lateral"
-              @click="ocultarMenu(), collapese()"
-            >
-              <i
-                :class="
-                  menu_lateral
-                    ? 'bi bi-text-indent-right'
-                    : 'bi bi-text-indent-left'
-                "
-              ></i>
+            <li class="nav-item contrasena" id="menu-lateral" @click="ocultarMenu(), collapese()">
+              <i :class="menu_lateral
+                  ? 'bi bi-text-indent-right'
+                  : 'bi bi-text-indent-left'
+                "></i>
               {{
                 menu_lateral ? "Ocultar menú lateral" : "Mostrar menú lateral"
               }}
             </li>
-            <li
-              class="nav-item contrasena"
-              :style="actualizacion ? 'padding-top: 15px' : ''"
-              id="contrasena"
-              @click="actualizar()"
-            >
+            <li class="nav-item contrasena" :style="actualizacion ? 'padding-top: 15px' : ''" id="contrasena"
+              @click="actualizar()">
               <i class="bi bi-person-circle"></i> Editar usuario
             </li>
-            <li
-              class="nav-item logout"
-              :style="actualizacion ? 'padding-top: 15px' : ''"
-              id="logout"
-              @click="logout"
-            >
+            <li class="nav-item logout" :style="actualizacion ? 'padding-top: 15px' : ''" id="logout" @click="logout">
               <i class="bi bi-box-arrow-left"></i> Cerrar sesión
             </li>
           </ul>
@@ -93,54 +52,28 @@
     <div class="aside">
       <div class="accordion-item" v-for="(item, index) in menu" :key="index">
         <h2 class="accordion-header" :id="'flush-heading' + option[index]">
-          <button
-            class="accordion-button collapsed"
-            type="button"
-            data-bs-toggle="collapse"
-            :data-bs-target="'#flush-collapse' + option[index]"
-            aria-expanded="false"
-            :aria-controls="'flush-collapse' + option[index]"
-          >
+          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+            :data-bs-target="'#flush-collapse' + option[index]" aria-expanded="false"
+            :aria-controls="'flush-collapse' + option[index]">
             <i :class="item.icon"></i><span>{{ item.categoria }}</span>
           </button>
         </h2>
-        <div
-          :id="'flush-collapse' + option[index]"
-          class="accordion-collapse collapse"
-          :aria-labelledby="'flush-heading' + option[index]"
-          data-bs-parent="#accordionFlushExample"
-        >
-          <div
-            v-for="(item, index) in menu[index].opciones"
-            :key="index"
-            class="accordion-body"
-          >
-            <router-link
-              v-if="item.urlExterna == '0'"
-              class="nav-link active"
-              :to="
-                item.powerbi != ''
-                  ? '/' + item.url + '/' + item.nombre
-                  : item.url != ''
+        <div :id="'flush-collapse' + option[index]" class="accordion-collapse collapse"
+          :aria-labelledby="'flush-heading' + option[index]" data-bs-parent="#accordionFlushExample">
+          <div v-for="(item, index) in menu[index].opciones" :key="index" class="accordion-body">
+            <router-link v-if="item.urlExterna == '0'" class="nav-link active" :to="item.powerbi != ''
+                ? '/' + item.url + '/' + item.nombre
+                : item.url != ''
                   ? '/' + item.url
                   : '/navbar'
-              "
-              :style="{ 'pointer-events': item.disabled ? 'none' : 'auto' }"
-            >
-              <i :class="item.icon"></i
-              ><span>{{
+              " :style="{ 'pointer-events': item.disabled ? 'none' : 'auto' }">
+              <i :class="item.icon"></i><span>{{
                 item.nombre == "rol" ? "Rol: " + userlogued.rol : item.nombre
               }}</span>
             </router-link>
-            <a
-              v-else
-              :href="item.url"
-              target="_blank"
-              rel="noopener noreferrer"
-              style="color: white; text-decoration: none"
-              class="nav-link active"
-              :style="{ 'pointer-events': item.disabled ? 'none' : 'auto' }"
-            >
+            <a v-else :href="item.url" target="_blank" rel="noopener noreferrer"
+              style="color: white; text-decoration: none" class="nav-link active"
+              :style="{ 'pointer-events': item.disabled ? 'none' : 'auto' }">
               <i :class="item.icon"></i> <span>{{ item.nombre }}</span>
             </a>
           </div>
@@ -148,18 +81,9 @@
         <hr />
       </div>
     </div>
-    <ModalPrincipal
-      @actualizacion="actualizacion = true"
-      :modal="actualizacion"
-    />
-    <router-view
-      :class="{ ancho_componente: anchocomponente }"
-      :userlogued="userlogued"
-      :menu="menu"
-      :user_type="user_type"
-      @getMenu="getMenu"
-      :actualizacion="actualizacion"
-    />
+    <ModalPrincipal @actualizacion="actualizacion = true" :modal="actualizacion" />
+    <router-view :class="{ ancho_componente: anchocomponente }" :userlogued="userlogued" :menu="menu"
+      :user_type="user_type" @getMenu="getMenu" :actualizacion="actualizacion" />
   </div>
 </template>
 <script>
@@ -206,7 +130,7 @@ export default {
         seconds: "Segundos",
       },
       actualizacion: true,
-      documento_identidad: "",
+      documento_identidad: '',
     };
   },
   watch: {
@@ -349,8 +273,7 @@ export default {
             self.user_id = response.data.usuario_id;
             self.documento_identidad = response.data.documento_identidad;
             self.nombre = response.data.nombres;
-          }
-          self.autoriced = true;
+  self.autoriced = true;
           self.getMenu();
         } else {
           self.$router.push("/");
@@ -359,21 +282,6 @@ export default {
         console.log(error);
         self.$router.push("/");
       }
-
-      /* .then(function (result) {
-          if (result.data[0] != undefined) {
-            self.userlogued = result.data[0];
-            self.user_id = result.data[0].usuario_id;
-            self.documento_identidad = result.data[0].documento_identidad;
-            self.autoriced = true;
-            self.getMenu();
-          } else {
-            self.$router.push("/");
-          }
-        })
-        .catch(function () {
-          self.$router.push("/");
-        }); */
     },
     getMenu() {
       let self = this;
@@ -612,14 +520,12 @@ export default {
   /* background: rgb(0, 107, 63);
   background: linear-gradient(90deg, rgba(0, 107, 63, 1) 6%, rgba(26, 150, 56, 1) 16%, rgba(22, 119, 115, 1) 47%, rgba(117, 165, 176, 1) 56%, rgba(4, 66, 105, 1) 66%); */
   background: rgb(0, 107, 63);
-  background: linear-gradient(
-    95deg,
-    rgba(0, 107, 63, 1) 4%,
-    rgba(26, 150, 56, 1) 19%,
-    rgba(48, 159, 128, 1) 45%,
-    rgba(22, 119, 115, 1) 63%,
-    rgba(4, 66, 105, 1) 88%
-  );
+  background: linear-gradient(95deg,
+      rgba(0, 107, 63, 1) 4%,
+      rgba(26, 150, 56, 1) 19%,
+      rgba(48, 159, 128, 1) 45%,
+      rgba(22, 119, 115, 1) 63%,
+      rgba(4, 66, 105, 1) 88%);
   /* Para navegadores que no admiten degradados */
   /* background-image: url('ruta/a/una/imagen-de-fondo.jpg'); */
   /* En caso de que el navegador no admita degradados, proporciona una imagen de fondo */
