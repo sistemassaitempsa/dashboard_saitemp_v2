@@ -50,11 +50,8 @@
           <i class="bi bi-file-earmark-plus"></i> Insertar usuario
         </button>
       </div>
-      <div
-        class="row"
-        style="clear: both; margin-bottom: 20px"
-      >
-        <div class="col-xs-3 col-md-4"  v-if="users.length > 0">
+      <div class="row" style="clear: both; margin-bottom: 20px">
+        <div class="col-xs-3 col-md-4" v-if="users.length > 0">
           <label for="exampleFormControlInput1" class="form-label"
             >Cantidad de registros a listar</label
           >
@@ -70,7 +67,7 @@
             <option>30</option>
           </select>
         </div>
-        <div class="col" style="margin-top: 30px;">
+        <div class="col" style="margin-top: 30px">
           <div class="form-check form-switch">
             <input
               class="form-check-input"
@@ -208,7 +205,7 @@ export default {
       loading: false,
       tipo_usuario: false,
       mensaje_tipo_usuario: "Usuarios cliente",
-      nit:''
+      nit: "",
     };
   },
   mounted() {
@@ -222,10 +219,10 @@ export default {
       // this.mensaje_tipo_usuario = this.tipo_usuario == true ? "Usuarios internos" : "Usuarios cliente";
       if (this.tipo_usuario) {
         this.mensaje_tipo_usuario = "Usuarios internos";
-        this.getUsers()
+        this.getUsers();
       } else {
         this.mensaje_tipo_usuario = "Usuarios cliente";
-        this.getUsers()
+        this.getUsers();
       }
     },
   },
@@ -261,7 +258,14 @@ export default {
       let self = this;
       let config = this.configHeader();
       axios
-        .get(self.URL_API + "api/v1/users/" + self.cantidad + "/"+self.tipo_usuario, config) //se anexa un 0 a la consulta para el tipo de usuario
+        .get(
+          self.URL_API +
+            "api/v1/users/" +
+            self.cantidad +
+            "/" +
+            self.tipo_usuario,
+          config
+        ) //se anexa un 0 a la consulta para el tipo de usuario
         .then(function (result) {
           self.users = result.data.data;
           self.result = result;
@@ -314,9 +318,9 @@ export default {
         });
     },
     actualizar(id, nit) {
-      if(this.tipo_usuario){
+      if (this.tipo_usuario) {
         this.$router.push({ name: "cliente", params: { id: nit } });
-      }else{
+      } else {
         this.$router.push({ name: "editarUsuario", params: { id: id } });
       }
     },
@@ -328,7 +332,7 @@ export default {
       axios
         .get(self.URL_API + "api/v1/userlogued/" + userType, config)
         .then(function (result) {
-          self.roluserlogued = result.data[0].rol;
+          self.roluserlogued = result.data.rol;
         })
         .catch(function (error) {
           if (error.response.data == "Unauthorized.") {
