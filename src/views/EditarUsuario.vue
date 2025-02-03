@@ -1,7 +1,7 @@
 <template>
   <div>
-    <FormularioUsuario :titulo="titulo" v-if="user_type == 1" />
-    <EditarUsuarioCandidato v-if="user_type == 3" />
+    <FormularioUsuario :titulo="titulo" v-if="user_type == '1'" />
+    <EditarUsuarioCandidato v-if="user_type == '3'" />
   </div>
 </template>
 <script>
@@ -12,7 +12,6 @@ export default {
     user_type: {
       type: String,
       required: false,
-      default: "1",
     },
   },
   components: {
