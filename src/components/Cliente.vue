@@ -156,12 +156,10 @@ onMounted(() => {
   let url;
   if (route.params.id != "") {
     url = URL_API.value + "api/v1/cliente/" + route.params.id;
-  } else {
-    url = URL_API.value + "api/v1/userloguedcliente";
+    axios.get(url, configHeader()).then(function (result) {
+      llenarFormulario(result.data);
+    });
   }
-  axios.get(url, configHeader()).then(function (result) {
-    llenarFormulario(result.data);
-  });
 });
 
 function save() {
