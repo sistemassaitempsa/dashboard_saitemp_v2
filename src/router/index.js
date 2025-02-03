@@ -1,353 +1,371 @@
-import { createRouter, createWebHashHistory  } from 'vue-router';
-import InicioSesion from '../components/InicioSesion.vue';
-import NavBar from '../components/NavBar.vue';
-import Usuarios from '../components/Usuarios.vue';
-import RolesUsuario from '../components/RolesUsuario.vue';
-import MenuRoles from '../components/MenuRoles.vue';
-import PermisoRoles from '../components/PermisoRoles.vue';
-import Permisos from '../components/Permisos.vue';
-import TipoDocumentoIdentidad from '../components/TipoDocumentoIdentidad.vue';
-import IngresarUsuario from '../views/IngresarUsuario.vue';
-import EditarUsuario from '../views/EditarUsuario.vue';
-import EmpleadoTemporal from '../components/EmpleadoTemporal.vue';
-import UsuariosDA from '../components/UsuariosDA.vue';
-import Estadistica from '../components/Estadistica.vue';
-import Empleados from '../components/Empleados.vue';
-import Empleado from '../components/Empleado.vue';
-import Reportes from '../components/Reportes.vue';
-import Trump from '../components/Trump.vue';
-import ProcesosEspeciales from '../components/ProcesosEspeciales.vue';
-import PowerBi from '../components/PowerBi.vue';
-import Ddashboard from '../components/Ddashboard.vue';
-import DdClientes from '../components/DdClientes.vue';
-import DdFormularioCliente from '../components/DdFormularioCliente.vue';
-import FormularioRegistro from '../components/FormularioRegistro.vue';
-import NovedadesNomina from '../components/NovedadesNomina.vue';
-import SolicitudNovedadesNomina from '../components/SolicitudNovedadesNomina.vue';
-import ConsultaNN from '../components/ConsultaNN.vue';
-import GestionCliente from '../components/GestionCliente.vue';
-import FormularioSupervision from '../components/FormularioSupervision.vue';
-import MapaVue from '../components/MapaVue.vue';
-import ClienteSupervision from '../components/ClienteSupervision.vue';
+import { createRouter, createWebHashHistory } from "vue-router";
+import InicioSesion from "../components/InicioSesion.vue";
+import NavBar from "../components/NavBar.vue";
+import Usuarios from "../components/Usuarios.vue";
+import RolesUsuario from "../components/RolesUsuario.vue";
+import MenuRoles from "../components/MenuRoles.vue";
+import PermisoRoles from "../components/PermisoRoles.vue";
+import Permisos from "../components/Permisos.vue";
+import TipoDocumentoIdentidad from "../components/TipoDocumentoIdentidad.vue";
+import IngresarUsuario from "../views/IngresarUsuario.vue";
+import EditarUsuario from "../views/EditarUsuario.vue";
+import EmpleadoTemporal from "../components/EmpleadoTemporal.vue";
+import UsuariosDA from "../components/UsuariosDA.vue";
+import Estadistica from "../components/Estadistica.vue";
+import Empleados from "../components/Empleados.vue";
+import Empleado from "../components/Empleado.vue";
+import Reportes from "../components/Reportes.vue";
+import Trump from "../components/Trump.vue";
+import ProcesosEspeciales from "../components/ProcesosEspeciales.vue";
+import PowerBi from "../components/PowerBi.vue";
+import Ddashboard from "../components/Ddashboard.vue";
+import DdClientes from "../components/DdClientes.vue";
+import DdFormularioCliente from "../components/DdFormularioCliente.vue";
+import FormularioRegistro from "../components/FormularioRegistro.vue";
+import NovedadesNomina from "../components/NovedadesNomina.vue";
+import SolicitudNovedadesNomina from "../components/SolicitudNovedadesNomina.vue";
+import ConsultaNN from "../components/ConsultaNN.vue";
+import GestionCliente from "../components/GestionCliente.vue";
+import FormularioSupervision from "../components/FormularioSupervision.vue";
+import MapaVue from "../components/MapaVue.vue";
+import ClienteSupervision from "../components/ClienteSupervision.vue";
 // import OrdenServicio from '../components/OrdenServicioantiguo.vue';
-import OrdenServicio from '../components/OrdenServicio.vue';
-import OrdenServicios from '../components/OrdenServicios.vue';
-import ListaServicio from '../components/ListaServicio.vue';
-import SolicitudesOrdenServicio from '../components/SolicitudesOrdenServicio.vue';
-import PieChar from '../components/PieChar.vue';
-import GraficosGerencia from '../components/GraficosGerencia.vue';
-import UsuariosPermisos from '../components/UsuariosPermisos.vue';
-import UsuariosMenu from '../components/UsuariosMenu.vue';
-import AdministrarMenu from '../components/AdministrarMenu.vue';
-import TimeLine from '../components/TimeLine.vue';
-import GestionIngresos from '../components/GestionIngresos.vue';
-import GestionIngresosl from '../components/GestionIngresosl.vue';
-import GestionIngresosM from '../components/GestionIngresosM.vue';
-import ChatWhatsapp from '../components/ChatWhatsapp.vue';
-import TareasPendientesIngresos from '../components/TareasPendientesIngresos.vue';
-import CrmCliente from '../components/CrmCliente.vue';
-import CrmSeguimiento from '../components/CrmSeguimiento.vue';
-import PendientesCrm from '../components/PendientesCrm.vue';
-import IndicadoresSeya from '../components/IndicadoresSeya.vue';
-import GestionRiesgos from '../components/GestionRiesgos.vue';
-import ListaRiesgos from '../components/ListaRiesgos.vue';
-import GuiaRiesgos from '../components/GuiaRiesgos.vue';
-import Landing from '../components/Landing.vue';
-import Configuraciones from '../components/Configuraciones.vue';
-import EstadosDebidaDIligenciaAdmin from '../components/EstadosDebidaDiligenciaAdmin.vue';
-import EditarCliente from '../components/EditarCliente.vue';
-import Cliente from '../components/Cliente.vue';
+import OrdenServicio from "../components/OrdenServicio.vue";
+import OrdenServicios from "../components/OrdenServicios.vue";
+import ListaServicio from "../components/ListaServicio.vue";
+import SolicitudesOrdenServicio from "../components/SolicitudesOrdenServicio.vue";
+import PieChar from "../components/PieChar.vue";
+import GraficosGerencia from "../components/GraficosGerencia.vue";
+import UsuariosPermisos from "../components/UsuariosPermisos.vue";
+import UsuariosMenu from "../components/UsuariosMenu.vue";
+import AdministrarMenu from "../components/AdministrarMenu.vue";
+import TimeLine from "../components/TimeLine.vue";
+import GestionIngresos from "../components/GestionIngresos.vue";
+import GestionIngresosl from "../components/GestionIngresosl.vue";
+import GestionIngresosM from "../components/GestionIngresosM.vue";
+import ChatWhatsapp from "../components/ChatWhatsapp.vue";
+import TareasPendientesIngresos from "../components/TareasPendientesIngresos.vue";
+import CrmCliente from "../components/CrmCliente.vue";
+import CrmSeguimiento from "../components/CrmSeguimiento.vue";
+import PendientesCrm from "../components/PendientesCrm.vue";
+import IndicadoresSeya from "../components/IndicadoresSeya.vue";
+import GestionRiesgos from "../components/GestionRiesgos.vue";
+import ListaRiesgos from "../components/ListaRiesgos.vue";
+import GuiaRiesgos from "../components/GuiaRiesgos.vue";
+import Landing from "../components/Landing.vue";
+import Configuraciones from "../components/Configuraciones.vue";
+import EstadosDebidaDIligenciaAdmin from "../components/EstadosDebidaDiligenciaAdmin.vue";
+import EditarCliente from "../components/EditarCliente.vue";
+import InicioSesionCandidatos from "@/components/InicioSesionCandidatos.vue";
+import RecoverPassword from "@/components/RecoverPassword.vue";
+import FormularioInfoCandidatos from "@/components/FormularioInfoCandidatos.vue";
+import Cliente from "../components/Cliente.vue";
 
 // Configuración de rutas
 const routes = [
   {
-    path: '/',
-    name: 'login',
+    path: "/",
+    name: "login",
     component: InicioSesion,
   },
   {
-    path: '/formularioregistro',
-    name: 'formularioregistro',
+    path: "/loginCandidatos",
+    name: "loginCandidatos",
+    component: InicioSesionCandidatos,
+  },
+  {
+    path: "/formularioinfocandidato",
+    name: "formularioinfocandidato",
+    component: FormularioInfoCandidatos,
+  },
+  {
+    path: "/recuperarcontrasena",
+    name: "recuperarcontrasena",
+    component: RecoverPassword,
+  },
+  {
+    path: "/formularioregistro",
+    name: "formularioregistro",
     component: FormularioRegistro,
   },
   {
-    path: '/:pathMatch(.*)*',
-    name: 'catchAll',
-    component: InicioSesion,
+    path: "/:pathMatch(.*)*",
+    name: "catchAll",
+    component: InicioSesionCandidatos,
   },
   {
-    path: '/navbar',
-    name: 'navbar',
+    path: "/navbar",
+    name: "navbar",
     component: NavBar,
     children: [
       {
-        path: 'editarUsuario/:id',
-        name: 'editarUsuario',
+        path: "editarUsuario/:id",
+        name: "editarUsuario",
         component: EditarUsuario,
       },
       {
-        path: 'ingresarUsuario',
-        name: 'ingresarUsuario',
+        path: "ingresarUsuario",
+        name: "ingresarUsuario",
         component: IngresarUsuario,
       },
       {
-        path: 'usuarios',
-        name: 'usuarios',
+        path: "usuarios",
+        name: "usuarios",
         component: Usuarios,
       },
       {
-        path: 'rolesUsuario',
-        name: 'rolesUsuario',
+        path: "rolesUsuario",
+        name: "rolesUsuario",
         component: RolesUsuario,
       },
       {
-        path: 'menuRoles',
-        name: 'menuRoles',
+        path: "menuRoles",
+        name: "menuRoles",
         component: MenuRoles,
       },
       {
-        path: 'permisoRoles',
-        name: 'permisoRoles',
+        path: "permisoRoles",
+        name: "permisoRoles",
         component: PermisoRoles,
       },
       {
-        path: 'permisos',
-        name: 'permisos',
+        path: "permisos",
+        name: "permisos",
         component: Permisos,
       },
       {
-        path: 'tipoDocumentoIdentidad',
-        name: 'tipoDocumentoIdentidad',
+        path: "tipoDocumentoIdentidad",
+        name: "tipoDocumentoIdentidad",
         component: TipoDocumentoIdentidad,
       },
       {
-        path: 'empleadoTemporal',
-        name: 'EmpleadoTemporal',
+        path: "empleadoTemporal",
+        name: "EmpleadoTemporal",
         component: EmpleadoTemporal,
       },
       {
-        path: 'usuariosDA',
-        name: 'usuariosDA',
+        path: "usuariosDA",
+        name: "usuariosDA",
         component: UsuariosDA,
       },
       {
-        path: 'estadistica',
-        name: 'estadistica',
+        path: "estadistica",
+        name: "estadistica",
         component: Estadistica,
       },
       {
-        path: 'empleados/:id?',
-        name: 'empleados',
+        path: "empleados/:id?",
+        name: "empleados",
         component: Empleados,
       },
       {
-        path: 'empleado/:id',
-        name: 'empleado',
+        path: "empleado/:id",
+        name: "empleado",
         component: Empleado,
       },
       {
-        path: 'reportes',
-        name: 'reportes',
+        path: "reportes",
+        name: "reportes",
         component: Reportes,
       },
       {
-        path: 'trump',
-        name: 'trump',
+        path: "trump",
+        name: "trump",
         component: Trump,
       },
       {
-        path: 'procesosEspeciales',
-        name: 'procesosEspeciales',
+        path: "procesosEspeciales",
+        name: "procesosEspeciales",
         component: ProcesosEspeciales,
       },
       {
-        path: 'powerBi/:id',
-        name: 'powerBi',
+        path: "powerBi/:id",
+        name: "powerBi",
         component: PowerBi,
       },
       {
-        path: 'debida-diligencia/dashboard',
-        name: 'debida-diligencia/dashboard',
+        path: "debida-diligencia/dashboard",
+        name: "debida-diligencia/dashboard",
         component: Ddashboard,
       },
       {
-        path: 'debida-diligencia/clientes',
-        name: 'debida-diligencia/clientes',
+        path: "debida-diligencia/clientes",
+        name: "debida-diligencia/clientes",
         component: DdClientes,
       },
       {
-        path: 'debida-diligencia/formulario-clientes/:id?',
-        name: 'debida-diligencia/formulario-clientes',
+        path: "debida-diligencia/formulario-clientes/:id?",
+        name: "debida-diligencia/formulario-clientes",
         component: DdFormularioCliente,
       },
       {
-        path: 'gestion-novedades-nomina',
-        name: 'gestion-novedades-nomina',
+        path: "gestion-novedades-nomina",
+        name: "gestion-novedades-nomina",
         component: NovedadesNomina,
       },
       {
-        path: 'solicitud-novedades-nomina',
-        name: 'solicitud-novedades-nomina',
+        path: "solicitud-novedades-nomina",
+        name: "solicitud-novedades-nomina",
         component: SolicitudNovedadesNomina,
       },
       {
-        path: 'correo-novedades-nomina',
-        name: 'correo-novedades-nomina',
+        path: "correo-novedades-nomina",
+        name: "correo-novedades-nomina",
         component: ConsultaNN,
       },
       {
-        path: 'estados-cliente/:?',
-        name: 'estados-cliente',
+        path: "estados-cliente/:?",
+        name: "estados-cliente",
         component: GestionCliente,
       },
       {
-        path: 'formulario-supervision/:id?',
-        name: 'formulario-supervision',
+        path: "formulario-supervision/:id?",
+        name: "formulario-supervision",
         component: FormularioSupervision,
       },
       {
-        path: 'mapa',
-        name: 'mapa',
+        path: "mapa",
+        name: "mapa",
         component: MapaVue,
       },
       {
-        path: 'cliente-supervision',
-        name: 'cliente-supervision',
+        path: "cliente-supervision",
+        name: "cliente-supervision",
         component: ClienteSupervision,
       },
       {
-        path: 'orden-servicio/:id?',
-        name: 'orden-servicio',
+        path: "orden-servicio/:id?",
+        name: "orden-servicio",
         component: OrdenServicio,
       },
       {
-        path: 'lista-servicios/:id?',
-        name: 'lista-servicios',
+        path: "lista-servicios/:id?",
+        name: "lista-servicios",
         component: ListaServicio,
       },
       {
-        path: 'orden-servicios/:id?',
-        name: 'orden-servicios',
+        path: "orden-servicios/:id?",
+        name: "orden-servicios",
         component: OrdenServicios,
       },
       {
-        path: 'solicitudes-os',
-        name: 'solicitudes-os',
+        path: "solicitudes-os",
+        name: "solicitudes-os",
         component: SolicitudesOrdenServicio,
       },
       {
-        path: 'piechar',
-        name: 'piechar',
+        path: "piechar",
+        name: "piechar",
         component: PieChar,
       },
       {
-        path: 'graficos-gerencia',
-        name: 'graficos-gerencia',
+        path: "graficos-gerencia",
+        name: "graficos-gerencia",
         component: GraficosGerencia,
       },
       {
-        path: 'permiso-usuario',
-        name: 'permiso-usuario',
+        path: "permiso-usuario",
+        name: "permiso-usuario",
         component: UsuariosPermisos,
       },
       {
-        path: 'menus',
-        name: 'menus',
+        path: "menus",
+        name: "menus",
         component: AdministrarMenu,
       },
       {
-        path: 'menu-usuarios',
-        name: 'menu-usuarios',
+        path: "menu-usuarios",
+        name: "menu-usuarios",
         component: UsuariosMenu,
       },
       {
-        path: 'TimeLine/:id?',
-        name: 'TimeLine',
+        path: "TimeLine/:id?",
+        name: "TimeLine",
         component: TimeLine,
       },
       {
-        path: 'gestion-ingresos/:id?',
-        name: 'gestion-ingresos',
+        path: "gestion-ingresos/:id?",
+        name: "gestion-ingresos",
         component: GestionIngresos,
       },
       {
-        path: 'gestion-ingresosl',
-        name: 'gestion-ingresosl',
+        path: "gestion-ingresosl",
+        name: "gestion-ingresosl",
         component: GestionIngresosl,
       },
       {
-        path: 'estados-DDAdmin',
-        name: 'estados-DDAdmin',
+        path: "estados-DDAdmin",
+        name: "estados-DDAdmin",
         component: EstadosDebidaDIligenciaAdmin,
       },
       {
-        path: 'gestion-ingresosm',
-        name: 'gestion-ingresosm',
+        path: "gestion-ingresosm",
+        name: "gestion-ingresosm",
         component: GestionIngresosM,
       },
       {
-        path: 'chat',
-        name: 'chat',
+        path: "chat",
+        name: "chat",
         component: ChatWhatsapp,
       },
       {
-        path: 'ingresos-pendientes',
-        name: 'ingresos-pendientes',
+        path: "ingresos-pendientes",
+        name: "ingresos-pendientes",
         component: TareasPendientesIngresos,
       },
       {
-        path: 'crm-intreraccion/:id?',
-        name: 'crm-intreraccion',
+        path: "crm-intreraccion/:id?",
+        name: "crm-intreraccion",
         component: CrmCliente,
       },
       {
-        path: 'crm-seguimiento',
-        name: 'crm-seguimiento',
+        path: "crm-seguimiento",
+        name: "crm-seguimiento",
         component: CrmSeguimiento,
       },
       {
-        path: 'crm-pendientes',
-        name: 'crm-pendientes',
+        path: "crm-pendientes",
+        name: "crm-pendientes",
         component: PendientesCrm,
       },
       {
-        path: 'indicadores-seiya',
-        name: 'indicadores-seiya',
+        path: "indicadores-seiya",
+        name: "indicadores-seiya",
         component: IndicadoresSeya,
       },
       {
-        path: 'gestionriesgos/:id?',
-        name: 'gestionriesgos',
+        path: "gestionriesgos/:id?",
+        name: "gestionriesgos",
         component: GestionRiesgos,
       },
       {
-        path: 'lista-riesgos',
-        name: 'lista-riesgos',
+        path: "lista-riesgos",
+        name: "lista-riesgos",
         component: ListaRiesgos,
       },
       {
-        path: 'guia-riesgos',
-        name: 'guia-riesgos',
+        path: "guia-riesgos",
+        name: "guia-riesgos",
         component: GuiaRiesgos,
       },
       {
-        path: 'landing',
-        name: 'landing',
+        path: "landing",
+        name: "landing",
         component: Landing,
       },
       {
-        path: 'configuraciones',
-        name: 'configuraciones',
+        path: "configuraciones",
+        name: "configuraciones",
         component: Configuraciones,
       },
       {
-        path: 'editarCliente',
-        name: 'editarCliente',
+        path: "editarCliente",
+        name: "editarCliente",
         component: EditarCliente,
       },
       {
-        path: 'cliente/:id?',
-        name: 'cliente',
+        path: "cliente/:id?",
+        name: "cliente",
         component: Cliente,
       },
     ],

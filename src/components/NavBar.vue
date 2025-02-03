@@ -112,6 +112,7 @@ export default {
       saludo: "Bienvenido",
       ruta: "",
       menu: [],
+      nombre: "",
       userlogued: { nombres: "", rol: "" },
       logo: [],
       user_id: "",
@@ -261,7 +262,6 @@ export default {
         if (response.data) {
           self.userlogued = response.data;
           self.user_type = response.data.tipo_usuario_id;
-          
           if (response.data.tipo_usuario_id == "3") {
             self.user_id = response.data.id;
             self.documento_identidad = response.data.num_doc;
@@ -273,8 +273,7 @@ export default {
             self.user_id = response.data.usuario_id;
             self.documento_identidad = response.data.documento_identidad;
             self.nombre = response.data.nombres;
-          }
-          self.autoriced = true;
+  self.autoriced = true;
           self.getMenu();
         } else {
           self.$router.push("/");
