@@ -223,14 +223,18 @@
             <div class="form-check">
               <label class="form-check-label">
                 <input
+                  :checked="autorizacion"
                   type="checkbox"
                   class="form-check-input"
                   name=""
                   id=""
-                  value="checkedValue"
-                  checked
-                />
-                Autoriza y acepta la po
+                  :value="autorizacion"
+                />He leído y acepto la
+                <span class="spanRegister"
+                  >Política de Tratamiento de Datos Personales de Saitemp
+                  S.A.</span
+                >, autorizando el uso de mis datos conforme a lo establecido en
+                dicha política.
               </label>
             </div>
           </div>
@@ -296,7 +300,7 @@ const cliente = reactive({
   telefono: "",
   doc_tip_id: "01",
 });
-/* const autorizacion = ref(false); */
+const autorizacion = ref(false);
 const error = "Campo requerido";
 const errorConfirmationNumDoc = ref("");
 const errorConfirmationEmail = ref("");

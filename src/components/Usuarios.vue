@@ -145,6 +145,7 @@ export default {
     // ruta() {
     //   this.autorizado(this.menu)
     // }
+   
   },
   created() {
     this.getUsers();
