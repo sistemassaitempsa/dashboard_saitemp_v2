@@ -232,7 +232,7 @@ export default {
       axios
         .get(self.URL_API + "api/v1/userlogued", config)
         .then(function (result) {
-          self.roluserlogued = result.data[0].rol;
+          self.roluserlogued = result.data.rol;
         })
         .catch(function (error) {
           if (error.response.data == "Unauthorized.") {
