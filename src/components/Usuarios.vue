@@ -37,6 +37,13 @@
             <option>30</option>
           </select>
         </div>
+        <div class="col-xs-3 col-md-4" v-if="users.length > 0">
+          <label for="exampleFormControlInput1" class="form-label">Tipo de usuario a listar</label>
+          <select class="form-select form-select-sm" @change="getUsers(tipo_usuario_id)" v-model="tipo_usuario_id"
+            aria-label="Default select example">
+            <option v-for="item in tipos_usuarios" :key="item" :value ="item.id">{{ item.nombre }}</option>
+          </select>
+        </div>
       </div>
       <div v-if="spinner">
         <div class="lds-ring">
@@ -64,31 +71,31 @@
             <tr v-for="(item, index) in users" :key="item.id">
               <th scope="row">{{ index + 1 }}</th>
               <td>{{ item.nombres }} {{ item.apellidos }}</td>
-              <td>{{ item.usuario }}</td>
+              <td>{{ item.correo }}</td>
               <td>{{ item.email }}</td>
               <td>{{ item.estado }}</td>
               <td>{{ item.rol }}</td>
               <td>
                 <button type="button" v-if="item.rol != 'S. Administrador'" class="btn btn-warning btn-sm"
-                  @click="actualizar(item.id_user)">
+                  @click="actualizar(item.usuario_id, item.tipo_usuario_id)">
                   <i class="bi bi-pencil-square"></i>
                 </button>
                 <button v-if="
                   item.rol == 'S. Administrador' &&
                   roluserlogued == 'S. Administrador'
-                " type="button" class="btn btn-warning btn-sm" @click="actualizar(item.id_user)">
+                " type="button" class="btn btn-warning btn-sm" @click="actualizar(item.usuario_id, item.tipo_usuario_id)">
                   <i class="bi bi-pencil-square"></i>
                 </button>
               </td>
               <td>
                 <button v-if="item.rol != 'S. Administrador'" type="button" class="btn btn-danger btn-sm"
-                  @click="messageDelete(item.id_user)">
+                  @click="messageDelete(item.usuario_id)">
                   <i class="bi bi-trash"></i>
                 </button>
                 <button v-if="
                   item.rol == 'S. Administrador' &&
                   roluserlogued == 'S. Administrador'
-                " type="button" class="btn btn-danger btn-sm" @click="messageDelete(item.id_user)">
+                " type="button" class="btn btn-danger btn-sm" @click="messageDelete(item.usuario_id)">
                   <i class="bi bi-trash"></i>
                 </button>
               </td>
@@ -136,6 +143,8 @@ export default {
       loading: false,
       tipo_usuario: false,
       mensaje_tipo_usuario: "Usuarios cliente",
+      tipo_usuario_id:"",
+      tipos_usuarios:[],
     };
   },
   mounted() {
@@ -145,10 +154,12 @@ export default {
     // ruta() {
     //   this.autorizado(this.menu)
     // }
+   
   },
   created() {
     this.getUsers();
     this.userLogued();
+    this.tipoUsuarios();
   },
   methods: {
     response(response) {
@@ -167,11 +178,11 @@ export default {
       });
       return rolasignado;
     },
-    getUsers() {
+    getUsers(tipo_usuario_id = 1) {
       let self = this;
       let config = this.configHeader();
       axios
-        .get(self.URL_API + "api/v1/users/" + self.cantidad, config) //se anexa un 0 a la consulta para el tipo de usuario
+        .get(self.URL_API + "api/v1/users/" + self.cantidad+'/'+tipo_usuario_id, config) //se anexa un 0 a la consulta para el tipo de usuario
         .then(function (result) {
           self.users = result.data.data;
           self.result = result;
@@ -190,6 +201,15 @@ export default {
           self.users = result.data.data;
           self.result = result;
           self.spinner = false;
+        });
+    },
+    tipoUsuarios() {
+      let self = this;
+      let config = this.configHeader();
+      axios
+        .get(self.URL_API + "api/v1/tipousuariologin", config) //se anexa un 0 a la consulta para el tipo de usuario
+        .then(function (result) {
+          self.tipos_usuarios = result.data;
         });
     },
     nuevoUsuario() {
@@ -223,8 +243,8 @@ export default {
           self.getUsers();
         });
     },
-    actualizar(id) {
-      this.$router.push({ name: "editarUsuario", params: { id: id } });
+    actualizar(id, tipo_usuario_id) {
+      this.$router.push({ name: "editarUsuario", params: { tipo:tipo_usuario_id, id: id } });
     },
     userLogued() {
       let self = this;

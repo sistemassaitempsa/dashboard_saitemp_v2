@@ -37,7 +37,6 @@
             />
           </div>
         </div>
-
         <div class="row mb-4">
           <div class="col">
             <label for="exampleInputPassword1" class="form-label"
@@ -332,7 +331,6 @@ button {
   justify-content: center;
   align-items: center;
 }
-
 .fadeOutUpBig-enter-active {
   animation: fadeInDownBig 1s; /* Animate.css: animación de entrada */
 }

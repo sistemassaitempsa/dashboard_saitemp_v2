@@ -58,8 +58,9 @@ import EstadosDebidaDIligenciaAdmin from "../components/EstadosDebidaDiligenciaA
 import EditarCliente from "../components/EditarCliente.vue";
 import InicioSesionCandidatos from "@/components/InicioSesionCandidatos.vue";
 import RecoverPassword from "@/components/RecoverPassword.vue";
+import Cliente from '../components/Cliente.vue';
 import FormularioInfoCandidatos from "@/components/FormularioInfoCandidatos.vue";
-import Cliente from "../components/Cliente.vue";
+
 
 // Configuración de rutas
 const routes = [
@@ -91,7 +92,7 @@ const routes = [
   {
     path: "/:pathMatch(.*)*",
     name: "catchAll",
-    component: InicioSesionCandidatos,
+    component: InicioSesion,
   },
   {
     path: "/navbar",
@@ -99,7 +100,7 @@ const routes = [
     component: NavBar,
     children: [
       {
-        path: "editarUsuario/:id",
+        path: "editarUsuario/:tipo?/:id",
         name: "editarUsuario",
         component: EditarUsuario,
       },

@@ -24,7 +24,6 @@
                 required
                 :class="{ 'is-invalid': !cliente.nombre }"
               />
-
               <div v-if="cliente.nombre == ''" class="invalid-feedback">
                 {{ error }}
               </div>
@@ -40,7 +39,6 @@
                 :class="{ 'is-invalid': !cliente.apellidos }"
                 required
               />
-
               <div v-if="cliente.apellidos == ''" class="invalid-feedback">
                 {{ error }}
               </div>
@@ -59,7 +57,6 @@
                 :class="{ 'is-invalid': numeroDocumentoError }"
                 required
               />
-
               <div v-if="numeroDocumentoError" class="invalid-feedback">
                 {{ numeroDocumentoError }}
               </div>
@@ -79,7 +76,6 @@
                 :class="{ 'is-invalid': errorConfirmationStyle }"
                 required
               />
-
               <div v-if="errorConfirmationStyle" class="invalid-feedback">
                 {{ errorConfirmationNumDoc }}
               </div>
@@ -113,7 +109,6 @@
                 @blur="isFocusTel = false"
                 :class="{ 'is-invalid': !cliente.telefono }"
               />
-
               <div v-if="cliente.telefono == ''" class="invalid-feedback">
                 {{ error }}
               </div>
@@ -169,7 +164,6 @@
                 :class="{ 'is-invalid': passwordError }"
                 required
               />
-
               <div v-if="passwordError" class="invalid-feedback">
                 {{ passwordError }}
               </div>
@@ -187,7 +181,6 @@
                 required
                 :class="{ 'is-invalid': errorConfirmationPassword }"
               />
-
               <div
                 v-show="errorConfirmationPasswordStyle"
                 class="invalid-feedback"
@@ -516,7 +509,6 @@ label {
 }
 
 /* Fila y Columna */
-
 .col {
   flex: 1;
   min-width: 250px;

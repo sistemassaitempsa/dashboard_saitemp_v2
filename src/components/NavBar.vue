@@ -1,10 +1,7 @@
 <template>
   <div v-if="autoriced">
     <NotificacionesSocket />
-    <nav
-      class="navbar navbar-expand-lg navbar-dark gradient-background"
-      style="height: 100px"
-    >
+    <nav class="navbar navbar-expand-lg navbar-dark gradient-background" style="height: 100px">
       <div class="container-fluid">
         <a class="navbar-brand" href="">
           <!-- <img
@@ -33,39 +30,23 @@
         >
           <span class="navbar-toggler-icon"></span>
         </button>
-        <div
-          :class="
-            collapse
-              ? 'collapse navbar-collapse show'
-              : 'collapse navbar-collapse'
-          "
-          id="navbarNav"
-        >
+        <div :class="collapse
+          ? 'collapse navbar-collapse show'
+          : 'collapse navbar-collapse'
+          " id="navbarNav">
           <ul class="navbar-nav">
-            <li
-              class="nav-item"
-              @click="collapese"
-              :style="actualizacion ? 'padding-top: 15px' : ''"
-            >
-              <router-link class="nav-link active" to=""
-                >{{ saludo }} {{ nombre }}</router-link
-              >
+            <li class="nav-item" @click="collapese" :style="actualizacion ? 'padding-top: 15px' : ''">
+              <router-link class="nav-link active" to="">{{ saludo }} {{ nombre }}</router-link>
             </li>
             <li>
               <CuentaRegresiva @timeElapsed="actualizacion = false" />
             </li>
-            <li
-              class="nav-item contrasena"
-              id="menu-lateral"
-              @click="ocultarMenu(), collapese()"
-            >
-              <i
-                :class="
-                  menu_lateral
-                    ? 'bi bi-text-indent-right'
-                    : 'bi bi-text-indent-left'
-                "
-              ></i>
+            <li class="nav-item contrasena" id="menu-lateral" @click="ocultarMenu(), collapese()">
+              <i :class="menu_lateral
+                ? 'bi bi-text-indent-right'
+                : 'bi bi-text-indent-left'
+                "></i>
+
               {{
                 menu_lateral ? "Ocultar menú lateral" : "Mostrar menú lateral"
               }}
@@ -104,31 +85,16 @@
             <i :class="item.icon"></i><span>{{ item.categoria }}</span>
           </button>
         </h2>
-        <div
-          :id="'flush-collapse' + option[index]"
-          class="accordion-collapse collapse"
-          :aria-labelledby="'flush-heading' + option[index]"
-          data-bs-parent="#accordionFlushExample"
-        >
-          <div
-            v-for="(item, index) in menu[index].opciones"
-            :key="index"
-            class="accordion-body"
-          >
-            <router-link
-              v-if="item.urlExterna == '0'"
-              class="nav-link active"
-              :to="
-                item.powerbi != ''
-                  ? '/' + item.url + '/' + item.nombre
-                  : item.url != ''
-                  ? '/' + item.url
-                  : '/navbar'
-              "
-              :style="{ 'pointer-events': item.disabled ? 'none' : 'auto' }"
-            >
-              <i :class="item.icon"></i
-              ><span>{{
+        <div :id="'flush-collapse' + option[index]" class="accordion-collapse collapse"
+          :aria-labelledby="'flush-heading' + option[index]" data-bs-parent="#accordionFlushExample">
+          <div v-for="(item, index) in menu[index].opciones" :key="index" class="accordion-body">
+            <router-link v-if="item.urlExterna == '0'" class="nav-link active" :to="item.powerbi != ''
+              ? '/' + item.url + '/' + item.nombre
+              : item.url != ''
+                ? '/' + item.url
+                : '/navbar'
+              " :style="{ 'pointer-events': item.disabled ? 'none' : 'auto' }">
+              <i :class="item.icon"></i><span>{{
                 item.nombre == "rol" ? "Rol: " + userlogued.rol : item.nombre
               }}</span>
             </router-link>
@@ -215,9 +181,6 @@ export default {
     },
   },
   mounted() {
-    // window.Echo.channel("channel").listen("NotificacionSeiya", (e) => {
-    //   console.log(e.message);
-    // });
   },
   created() {
     this.urlExterna();
@@ -308,23 +271,9 @@ export default {
       localStorage.setItem("menu_lateral", this.menu_lateral);
     },
     actualizar() {
-      // if( userlogued.rol != 'Cliente'){
-
-      // }else{
-
-      // }
-      let ruta = "";
-      let id = "";
-      if (this.permisos[34].autorizado) {
-        ruta = "editarUsuario";
-        id = this.user_id;
-      } else {
-        ruta = "cliente";
-        id = this.documento_identidad;
-      }
       this.$router.push({
-        name: ruta,
-        params: { id: id },
+        name: 'editarUsuario',
+        params: { tipo: this.user_type, id: this.user_id },
       });
     },
     async userLogued() {
@@ -336,31 +285,23 @@ export default {
           config
         );
         if (response.data) {
-          self.userlogued = response.data;
-          self.user_type = response.data.tipo_usuario_id;
-          if (response.data.tipo_usuario_id == "3") {
-            self.user_id = response.data.id;
-            self.documento_identidad = response.data.num_doc;
-            self.nombre = response.data.primer_nombre.concat(
-              " ",
-              response.data.primer_apellido
-            );
-            self.autoriced = true;
-            self.getMenu();
-          } else if (response.data.tipo_usuario_id == "1") {
-            self.user_id = response.data.usuario_id;
-            self.documento_identidad = response.data.documento_identidad;
-            self.nombre = response.data.nombres;
-            self.autoriced = true;
-            self.getMenu();
-          } else {
-            self.$router.push("/");
-          }
+          self.configuraUsuario(response.data)
+        }
+        else {
+          self.$router.push("/");
         }
       } catch (error) {
         console.log(error);
         self.$router.push("/");
       }
+    },
+    configuraUsuario(data) {
+      let self = this
+      self.userlogued = data;
+      self.user_type = data.tipo_usuario_id;
+      self.user_id = data.usuario_id;
+      self.autoriced = true;
+      self.getMenu();
     },
     getMenu() {
       let self = this;
