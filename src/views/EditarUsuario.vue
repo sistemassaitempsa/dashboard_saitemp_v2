@@ -6,24 +6,20 @@
   </div>
 </template>
 <script>
-import Cliente from '@/components/Cliente.vue';
-import FormularioUsuario from '@/components/FormularioUsuario.vue';
+import Cliente from "@/components/Cliente.vue";
+import FormularioUsuario from "@/components/FormularioUsuario.vue";
 import EditarUsuarioCandidato from "@/components/EditarUsuarioCandidato.vue";
 export default {
-    components: {
-        FormularioUsuario,
-        Cliente
-    },
-    props:{
-        user_type:{
-            type:String,
-            required:true
-        }
-    },
-  },
   components: {
     FormularioUsuario,
+    Cliente,
     EditarUsuarioCandidato,
+  },
+  props: {
+    user_type: {
+      type: String,
+      required: true,
+    },
   },
   data() {
     return {
