@@ -2,13 +2,19 @@
   <transition name="fadeInUpBig" appear>
     <div class="cardRegister">
       <div class="principalContainerRegister">
-        <div class="logo logoRegister">
-          <img src="@/assets/logo1.png" alt="" />
+        <div class="logosContainer">
+          <div class="logo saitemp">
+            <img src="@/assets/logo1.png" alt="" />
+          </div>
+          <div class="logo">
+            <img src="@/assets/logoAlInstante.png" alt="" />
+          </div>
         </div>
         <form class="formRegister" action="">
-          <h2>Registro candidatos</h2>
-          <div class="row">
-            <div class="col floating-label-group">
+          <h2 class="mb-5">Crea tu cuenta</h2>
+          <div class="row mb-4">
+            <div class="col">
+              <label for="" class="form-label">Nombres:*</label>
               <input
                 type="text"
                 v-model="cliente.nombre"
@@ -18,14 +24,12 @@
                 required
                 :class="{ 'is-invalid': !cliente.nombre }"
               />
-              <label :class="{ active: isFocusNombre || cliente.nombre }"
-                >Nombres *</label
-              >
               <div v-if="cliente.nombre == ''" class="invalid-feedback">
                 {{ error }}
               </div>
             </div>
-            <div class="col floating-label-group">
+            <div class="col">
+              <label for="" class="form-label">Apellidos:*</label>
               <input
                 type="text"
                 class="form-control"
@@ -35,16 +39,14 @@
                 :class="{ 'is-invalid': !cliente.apellidos }"
                 required
               />
-              <label :class="{ active: isFocusApellidos || cliente.apellidos }"
-                >Apellidos *</label
-              >
               <div v-if="cliente.apellidos == ''" class="invalid-feedback">
                 {{ error }}
               </div>
             </div>
           </div>
-          <div class="row">
-            <div class="col floating-label-group">
+          <div class="row mb-4">
+            <div class="col">
+              <label for="" class="form-label">Numero de documento:*</label>
               <input
                 type="text"
                 class="form-control"
@@ -55,15 +57,14 @@
                 :class="{ 'is-invalid': numeroDocumentoError }"
                 required
               />
-              <label
-                :class="{ active: isFocusNumDoc || cliente.numero_documento }"
-                >Número de documento *</label
-              >
               <div v-if="numeroDocumentoError" class="invalid-feedback">
                 {{ numeroDocumentoError }}
               </div>
             </div>
-            <div class="col floating-label-group">
+            <div class="col">
+              <label for="" class="form-label"
+                >Confirme número de documento:*</label
+              >
               <input
                 type="text"
                 class="form-control"
@@ -75,20 +76,14 @@
                 :class="{ 'is-invalid': errorConfirmationStyle }"
                 required
               />
-              <label
-                :class="{
-                  active:
-                    isFocusNumDocConfirmation || numero_documento_confirmation,
-                }"
-                >Confirme número de documento *</label
-              >
               <div v-if="errorConfirmationStyle" class="invalid-feedback">
                 {{ errorConfirmationNumDoc }}
               </div>
             </div>
           </div>
-          <div class="row">
-            <div class="col floating-label-group">
+          <div class="row mb-4">
+            <div class="col">
+              <label for="" class="form-label">Tipo de documento:*</label>
               <select
                 class="form-select"
                 name=""
@@ -104,7 +99,8 @@
                 </option>
               </select>
             </div>
-            <div class="col floating-label-group">
+            <div class="col">
+              <label for="" class="form-label">Teléfono:*</label>
               <input
                 type="text"
                 class="form-control"
@@ -113,19 +109,14 @@
                 @blur="isFocusTel = false"
                 :class="{ 'is-invalid': !cliente.telefono }"
               />
-              <label
-                :class="{
-                  active: isFocusTel || cliente.telefono,
-                }"
-                >Teléfono *</label
-              >
               <div v-if="cliente.telefono == ''" class="invalid-feedback">
                 {{ error }}
               </div>
             </div>
           </div>
-          <div class="row">
-            <div class="col floating-label-group">
+          <div class="row mb-4">
+            <div class="col">
+              <label for="" class="form-label">Correo electónico:*</label>
               <input
                 type="text"
                 class="form-control"
@@ -136,17 +127,14 @@
                 :class="{ 'is-invalid': emailError }"
                 required
               />
-              <label
-                :class="{
-                  active: isFocusEmail || cliente.email,
-                }"
-                >Correo electrónico *</label
-              >
               <div v-if="emailError" class="invalid-feedback">
                 {{ emailError }}
               </div>
             </div>
-            <div class="col floating-label-group">
+            <div class="col">
+              <label for="" class="form-label"
+                >Confirme correo electrónico</label
+              >
               <input
                 type="text"
                 class="form-control"
@@ -158,19 +146,14 @@
                 :class="{ 'is-invalid': errorConfirmationEmail }"
                 required
               />
-              <label
-                :class="{
-                  active: isFocusEmailConfirmation || email_confirmation,
-                }"
-                >Confirme correo electrónico *</label
-              >
               <div v-if="errorConfirmationEmailStyle" class="invalid-feedback">
                 {{ errorConfirmationEmail }}
               </div>
             </div>
           </div>
-          <div class="row">
-            <div class="col floating-label-group">
+          <div class="row mb-4">
+            <div class="col">
+              <label for="" class="form-label">Contraseña:*</label>
               <input
                 type="password"
                 class="form-control"
@@ -181,17 +164,12 @@
                 :class="{ 'is-invalid': passwordError }"
                 required
               />
-              <label
-                :class="{
-                  active: isFocusPassword || cliente.password,
-                }"
-                >Contraseña *</label
-              >
               <div v-if="passwordError" class="invalid-feedback">
                 {{ passwordError }}
               </div>
             </div>
-            <div class="col floating-label-group">
+            <div class="col">
+              <label for="" class="form-label">Confirme contraseña:*</label>
               <input
                 type="password"
                 class="form-control"
@@ -203,14 +181,6 @@
                 required
                 :class="{ 'is-invalid': errorConfirmationPassword }"
               />
-              <label
-                :class="{
-                  active:
-                    isFocusPasswordConfirmation ||
-                    cliente.password_confirmation,
-                }"
-                >Confirme contraseña *</label
-              >
               <div
                 v-show="errorConfirmationPasswordStyle"
                 class="invalid-feedback"
@@ -219,7 +189,7 @@
               </div>
             </div>
           </div>
-          <div class="row">
+          <div class="row mb-4">
             <div class="form-check">
               <label class="form-check-label">
                 <input
@@ -228,7 +198,7 @@
                   class="form-check-input"
                   name=""
                   id=""
-                  :value="autorizacion"
+                  v-model="autorizacion"
                 />He leído y acepto la
                 <span class="spanRegister"
                   >Política de Tratamiento de Datos Personales de Saitemp
@@ -238,14 +208,14 @@
               </label>
             </div>
           </div>
-          <div class="row mb-4">
+          <div class="row mb-4 mb-4">
             <div class="col">
               <button class="btn btn-success" @click="saveForm">
                 Registrarse
               </button>
             </div>
           </div>
-          <div class="row mb-2">
+          <div class="row">
             <div class="col">
               <label for=""
                 >¿Ya se encuentra registrado?
@@ -287,10 +257,10 @@ const {
 const { showAlert } = useAlerts();
 const URL_API = process.env.VUE_APP_URL_API;
 const emit = defineEmits(["toogleRegisterChild"]);
+const tiposDocumentos = ref([]);
 const numero_documento_confirmation = ref("");
 const email_confirmation = ref("");
-const tiposDocumentos = ref([]);
-const cliente = reactive({
+let cliente = reactive({
   nombre: "",
   apellidos: "",
   numero_documento: "",
@@ -364,31 +334,72 @@ const validateNumeroDocConfimation = () => {
     errorConfirmationStyle.value = false;
   }
 };
+const limpiarFormulario = () => {
+  numero_documento_confirmation.value = "";
+  email_confirmation.value = "";
+  cliente = {
+    nombre: "",
+    apellidos: "",
+    numero_documento: "",
+    email: "",
+    password: "",
+    password_confirmation: "",
+    telefono: "",
+    doc_tip_id: "01",
+  };
+  autorizacion.value = false;
+  errorConfirmationNumDoc.value = "";
+  errorConfirmationEmail.value = "";
+  errorConfirmationPassword.value = "";
+  errorConfirmationPasswordStyle.value = true;
+  errorConfirmationEmailStyle.value = true;
+  errorConfirmationStyle.value = true;
+  isFocusNombre.value = false;
+  isFocusApellidos.value = false;
+  isFocusNumDoc.value = false;
+  isFocusNumDocConfirmation.value = false;
+  isFocusTel.value = false;
+  isFocusEmail.value = false;
+  isFocusEmailConfirmation.value = false;
+  isFocusPassword.value = false;
+  isFocusPasswordConfirmation.value = false;
+  validateEmail(cliente.email);
+  validatePassword(cliente.password);
+  validateNumeroDocumento(cliente.numero_documento);
+  validatePasswordConfimation();
+  validateEmailConfimation();
+  validateNumeroDocConfimation();
+};
 const saveForm = async () => {
-  if (
-    validateForm(cliente) &&
-    errorConfirmationPasswordStyle.value == false &&
-    errorConfirmationEmailStyle.value == false &&
-    errorConfirmationStyle.value == false &&
-    cliente.nombre != "" &&
-    cliente.apellidos != "" &&
-    cliente.telefono != ""
-  ) {
-    try {
-      const response = await axios.post(
-        URL_API + "api/v1/registerCandidatos",
-        cliente
-      );
-
-      showAlert(response.data.message, response.data.status);
-    } catch (error) {
-      if (error.status == 422) {
-        showAlert(error.response.data.message, "error");
-        console.log(error);
+  if (autorizacion.value) {
+    if (
+      validateForm(cliente) &&
+      errorConfirmationPasswordStyle.value == false &&
+      errorConfirmationEmailStyle.value == false &&
+      errorConfirmationStyle.value == false &&
+      cliente.nombre != "" &&
+      cliente.apellidos != "" &&
+      cliente.telefono != ""
+    ) {
+      try {
+        const response = await axios.post(
+          URL_API + "api/v1/registerCandidatos",
+          cliente
+        );
+        limpiarFormulario();
+        showAlert(response.data.message, response.data.status);
+        emitLoginToggle();
+      } catch (error) {
+        if (error.status == 422) {
+          showAlert(error.response.data.message, "error");
+          console.log(error);
+        }
       }
+    } else {
+      showAlert("Verifique los campos necesarios", "error");
     }
   } else {
-    showAlert("Verifique los campos necesarios", "error");
+    showAlert("Debe aceptar la politica de tratamiento de datos", "error");
   }
 };
 
@@ -407,21 +418,65 @@ onMounted(() => {});
 
 <style scoped>
 /* Contenedor Principal */
+label {
+  float: left;
+}
 .cardRegister {
   width: 80%;
   max-width: 1000px;
   margin: 1vh auto;
-  padding: 2em;
-  padding-left: 4em;
-  padding-right: 4em;
-  background-color: rgba(239, 237, 237, 1);
+  padding: 4em;
+  padding-top: 4em;
+  padding-bottom: 4em;
+  background-color: rgb(255, 255, 255);
   box-shadow: rgba(0, 0, 0, 0.25) 0px 14px 28px,
     rgba(0, 0, 0, 0.22) 0px 10px 10px;
   border-radius: 10px;
   z-index: 100;
   position: relative;
 }
+.btn-success {
+  background: linear-gradient(
+    90deg,
+    rgba(0, 107, 63, 1) 0%,
+    rgba(19, 114, 148, 1) 51%,
+    rgba(26, 148, 56, 1) 100%
+  );
+  transition: all 0.5s ease-out; /* Cambiado a 0.5s */
+  border: none;
+  color: white;
+  position: relative;
+  overflow: hidden;
+}
 
+.btn-success:hover {
+  background: linear-gradient(
+    90deg,
+    rgba(0, 107, 63, 1) 0%,
+    rgba(19, 114, 148, 1) 100%
+  );
+  background-size: 200% auto;
+  background-position: right center; /* Crea efecto de movimiento */
+}
+.btn-success::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.2),
+    transparent
+  );
+  transition: all 0.5s;
+}
+
+.btn-success:hover::before {
+  left: 100%;
+}
 /* Contenedor del Logo y Formulario */
 .principalContainerRegister {
   display: flex;
@@ -430,30 +485,30 @@ onMounted(() => {});
   justify-content: center;
   width: 100%;
 }
+.logosContainer {
+  display: flex;
+  gap: 20%;
+}
 
 /* Logo */
-.logoRegister {
-  width: 10em;
+.logo {
+  width: 200px;
   margin: auto;
+  margin-bottom: 1em;
 }
 
-.logoRegister img {
+.logo img {
   width: 100%;
-  border-radius: 10px;
 }
-
+.saitemp {
+  width: 150px;
+}
 /* Formulario */
 .formRegister {
   width: 100%;
 }
 
 /* Fila y Columna */
-.row {
-  display: flex;
-  flex-wrap: wrap;
-  margin-bottom: 1rem;
-}
-
 .col {
   flex: 1;
   min-width: 250px;
@@ -560,6 +615,17 @@ onMounted(() => {});
 
 /* Responsividad */
 @media (max-width: 768px) {
+  .logosContainer {
+    width: 80%;
+  }
+  .logo {
+    width: 150px;
+    margin: auto;
+    margin-bottom: 1em;
+  }
+  .saitemp {
+    width: 100px;
+  }
   .cardRegister {
     left: 5%;
   }
@@ -567,7 +633,7 @@ onMounted(() => {});
     flex-direction: column;
     gap: 2em;
   }
-  .row {
+  .row mb-4 {
     flex-direction: column;
   }
 
@@ -580,21 +646,12 @@ onMounted(() => {});
     padding: 0 1rem;
   }
 
-  .logoRegister {
-    width: 120px;
-    margin-bottom: 1rem;
-  }
-
   .cardRegister {
     padding: 2em 1em;
   }
 }
 
 @media (max-width: 480px) {
-  .logoRegister {
-    width: 100px;
-  }
-
   .floating-label-group label.active {
     left: 8px;
   }

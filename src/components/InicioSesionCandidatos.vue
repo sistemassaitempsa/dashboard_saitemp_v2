@@ -8,15 +8,21 @@
         loop
         class="videoBackground"
       ></video>
+      <div class="background_color"></div>
     </div>
 
     <div v-if="toogleLogin" :class="classCardLogin">
-      <div class="logo">
-        <img src="@/assets/logo1.png" alt="" />
+      <div class="logosContainer">
+        <div class="logo saitemp">
+          <img src="@/assets/logo1.png" alt="" />
+        </div>
+        <div class="logo">
+          <img src="@/assets/logoAlInstante.png" alt="" />
+        </div>
       </div>
-      <h2>Acceso candidatos</h2>
+      <h2 class="mb-5">Iniciar sesión</h2>
       <form>
-        <div class="row mb-3">
+        <div class="row mb-4">
           <div class="col">
             <label for="exampleInputEmail1" class="form-label"
               >Usuario/correo electrónico:</label
@@ -31,8 +37,7 @@
             />
           </div>
         </div>
-
-        <div class="row mb-3">
+        <div class="row mb-4">
           <div class="col">
             <label for="exampleInputPassword1" class="form-label"
               >Contraseña:</label
@@ -65,7 +70,7 @@
             </div>
           </div>
         </div>
-        <div class="row mb-3">
+        <div class="row mb-4">
           <router-link to="/recuperarcontrasena">
             <h6
               for="exampleInputPassword1"
@@ -76,12 +81,12 @@
             </h6>
           </router-link>
         </div>
-        <div class="row mb-3">
+        <div class="row mb-4">
           <div class="col">
             <button class="btn btn-success" @click="login()">Ingresar</button>
           </div>
         </div>
-        <div class="row mb-2">
+        <div class="row">
           <div class="col">
             <label for=""
               >¿Aún no tiene cuenta?
@@ -171,6 +176,48 @@ export default {
 };
 </script>
 <style scoped>
+.btn-success {
+  background: linear-gradient(
+    90deg,
+    rgba(0, 107, 63, 1) 0%,
+    rgba(19, 114, 148, 1) 51%,
+    rgba(26, 148, 56, 1) 100%
+  );
+  transition: all 0.5s ease-out; /* Cambiado a 0.5s */
+  border: none;
+  color: white;
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-success:hover {
+  background: linear-gradient(
+    90deg,
+    rgba(0, 107, 63, 1) 0%,
+    rgba(19, 114, 148, 1) 100%
+  );
+  background-size: 200% auto;
+  background-position: right center; /* Crea efecto de movimiento */
+}
+.btn-success::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.2),
+    transparent
+  );
+  transition: 0.5s;
+}
+
+.btn-success:hover::before {
+  left: 100%;
+}
 .containerPrincipal {
   display: flex;
   justify-content: center;
@@ -179,11 +226,17 @@ export default {
   position: relative;
 }
 .card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
   width: 90%;
   max-width: 30em;
   margin: auto;
-  padding: 2em;
-  background-color: rgba(239, 237, 237, 1);
+  padding: 4em;
+  padding-top: 4em;
+  padding-bottom: 4em;
+  background-color: rgb(255, 255, 255);
   box-shadow: rgba(0, 0, 0, 0.25) 0px 14px 28px,
     rgba(0, 0, 0, 0.22) 0px 10px 10px;
   position: relative;
@@ -215,7 +268,7 @@ button {
 .logo {
   width: 150px;
   margin: auto;
-  border-radius: 15px;
+  margin-bottom: 1em;
 }
 .logoRegister {
   width: 80px;
@@ -223,7 +276,6 @@ button {
 }
 .logo img {
   width: 100%;
-  border-radius: 15px;
 }
 
 #emailHelp {
@@ -274,7 +326,7 @@ button {
   height: 100%;
   width: 100%;
   overflow: hidden;
-  opacity: 0.3;
+  opacity: 0.8;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -313,5 +365,28 @@ button {
   width: 100%;
   height: 100%;
   object-fit: cover;
+}
+.logosContainer {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  padding: 0;
+  width: 90%;
+}
+.saitemp {
+  width: 100px;
+}
+.background_color {
+  height: 100%;
+  width: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  background: linear-gradient(
+    90deg,
+    rgba(0, 107, 62, 0.801) 0%,
+    rgba(19, 114, 148, 0.815) 51%,
+    rgba(26, 148, 56, 0.801) 100%
+  );
 }
 </style>

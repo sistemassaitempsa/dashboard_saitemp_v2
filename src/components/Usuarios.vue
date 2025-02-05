@@ -248,9 +248,11 @@ export default {
     },
     userLogued() {
       let self = this;
+      const userType = localStorage.getItem("user_type");
+      console.log("pasé por el log");
       let config = this.configHeader();
       axios
-        .get(self.URL_API + "api/v1/userlogued", config)
+        .get(self.URL_API + "api/v1/userlogued/" + userType, config)
         .then(function (result) {
           self.roluserlogued = result.data.rol;
         })

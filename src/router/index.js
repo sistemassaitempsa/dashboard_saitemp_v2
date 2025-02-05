@@ -32,7 +32,7 @@ import ClienteSupervision from "../components/ClienteSupervision.vue";
 // import OrdenServicio from '../components/OrdenServicioantiguo.vue';
 import OrdenServicio from "../components/OrdenServicio.vue";
 import OrdenServicios from "../components/OrdenServicios.vue";
-// import ListaServicio from '../components/ListaServicio.vue';
+import ListaServicio from "../components/ListaServicio.vue";
 import SolicitudesOrdenServicio from "../components/SolicitudesOrdenServicio.vue";
 import PieChar from "../components/PieChar.vue";
 import GraficosGerencia from "../components/GraficosGerencia.vue";
@@ -60,6 +60,7 @@ import InicioSesionCandidatos from "@/components/InicioSesionCandidatos.vue";
 import RecoverPassword from "@/components/RecoverPassword.vue";
 import Cliente from '../components/Cliente.vue';
 import FormularioInfoCandidatos from "@/components/FormularioInfoCandidatos.vue";
+
 
 // Configuración de rutas
 const routes = [
@@ -239,8 +240,13 @@ const routes = [
         component: OrdenServicio,
       },
       {
-        path: 'orden-servicios/:id?',
-        name: 'orden-servicios',
+        path: "lista-servicios/:id?",
+        name: "lista-servicios",
+        component: ListaServicio,
+      },
+      {
+        path: "orden-servicios/:id?",
+        name: "orden-servicios",
         component: OrdenServicios,
       },
       {
@@ -359,8 +365,8 @@ const routes = [
         component: EditarCliente,
       },
       {
-        path: 'cliente/:id?',
-        name: 'cliente',
+        path: "cliente/:id?",
+        name: "cliente",
         component: Cliente,
       },
     ],
