@@ -32,7 +32,7 @@ import ClienteSupervision from "../components/ClienteSupervision.vue";
 // import OrdenServicio from '../components/OrdenServicioantiguo.vue';
 import OrdenServicio from "../components/OrdenServicio.vue";
 import OrdenServicios from "../components/OrdenServicios.vue";
-import ListaServicio from '../components/ListaServicio.vue';
+// import ListaServicio from '../components/ListaServicio.vue';
 import SolicitudesOrdenServicio from "../components/SolicitudesOrdenServicio.vue";
 import PieChar from "../components/PieChar.vue";
 import GraficosGerencia from "../components/GraficosGerencia.vue";
@@ -91,7 +91,7 @@ const routes = [
   {
     path: "/:pathMatch(.*)*",
     name: "catchAll",
-    component: InicioSesionCandidatos,
+    component: InicioSesion,
   },
   {
     path: "/navbar",
@@ -99,7 +99,7 @@ const routes = [
     component: NavBar,
     children: [
       {
-        path: "editarUsuario/:id",
+        path: "editarUsuario/:tipo?/:id",
         name: "editarUsuario",
         component: EditarUsuario,
       },
