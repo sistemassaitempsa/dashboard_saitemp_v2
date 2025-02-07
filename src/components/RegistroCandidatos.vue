@@ -112,6 +112,7 @@
                 @focus="isFocusTel = true"
                 @blur="isFocusTel = false"
                 :class="{ 'is-invalid': !cliente.telefono }"
+                maxlength="10"
               />
 
               <div v-if="cliente.telefono == ''" class="invalid-feedback">
