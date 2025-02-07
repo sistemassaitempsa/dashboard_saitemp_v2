@@ -1,13 +1,15 @@
 <template>
   <div class="containerPrincipal">
     <div class="videoContainer">
-      <video
+      <!--      <video
         src="../assets/video.mp4"
         autoplay
         muted
         loop
         class="videoBackground"
       ></video>
+      <div class="background_color"></div> -->
+      <img src="@/assets/imgLogin2.jpg" alt="" class="imgLogin" />
       <div class="background_color"></div>
     </div>
 
@@ -221,12 +223,13 @@ export default {
 }
 .containerPrincipal {
   display: flex;
-  justify-content: center;
-  align-items: flex-start;
   min-height: 100vh;
   position: relative;
+  justify-content: center;
+  align-items: center;
 }
 .card {
+  right: -25%;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -282,6 +285,12 @@ button {
 #emailHelp {
   color: red;
 }
+.imgLogin {
+  width: 100%;
+  box-sizing: content-box;
+  position: absolute;
+  right: 8%;
+}
 .labelPassword {
   text-align: right;
   color: rgb(67, 151, 196);
@@ -332,7 +341,21 @@ button {
   justify-content: center;
   align-items: center;
 }
-
+.background_color {
+  height: 180%;
+  width: 100%;
+  position: absolute;
+  top: -20%;
+  left: 45%;
+  border-radius: 50%;
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0.479) 0%,
+    rgba(255, 255, 255, 0.623) 10%,
+    rgba(255, 255, 255, 1) 20%,
+    rgba(255, 255, 255, 1) 100%
+  );
+}
 .fadeOutUpBig-enter-active {
   animation: fadeInDownBig 1s; /* Animate.css: animación de entrada */
 }
@@ -348,6 +371,27 @@ button {
 }
 .registerContainer {
   width: 60%;
+}
+@media (max-width: 1100px) {
+  .card {
+    right: 0;
+  }
+  .imgLogin {
+    object-fit: fill;
+    right: 0;
+    position: relative;
+  }
+  .background_color {
+    top: 0%;
+    left: 0%;
+    border-radius: 0%;
+    background: linear-gradient(
+      90deg,
+      rgba(0, 107, 62, 0.712) 10%,
+      rgba(19, 114, 148, 0.616) 20%,
+      rgba(26, 148, 56, 0.562) 100%
+    );
+  }
 }
 @media (max-width: 768px) {
   .containerPrincipal {
@@ -377,18 +421,5 @@ button {
 }
 .saitemp {
   width: 100px;
-}
-.background_color {
-  height: 100%;
-  width: 100%;
-  position: absolute;
-  top: 0;
-  left: 0;
-  background: linear-gradient(
-    90deg,
-    rgba(0, 107, 62, 0.801) 0%,
-    rgba(19, 114, 148, 0.815) 51%,
-    rgba(26, 148, 56, 0.801) 100%
-  );
 }
 </style>

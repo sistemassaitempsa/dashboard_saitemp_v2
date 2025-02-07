@@ -223,6 +223,8 @@
           <div class="col mb-3">
             <label class="form-label">Fecha de expedición: *</label>
             <input
+              @keydown.prevent
+              @click="abrirCalendario"
               type="date"
               class="form-control"
               id="fecha_expedicion"
@@ -296,6 +298,8 @@
           <div class="col mb-3">
             <label class="form-label">Fecha de constitución: * </label>
             <input
+              @keydown.prevent
+              @click="abrirCalendario"
               type="date"
               class="form-control"
               aria-describedby="emailHelp"
@@ -2499,6 +2503,8 @@
           <div class="col">
             <label for="exampleInputEmail1" class="form-label">Fecha</label>
             <input
+              @keydown.prevent
+              @click="abrirCalendario"
               type="date"
               class="form-control"
               id="exampleInputEmail1"
@@ -3487,28 +3493,28 @@
             conformidad con lo establecido en la ley. El responsable del
             tratamiento de sus datos personales es SAITEMP S.A. sociedad
             legalmente existente de acuerdo con la leyes Colombianas,
-            domiciliado en la ciudad de MEDELLÍN, en la CALLE 51 # 49-11 PISO
-            10, quien recogerá dichos datos a través de sus diferentes canales y
-            serán usados para a) Ofrecer o informarle productos b) Para hacerle
-            llegar información publicitaria sobre promociones c) Atender o
-            formalizar cualquier solicitud relacionada con nuestro objeto social
-            e) Controles estadísticos sobre proveedores, clientes f) Establecer
-            rotación de los empleados. Usted podrá ejercer los derechos que la
-            ley prevé, siguiendo los procedimientos establecidos en nuestras
-            políticas y procedimientos de Protección de datos Personales
-            publicados en la página web de la empresa, http://www.saitempsa.com,
-            o solicitando la información que requiera a través de nuestro correo
-            misdatos@saitempsa.com o llamando al teléfono: (4) 4485744 Tenga en
-            cuenta que el ejercicio de sus derechos no es requisito previo ni
-            impide el ejercicio de otros derechos y que cualquier modificación
-            al presente aviso le será avisado a través de nuestra página Web.
-            Leído lo anterior, autorizo de manera previa, explicita e inequívoca
-            a la sociedad SAITEMP S.A., para el tratamiento de los datos
-            personales suministrados por mi persona para las finalidades aquí
-            establecidas. Declaro que soy el titular de la información reportada
-            en este formato para autorizar el tratamiento de datos personales y
-            que la he suministrado de forma voluntaria y es completa, veraz,
-            exacta y verídica.
+            domiciliado en la ciudad de MEDELLÍN, en la CALLE 51 # 49-11 oficina
+            1005 , quien recogerá dichos datos a través de sus diferentes
+            canales y serán usados para a) Ofrecer o informarle productos b)
+            Para hacerle llegar información publicitaria sobre promociones c)
+            Atender o formalizar cualquier solicitud relacionada con nuestro
+            objeto social e) Controles estadísticos sobre proveedores, clientes
+            f) Establecer rotación de los empleados. Usted podrá ejercer los
+            derechos que la ley prevé, siguiendo los procedimientos establecidos
+            en nuestras políticas y procedimientos de Protección de datos
+            Personales publicados en la página web de la empresa,
+            http://www.saitempsa.com, o solicitando la información que requiera
+            a través de nuestro correo misdatos@saitempsa.com o llamando al
+            teléfono: (4) 4485744 Tenga en cuenta que el ejercicio de sus
+            derechos no es requisito previo ni impide el ejercicio de otros
+            derechos y que cualquier modificación al presente aviso le será
+            avisado a través de nuestra página Web. Leído lo anterior, autorizo
+            de manera previa, explicita e inequívoca a la sociedad SAITEMP S.A.,
+            para el tratamiento de los datos personales suministrados por mi
+            persona para las finalidades aquí establecidas. Declaro que soy el
+            titular de la información reportada en este formato para autorizar
+            el tratamiento de datos personales y que la he suministrado de forma
+            voluntaria y es completa, veraz, exacta y verídica.
           </p>
           <div style="display: flex">
             <div class="form-check m-2">
@@ -3534,6 +3540,80 @@
               />
               No acepto
             </div>
+          </div>
+        </div>
+      </div>
+      <h6 v-if="$route.params.id != ''" class="tituloseccion">
+        Profesionales encargados.
+      </h6>
+      <div id="seccion" v-if="$route.params.id != ''">
+        <div class="row">
+          <div class="col">
+            <SearchList
+              nombreCampo="Profesional de nómina:"
+              nombreItem="nombre"
+              :consulta="consulta_profesional_nomina"
+              :registros="profesionales_nomina"
+              eventoCampo="getProfesionalNomina"
+              @getProfesionalNomina="getProfesionalNomina"
+              placeholder="Seleccione una opción"
+            />
+          </div>
+          <div class="col">
+            <label for="" class="form-label">Anotaciones de nomina</label>
+            <textarea
+              class="form-control"
+              id="exampleInputEmail1"
+              maxlength="400"
+              aria-describedby="emailHelp"
+              v-model="anotaciones_nomina"
+            />
+          </div>
+        </div>
+        <div class="row">
+          <div class="col">
+            <SearchList
+              nombreCampo="Profesional de cartera:"
+              nombreItem="nombre"
+              :consulta="consulta_profesional_cartera"
+              :registros="profesionales_cartera"
+              eventoCampo="getProfesionalCartera"
+              @getProfesionalCartera="getProfesionalCartera"
+              placeholder="Seleccione una opción"
+            />
+          </div>
+          <div class="col">
+            <label for="" class="form-label">Anotaciones de cartera</label>
+            <textarea
+              class="form-control"
+              id="exampleInputEmail1"
+              maxlength="400"
+              aria-describedby="emailHelp"
+              v-model="anotaciones_cartera"
+            />
+          </div>
+        </div>
+        <div class="row">
+          <div class="col">
+            <SearchList
+              nombreCampo="Profesional de SST:"
+              nombreItem="nombre"
+              :consulta="consulta_profesional_sst"
+              :registros="profesionales_sst"
+              eventoCampo="getProfesionalesSST"
+              @getProfesionalesSST="getProfesionalesSST"
+              placeholder="Seleccione una opción"
+            />
+          </div>
+          <div class="col">
+            <label for="" class="form-label">Anotaciones de SST</label>
+            <textarea
+              class="form-control"
+              id="exampleInputEmail1"
+              maxlength="400"
+              aria-describedby="emailHelp"
+              v-model="anotaciones_sst"
+            />
           </div>
         </div>
       </div>
@@ -3850,20 +3930,27 @@ export default {
     ModalHistoricoActualizaciones,
   },
   mixins: [Scroll, Alerts, Token, Permisos],
+
   props: {
-    menu: {
-      type: Array,
-      required: true, // Cambia a true si es obligatorio
-      default: () => [], // Arreglo vacío como valor predeterminado
-    },
+    menu: [],
     userlogued: {
-      type: Object,
-      required: false, // Cambia a true si es obligatorio
-      default: () => {}, // Arreglo vacío como valor predeterminado
+      default: "",
     },
   },
   data() {
     return {
+      profesionales_sst: [],
+      profesionales_cartera: [],
+      profesionales_nomina: [],
+      profesional_sst_id: "",
+      profesional_cartera_id: "",
+      profesional_nomina_id: "",
+      consulta_profesional_nomina: "",
+      consulta_profesional_cartera: "",
+      consulta_profesional_sst: "",
+      anotaciones_sst: "",
+      anotaciones_cartera: "",
+      anotaciones_nomina: "",
       novedadesToggle: true,
       novedades: [],
       tamano_texto_version: "",
@@ -4374,6 +4461,9 @@ export default {
             break;
         }
       }
+    },
+    abrirCalendario(event) {
+      event.target.showPicker(); // Abre el selector de fecha
     },
     setLabelDepartamento(item = null, campo = null, index = null) {
       if (item != null) {
@@ -5110,12 +5200,12 @@ export default {
     },
     getConvenioBanco(item = null) {
       if (item != null) {
-        item.id = item.id.toString().padStart(2, "0");
+        /* item.cod_ban = item.id.toString().padStart(2, "0") ; */
         var nombreExistente = this.bancos_agregados.some(function (objeto) {
           return objeto.nombre === item.nombre;
         });
         if (!nombreExistente) {
-          this.bancos_agregados.push({ id: item.id, nombre: item.nombre });
+          this.bancos_agregados.push({ id: item.cod_ban, nombre: item.nombre });
         }
       }
       let self = this;
@@ -7011,6 +7101,17 @@ export default {
         laboratorios_medicos: this.laboratorios_medicos_agregados,
         contratacion_observacion: this.contratacion_observacion,
       };
+      this.registroCliente.profesional_sst_id = this.profesional_sst_id;
+      this.registroCliente.profesional_cartera_id = this.profesional_cartera_id;
+      this.registroCliente.profesional_nomina_id = this.profesional_nomina_id;
+      this.registroCliente.profesional_sst = this.consulta_profesional_sst;
+      this.registroCliente.profesional_cartera =
+        this.consulta_profesional_cartera;
+      this.registroCliente.profesional_nomina =
+        this.consulta_profesional_nomina;
+      this.registroCliente.anotacion_sst = this.anotaciones_sst;
+      this.registroCliente.anotacion_cartera = this.anotaciones_cartera;
+      this.registroCliente.anotacion_nomina = this.anotaciones_nomina;
       this.registroCliente.cargos = this.cargos;
       this.registroCliente.cargos2 = this.cargos2;
       this.registroCliente.accionistas = this.accionistas;
@@ -7515,8 +7616,26 @@ export default {
             }
           });
         });
+        if (item.historico_profesionales) {
+          this.consulta_profesional_nomina =
+            item.historico_profesionales.profesional_nomina;
+          this.profesional_nomina_id =
+            item.historico_profesionales.usuario_nomina_id;
+          this.anotaciones_nomina =
+            item.historico_profesionales.anotacion_nomina;
+          this.consulta_profesional_cartera =
+            item.historico_profesionales.profesional_cartera;
+          this.consulta_profesional_sst =
+            item.historico_profesionales.profesional_sst;
+          this.profesional_cartera_id =
+            item.historico_profesionales.usuario_cartera_id;
+          this.profesional_sst_id = item.historico_profesionales.usuario_sst_id;
+          this.anotaciones_cartera =
+            item.historico_profesionales.anotacion_cartera;
+          this.anotaciones_sst = item.historico_profesionales.anotacion_sst;
+          this.novedades = item.novedades;
+        }
 
-        this.novedades = item.novedades;
         /* this.consulta_observacion_estado = item.nombre_novedad_servicio;
         this.novedad_servicio = item.novedad_servicio; */
         this.contrato = item.contrato;
@@ -7745,19 +7864,19 @@ export default {
         }
 
         item.convenios_banco.forEach((element) => {
-          if (element.id >= 1 && element.id <= 9) {
+          /*  if (element.id >= 1 && element.id <= 9) {
             element.id = "0" + element.id;
-          }
+          } */
           this.bancos_agregados.push({
-            id: element.id,
+            id: element.cod_ban,
             nombre: element.nombre,
           });
         });
 
         item.tipos_contrato.forEach((element) => {
-          if (element.tip_con >= 1 && element.tip_con <= 9) {
+          /*      if (element.tip_con >= 1 && element.tip_con <= 9) {
             element.tip_con = "0" + element.tip_con;
-          }
+          } */
           this.tipos_contratos_agregados.push({
             id: element.tip_con,
             nombre: element.nombre,
@@ -7935,6 +8054,45 @@ export default {
     toggleDiv2() {
       this.divExpandido2 = !this.divExpandido2;
       this.divExpandido = false;
+    },
+    getProfesionalesSST(item = null) {
+      if (item != null) {
+        this.consulta_profesional_sst = item.nombre;
+        this.profesional_sst_id = item.id;
+      }
+      let self = this;
+      let config = this.configHeader();
+      axios
+        .get(self.URL_API + "api/v1/usersbyrolinterno/5", config)
+        .then((result) => {
+          self.profesionales_sst = result.data;
+        });
+    },
+    getProfesionalNomina(item = null) {
+      if (item != null) {
+        this.consulta_profesional_nomina = item.nombre;
+        this.profesional_nomina_id = item.id;
+      }
+      let self = this;
+      let config = this.configHeader();
+      axios
+        .get(self.URL_API + "api/v1/usersbyrolinterno/8", config)
+        .then((result) => {
+          self.profesionales_nomina = result.data;
+        });
+    },
+    getProfesionalCartera(item = null) {
+      if (item != null) {
+        this.consulta_profesional_cartera = item.nombre;
+        this.profesional_cartera_id = item.id;
+      }
+      let self = this;
+      let config = this.configHeader();
+      axios
+        .get(self.URL_API + "api/v1/usersbyrolinterno/6", config)
+        .then((result) => {
+          self.profesionales_cartera = result.data;
+        });
     },
   },
 };

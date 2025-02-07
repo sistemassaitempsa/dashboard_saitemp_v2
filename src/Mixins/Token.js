@@ -23,4 +23,3 @@ export const Token = {
   computed: {},
   created() {},
 }; // MiMixin.js
-s;

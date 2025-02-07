@@ -1,8 +1,8 @@
 <template>
   <div>
-    <FormularioUsuario :titulo="titulo" v-if="user_type == 1" />
-    <Cliente :titulo="titulo" v-if="user_type == 2" />
-    <EditarUsuarioCandidato v-if="user_type == 3" />
+    <FormularioUsuario :titulo="titulo" v-if="usuario()" />
+    <Cliente :titulo="titulo" v-if="cliente()" />
+    <EditarUsuarioCandidato v-if="candidato()" />
   </div>
 </template>
 <script>
@@ -27,7 +27,29 @@ export default {
     };
   },
 
-  methods: {},
+  methods: {
+    usuario() {
+      if (this.$route.params.tipo == undefined && this.user_type == 1) {
+        return true;
+      } else if (this.$route.params.tipo == 1) {
+        return true;
+      }
+    },
+    cliente() {
+      if (this.$route.params.tipo == undefined && this.user_type == 2) {
+        return true;
+      } else if (this.$route.params.tipo == 2) {
+        return true;
+      }
+    },
+    candidato() {
+      if (this.$route.params.tipo == undefined && this.user_type == 3) {
+        return true;
+      } else if (this.$route.params.tipo == 3) {
+        return true;
+      }
+    },
+  },
 };
 </script>
 <style scoped></style>

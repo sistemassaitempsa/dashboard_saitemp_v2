@@ -429,6 +429,7 @@ label {
   float: left;
 }
 .cardRegister {
+  right: -30%;
   width: 80%;
   max-width: 1000px;
   margin: 1vh auto;
