@@ -60,6 +60,7 @@ import InicioSesionCandidatos from "@/components/InicioSesionCandidatos.vue";
 import RecoverPassword from "@/components/RecoverPassword.vue";
 import FormularioInfoCandidatos from "@/components/FormularioInfoCandidatos.vue";
 import Cliente from "../components/Cliente.vue";
+import ResetPasswordView from "@/views/ResetPasswordView.vue";
 
 // Configuración de rutas
 const routes = [
@@ -87,6 +88,11 @@ const routes = [
     path: "/formularioregistro",
     name: "formularioregistro",
     component: FormularioRegistro,
+  },
+  {
+    path: "/reset-password",
+    name: "reset-password",
+    component: ResetPasswordView,
   },
   {
     path: "/:pathMatch(.*)*",
