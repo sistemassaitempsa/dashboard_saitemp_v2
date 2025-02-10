@@ -97,7 +97,7 @@
               <button
                 type="button"
                 class="btn btn-warning w-100"
-                @click="cambiarContrasena"
+                @click="toggleModalCambioHandle"
               >
                 Cambiar Contraseña
               </button>
@@ -109,6 +109,12 @@
             </div>
           </div>
         </form>
+        <div v-if="toggleModalCambio">
+          <ModalCambioContrasena
+            @closeModalCambio="toggleModalCambioHandle"
+            @cambioContrasena="cambioContrasena"
+          />
+        </div>
       </div>
     </div>
   </div>
@@ -123,6 +129,7 @@ import { ref, reactive, onBeforeMount } from "vue";
 import { useValidation } from "../composables/useValidations";
 import { useToken } from "@/composables/useToken";
 import { useRouter } from "vue-router";
+import ModalCambioContrasena from "./ModalCambioContrasena";
 
 // Variables
 const { showAlert } = useAlerts();
@@ -132,8 +139,7 @@ const loading = ref(false);
 const tiposDocumentos = ref([]);
 const { validateEmail, validateNumeroDocumento } = useValidation();
 const URL_API = process.env.VUE_APP_URL_API;
-
-// Objeto reactivo para el cliente
+const toggleModalCambio = ref(false);
 const cliente = reactive({
   id: "",
   nombre: "",
@@ -142,10 +148,16 @@ const cliente = reactive({
   email: "",
   celular: "",
   doc_tip_id: "",
+  password: "",
 });
 
 // Funciones
 
+const cambioContrasena = (password) => {
+  cliente.password = password;
+  toggleModalCambioHandle();
+  guardarDatos();
+};
 // Obtener tipos de documento
 const getTiposDocumento = async () => {
   loading.value = true;
@@ -156,7 +168,6 @@ const getTiposDocumento = async () => {
     tiposDocumentos.value = response.data;
   } catch (error) {
     console.error("Error al obtener tipos de documento:", error);
-    // Manejar el error según sea necesario
   } finally {
     loading.value = false;
   }
@@ -185,13 +196,15 @@ const userLogued = async () => {
       router.push("/");
       localStorage.removeItem("access_token");
     }
-    // Manejar otros errores si es necesario
   } finally {
     loading.value = false;
   }
 };
 
-// Función para guardar datos (actualizar)
+const toggleModalCambioHandle = () => {
+  toggleModalCambio.value = !toggleModalCambio.value;
+};
+
 const guardarDatos = async () => {
   // Validaciones
   const isEmailValid = validateEmail(cliente.email);
@@ -211,6 +224,7 @@ const guardarDatos = async () => {
       email: cliente.email,
       celular: cliente.celular,
       tip_doc_id: cliente.doc_tip_id,
+      password: cliente.password,
       // Agrega otros campos según sea necesario
     };
     const response = await axios.put(
@@ -228,13 +242,6 @@ const guardarDatos = async () => {
   } finally {
     loading.value = false;
   }
-};
-
-// Función para cambiar contraseña
-const cambiarContrasena = () => {
-  // Implementa la lógica para cambiar la contraseña
-  // Por ejemplo, redirigir a una página de cambio de contraseña
-  router.push("/cambiar-contrasena");
 };
 
 // Ciclo de vida
