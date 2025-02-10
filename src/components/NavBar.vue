@@ -318,6 +318,9 @@ export default {
       if (this.permisos[34].autorizado) {
         ruta = "editarUsuario";
         id = this.user_id;
+      } else if (this.user_type == 3) {
+        ruta = "editarUsuario";
+        id = this.user_id;
       } else {
         ruta = "cliente";
         id = this.documento_identidad;

@@ -37,7 +37,7 @@
               >
               <input
                 id="numero_documento"
-                class="form-control"
+                class="form-control disabledLabel"
                 type="text"
                 :value="cliente.numero_documento"
                 disabled
@@ -80,12 +80,12 @@
               />
             </div>
             <div class="col-md-6">
-              <label for="telefono" class="form-label">Teléfono:</label>
+              <label for="telefono" class="form-label">Teléfono celular:</label>
               <input
                 id="telefono"
                 class="form-control"
                 type="text"
-                v-model="cliente.telefono"
+                v-model="cliente.celular"
                 placeholder="Ingrese su teléfono"
                 required
               />
@@ -116,6 +116,7 @@
 
 <script setup>
 // Imports
+import { useAlerts } from "@/composables/useAlerts";
 import axios from "axios";
 import Loading from "./Loading.vue";
 import { ref, reactive, onBeforeMount } from "vue";
@@ -124,6 +125,7 @@ import { useToken } from "@/composables/useToken";
 import { useRouter } from "vue-router";
 
 // Variables
+const { showAlert } = useAlerts();
 const router = useRouter();
 const { configHeader } = useToken();
 const loading = ref(false);
@@ -138,7 +140,7 @@ const cliente = reactive({
   apellidos: "",
   numero_documento: "",
   email: "",
-  telefono: "",
+  celular: "",
   doc_tip_id: "",
 });
 
@@ -172,7 +174,7 @@ const userLogued = async () => {
       cliente.nombre = response.data.primer_nombre;
       cliente.apellidos = response.data.primer_apellido;
       cliente.email = response.data.email;
-      cliente.telefono = response.data.celular;
+      cliente.celular = response.data.celular;
       cliente.doc_tip_id = response.data.tip_doc_id;
     } else {
       router.push("/");
@@ -196,7 +198,7 @@ const guardarDatos = async () => {
   const isDocValid = validateNumeroDocumento(cliente.numero_documento);
 
   if (!isEmailValid || !isDocValid) {
-    // Mostrar alertas o manejar errores de validación
+    showAlert("correo o documento no válido", "error");
     return;
   }
 
@@ -207,18 +209,20 @@ const guardarDatos = async () => {
       nombre: cliente.nombre,
       apellidos: cliente.apellidos,
       email: cliente.email,
-      telefono: cliente.telefono,
-      doc_tip_id: cliente.doc_tip_id,
+      celular: cliente.celular,
+      tip_doc_id: cliente.doc_tip_id,
       // Agrega otros campos según sea necesario
     };
     const response = await axios.put(
-      `${URL_API}api/v1/actualizarUsuario/${cliente.id}`,
+      `${URL_API}api/v1/actualizarcandidatousuario/${cliente.id}`,
       payload,
       config
     );
     // Manejar la respuesta, mostrar notificación de éxito, etc.
+    showAlert(response.data.message, response.data.status);
     console.log("Datos actualizados:", response.data);
   } catch (error) {
+    showAlert(error.response.data.message, error.response.data.status);
     console.error("Error al actualizar datos:", error);
     // Manejar el error, mostrar notificación, etc.
   } finally {
@@ -262,7 +266,9 @@ label {
 .form-control {
   background-color: white;
 }
-
+.disabledLabel {
+  background-color: rgb(235, 234, 234);
+}
 button {
   padding: 0.75rem;
   font-size: 1rem;
