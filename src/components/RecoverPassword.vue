@@ -1,5 +1,6 @@
 <template>
   <div class="containerPrincipal">
+    <Loading :loading="loading" />
     <div class="videoContainer">
       <video
         src="../assets/video.mp4"
@@ -60,7 +61,9 @@
         </div>
         <div class="row nom_border">
           <div class="col">
-            <button class="btn btn-success">Recuperar contraseña</button>
+            <button class="btn btn-success" @click="recuperarContrasenaHandle">
+              Recuperar contraseña
+            </button>
           </div>
         </div>
       </form>
@@ -72,8 +75,12 @@
 import { ref, reactive, onBeforeMount } from "vue";
 import axios from "axios";
 import { useValidation } from "@/composables/useValidations";
+import { useAlerts } from "@/composables/useAlerts";
+import Loading from "./Loading.vue";
 
 //variables
+
+const { showAlert, showAlertConfirm } = useAlerts();
 const URL_API = process.env.VUE_APP_URL_API;
 const { validateNumeroDocumento, numeroDocumentoError } = useValidation();
 const cliente = reactive({
@@ -81,8 +88,34 @@ const cliente = reactive({
   doc_tip_id: "",
 });
 const tiposDocumentos = ref([]);
+const loading = ref(false);
 
 //metodos
+
+const limpiarFormulario = () => {
+  cliente.num_doc = "";
+  cliente.doc_tip_id = "";
+};
+const recuperarContrasenaHandle = async () => {
+  loading.value = true;
+  const response = await axios.post(
+    `${URL_API}api/v1/enviartoken/${cliente.num_doc}`,
+    cliente
+  );
+  if (response.data.status == "success") {
+    showAlertConfirm(
+      "Verifique el correo electrónico asociado a su cuenta",
+      "success"
+    );
+    limpiarFormulario();
+    loading.value = false;
+    return;
+  }
+  showAlert(
+    "Error al intentar recuperar, esta cuenta verifique los datos",
+    "error"
+  );
+};
 const getTiposDocumento = async () => {
   const response = await axios.get(URL_API + "api/v1/tipoIdFormularioEmpleado");
   tiposDocumentos.value = response.data;

@@ -34,14 +34,34 @@
           <div class="col">
             <label for="password" class="form-label">Contraseña nueva</label>
             <input
-              id="password"
-              type="password"
+              :type="contraseña ? 'password' : 'text'"
               class="form-control"
+              v-model="cliente.password"
+              @focus="isFocusPassword = true"
+              @input="validatePassword(cliente.password)"
+              @blur="isFocusPassword = false"
+              :class="{ 'is-invalid': passwordError }"
               required
-              v-model="password"
-              @input="validateNumeroDocumento(cliente.num_doc)"
-              :class="{ 'is-invalid': numeroDocumentoError }"
             />
+            <div class="positionAbsolute">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="input-icon password"
+                viewBox="0 0 20 20"
+                fill="currentColor"
+                @click="contraseña = !contraseña"
+              >
+                <path d="M10 12a2 2 0 100-4 2 2 0 000 4z" />
+                <path
+                  fill-rule="evenodd"
+                  d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z"
+                  clip-rule="evenodd"
+                />
+              </svg>
+            </div>
+            <div v-if="passwordError" class="invalid-feedback">
+              {{ passwordError }}
+            </div>
           </div>
         </div>
 
@@ -50,21 +70,52 @@
             <label for="confirmPassword" class="form-label"
               >Confirme contraseña</label
             >
+
             <input
               id="confirmPassword"
-              type="password"
+              :type="confirmContraseña ? 'password' : 'text'"
               class="form-control"
+              v-model="cliente.password_confirmation"
               required
-              v-model="confirmPassword"
-              @input="validateNumeroDocumento(cliente.num_doc)"
-              :class="{ 'is-invalid': numeroDocumentoError }"
+              @focus="isFocusPasswordConfirmation = true"
+              @blur="isFocusPasswordConfirmation = false"
+              @input="validatePasswordConfimation"
+              @paste.prevent
+              :class="{ 'is-invalid': errorConfirmationPassword }"
             />
+            <div class="positionAbsolute">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="input-icon password"
+                viewBox="0 0 20 20"
+                fill="currentColor"
+                @click="confirmContraseña = !confirmContraseña"
+              >
+                <path d="M10 12a2 2 0 100-4 2 2 0 000 4z" />
+                <path
+                  fill-rule="evenodd"
+                  d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z"
+                  clip-rule="evenodd"
+                />
+              </svg>
+            </div>
+            <div
+              v-show="errorConfirmationPasswordStyle"
+              class="invalid-feedback"
+            >
+              {{ errorConfirmationPassword }}
+            </div>
           </div>
         </div>
 
         <div class="row nom_border">
           <div class="col">
-            <button class="btn btn-success w-100" type="submit">
+            <button
+              :disabled="disabledButton"
+              class="btn btn-success w-100"
+              type="submit"
+              @click="cambiarContrasena"
+            >
               Cambiar contraseña
             </button>
           </div>
@@ -75,27 +126,98 @@
 </template>
 
 <script setup>
-// Aquí irían tus imports y lógica si fuera necesario
-import { ref, reactive } from "vue";
+// imports
+import { ref, reactive, onBeforeMount } from "vue";
+import { useValidation } from "../composables/useValidations";
+import { useRoute, useRouter } from "vue-router";
+import { useAlerts } from "@/composables/useAlerts";
+import axios from "axios";
 
-// Ejemplo de propiedades y funciones
-const password = ref("");
-const confirmPassword = ref("");
-const numeroDocumentoError = false;
+//variables
+const URL_API = process.env.VUE_APP_URL_API;
+const { passwordError, validatePassword } = useValidation();
+const { showAlert } = useAlerts();
+const errorConfirmationPassword = ref("");
+const route = useRoute();
+const router = useRouter();
+const errorConfirmationPasswordStyle = ref(true);
 const cliente = reactive({
-  num_doc: "",
+  email: route.query.email,
+  password: "",
+  password_confirmation: "",
+  token: route.query.token,
 });
+const disabledButton = ref(true);
+const contraseña = ref(true);
+const confirmContraseña = ref(true);
 
-// Función de validación simulada
-const validateNumeroDocumento = () => {
-  // Lógica de validación de número de documento
+// Metodos
+const diableButtonHandle = () => {
+  if (
+    validatePassword(cliente.password) &&
+    errorConfirmationPasswordStyle.value == false
+  ) {
+    disabledButton.value = false;
+  }
+};
+const validatePasswordConfimation = () => {
+  if (cliente.password_confirmation == "") {
+    errorConfirmationPassword.value = "Campo requerido";
+    errorConfirmationPasswordStyle.value = true;
+  } else if (cliente.password_confirmation != cliente.password) {
+    errorConfirmationPassword.value = "Las contraseñas deben ser idénticas";
+    errorConfirmationPasswordStyle.value = true;
+  } else {
+    errorConfirmationPassword.value = "";
+    errorConfirmationPasswordStyle.value = false;
+  }
+  diableButtonHandle();
 };
 
+const limpiarFormulario = () => {
+  (cliente.email = route.query.email),
+    (cliente.password = ""),
+    (cliente.password_confirmation = ""),
+    (cliente.token = route.query.token),
+    (errorConfirmationPasswordStyle.value = true);
+  errorConfirmationPassword.value = "";
+  disabledButton.value = true;
+};
 // Función para enviar el formulario
-const cambiarContrasena = () => {
-  // Lógica para cambiar la contraseña
-  console.log("Contraseña cambiada:", password.value, confirmPassword.value);
+const cambiarContrasena = async () => {
+  if (!cliente.token || !cliente.email) {
+    showAlert(
+      "Ingrese nuevamente al link enviado al correo asociado a la cuenta",
+      "error"
+    );
+    return;
+  }
+  if (
+    validatePassword(cliente.password) &&
+    errorConfirmationPasswordStyle.value == false
+  ) {
+    try {
+      const response = await axios.post(
+        URL_API + "api/v1/recuperarcontrasena",
+        cliente
+      );
+      showAlert(response.data.message, response.data.status);
+      limpiarFormulario();
+
+      if (response.data.status == "success") {
+        router.push("/logincandidatos");
+      }
+    } catch (error) {
+      showAlert("Ha ocurrido un error al procesar la solcitud", "error");
+    }
+  }
 };
+
+//ciclo de vida
+onBeforeMount(() => {
+  validatePassword(cliente.password);
+  validatePasswordConfimation();
+});
 </script>
 
 <style scoped>
@@ -132,6 +254,11 @@ label {
   background-position: right center;
 }
 
+.positionAbsolute {
+  position: absolute;
+  left: 98%;
+  top: 2.5em;
+}
 .btn-success::before {
   content: "";
   position: absolute;
@@ -182,7 +309,6 @@ label {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  animation: fadeInDownBig 1s;
 }
 
 /* Líneas divisorias en los .row (opcional) */
@@ -203,8 +329,20 @@ label {
 /* Espaciado en las columnas */
 .col {
   margin-top: 1.5em;
+  position: relative;
 }
-
+.input-icon {
+  color: #191919;
+  width: 20px;
+  height: 20px;
+}
+.input-icon.password {
+  left: unset;
+  right: 40px;
+  top: unset;
+  bottom: 110px;
+  cursor: pointer;
+}
 /* Logotipos */
 .logosContainer {
   display: flex;
@@ -258,20 +396,11 @@ label {
   );
 }
 
-/* Animaciones Personalizadas */
-@keyframes fadeInDownBig {
-  from {
-    opacity: 0;
-    transform: translate3d(0, -1000px, 0);
-  }
-  to {
-    opacity: 1;
-    transform: translate3d(0, 0, 0);
-  }
-}
-
 /* Responsividad */
 @media (max-width: 768px) {
+  .containerPrincipal {
+    overflow-y: scroll;
+  }
   .card {
     width: 90%;
     padding: 3em;
