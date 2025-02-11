@@ -105,6 +105,11 @@ const routes = [
     component: NavBar,
     children: [
       {
+        path: "formularioinfocandidato",
+        name: "formularioinfocandidato",
+        component: FormularioInfoCandidatos,
+      },
+      {
         path: "editarUsuario/:id",
         name: "editarUsuario",
         component: EditarUsuario,

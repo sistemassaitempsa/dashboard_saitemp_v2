@@ -166,7 +166,7 @@ export default {
         );
         if (response.data.access_token != undefined) {
           localStorage.setItem("access_token", response.data.access_token);
-          self.$router.push("/navbar/landing");
+          self.$router.push("/navbar/formularioinfocandidato");
         } else if (response.data.status == "error") {
           self.showAlert(response.data.message, response.data.status);
         }

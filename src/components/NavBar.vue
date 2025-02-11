@@ -262,7 +262,8 @@ export default {
                 newPath.includes("empleado") ||
                 newPath.includes("editarUsuario") ||
                 newPath.includes("timeLine") ||
-                newPath.includes("landing")
+                newPath.includes("landing") ||
+                newPath.includes("formularioinfocandidato")
               ) {
                 bandera = true;
               }

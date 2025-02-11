@@ -48,6 +48,41 @@
           </div>
           <div class="row mb-4">
             <div class="col">
+              <label for="" class="form-label">Teléfono celular:*</label>
+              <input
+                type="text"
+                class="form-control"
+                v-model="cliente.telefono"
+                @focus="isFocusTel = true"
+                @blur="isFocusTel = false"
+                :class="{ 'is-invalid': !cliente.telefono }"
+                maxlength="10"
+              />
+
+              <div v-if="cliente.telefono == ''" class="invalid-feedback">
+                {{ error }}
+              </div>
+            </div>
+            <div class="col">
+              <label for="" class="form-label">Tipo de documento:*</label>
+              <select
+                class="form-select"
+                name=""
+                id=""
+                v-model="cliente.doc_tip_id"
+              >
+                <option
+                  v-for="tipo_doc in tiposDocumentos"
+                  :value="tipo_doc.cod_tip"
+                  :key="tipo_doc.cod_tip"
+                >
+                  {{ tipo_doc.des_tip }}
+                </option>
+              </select>
+            </div>
+          </div>
+          <div class="row mb-4">
+            <div class="col">
               <label for="" class="form-label">Numero de documento:*</label>
               <input
                 type="text"
@@ -85,41 +120,7 @@
               </div>
             </div>
           </div>
-          <div class="row mb-4">
-            <div class="col">
-              <label for="" class="form-label">Tipo de documento:*</label>
-              <select
-                class="form-select"
-                name=""
-                id=""
-                v-model="cliente.doc_tip_id"
-              >
-                <option
-                  v-for="tipo_doc in tiposDocumentos"
-                  :value="tipo_doc.cod_tip"
-                  :key="tipo_doc.cod_tip"
-                >
-                  {{ tipo_doc.des_tip }}
-                </option>
-              </select>
-            </div>
-            <div class="col">
-              <label for="" class="form-label">Teléfono:*</label>
-              <input
-                type="text"
-                class="form-control"
-                v-model="cliente.telefono"
-                @focus="isFocusTel = true"
-                @blur="isFocusTel = false"
-                :class="{ 'is-invalid': !cliente.telefono }"
-                maxlength="10"
-              />
 
-              <div v-if="cliente.telefono == ''" class="invalid-feedback">
-                {{ error }}
-              </div>
-            </div>
-          </div>
           <div class="row mb-4">
             <div class="col">
               <label for="" class="form-label">Correo electónico:*</label>
