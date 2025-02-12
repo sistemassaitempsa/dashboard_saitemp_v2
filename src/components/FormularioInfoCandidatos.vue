@@ -592,24 +592,18 @@
           </div>
         </div>
         <div class="info_container" v-if="info_academica">
-          <div class="row">
-            <div class="col flex">
-              <div class="col-12 col-lg-6">
-                <SearchList
-                  nombreCampo="Nivel académico:*"
-                  @selectAcademico="selectAcademico"
-                  eventoCampo="selectAcademico"
-                  nombreItem="des_est"
-                  :consulta="consulta_estudio"
-                  :registros="consulta_estudio"
-                  placeholder="Seleccione una opción"
-                />
-              </div>
-
-              <div></div>
+          <div class="row mb-5">
+            <div class="col-12 col-lg-6 flex">
+              <SearchList
+                nombreCampo="Nivel académico:*"
+                @selectAcademico="selectAcademico"
+                eventoCampo="selectAcademico"
+                nombreItem="des_est"
+                :consulta="consulta_estudio"
+                :registros="consulta_estudio"
+                placeholder="Seleccione una opción"
+              />
             </div>
-          </div>
-          <div class="row">
             <div class="col">
               <SearchList
                 nombreCampo="Sector académico:*"
@@ -621,17 +615,60 @@
                 placeholder="Seleccione una opción"
               />
             </div>
-            <div class="col">
-              <SearchList
-                nombreCampo="Idioma:*"
-                @selectTipoId="selectTipoId"
-                eventoCampo="selectTipoId"
-                nombreItem="des_tip"
-                :consulta="nom_tip_doc"
-                :registros="consulta_tipo_id"
-                placeholder="Seleccione una opción"
-              />
+          </div>
+          <div v-for="(idioma, index) in form.idiomas" class="row" :key="index">
+            <div class="row">
+              <div class="col"></div>
+              <div class="col-sm-12 col-md-6 mb-3">
+                <div
+                  class="d-flex justify-content-end align-items-end w-100 h-100"
+                >
+                  <label
+                    class="bi bi-trash-fill labelOption"
+                    @click="deleteIdioma(index)"
+                  >
+                    Eliminar idioma</label
+                  >
+                </div>
+              </div>
             </div>
+            <div class="row">
+              <div class="col">
+                <SearchList
+                  nombreCampo="Idioma:*"
+                  @selectTipoId="selectTipoId"
+                  eventoCampo="selectTipoId"
+                  nombreItem="des_tip"
+                  :consulta="nom_tip_doc"
+                  :registros="consulta_tipo_id"
+                  placeholder="Seleccione una opción"
+                />
+              </div>
+              <div class="col">
+                <label for="" class="form-label">Nivel:</label>
+                <select
+                  name=""
+                  id=""
+                  class="form-select"
+                  v-model="idioma.nivel"
+                >
+                  <option value="1">Básico</option>
+                  <option value="2">Intermedio</option>
+                  <option value="3">Avanzado</option>
+                </select>
+              </div>
+            </div>
+          </div>
+          <div
+            class="row mt-5 trash justify-content-center align-items-center padding-1"
+          >
+            <label
+              id="clasificador"
+              @click="addIdioma()"
+              style="cursor: pointer"
+              ><i class="bi bi-plus-circle-fill"></i>
+              Agregar idioma
+            </label>
           </div>
         </div>
 
@@ -1329,8 +1366,8 @@ const form = reactive({
   est_civ: "",
   est_soc: "",
   experiencias_laborales: [],
+  idiomas: [],
   sector_academico_id: "",
-  idiomas_id: [],
   familiaresConsulta: [],
   referencias: [
     { num_ref: 1, tip_ref: "", parent: "", cel_ref: "", nom_ref: "" },
@@ -1409,6 +1446,9 @@ const submitForm = async () => {
   } finally {
     loading.value = false; // Desactivar el estado de carga
   }
+};
+const deleteIdioma = (index) => {
+  form.idiomas.splice(index, 1);
 };
 const deleteExperiencia = (index) => {
   form.experiencias_laborales.splice(index, 1);
@@ -1498,7 +1538,26 @@ const selectBanco = (item) => {
       console.error("Error al seleccionar banco:", error);
     });
 };
+const addIdioma = () => {
+  form.idiomas.push({
+    nombre: "",
+    id: "",
+    nivel: "",
+  });
+};
 
+/* const selectIdioma = (item) => {
+  axios
+    .get(`${URL_API}api/v1/getidiomas`)
+    .then((result) => {
+      form.idiomas.push({});
+      form.value = result.data;
+      form.tip_ide = item.cod_tip;
+    })
+    .catch((error) => {
+      console.error("Error al seleccionar tipo de identificación:", error);
+    });
+}; */
 const selectTipoId = (item) => {
   axios
     .get(`${URL_API}api/v1/tipoIdFormularioEmpleado`)
@@ -1721,7 +1780,9 @@ h5 {
   border-radius: 5px;
   transform: scaleX(0%) translateY(-50%);
 }
-
+.form-check-input:checked {
+  background-color: #006b3f;
+}
 .btn_outline:hover::after {
   opacity: 1;
   transform: scaleX(100%) translateY(-50%);
