@@ -5,6 +5,14 @@
     <h2>Registro de datos personales</h2>
     <div id="seccion">
       <form @submit.prevent="submitForm" class="row g-3">
+        <!-- barra para el pocrcentaje de llenado -->
+        <div class="progress-container">
+          <div class="progress-bar" :style="{ width: progress + '%' }"></div>
+          <span class="progress-text"
+            >{{ Math.round(progress) }}% completado</span
+          >
+        </div>
+        <!-- --------------------------- -->
         <p>
           Ingrese la información requerida en cada sección, para desplegar una
           seccion debe hacer clic en ella.
@@ -347,17 +355,6 @@
           </div>
           <!-- Nivel Académico y Género -->
           <div class="row">
-            <div class="col-12 col-lg-6">
-              <SearchList
-                nombreCampo="Nivel académico:*"
-                @selectAcademico="selectAcademico"
-                eventoCampo="selectAcademico"
-                nombreItem="des_est"
-                :consulta="consulta_estudio"
-                :registros="consulta_estudio"
-                placeholder="Seleccione una opción"
-              />
-            </div>
             <div class="col-12 mt-2 was-validated p-2 col-lg-6">
               <label class="form-label" for="genero"
                 >Identidad de género:*</label
@@ -424,31 +421,6 @@
                 {{ mensaje_error }}
               </div>
             </div>
-            <div class="col-12 col-lg-6">
-              <SearchList
-                nombreCampo="Estado civil:*"
-                @selectEstadoCivil="selectEstadoCivil"
-                eventoCampo="selectEstadoCivil"
-                nombreItem="des_est"
-                :consulta="est_civ_name"
-                :registros="consulta_estado_civil"
-                placeholder="Seleccione una opción"
-              />
-            </div>
-          </div>
-          <!-- Grupo Étnico y Estrato Socioeconómico -->
-          <div class="row">
-            <div class="col-12 col-lg-6">
-              <SearchList
-                nombreCampo="Grupo étnico:*"
-                @selectEtnia="selectEtnia"
-                eventoCampo="selectEtnia"
-                nombreItem="descripcion"
-                :consulta="form.raza"
-                :registros="consulta_etnia"
-                placeholder="Seleccione una opción"
-              />
-            </div>
             <div class="col-12 col-lg-6 mt-2 was-validated p-2">
               <label class="form-label" for="estrato"
                 >Estrato socioeconomico:*</label
@@ -466,6 +438,294 @@
               </div>
             </div>
           </div>
+          <!-- Grupo Étnico y Estrato Socioeconómico -->
+          <div class="row">
+            <div class="col-12 col-lg-6">
+              <SearchList
+                nombreCampo="Grupo étnico:*"
+                @selectEtnia="selectEtnia"
+                eventoCampo="selectEtnia"
+                nombreItem="descripcion"
+                :consulta="form.raza"
+                :registros="consulta_etnia"
+                placeholder="Seleccione una opción"
+              />
+            </div>
+            <div class="col-12 col-lg-6">
+              <SearchList
+                nombreCampo="Estado civil:*"
+                @selectEstadoCivil="selectEstadoCivil"
+                eventoCampo="selectEstadoCivil"
+                nombreItem="des_est"
+                :consulta="est_civ_name"
+                :registros="consulta_estado_civil"
+                placeholder="Seleccione una opción"
+              />
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col">
+            <h5
+              @click="experiencia_laboral = !experiencia_laboral"
+              style="cursor: pointer"
+            >
+              2. Experiencia laboral
+              <i v-if="experiencia_laboral" class="bi bi-chevron-compact-up"></i
+              ><i v-if="!experiencia_laboral" class="bi bi-chevron-down"></i>
+            </h5>
+          </div>
+        </div>
+        <div class="info_container pt-0" v-if="experiencia_laboral">
+          <div
+            v-for="(experiencia, index) in form.experiencias_laborales"
+            :key="index"
+          >
+            <div class="row mt-5">
+              <div class="col">
+                <h6>Experiencia {{ index + 1 }}</h6>
+              </div>
+              <div class="col-sm-12 col-md-6 mb-3">
+                <div
+                  class="d-flex justify-content-end align-items-end w-100 h-100"
+                >
+                  <label
+                    class="bi bi-trash-fill labelOption"
+                    @click="deleteExperiencia(index)"
+                  >
+                    Eliminar</label
+                  >
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col">
+                <label for="" class="form-label"> Cargo:* </label>
+                <input
+                  type="text"
+                  class="form-control"
+                  v-model="experiencia.cargo"
+                />
+              </div>
+              <div class="col">
+                <label for="" class="form-label"> Empresa:* </label>
+                <input
+                  type="text"
+                  class="form-control"
+                  v-model="experiencia.empresa"
+                />
+              </div>
+            </div>
+            <div class="row">
+              <div class="col">
+                <SearchList
+                  nombreCampo="Sector:*"
+                  @selectTipoId="selectTipoId"
+                  eventoCampo="selectTipoId"
+                  nombreItem="des_tip"
+                  :consulta="nom_tip_doc"
+                  :registros="consulta_tipo_id"
+                  placeholder="Seleccione una opción"
+                />
+              </div>
+              <div class="col">
+                <label for="" class="form-label"> Motivo del retiro:* </label>
+                <input
+                  type="text"
+                  class="form-control"
+                  v-model="experiencia.motivo_retiro"
+                />
+              </div>
+            </div>
+            <div class="row">
+              <div class="col">
+                <label for="" class="form-label">Funciones:*</label>
+                <textarea
+                  name=""
+                  id=""
+                  class="form-control"
+                  v-model="experiencia.funciones"
+                ></textarea>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col">
+                <label for="" class="form-label">Fecha inicio</label>
+                <input
+                  type="date"
+                  class="form-control"
+                  v-model="experiencia.fecha_inicio"
+                />
+              </div>
+              <div class="col">
+                <label for="" class="form-label">Fecha fin</label>
+                <input
+                  type="date"
+                  class="form-control"
+                  v-model="experiencia.fecha_fin"
+                />
+              </div>
+            </div>
+          </div>
+          <div
+            class="row mt-5 trash justify-content-center align-items-center padding-1"
+          >
+            <label
+              id="clasificador"
+              @click="addExperienciaLaboral()"
+              style="cursor: pointer"
+              ><i class="bi bi-plus-circle-fill"></i>
+              Agregar experiencia laboral
+            </label>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col">
+            <h5
+              @click="info_academica = !info_academica"
+              style="cursor: pointer"
+            >
+              3. Información académica
+              <i v-if="info_academica" class="bi bi-chevron-compact-up"></i
+              ><i v-if="!info_academica" class="bi bi-chevron-down"></i>
+            </h5>
+          </div>
+        </div>
+        <div class="info_container" v-if="info_academica">
+          <div class="row">
+            <div class="col flex">
+              <div class="col-12 col-lg-6">
+                <SearchList
+                  nombreCampo="Nivel académico:*"
+                  @selectAcademico="selectAcademico"
+                  eventoCampo="selectAcademico"
+                  nombreItem="des_est"
+                  :consulta="consulta_estudio"
+                  :registros="consulta_estudio"
+                  placeholder="Seleccione una opción"
+                />
+              </div>
+
+              <div></div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col">
+              <SearchList
+                nombreCampo="Sector académico:*"
+                @selectTipoId="selectTipoId"
+                eventoCampo="selectTipoId"
+                nombreItem="des_tip"
+                :consulta="nom_tip_doc"
+                :registros="consulta_tipo_id"
+                placeholder="Seleccione una opción"
+              />
+            </div>
+            <div class="col">
+              <SearchList
+                nombreCampo="Idioma:*"
+                @selectTipoId="selectTipoId"
+                eventoCampo="selectTipoId"
+                nombreItem="des_tip"
+                :consulta="nom_tip_doc"
+                :registros="consulta_tipo_id"
+                placeholder="Seleccione una opción"
+              />
+            </div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col">
+            <h5
+              @click="medio_transporte = !medio_transporte"
+              style="cursor: pointer"
+            >
+              4. Medio de transporte
+              <i v-if="medio_transporte" class="bi bi-chevron-compact-up"></i
+              ><i v-if="!medio_transporte" class="bi bi-chevron-down"></i>
+            </h5>
+          </div>
+        </div>
+        <div class="info_container" v-if="medio_transporte">
+          <div class="row">
+            <div class="col flex">
+              <label for="" class="form-label">Tipo de trasnporte:</label>
+              <div>
+                <div class="form-check form-check-inline">
+                  <input
+                    class="form-check-input"
+                    type="radio"
+                    name="inlineRadioOptions"
+                    id="inlineRadio1"
+                    value="option1"
+                  />
+                  <label class="form-check-label" for="inlineRadio1"
+                    >Vehiculo propio</label
+                  >
+                </div>
+                <div class="form-check form-check-inline">
+                  <input
+                    class="form-check-input"
+                    type="radio"
+                    name="inlineRadioOptions"
+                    id="inlineRadio2"
+                    value="option2"
+                  />
+                  <label class="form-check-label" for="inlineRadio2"
+                    >Transporte publico</label
+                  >
+                </div>
+                <div class="form-check form-check-inline">
+                  <input
+                    class="form-check-input"
+                    type="radio"
+                    name="inlineRadioOptions"
+                    id="inlineRadio2"
+                    value="option2"
+                  />
+                  <label class="form-check-label" for="inlineRadio2"
+                    >Otro</label
+                  >
+                </div>
+              </div>
+            </div>
+            <div class="col">
+              <label for="" class="form-label"> Cuál?</label>
+              <input type="text" class="form-control" />
+            </div>
+          </div>
+          <div class="row">
+            <div class="col flex">
+              <label for="" class="form-label">Licencia de conducción:</label>
+              <div>
+                <div class="form-check form-check-inline">
+                  <input
+                    class="form-check-input"
+                    type="radio"
+                    name="inlineRadioOptions"
+                    id="inlineRadio1"
+                    value="option1"
+                  />
+                  <label class="form-check-label" for="inlineRadio1">Si</label>
+                </div>
+                <div class="form-check form-check-inline">
+                  <input
+                    class="form-check-input"
+                    type="radio"
+                    name="inlineRadioOptions"
+                    id="inlineRadio2"
+                    value="option2"
+                  />
+                  <label class="form-check-label" for="inlineRadio2">No</label>
+                </div>
+              </div>
+            </div>
+            <div class="col">
+              <label for="" class="form-label">Categoría</label>
+              <select name="" id="" class="form-select"></select>
+            </div>
+          </div>
         </div>
         <div class="row">
           <div class="col">
@@ -473,7 +733,7 @@
               @click="condiciones_salud = !condiciones_salud"
               style="cursor: pointer"
             >
-              2. Condiciones de salud
+              5. Condiciones de salud
               <i v-if="condiciones_salud" class="bi bi-chevron-compact-up"></i
               ><i v-if="!condiciones_salud" class="bi bi-chevron-down"></i>
             </h5>
@@ -802,103 +1062,10 @@
         <div class="row">
           <div class="col">
             <h5
-              @click="medio_transporte = !medio_transporte"
-              style="cursor: pointer"
-            >
-              3. Medio de transporte
-              <i v-if="medio_transporte" class="bi bi-chevron-compact-up"></i
-              ><i v-if="!medio_transporte" class="bi bi-chevron-down"></i>
-            </h5>
-          </div>
-        </div>
-        <div class="info_container" v-if="medio_transporte">
-          <div class="row">
-            <div class="col flex">
-              <label for="" class="form-label">Tipo de trasnporte:</label>
-              <div>
-                <div class="form-check form-check-inline">
-                  <input
-                    class="form-check-input"
-                    type="radio"
-                    name="inlineRadioOptions"
-                    id="inlineRadio1"
-                    value="option1"
-                  />
-                  <label class="form-check-label" for="inlineRadio1"
-                    >Vehiculo propio</label
-                  >
-                </div>
-                <div class="form-check form-check-inline">
-                  <input
-                    class="form-check-input"
-                    type="radio"
-                    name="inlineRadioOptions"
-                    id="inlineRadio2"
-                    value="option2"
-                  />
-                  <label class="form-check-label" for="inlineRadio2"
-                    >Transporte publico</label
-                  >
-                </div>
-                <div class="form-check form-check-inline">
-                  <input
-                    class="form-check-input"
-                    type="radio"
-                    name="inlineRadioOptions"
-                    id="inlineRadio2"
-                    value="option2"
-                  />
-                  <label class="form-check-label" for="inlineRadio2"
-                    >Otro</label
-                  >
-                </div>
-              </div>
-            </div>
-            <div class="col">
-              <label for="" class="form-label"> Cuál?</label>
-              <input type="text" class="form-control" />
-            </div>
-          </div>
-          <div class="row">
-            <div class="col flex">
-              <label for="" class="form-label">Licencia de conducción:</label>
-              <div>
-                <div class="form-check form-check-inline">
-                  <input
-                    class="form-check-input"
-                    type="radio"
-                    name="inlineRadioOptions"
-                    id="inlineRadio1"
-                    value="option1"
-                  />
-                  <label class="form-check-label" for="inlineRadio1">Si</label>
-                </div>
-                <div class="form-check form-check-inline">
-                  <input
-                    class="form-check-input"
-                    type="radio"
-                    name="inlineRadioOptions"
-                    id="inlineRadio2"
-                    value="option2"
-                  />
-                  <label class="form-check-label" for="inlineRadio2">No</label>
-                </div>
-              </div>
-            </div>
-            <div class="col">
-              <label for="" class="form-label">Categoría</label>
-              <select name="" id="" class="form-select"></select>
-            </div>
-          </div>
-        </div>
-        <!-- Referencias personales -->
-        <div class="row">
-          <div class="col">
-            <h5
               @click="referencias_personales = !referencias_personales"
               style="cursor: pointer"
             >
-              4. Referencias personales
+              6. Referencias personales
               <i
                 v-if="referencias_personales"
                 class="bi bi-chevron-compact-up"
@@ -974,7 +1141,7 @@
         <div class="row">
           <div class="col">
             <h5 @click="hijos_info = !hijos_info" style="cursor: pointer">
-              5. Hijos
+              7. Hijos
               <i v-if="hijos_info" class="bi bi-chevron-compact-up"></i
               ><i v-if="!hijos_info" class="bi bi-chevron-down"></i>
             </h5>
@@ -1043,185 +1210,6 @@
             </div>
           </div>
         </div>
-        <div class="row">
-          <div class="col">
-            <h5
-              @click="info_academica = !info_academica"
-              style="cursor: pointer"
-            >
-              6. Información académica
-              <i v-if="info_academica" class="bi bi-chevron-compact-up"></i
-              ><i v-if="!info_academica" class="bi bi-chevron-down"></i>
-            </h5>
-          </div>
-        </div>
-        <div class="info_container" v-if="info_academica">
-          <div class="row">
-            <div class="col flex">
-              <label for="" class="form-label">Nivel de formación:</label>
-              <div>
-                <div class="form-check form-check-inline">
-                  <input
-                    class="form-check-input"
-                    type="radio"
-                    name="inlineRadioOptions"
-                    id="inlineRadio1"
-                    value="option1"
-                  />
-                  <label class="form-check-label" for="inlineRadio1"
-                    >Bachiller</label
-                  >
-                </div>
-                <div class="form-check form-check-inline">
-                  <input
-                    class="form-check-input"
-                    type="radio"
-                    name="inlineRadioOptions"
-                    id="inlineRadio2"
-                    value="option2"
-                  />
-                  <label class="form-check-label" for="inlineRadio2"
-                    >Técnico</label
-                  >
-                </div>
-                <div class="form-check form-check-inline">
-                  <input
-                    class="form-check-input"
-                    type="radio"
-                    name="inlineRadioOptions"
-                    id="inlineRadio2"
-                    value="option2"
-                  />
-                  <label class="form-check-label" for="inlineRadio2"
-                    >Tecnólogo</label
-                  >
-                </div>
-                <div class="form-check form-check-inline">
-                  <input
-                    class="form-check-input"
-                    type="radio"
-                    name="inlineRadioOptions"
-                    id="inlineRadio2"
-                    value="option2"
-                  />
-                  <label class="form-check-label" for="inlineRadio2"
-                    >Profesional</label
-                  >
-                </div>
-                <div class="form-check form-check-inline">
-                  <input
-                    class="form-check-input"
-                    type="radio"
-                    name="inlineRadioOptions"
-                    id="inlineRadio2"
-                    value="option2"
-                  />
-                  <label class="form-check-label" for="inlineRadio2"
-                    >Especialista</label
-                  >
-                </div>
-                <div class="form-check form-check-inline">
-                  <input
-                    class="form-check-input"
-                    type="radio"
-                    name="inlineRadioOptions"
-                    id="inlineRadio2"
-                    value="option2"
-                  />
-                  <label class="form-check-label" for="inlineRadio2"
-                    >Maestría</label
-                  >
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="row">
-            <div class="col">
-              <SearchList
-                nombreCampo="Sector académico:*"
-                @selectTipoId="selectTipoId"
-                eventoCampo="selectTipoId"
-                nombreItem="des_tip"
-                :consulta="nom_tip_doc"
-                :registros="consulta_tipo_id"
-                placeholder="Seleccione una opción"
-              />
-            </div>
-            <div class="col">
-              <SearchList
-                nombreCampo="Idioma:*"
-                @selectTipoId="selectTipoId"
-                eventoCampo="selectTipoId"
-                nombreItem="des_tip"
-                :consulta="nom_tip_doc"
-                :registros="consulta_tipo_id"
-                placeholder="Seleccione una opción"
-              />
-            </div>
-          </div>
-        </div>
-        <div class="row">
-          <div class="col">
-            <h5
-              @click="experiencia_laboral = !experiencia_laboral"
-              style="cursor: pointer"
-            >
-              7. Experiencia laboral
-              <i v-if="experiencia_laboral" class="bi bi-chevron-compact-up"></i
-              ><i v-if="!experiencia_laboral" class="bi bi-chevron-down"></i>
-            </h5>
-          </div>
-        </div>
-        <div class="info_container" v-if="experiencia_laboral">
-          <div v-for="(experiencia, index) in experiencias" :key="index">
-            <div class="row">
-              <h6>Experiencia {{ index + 1 }}</h6>
-            </div>
-            <div class="row">
-              <div class="col">
-                <label for="" class="form-label"> Empresa:* </label>
-                <input type="text" class="form-control" />
-              </div>
-              <div class="col">
-                <SearchList
-                  nombreCampo="Sector:*"
-                  @selectTipoId="selectTipoId"
-                  eventoCampo="selectTipoId"
-                  nombreItem="des_tip"
-                  :consulta="nom_tip_doc"
-                  :registros="consulta_tipo_id"
-                  placeholder="Seleccione una opción"
-                />
-              </div>
-            </div>
-            <div class="row">
-              <div class="col">
-                <label for="" class="form-label"> Cargo:* </label>
-                <input type="text" class="form-control" />
-              </div>
-              <div class="col">
-                <label for="" class="form-label"> Motivo del retiro:* </label>
-                <input type="text" class="form-control" />
-              </div>
-            </div>
-            <div class="row">
-              <div class="col">
-                <label for="" class="form-label">Funciones:*</label>
-                <textarea name="" id="" class="form-control"></textarea>
-              </div>
-            </div>
-            <div class="row">
-              <div class="col">
-                <label for="" class="form-label">Fecha inicio</label>
-                <input type="date" class="form-control" />
-              </div>
-              <div class="col">
-                <label for="" class="form-label">Fecha fin</label>
-                <input type="date" class="form-control" />
-              </div>
-            </div>
-          </div>
-        </div>
         <button type="submit">Enviar</button>
       </form>
     </div>
@@ -1232,13 +1220,12 @@
 // Importaciones
 import SearchList from "./SearchList.vue";
 import Loading from "./Loading.vue";
-import { ref, reactive } from "vue";
+import { ref, reactive, watch } from "vue";
 import axios from "axios";
 
 // Variables reactivas
 const loading = ref(false);
 const mensaje_error = "¡Este campo debe ser diligenciado!";
-const experiencias = ref([1]);
 const consulta_etnia = ref([]);
 const est_civ_name = ref("");
 const consulta_estado_civil = ref([]);
@@ -1270,6 +1257,42 @@ const info_academica = ref(false);
 const experiencia_laboral = ref(false);
 
 // Formulario reactivo
+
+const requiredFieldsToComplete = [
+  "dir_res",
+  "cod_ban",
+  "barrio",
+  "dir_res",
+  "cta_ban",
+  "per_car",
+  "gru_san",
+  "fac_rhh",
+  "est_soc",
+  "est_civ",
+];
+const requiredFieldsInfoPersonal = [
+  "nom1_emp",
+  "ap1_emp",
+  "ap2_emp",
+  "tip_ide",
+  "cod_emp",
+  "pai_exp",
+  "dpt_exp",
+  "ciu_exp",
+  "fec_expdoc",
+  "cod_pai",
+  "cod_dep",
+  "cod_ciu",
+  "fec_nac",
+  "tel_cel",
+  "e_mail",
+  "pai_res",
+  "dpt_res",
+  "ciu_res",
+  "sex_emp",
+  "cod_grupo",
+];
+const progress = ref(0);
 const form = reactive({
   emp_id: "",
   nom1_emp: "",
@@ -1305,6 +1328,9 @@ const form = reactive({
   raza: "",
   est_civ: "",
   est_soc: "",
+  experiencias_laborales: [],
+  sector_academico_id: "",
+  idiomas_id: [],
   familiaresConsulta: [],
   referencias: [
     { num_ref: 1, tip_ref: "", parent: "", cel_ref: "", nom_ref: "" },
@@ -1337,6 +1363,30 @@ const form = reactive({
     },
   ],
 });
+watch(
+  form,
+  () => {
+    calculateProgress();
+  },
+  { deep: true }
+);
+
+const calculateProgress = () => {
+  let completed = 0;
+
+  requiredFieldsInfoPersonal.forEach((field) => {
+    if (form[field] && form[field].toString().trim() !== "") {
+      completed++;
+    }
+  });
+
+  // Verificar campos especiales de componentes SearchList
+
+  const totalFields =
+    requiredFieldsInfoPersonal.length + requiredFieldsToComplete.length; // Campos adicionales
+
+  progress.value = ((completed / totalFields) * 100) / 8;
+};
 
 // Función para enviar el formulario
 const submitForm = async () => {
@@ -1359,6 +1409,19 @@ const submitForm = async () => {
   } finally {
     loading.value = false; // Desactivar el estado de carga
   }
+};
+const deleteExperiencia = (index) => {
+  form.experiencias_laborales.splice(index, 1);
+};
+const addExperienciaLaboral = () => {
+  form.experiencias_laborales.push({
+    empresa: "",
+    cargo: "",
+    sector_econimico_id: "",
+    motivo_retiro: "",
+    fecha_inicio: "",
+    fecha_fin: "",
+  });
 };
 
 // Función para agregar un hijo
@@ -1551,6 +1614,31 @@ const getPaises = (item = null, index = null) => {
 </script>
 
 <style scoped>
+.progress-container {
+  width: 80%;
+  height: 20px;
+  background-color: #e0e0e0;
+  border-radius: 10px;
+  margin: 20px auto;
+  position: relative;
+}
+
+.progress-bar {
+  height: 100%;
+  background: linear-gradient(90deg, #006b3f 0%, #137294 51%, #1a9438 100%);
+  border-radius: 10px;
+  transition: width 0.5s ease-in-out;
+}
+
+.progress-text {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  color: white;
+  font-weight: bold;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+}
 h2 {
   text-align: center;
 }
