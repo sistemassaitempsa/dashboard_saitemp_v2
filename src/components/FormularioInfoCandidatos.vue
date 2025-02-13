@@ -593,7 +593,7 @@
         </div>
         <div class="info_container" v-if="info_academica">
           <div class="row mb-5">
-            <div class="col-12 col-lg-6 flex">
+            <div class="col-12 col-lg-6">
               <SearchList
                 nombreCampo="Nivel académico:*"
                 @selectAcademico="selectAcademico"
@@ -604,7 +604,7 @@
                 placeholder="Seleccione una opción"
               />
             </div>
-            <div class="col">
+            <div class="col mt-0">
               <SearchList
                 nombreCampo="Sector académico:*"
                 @selectTipoId="selectTipoId"
@@ -687,15 +687,16 @@
         <div class="info_container" v-if="medio_transporte">
           <div class="row">
             <div class="col flex">
-              <label for="" class="form-label">Tipo de trasnporte:</label>
+              <label for="" class="form-label">Tipo de transporte:</label>
               <div>
                 <div class="form-check form-check-inline">
                   <input
                     class="form-check-input"
                     type="radio"
-                    name="inlineRadioOptions"
+                    name="transporteOptions"
                     id="inlineRadio1"
-                    value="option1"
+                    value="1"
+                    v-model="tipo_transporte"
                   />
                   <label class="form-check-label" for="inlineRadio1"
                     >Vehiculo propio</label
@@ -705,9 +706,10 @@
                   <input
                     class="form-check-input"
                     type="radio"
-                    name="inlineRadioOptions"
+                    name="transporteOptions"
                     id="inlineRadio2"
-                    value="option2"
+                    value="2"
+                    v-model="tipo_transporte"
                   />
                   <label class="form-check-label" for="inlineRadio2"
                     >Transporte publico</label
@@ -717,11 +719,12 @@
                   <input
                     class="form-check-input"
                     type="radio"
-                    name="inlineRadioOptions"
-                    id="inlineRadio2"
-                    value="option2"
+                    name="transporteOptions"
+                    id="inlineRadio3"
+                    value="3"
+                    v-model="tipo_transporte"
                   />
-                  <label class="form-check-label" for="inlineRadio2"
+                  <label class="form-check-label" for="inlineRadio3"
                     >Otro</label
                   >
                 </div>
@@ -729,7 +732,12 @@
             </div>
             <div class="col">
               <label for="" class="form-label"> Cuál?</label>
-              <input type="text" class="form-control" />
+              <input
+                type="text"
+                class="form-control"
+                v-model="otro_transporte"
+                :disabled="tipo_transporte == 3 ? false : true"
+              />
             </div>
           </div>
           <div class="row">
@@ -740,9 +748,10 @@
                   <input
                     class="form-check-input"
                     type="radio"
-                    name="inlineRadioOptions"
-                    id="inlineRadio1"
-                    value="option1"
+                    name="licenciaConduccion"
+                    id="inlineRadioConduccion1"
+                    value="1"
+                    v-model="licencia_conduccion"
                   />
                   <label class="form-check-label" for="inlineRadio1">Si</label>
                 </div>
@@ -750,9 +759,10 @@
                   <input
                     class="form-check-input"
                     type="radio"
-                    name="inlineRadioOptions"
-                    id="inlineRadio2"
-                    value="option2"
+                    name="licenciaConduccion"
+                    id="inlineRadioConduccion2"
+                    v-model="licencia_conduccion"
+                    value="0"
                   />
                   <label class="form-check-label" for="inlineRadio2">No</label>
                 </div>
@@ -760,7 +770,21 @@
             </div>
             <div class="col">
               <label for="" class="form-label">Categoría</label>
-              <select name="" id="" class="form-select"></select>
+              <select
+                name=""
+                id=""
+                class="form-select"
+                v-model="form.categoria_licencia"
+              >
+                <option value="A1">A1</option>
+                <option value="A2">A2</option>
+                <option value="B1">B1</option>
+                <option value="B2">B2</option>
+                <option value="B3">B3</option>
+                <option value="C1">C1</option>
+                <option value="C2">C2</option>
+                <option value="C3">C3</option>
+              </select>
             </div>
           </div>
         </div>
@@ -785,21 +809,27 @@
                   <input
                     class="form-check-input"
                     type="radio"
-                    name="inlineRadioOptions"
-                    id="inlineRadio1"
-                    value="option1"
+                    name="accidentesOptions"
+                    id="accidentesOptions1"
+                    v-model="form.acidente_laboral"
+                    value="1"
                   />
-                  <label class="form-check-label" for="inlineRadio1">Si</label>
+                  <label class="form-check-label" for="accidentesOptions1"
+                    >Si</label
+                  >
                 </div>
                 <div class="form-check form-check-inline">
                   <input
                     class="form-check-input"
                     type="radio"
-                    name="inlineRadioOptions"
-                    id="inlineRadio2"
-                    value="option2"
+                    name="accidentesOptions"
+                    id="accidentesOptions2"
+                    v-model="form.acidente_laboral"
+                    value="0"
                   />
-                  <label class="form-check-label" for="inlineRadio2">No</label>
+                  <label class="form-check-label" for="accidentesOptions2"
+                    >No</label
+                  >
                 </div>
               </div>
             </div>
@@ -810,21 +840,27 @@
                   <input
                     class="form-check-input"
                     type="radio"
-                    name="inlineRadioOptions"
-                    id="inlineRadio1"
-                    value="option1"
+                    name="enfermedadesOptions"
+                    id="enfermedadesOptions1"
+                    v-model="form.enfermedad"
+                    value="1"
                   />
-                  <label class="form-check-label" for="inlineRadio1">Si</label>
+                  <label class="form-check-label" for="enfermedadesOptions1"
+                    >Si</label
+                  >
                 </div>
                 <div class="form-check form-check-inline">
                   <input
                     class="form-check-input"
                     type="radio"
-                    name="inlineRadioOptions"
-                    id="inlineRadio2"
-                    value="option2"
+                    name="enfermedadesOptions"
+                    id="enfermedadesOptions2"
+                    v-model="form.enfermedad"
+                    value="0"
                   />
-                  <label class="form-check-label" for="inlineRadio2">No</label>
+                  <label class="form-check-label" for="enfermedadesOptions2"
+                    >No</label
+                  >
                 </div>
               </div>
             </div>
@@ -1292,7 +1328,9 @@ const referencias_personales = ref(false);
 const hijos_info = ref(false);
 const info_academica = ref(false);
 const experiencia_laboral = ref(false);
-
+const tipo_transporte = ref(2);
+const otro_transporte = ref("");
+const licencia_conduccion = ref(0);
 // Formulario reactivo
 
 const requiredFieldsToComplete = [
@@ -1331,6 +1369,7 @@ const requiredFieldsInfoPersonal = [
 ];
 const progress = ref(0);
 const form = reactive({
+  acidente_laboral: 0,
   emp_id: "",
   nom1_emp: "",
   nom2_emp: "",
@@ -1367,6 +1406,7 @@ const form = reactive({
   est_soc: "",
   experiencias_laborales: [],
   idiomas: [],
+  categoria_licencia: "",
   sector_academico_id: "",
   familiaresConsulta: [],
   referencias: [
