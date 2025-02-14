@@ -3,16 +3,14 @@
     <Loading :loading="loading" />
 
     <h2>Registro de datos personales</h2>
+    <!-- barra para el pocrcentaje de llenado -->
+    <div class="progress-container">
+      <div class="progress-bar" :style="{ width: progress + '%' }"></div>
+      <span class="progress-text">{{ Math.round(progress) }}% completado</span>
+    </div>
+    <!-- --------------------------- -->
     <div id="seccion">
       <form @submit.prevent="submitForm" class="row g-3">
-        <!-- barra para el pocrcentaje de llenado -->
-        <div class="progress-container">
-          <div class="progress-bar" :style="{ width: progress + '%' }"></div>
-          <span class="progress-text"
-            >{{ Math.round(progress) }}% completado</span
-          >
-        </div>
-        <!-- --------------------------- -->
         <p>
           Ingrese la información requerida en cada sección, para desplegar una
           seccion debe hacer clic en ella.
@@ -550,17 +548,17 @@
             </div>
             <div class="row">
               <div class="col">
-                <label for="" class="form-label">Fecha inicio</label>
+                <label for="" class="form-label">Fecha inicio:</label>
                 <input
-                  type="date"
+                  type="month"
                   class="form-control"
                   v-model="experiencia.fecha_inicio"
                 />
               </div>
               <div class="col">
-                <label for="" class="form-label">Fecha fin</label>
+                <label for="" class="form-label">Fecha fin:</label>
                 <input
-                  type="date"
+                  type="month"
                   class="form-control"
                   v-model="experiencia.fecha_fin"
                 />
@@ -1242,7 +1240,25 @@
             :key="index"
           >
             <div class="info_container">
-              <h6>{{ "Referencia " + (index + 1) }}</h6>
+              <div class="row">
+                <div class="col">
+                  <h6>{{ "Referencia " + (index + 1) }}</h6>
+                </div>
+                <div class="col-sm-12 col-md-6 mb-3">
+                  <div
+                    v-if="form.referencias.length > 2"
+                    class="d-flex justify-content-end align-items-end w-100 h-100"
+                  >
+                    <label
+                      class="bi bi-trash-fill labelOption"
+                      @click="deleteReferencia(index)"
+                    >
+                      Eliminar</label
+                    >
+                  </div>
+                </div>
+              </div>
+
               <div class="row">
                 <div class="col-12 col-lg-3">
                   <label class="form-label" for="tipo_ref"
@@ -1296,6 +1312,17 @@
               </div>
             </div>
           </div>
+          <div
+            class="row mt-5 trash justify-content-center align-items-center padding-1"
+          >
+            <label
+              id="clasificador"
+              @click="addReferencia()"
+              style="cursor: pointer"
+              ><i class="bi bi-plus-circle-fill"></i>
+              Agregar referencia
+            </label>
+          </div>
         </div>
 
         <!-- Hijos -->
@@ -1315,7 +1342,25 @@
             :key="index"
           >
             <div class="info_container">
-              <h6>{{ "Hijo " + (index + 1) }}</h6>
+              <div class="row">
+                <div class="col">
+                  <h6>{{ "Hijo " + (index + 1) }}</h6>
+                </div>
+
+                <div class="col-sm-12 col-md-6 mb-3">
+                  <div
+                    class="d-flex justify-content-end align-items-end w-100 h-100"
+                  >
+                    <label
+                      class="bi bi-trash-fill labelOption"
+                      @click="deleteHijo(index)"
+                    >
+                      Eliminar</label
+                    >
+                  </div>
+                </div>
+              </div>
+
               <div class="row">
                 <div class="col-12 col-lg-3">
                   <label class="form-label" for="primer_apellido_hijo"
@@ -1363,12 +1408,13 @@
               </div>
             </div>
           </div>
-          <div class="row" v-if="form.familiares.length < 3">
-            <div class="col-3 col-md-1 mt-3">
-              <button type="button" class="btn_outline" @click="addHijo">
-                <i class="bi bi-plus color_green"></i>
-              </button>
-            </div>
+          <div
+            class="row mt-5 trash justify-content-center align-items-center padding-1"
+          >
+            <label id="clasificador" @click="addHijo()" style="cursor: pointer"
+              ><i class="bi bi-plus-circle-fill"></i>
+              Agregar hijo
+            </label>
           </div>
         </div>
         <button type="submit">Enviar</button>
@@ -1520,32 +1566,7 @@ const form = reactive({
     { num_ref: 1, tip_ref: "", parent: "", cel_ref: "", nom_ref: "" },
     { num_ref: 2, tip_ref: "", parent: "", cel_ref: "", nom_ref: "" },
   ],
-  familiares: [
-    {
-      ap1_fam: "",
-      ap2_fam: "",
-      nom_fam: "",
-      tip_fam: 2,
-      fec_nac: "",
-      ocu_fam: 7,
-    },
-    {
-      ap1_fam: "",
-      ap2_fam: "",
-      nom_fam: "",
-      tip_fam: 2,
-      fec_nac: "",
-      ocu_fam: 7,
-    },
-    {
-      ap1_fam: "",
-      ap2_fam: "",
-      nom_fam: "",
-      tip_fam: 2,
-      fec_nac: "",
-      ocu_fam: 7,
-    },
-  ],
+  familiares: [],
 });
 watch(
   form,
@@ -1613,16 +1634,14 @@ const addExperienciaLaboral = () => {
 
 // Función para agregar un hijo
 const addHijo = () => {
-  if (form.familiares.length < 3) {
-    form.familiares.push({
-      ap1_fam: "",
-      ap2_fam: "",
-      nom_fam: "",
-      tip_fam: 2,
-      fec_nac: "",
-      ocu_fam: 7,
-    });
-  }
+  form.familiares.push({
+    ap1_fam: "",
+    ap2_fam: "",
+    nom_fam: "",
+    tip_fam: 2,
+    fec_nac: "",
+    ocu_fam: 7,
+  });
 };
 
 // Formatear fecha
@@ -1631,6 +1650,19 @@ const formattedDate = (date) => {
   return date.split(" ")[0];
 };
 
+const deleteReferencia = (index) => {
+  form.referencias.splice(index, 1);
+};
+
+const addReferencia = () => {
+  form.referencias.push({
+    num_ref: form.referencias.length + 1,
+    tip_ref: "",
+    parent: "",
+    cel_ref: "",
+    nom_ref: "",
+  });
+};
 // Actualizar fecha de nacimiento
 const updateFecha = (event, familiar) => {
   const fecha = event.target.value;
@@ -1650,6 +1682,9 @@ const selectEtnia = (item) => {
     });
 };
 
+const deleteHijo = (index) => {
+  form.familiares.splice(index, 1);
+};
 const selectEstadoCivil = (item) => {
   axios
     .get(`${URL_API}/api/v1/estadocivil`)

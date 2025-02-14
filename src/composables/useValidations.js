@@ -20,7 +20,7 @@ export const useValidation = () => {
   const validateEmail = (email) => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!email) {
-      emailError.value = "El email es requerido.";
+      emailError.value = "";
       return false;
     } else if (!emailRegex.test(email)) {
       emailError.value = "El email no es válido.";
@@ -42,7 +42,7 @@ export const useValidation = () => {
     // Expresión regular para al menos una letra mayúscula y un número
     const passwordRegex = /^(?=.*[A-Z])(?=.*\d).{6,}$/;
     if (!password) {
-      passwordError.value = "La contraseña es requerida.";
+      passwordError.value = "";
       return false;
     } else if (!passwordRegex.test(password)) {
       passwordError.value =
@@ -56,7 +56,7 @@ export const useValidation = () => {
   const validateNumeroDocumento = (numeroDocumento) => {
     const numeroDocumentoRegex = /^\d{4,}$/;
     if (!numeroDocumento) {
-      numeroDocumentoError.value = "El número de documento es requerido.";
+      numeroDocumentoError.value = "";
       return false;
     } else if (!numeroDocumentoRegex.test(numeroDocumento)) {
       numeroDocumentoError.value =

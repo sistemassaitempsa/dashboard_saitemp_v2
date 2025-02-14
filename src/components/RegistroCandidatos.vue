@@ -11,8 +11,8 @@
           </div>
         </div>
         <form class="formRegister" action="">
-          <h2 class="mb-5">Crea tu cuenta</h2>
-          <div class="row mb-4">
+          <h2 class="mb-3">Crea tu cuenta</h2>
+          <div class="row mb-3">
             <div class="col">
               <label for="" class="form-label">Nombres:*</label>
               <input
@@ -46,7 +46,7 @@
               </div>
             </div>
           </div>
-          <div class="row mb-4">
+          <div class="row mb-3">
             <div class="col">
               <label for="" class="form-label">Teléfono celular:*</label>
               <input
@@ -81,7 +81,7 @@
               </select>
             </div>
           </div>
-          <div class="row mb-4">
+          <div class="row mb-3">
             <div class="col">
               <label for="" class="form-label">Numero de documento:*</label>
               <input
@@ -91,11 +91,17 @@
                 @focus="isFocusNumDoc = true"
                 @input="validateNumeroDocumento(cliente.numero_documento)"
                 @blur="isFocusNumDoc = false"
-                :class="{ 'is-invalid': numeroDocumentoError }"
+                :class="{
+                  'is-invalid':
+                    numeroDocumentoError || cliente.numero_documento == '',
+                }"
                 required
               />
 
-              <div v-if="numeroDocumentoError" class="invalid-feedback">
+              <div
+                v-if="numeroDocumentoError || cliente.numero_documento == ''"
+                class="invalid-feedback"
+              >
                 {{ numeroDocumentoError }}
               </div>
             </div>
@@ -110,8 +116,17 @@
                 @focus="isFocusNumDocConfirmation = true"
                 @input="validateNumeroDocConfimation"
                 @blur="isFocusNumDocConfirmation = false"
+                :disabled="
+                  numeroDocumentoError == '' && cliente.numero_documento != ''
+                    ? false
+                    : true
+                "
                 @paste.prevent
-                :class="{ 'is-invalid': errorConfirmationStyle }"
+                :class="{
+                  'is-invalid':
+                    errorConfirmationStyle ||
+                    numero_documento_confirmation == '',
+                }"
                 required
               />
 
@@ -121,7 +136,7 @@
             </div>
           </div>
 
-          <div class="row mb-4">
+          <div class="row mb-3">
             <div class="col">
               <label for="" class="form-label">Correo electónico:*</label>
               <input
@@ -131,16 +146,19 @@
                 @focus="isFocusEmail = true"
                 @input="validateEmail(cliente.email)"
                 @blur="isFocusEmail = false"
-                :class="{ 'is-invalid': emailError }"
+                :class="{ 'is-invalid': emailError || cliente.email == '' }"
                 required
               />
-              <div v-if="emailError" class="invalid-feedback">
+              <div
+                v-if="emailError || cliente.email == ''"
+                class="invalid-feedback"
+              >
                 {{ emailError }}
               </div>
             </div>
             <div class="col">
               <label for="" class="form-label"
-                >Confirme correo electrónico</label
+                >Confirme correo electrónico:*</label
               >
               <input
                 type="text"
@@ -150,7 +168,13 @@
                 @input="validateEmailConfimation"
                 @blur="isFocusEmailConfirmation = false"
                 @paste.prevent
-                :class="{ 'is-invalid': errorConfirmationEmail }"
+                :disabled="
+                  emailError == '' && cliente.email != '' ? false : true
+                "
+                :class="{
+                  'is-invalid':
+                    errorConfirmationEmail || email_confirmation == '',
+                }"
                 required
               />
               <div v-if="errorConfirmationEmailStyle" class="invalid-feedback">
@@ -158,7 +182,7 @@
               </div>
             </div>
           </div>
-          <div class="row mb-4">
+          <div class="row mb-3">
             <div class="col">
               <label for="" class="form-label">Contraseña:*</label>
               <input
@@ -168,11 +192,16 @@
                 @focus="isFocusPassword = true"
                 @input="validatePassword(cliente.password)"
                 @blur="isFocusPassword = false"
-                :class="{ 'is-invalid': passwordError }"
+                :class="{
+                  'is-invalid': passwordError || cliente.password == '',
+                }"
                 required
               />
 
-              <div v-if="passwordError" class="invalid-feedback">
+              <div
+                v-if="passwordError || cliente.password == ''"
+                class="invalid-feedback"
+              >
                 {{ passwordError }}
               </div>
             </div>
@@ -186,8 +215,15 @@
                 @blur="isFocusPasswordConfirmation = false"
                 @input="validatePasswordConfimation"
                 @paste.prevent
+                :disabled="
+                  passwordError == '' && cliente.password != '' ? false : true
+                "
                 required
-                :class="{ 'is-invalid': errorConfirmationPassword }"
+                :class="{
+                  'is-invalid':
+                    errorConfirmationPassword ||
+                    cliente.password_confirmation == '',
+                }"
               />
 
               <div
@@ -198,7 +234,7 @@
               </div>
             </div>
           </div>
-          <div class="row mb-4">
+          <div class="row mb-3">
             <div class="form-check">
               <label class="form-check-label">
                 <input
@@ -217,7 +253,7 @@
               </label>
             </div>
           </div>
-          <div class="row mb-4 mb-4">
+          <div class="row mb-3 mb-3">
             <div class="col">
               <button class="btn btn-success" @click="saveForm">
                 Registrarse
@@ -280,7 +316,7 @@ let cliente = reactive({
   doc_tip_id: "01",
 });
 const autorizacion = ref(false);
-const error = "Campo requerido";
+const error = "";
 const errorConfirmationNumDoc = ref("");
 const errorConfirmationEmail = ref("");
 const errorConfirmationPassword = ref("");
@@ -307,7 +343,7 @@ const getTiposDocumento = async () => {
 };
 const validatePasswordConfimation = () => {
   if (cliente.password_confirmation == "") {
-    errorConfirmationPassword.value = "Campo requerido";
+    errorConfirmationPassword.value = "";
     errorConfirmationPasswordStyle.value = true;
   } else if (cliente.password_confirmation != cliente.password) {
     errorConfirmationPassword.value = "Las contraseñas deben ser idénticas";
@@ -319,7 +355,7 @@ const validatePasswordConfimation = () => {
 };
 const validateEmailConfimation = () => {
   if (email_confirmation.value == "") {
-    errorConfirmationEmail.value = "Campo requerido";
+    errorConfirmationEmail.value = "";
     errorConfirmationEmailStyle.value = true;
   } else if (email_confirmation.value != cliente.email) {
     errorConfirmationEmail.value = "Los correos deben ser idénticos";
@@ -332,7 +368,7 @@ const validateEmailConfimation = () => {
 
 const validateNumeroDocConfimation = () => {
   if (numero_documento_confirmation.value == "") {
-    errorConfirmationNumDoc.value = "Campo requerido";
+    errorConfirmationNumDoc.value = "";
     errorConfirmationStyle.value = true;
   } else if (numero_documento_confirmation.value != cliente.numero_documento) {
     errorConfirmationNumDoc.value =
@@ -435,9 +471,9 @@ label {
   width: 80%;
   max-width: 1000px;
   margin: 1vh auto;
-  padding: 4em;
-  padding-top: 4em;
-  padding-bottom: 4em;
+  padding: 3em;
+  padding-top: 2em;
+  padding-bottom: 2em;
   background-color: rgb(255, 255, 255);
   box-shadow: rgba(0, 0, 0, 0.25) 0px 14px 28px,
     rgba(0, 0, 0, 0.22) 0px 10px 10px;
@@ -502,7 +538,7 @@ label {
 
 /* Logo */
 .logo {
-  width: 200px;
+  width: 150px;
   margin: auto;
   margin-bottom: 1em;
 }
@@ -511,7 +547,7 @@ label {
   width: 100%;
 }
 .saitemp {
-  width: 150px;
+  width: 100px;
 }
 /* Formulario */
 .formRegister {
@@ -644,7 +680,7 @@ label {
     flex-direction: column;
     gap: 2em;
   }
-  .row mb-4 {
+  .row mb-3 {
     flex-direction: column;
   }
 
