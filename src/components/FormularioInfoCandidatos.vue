@@ -5,7 +5,7 @@
     <h2>Registro de datos personales</h2>
     <!-- barra para el pocrcentaje de llenado -->
     <div class="progress-container">
-      <div class="progress-bar" :style="{ width: progress + '%' }"></div>
+      <div class="progress-bar" :style="{ height: progress + '%' }"></div>
       <span class="progress-text">{{ Math.round(progress) }}% completado</span>
     </div>
     <!-- --------------------------- -->
@@ -371,6 +371,17 @@
                 {{ "" }}
               </div>
             </div>
+            <div class="col-12 col-lg-6">
+              <SearchList
+                nombreCampo="Estado civil:*"
+                @selectEstadoCivil="selectEstadoCivil"
+                eventoCampo="selectEstadoCivil"
+                nombreItem="des_est"
+                :consulta="est_civ_name"
+                :registros="consulta_estado_civil"
+                placeholder="Seleccione una opción"
+              />
+            </div>
           </div>
           <!-- Personas a Cargo y Grupo Sanguíneo -->
           <div class="row mb-4">
@@ -446,17 +457,6 @@
                 nombreItem="descripcion"
                 :consulta="form.raza"
                 :registros="consulta_etnia"
-                placeholder="Seleccione una opción"
-              />
-            </div>
-            <div class="col-12 col-lg-6">
-              <SearchList
-                nombreCampo="Estado civil:*"
-                @selectEstadoCivil="selectEstadoCivil"
-                eventoCampo="selectEstadoCivil"
-                nombreItem="des_est"
-                :consulta="est_civ_name"
-                :registros="consulta_estado_civil"
                 placeholder="Seleccione una opción"
               />
             </div>
@@ -1865,26 +1865,31 @@ const getPaises = (item = null, index = null) => {
 
 <style scoped>
 .progress-container {
-  width: 80%;
-  height: 20px;
+  width: 20px;
+  height: 200px; /* Altura del contenedor */
   background-color: #e0e0e0;
   border-radius: 10px;
   margin: 20px auto;
   position: relative;
+  display: flex;
+  align-items: flex-end; /* Para que la barra crezca desde abajo */
 }
 
 .progress-bar {
-  height: 100%;
-  background: linear-gradient(90deg, #006b3f 0%, #137294 51%, #1a9438 100%);
+  width: 100%;
+  background: linear-gradient(0deg, #006b3f 0%, #137294 51%, #1a9438 100%);
   border-radius: 10px;
-  transition: width 0.5s ease-in-out;
+  transition: height 0.5s ease-in-out;
+  position: absolute;
+  bottom: 0%;
 }
 
 .progress-text {
   position: absolute;
   left: 50%;
   top: 50%;
-  transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%) rotate(-90deg); /* Texto vertical */
+  white-space: nowrap;
   color: white;
   font-weight: bold;
   text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
