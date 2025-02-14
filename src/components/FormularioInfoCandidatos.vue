@@ -871,21 +871,27 @@
                   <input
                     class="form-check-input"
                     type="radio"
-                    name="inlineRadioOptions"
-                    id="inlineRadio1"
-                    value="option1"
+                    name="inlineRadioOptionsTratamientoMedico"
+                    id="TratamientoMedico1"
+                    v-model="form.tratamiento_medico"
+                    value="1"
                   />
-                  <label class="form-check-label" for="inlineRadio1">Si</label>
+                  <label class="form-check-label" for="TratamientoMedico1"
+                    >Si</label
+                  >
                 </div>
                 <div class="form-check form-check-inline">
                   <input
                     class="form-check-input"
                     type="radio"
-                    name="inlineRadioOptions"
-                    id="inlineRadio2"
-                    value="option2"
+                    name="inlineRadioOptionsTratamientoMedico"
+                    id="TratamientoMedico2"
+                    v-model="form.tratamiento_medico"
+                    value="0"
                   />
-                  <label class="form-check-label" for="inlineRadio2">No</label>
+                  <label class="form-check-label" for="TratamientoMedico2"
+                    >No</label
+                  >
                 </div>
               </div>
             </div>
@@ -900,21 +906,31 @@
                   <input
                     class="form-check-input"
                     type="radio"
-                    name="inlineRadioOptions"
-                    id="inlineRadio1"
-                    value="option1"
+                    name="tratamientoPsicologicoOptions"
+                    id="tratamientoPsicologicoOptions1"
+                    v-model="form.tratamiento_psicologico"
+                    value="1"
                   />
-                  <label class="form-check-label" for="inlineRadio1">Si</label>
+                  <label
+                    class="form-check-label"
+                    for="tratamientoPsicologicoOptions1"
+                    >Si</label
+                  >
                 </div>
                 <div class="form-check form-check-inline">
                   <input
                     class="form-check-input"
                     type="radio"
-                    name="inlineRadioOptions"
-                    id="inlineRadio2"
-                    value="option2"
+                    name="tratamientoPsicologicoOptions"
+                    id="tratamientoPsicologicoOptions2"
+                    v-model="form.tratamiento_psicologico"
+                    value="0"
                   />
-                  <label class="form-check-label" for="inlineRadio2">No</label>
+                  <label
+                    class="form-check-label"
+                    for="tratamientoPsicologicoOptions2"
+                    >No</label
+                  >
                 </div>
               </div>
             </div>
@@ -927,21 +943,31 @@
                   <input
                     class="form-check-input"
                     type="radio"
-                    name="inlineRadioOptions"
-                    id="inlineRadio1"
-                    value="option1"
+                    name="tratamientoPsiquiatricoRadioOptions"
+                    id="tratamientoPsiquiatricoRadioOptions1"
+                    v-model="form.tratamiento_psiquiatrico"
+                    value="1"
                   />
-                  <label class="form-check-label" for="inlineRadio1">Si</label>
+                  <label
+                    class="form-check-label"
+                    for="tratamientoPsiquiatricoRadioOptions1"
+                    >Si</label
+                  >
                 </div>
                 <div class="form-check form-check-inline">
                   <input
                     class="form-check-input"
                     type="radio"
-                    name="inlineRadioOptions"
-                    id="inlineRadio2"
-                    value="option2"
+                    name="tratamientoPsiquiatricoRadioOptions"
+                    v-model="form.tratamiento_psiquiatrico"
+                    id="tratamientoPsiquiatricoRadioOptions2"
+                    value="0"
                   />
-                  <label class="form-check-label" for="inlineRadio2">No</label>
+                  <label
+                    class="form-check-label"
+                    for="tratamientoPsiquiatricoRadioOptions2"
+                    >No</label
+                  >
                 </div>
               </div>
             </div>
@@ -954,21 +980,31 @@
                   <input
                     class="form-check-input"
                     type="radio"
-                    name="inlineRadioOptions"
-                    id="inlineRadio1"
-                    value="option1"
+                    name="tratamientoOdontologicoRadioOptions"
+                    id="tratamientoOdontologicoRadioOptions1"
+                    v-model="form.tratamiento_odontologico"
+                    value="1"
                   />
-                  <label class="form-check-label" for="inlineRadio1">Si</label>
+                  <label
+                    class="form-check-label"
+                    for="tratamientoOdontologicoRadioOptions1"
+                    >Si</label
+                  >
                 </div>
                 <div class="form-check form-check-inline">
                   <input
                     class="form-check-input"
                     type="radio"
-                    name="inlineRadioOptions"
-                    id="inlineRadio2"
-                    value="option2"
+                    name="tratamientoOdontologicoRadioOptions"
+                    v-model="form.tratamiento_odontologico"
+                    id="tratamientoOdontologicoRadioOptions2"
+                    value="0"
                   />
-                  <label class="form-check-label" for="inlineRadio2">No</label>
+                  <label
+                    class="form-check-label"
+                    for="tratamientoOdontologicoRadioOptions2"
+                    >No</label
+                  >
                 </div>
               </div>
             </div>
@@ -981,21 +1017,27 @@
                   <input
                     class="form-check-input"
                     type="radio"
-                    name="inlineRadioOptions"
-                    id="inlineRadio1"
-                    value="option1"
+                    name="AlergiasRadioOptions"
+                    v-model="form.alerigia"
+                    id="AlergiasRadioOptions1"
+                    value="1"
                   />
-                  <label class="form-check-label" for="inlineRadio1">Si</label>
+                  <label class="form-check-label" for="AlergiasRadioOptions1"
+                    >Si</label
+                  >
                 </div>
                 <div class="form-check form-check-inline">
                   <input
                     class="form-check-input"
                     type="radio"
-                    name="inlineRadioOptions"
-                    id="inlineRadio2"
-                    value="option2"
+                    name="AlergiasRadioOptions"
+                    v-model="form.alerigia"
+                    id="AlergiasRadioOptions2"
+                    value="0"
                   />
-                  <label class="form-check-label" for="inlineRadio2">No</label>
+                  <label class="form-check-label" for="AlergiasRadioOptions2"
+                    >No</label
+                  >
                 </div>
               </div>
             </div>
@@ -1006,21 +1048,27 @@
                   <input
                     class="form-check-input"
                     type="radio"
-                    name="inlineRadioOptions"
-                    id="inlineRadio1"
-                    value="option1"
+                    v-model="form.fractura"
+                    name="fracturaRadioOptions"
+                    id="fracturaRadioOptions1"
+                    value="1"
                   />
-                  <label class="form-check-label" for="inlineRadio1">Si</label>
+                  <label class="form-check-label" for="fracturaRadioOptions1"
+                    >Si</label
+                  >
                 </div>
                 <div class="form-check form-check-inline">
                   <input
                     class="form-check-input"
                     type="radio"
-                    name="inlineRadioOptions"
-                    id="inlineRadio2"
-                    value="option2"
+                    name="fracturaRadioOptions"
+                    v-model="form.fractura"
+                    id="fracturaRadioOptions2"
+                    value="0"
                   />
-                  <label class="form-check-label" for="inlineRadio2">No</label>
+                  <label class="form-check-label" for="fracturaRadioOptions2"
+                    >No</label
+                  >
                 </div>
               </div>
             </div>
@@ -1031,21 +1079,27 @@
                   <input
                     class="form-check-input"
                     type="radio"
-                    name="inlineRadioOptions"
-                    id="inlineRadio1"
-                    value="option1"
+                    v-model="form.cirugia"
+                    name="cirugiaRadioOptions"
+                    id="cirugiaRadioOptions1"
+                    value="1"
                   />
-                  <label class="form-check-label" for="inlineRadio1">Si</label>
+                  <label class="form-check-label" for="cirugiaRadioOptions1"
+                    >Si</label
+                  >
                 </div>
                 <div class="form-check form-check-inline">
                   <input
                     class="form-check-input"
                     type="radio"
-                    name="inlineRadioOptions"
-                    id="inlineRadio2"
-                    value="option2"
+                    name="cirugiaRadioOptions"
+                    id="cirugiaRadioOptions2"
+                    v-model="form.cirugia"
+                    value="0"
                   />
-                  <label class="form-check-label" for="inlineRadio2">No</label>
+                  <label class="form-check-label" for="cirugiaRadioOptions2"
+                    >No</label
+                  >
                 </div>
               </div>
             </div>
@@ -1058,23 +1112,33 @@
               <div>
                 <div class="form-check form-check-inline">
                   <input
+                    v-model="form.sustencia_psicoactiva"
                     class="form-check-input"
                     type="radio"
-                    name="inlineRadioOptions"
-                    id="inlineRadio1"
-                    value="option1"
+                    name="sustenciaPsicoactivaRadioOptions"
+                    id="sustenciaPsicoactivaRadioOptions1"
+                    value="1"
                   />
-                  <label class="form-check-label" for="inlineRadio1">Si</label>
+                  <label
+                    class="form-check-label"
+                    for="sustenciaPsicoactivaRadioOptions1"
+                    >Si</label
+                  >
                 </div>
                 <div class="form-check form-check-inline">
                   <input
+                    v-model="form.sustencia_psicoactiva"
                     class="form-check-input"
                     type="radio"
-                    name="inlineRadioOptions"
-                    id="inlineRadio2"
-                    value="option2"
+                    name="sustenciaPsicoactivaRadioOptions"
+                    id="sustenciaPsicoactivaRadioOptions2"
+                    value="0"
                   />
-                  <label class="form-check-label" for="inlineRadio2">No</label>
+                  <label
+                    class="form-check-label"
+                    for="sustenciaPsicoactivaRadioOptions2"
+                    >No</label
+                  >
                 </div>
               </div>
             </div>
@@ -1085,21 +1149,27 @@
                   <input
                     class="form-check-input"
                     type="radio"
-                    name="inlineRadioOptions"
-                    id="inlineRadio1"
-                    value="option1"
+                    name="lentesRadioOptions"
+                    id="lentesRadioOptions1"
+                    v-model="form.lentes"
+                    value="1"
                   />
-                  <label class="form-check-label" for="inlineRadio1">Si</label>
+                  <label class="form-check-label" for="lentesRadioOptions1"
+                    >Si</label
+                  >
                 </div>
                 <div class="form-check form-check-inline">
                   <input
                     class="form-check-input"
                     type="radio"
-                    name="inlineRadioOptions"
-                    id="inlineRadio2"
-                    value="option2"
+                    name="lentesRadioOptions"
+                    id="lentesRadioOptions2"
+                    v-model="form.lentes"
+                    value="0"
                   />
-                  <label class="form-check-label" for="inlineRadio2">No</label>
+                  <label class="form-check-label" for="lentesRadioOptions2"
+                    >No</label
+                  >
                 </div>
               </div>
             </div>
@@ -1108,11 +1178,15 @@
           <div class="row">
             <div class="col">
               <label for="" class="form-label">Estatura(cm):</label>
-              <input type="number" class="form-control" />
+              <input
+                type="number"
+                class="form-control"
+                v-model="form.estatura"
+              />
             </div>
             <div class="col">
               <label for="" class="form-label">Peso(kg):</label>
-              <input type="number" class="form-control" />
+              <input type="number" class="form-control" v-model="form.peso" />
             </div>
           </div>
           <div class="row">
@@ -1120,7 +1194,17 @@
               <SearchList nombreCampo="EPS:*" />
             </div>
             <div class="col">
-              <SearchList nombreCampo="AFP:*" />
+              <SearchList
+                nombreCampo="AFP: *"
+                @getAFP="getAFP"
+                eventoCampo="getAFP"
+                nombreItem="nombre"
+                :consulta="consulta_afp"
+                :registros="lista_afp"
+                :ordenCampo="1"
+                :valida_campo="false"
+                placeholder="Seleccione una opción"
+              />
             </div>
           </div>
           <div class="row">
@@ -1128,7 +1212,11 @@
               <label for="" class="form-label"
                 >Ampliación de las condiciones de salud:</label
               >
-              <textarea class="form-control" />
+              <textarea
+                class="form-control"
+                v-model="form.descripcion_salud"
+                maxlength="300"
+              />
             </div>
           </div>
         </div>
@@ -1292,11 +1380,14 @@
 <script setup>
 // Importaciones
 import SearchList from "./SearchList.vue";
+import { useToken } from "../composables/useToken";
 import Loading from "./Loading.vue";
 import { ref, reactive, watch } from "vue";
 import axios from "axios";
 
 // Variables reactivas
+
+const { configHeader } = useToken();
 const loading = ref(false);
 const mensaje_error = "¡Este campo debe ser diligenciado!";
 const consulta_etnia = ref([]);
@@ -1367,8 +1458,24 @@ const requiredFieldsInfoPersonal = [
   "sex_emp",
   "cod_grupo",
 ];
+const lista_afp = ref([]);
+const consulta_afp = ref("");
 const progress = ref(0);
 const form = reactive({
+  descripcion_salud: "",
+  afp_id: "",
+  peso: 0,
+  estatura: 0,
+  sustencia_psicoactiva: 0,
+  enfermedad: 0,
+  lentes: 0,
+  cirugia: 0,
+  alerigia: 0,
+  fractura: 0,
+  tratamiento_odontologico: 0,
+  tratamiento_psiquiatrico: 0,
+  tratamiento_psicologico: 0,
+  tratamiento_medico: 0,
   acidente_laboral: 0,
   emp_id: "",
   nom1_emp: "",
@@ -1584,6 +1691,15 @@ const addIdioma = () => {
     id: "",
     nivel: "",
   });
+};
+const getAFP = async (item = null) => {
+  if (item != null) {
+    consulta_afp.value = item.nombre;
+    form.afp_id = item.id;
+  }
+
+  const response = await axios.get(URL_API + "api/v1/afp", configHeader());
+  lista_afp.value = response.data;
 };
 
 /* const selectIdioma = (item) => {
