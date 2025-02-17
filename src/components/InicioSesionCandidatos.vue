@@ -9,8 +9,20 @@
         class="videoBackground"
       ></video>
       <div class="background_color"></div> -->
-      <img src="@/assets/imgLogin2.jpg" alt="" class="imgLogin" />
-      <div class="background_color"></div>
+      <img
+        src="@/assets/imgLogin2.jpg"
+        alt=""
+        class="imgLogin"
+        v-if="toogleRegister == false"
+      />
+      <img src="@/assets/imgLogin3.jpg" alt="" class="imgLogin" v-else />
+      <div
+        :class="
+          toogleRegister == false
+            ? 'background_color'
+            : 'background_color background_color_register'
+        "
+      ></div>
     </div>
 
     <div v-if="toogleLogin" :class="classCardLogin">
@@ -289,7 +301,7 @@ button {
   width: 100%;
   box-sizing: content-box;
   position: absolute;
-  right: 8%;
+  right: 0%;
 }
 .labelPassword {
   text-align: right;
@@ -354,6 +366,16 @@ button {
     rgba(255, 255, 255, 0.623) 10%,
     rgba(255, 255, 255, 1) 20%,
     rgba(255, 255, 255, 1) 100%
+  );
+}
+.background_color_register {
+  left: -45%;
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 1) 70%,
+    rgba(255, 255, 255, 0.623) 80%,
+    rgba(255, 255, 255, 0.479) 90%,
+    rgba(255, 255, 255, 0.479) 100%
   );
 }
 .fadeOutUpBig-enter-active {

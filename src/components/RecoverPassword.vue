@@ -2,13 +2,7 @@
   <div class="containerPrincipal">
     <Loading :loading="loading" />
     <div class="videoContainer">
-      <video
-        src="../assets/video.mp4"
-        autoplay
-        muted
-        loop
-        class="videoBackground"
-      ></video>
+      <img src="@/assets/imgLogin4.jpg" alt="" class="imgLogin" />
       <div class="background_color"></div>
     </div>
     <div class="containerRecoverPassword card">
@@ -27,19 +21,6 @@
         </p>
       </div>
       <form action="">
-        <div class="row mb-3">
-          <div class="col">
-            <label for="" class="form-label">Número de documento:</label>
-            <input
-              type="text"
-              class="form-control"
-              required
-              v-model="cliente.num_doc"
-              @input="validateNumeroDocumento(cliente.num_doc)"
-              :class="{ 'is-invalid': numeroDocumentoError }"
-            />
-          </div>
-        </div>
         <div class="row mb-4 nom_border">
           <div class="col">
             <label for="" class="form-label">Tipo de documento:</label>
@@ -59,6 +40,20 @@
             </select>
           </div>
         </div>
+        <div class="row mb-3">
+          <div class="col">
+            <label for="" class="form-label">Número de documento:</label>
+            <input
+              type="text"
+              class="form-control"
+              required
+              v-model="cliente.num_doc"
+              @input="validateNumeroDocumento(cliente.num_doc)"
+              :class="{ 'is-invalid': numeroDocumentoError }"
+            />
+          </div>
+        </div>
+
         <div class="row nom_border">
           <div class="col">
             <button class="btn btn-success" @click="recuperarContrasenaHandle">
@@ -174,23 +169,23 @@ label {
   left: 100%;
 }
 .containerPrincipal {
-  padding: 0px;
-  height: 100vh;
+  display: flex;
+  min-height: 100vh;
   position: relative;
-  width: 100%;
+  justify-content: center;
+  align-items: center;
 }
 .card {
   width: 30em;
   margin: auto;
-  margin-top: 5vh;
   padding: 4em;
   background-color: rgb(255, 255, 255);
   min-width: 350px;
   box-shadow: rgba(0, 0, 0, 0.25) 0px 14px 28px,
     rgba(0, 0, 0, 0.22) 0px 10px 10px;
-  position: absolute;
+  position: relative;
   z-index: 100;
-  left: 35%;
+  right: -25%;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -226,15 +221,37 @@ label {
 video {
   box-sizing: content-box;
 }
+.imgLogin {
+  width: 100%;
+  box-sizing: content-box;
+  position: absolute;
+  right: 0%;
+}
 .videoContainer {
   z-index: 0;
   position: absolute;
+  height: 100%;
   width: 100%;
   overflow: hidden;
   opacity: 0.8;
   display: flex;
   justify-content: center;
   align-items: center;
+}
+.background_color {
+  height: 180%;
+  width: 100%;
+  position: absolute;
+  top: -20%;
+  left: 45%;
+  border-radius: 50%;
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0.479) 0%,
+    rgba(255, 255, 255, 0.623) 10%,
+    rgba(255, 255, 255, 1) 20%,
+    rgba(255, 255, 255, 1) 100%
+  );
 }
 .logosContainer {
   display: flex;
@@ -245,18 +262,5 @@ video {
 }
 .saitemp {
   width: 100px;
-}
-.background_color {
-  height: 100%;
-  width: 100%;
-  position: absolute;
-  top: 0;
-  left: 0;
-  background: linear-gradient(
-    90deg,
-    rgba(0, 107, 62, 0.801) 0%,
-    rgba(19, 114, 148, 0.815) 51%,
-    rgba(26, 148, 56, 0.801) 100%
-  );
 }
 </style>

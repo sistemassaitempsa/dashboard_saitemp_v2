@@ -1922,108 +1922,83 @@ const getDepartamentos = (item, index) => {
 };
 const scrollToInformacionPersonal = () => {
   if (informacionPersonalRef.value) {
-    // Asegura que la sección esté expandida
     informacion_personal.value = true;
-
-    // Usa scrollIntoView con comportamiento suave
     setTimeout(() => {
       informacionPersonalRef.value.scrollIntoView({
         behavior: "smooth",
         block: "start",
       });
-    }, 100); // Pequeño delay para permitir la renderización
+    }, 100);
   }
 };
 
 const scrollToExperiencia = () => {
   if (experienciaLaboralRef.value) {
-    // Asegura que la sección esté expandida
     experiencia_laboral.value = true;
-
-    // Usa scrollIntoView con comportamiento suave
     setTimeout(() => {
       experienciaLaboralRef.value.scrollIntoView({
         behavior: "smooth",
         block: "start",
       });
-    }, 100); // Pequeño delay para permitir la renderización
+    }, 100);
   }
 };
 
 const scrollToInformacionAcademica = () => {
   if (informacionAcademicaRef.value) {
-    // Asegura que la sección esté expandida
     info_academica.value = true;
-
-    // Usa scrollIntoView con comportamiento suave
     setTimeout(() => {
       informacionAcademicaRef.value.scrollIntoView({
         behavior: "smooth",
         block: "start",
       });
-    }, 100); // Pequeño delay para permitir la renderización
+    }, 100);
   }
 };
 
 const scrollToInMedioTrasnporte = () => {
   if (medioTransporteRef.value) {
-    // Asegura que la sección esté expandida
-
     medio_transporte.value = true;
-
-    // Usa scrollIntoView con comportamiento suave
     setTimeout(() => {
       medioTransporteRef.value.scrollIntoView({
         behavior: "smooth",
         block: "start",
       });
-    }, 100); // Pequeño delay para permitir la renderización
+    }, 100);
   }
 };
 const scrollToInCondicionesSalud = () => {
   if (condicionesSaludRef.value) {
-    // Asegura que la sección esté expandida
-
     condiciones_salud.value = true;
-
-    // Usa scrollIntoView con comportamiento suave
     setTimeout(() => {
       condicionesSaludRef.value.scrollIntoView({
         behavior: "smooth",
         block: "start",
       });
-    }, 100); // Pequeño delay para permitir la renderización
+    }, 100);
   }
 };
 const scrollToInReferenciasPersonales = () => {
   if (referenciasPersonalesRef.value) {
-    // Asegura que la sección esté expandida
-
     referencias_personales.value = true;
-
-    // Usa scrollIntoView con comportamiento suave
     setTimeout(() => {
       referenciasPersonalesRef.value.scrollIntoView({
         behavior: "smooth",
         block: "start",
       });
-    }, 100); // Pequeño delay para permitir la renderización
+    }, 100);
   }
 };
 
 const scrollToInHijos = () => {
   if (hijosRef.value) {
-    // Asegura que la sección esté expandida
-
     hijos_info.value = true;
-
-    // Usa scrollIntoView con comportamiento suave
     setTimeout(() => {
       hijosRef.value.scrollIntoView({
         behavior: "smooth",
         block: "start",
       });
-    }, 100); // Pequeño delay para permitir la renderización
+    }, 100);
   }
 };
 
