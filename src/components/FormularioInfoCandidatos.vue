@@ -4,520 +4,620 @@
 
     <h2>Registro de datos personales</h2>
     <!-- barra para el pocrcentaje de llenado -->
-    <div class="progress-container">
-      <div class="progress-bar" :style="{ height: progress + '%' }"></div>
-      <span class="progress-text">{{ Math.round(progress) }}% completado</span>
-    </div>
-    <!-- --------------------------- -->
-    <div id="seccion">
-      <form @submit.prevent="submitForm" class="row g-3">
-        <p>
-          Ingrese la información requerida en cada sección, para desplegar una
-          seccion debe hacer clic en ella.
-        </p>
-        <div class="row">
-          <div class="col">
-            <h5
-              @click="informacion_personal = !informacion_personal"
-              style="cursor: pointer"
-            >
-              1. Información personal
-              <i
-                v-if="informacion_personal"
-                class="bi bi-chevron-compact-up"
-              ></i
-              ><i v-if="!informacion_personal" class="bi bi-chevron-down"></i>
-            </h5>
-          </div>
-        </div>
 
-        <div class="info_container" v-if="informacion_personal">
-          <!-- Primer Nombre y Segundo Nombre -->
-          <div class="row mb-4">
-            <div class="col-12 was-validated col-lg-6">
-              <label class="form-label" for="nombre">Primer nombre:*</label>
-              <input
-                class="form-control"
-                type="text"
-                v-model="form.nom1_emp"
-                id="nombre"
-                required
-              />
-            </div>
-            <div class="col-12 col-lg-6">
-              <label class="form-label" for="nombre2">Segundo nombre:</label>
-              <input
-                class="form-control"
-                type="text"
-                v-model="form.nom2_emp"
-                id="nombre2"
-              />
-            </div>
-          </div>
-          <!-- Primer Apellido y Segundo Apellido -->
-          <div class="row mb-4">
-            <div class="col-12 was-validated col-lg-6">
-              <label class="form-label" for="apellido">Primer apellido:*</label>
-              <input
-                class="form-control"
-                type="text"
-                v-model="form.ap1_emp"
-                id="apellido"
-                required
-              />
-            </div>
-            <div class="col-12 was-validated col-lg-6">
-              <label class="form-label" for="apellido2"
-                >Segundo Apellido:*</label
-              >
-              <input
-                class="form-control"
-                type="text"
-                v-model="form.ap2_emp"
-                id="apellido2"
-                required
-              />
-            </div>
-          </div>
-          <!-- Tipo de Documento y Número de Documento -->
+    <!-- --------------------------- -->
+    <div class="flexRow">
+      <div class="progress-container">
+        <div class="progress-bar" :style="{ height: progress + '%' }"></div>
+        <span class="progress-text"
+          >{{ Math.round(progress) }}% completado</span
+        >
+      </div>
+      <div id="seccion">
+        <form @submit.prevent="submitForm" class="row g-3">
+          <p>
+            Ingrese la información requerida en cada sección, para desplegar una
+            seccion debe hacer clic en ella.
+          </p>
           <div class="row">
-            <div class="col-12 col-lg-6">
-              <SearchList
-                nombreCampo="Tipo de documento:*"
-                @selectTipoId="selectTipoId"
-                eventoCampo="selectTipoId"
-                nombreItem="des_tip"
-                :consulta="nom_tip_doc"
-                :registros="consulta_tipo_id"
-                placeholder="Seleccione una opción"
-              />
+            <div class="col">
+              <h5
+                @click="informacion_personal = !informacion_personal"
+                style="cursor: pointer"
+              >
+                1. Información personal
+                <i
+                  v-if="informacion_personal"
+                  class="bi bi-chevron-compact-up"
+                ></i
+                ><i v-if="!informacion_personal" class="bi bi-chevron-down"></i>
+              </h5>
             </div>
-            <div class="col-12 mt-2 was-validated p-2 col-lg-6">
-              <div>
-                <label class="form-label" for="documento"
-                  >Número de documento:*</label
+          </div>
+
+          <div class="info_container" v-if="informacion_personal">
+            <!-- Primer Nombre y Segundo Nombre -->
+            <div class="row mb-4">
+              <div class="col-12 was-validated col-lg-6">
+                <label class="form-label" for="nombre">Primer nombre:*</label>
+                <input
+                  class="form-control"
+                  type="text"
+                  v-model="form.nom1_emp"
+                  id="nombre"
+                  required
+                />
+              </div>
+              <div class="col-12 col-lg-6">
+                <label class="form-label" for="nombre2">Segundo nombre:</label>
+                <input
+                  class="form-control"
+                  type="text"
+                  v-model="form.nom2_emp"
+                  id="nombre2"
+                />
+              </div>
+            </div>
+            <!-- Primer Apellido y Segundo Apellido -->
+            <div class="row mb-4">
+              <div class="col-12 was-validated col-lg-6">
+                <label class="form-label" for="apellido"
+                  >Primer apellido:*</label
                 >
                 <input
                   class="form-control"
-                  type="number"
-                  v-model="form.cod_emp"
-                  id="documento"
-                  :disabled="form.tip_ide === '' || form.emp_id"
+                  type="text"
+                  v-model="form.ap1_emp"
+                  id="apellido"
                   required
                 />
+              </div>
+              <div class="col-12 was-validated col-lg-6">
+                <label class="form-label" for="apellido2"
+                  >Segundo Apellido:*</label
+                >
+                <input
+                  class="form-control"
+                  type="text"
+                  v-model="form.ap2_emp"
+                  id="apellido2"
+                  required
+                />
+              </div>
+            </div>
+            <!-- Tipo de Documento y Número de Documento -->
+            <div class="row">
+              <div class="col-12 col-lg-6">
+                <SearchList
+                  nombreCampo="Tipo de documento:*"
+                  @selectTipoId="selectTipoId"
+                  eventoCampo="selectTipoId"
+                  nombreItem="des_tip"
+                  :consulta="nom_tip_doc"
+                  :registros="consulta_tipo_id"
+                  placeholder="Seleccione una opción"
+                />
+              </div>
+              <div class="col-12 mt-2 was-validated p-2 col-lg-6">
+                <div>
+                  <label class="form-label" for="documento"
+                    >Número de documento:*</label
+                  >
+                  <input
+                    class="form-control"
+                    type="number"
+                    v-model="form.cod_emp"
+                    id="documento"
+                    :disabled="form.tip_ide === '' || form.emp_id"
+                    required
+                  />
+                  <div class="invalid-feedback errorCheck">
+                    {{ "" }}
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- Pais de Expedicion y Departamento de Expedicion -->
+            <div class="row">
+              <div class="col-12 col-lg-6">
+                <SearchList
+                  nombreCampo="Pais de expedicion:*"
+                  @getPaises="getPaises"
+                  eventoCampo="getPaises"
+                  nombreItem="nom_pai"
+                  :consulta="pai_exp_name"
+                  :registros="paises"
+                  :index="1"
+                  placeholder="Seleccione una opción"
+                />
+              </div>
+              <div class="col-12 col-lg-6">
+                <SearchList
+                  nombreCampo="Departamento de expedicion:*"
+                  @selectDepartamento="selectDepartamento"
+                  eventoCampo="selectDepartamento"
+                  nombreItem="nom_dep"
+                  :consulta="consulta_departamentos[1]"
+                  :registros="consulta_departamentos[1]"
+                  :index="1"
+                  :disabled="!form.pai_exp"
+                  placeholder="Seleccione una opción"
+                />
+              </div>
+            </div>
+            <!-- Ciudad de Expedicion y Fecha de Expedicion -->
+            <div class="row">
+              <div class="col-12 col-lg-6">
+                <SearchList
+                  nombreCampo="Ciudad de expedicion:*"
+                  @selectCiudad="selectCiudad"
+                  eventoCampo="selectCiudad"
+                  nombreItem="nom_ciu"
+                  :consulta="consulta_ciudades[1]"
+                  :registros="consulta_ciudades[1]"
+                  :index="1"
+                  :disabled="!form.dpt_exp"
+                  placeholder="Seleccione una opción"
+                />
+              </div>
+              <div class="col-12 col-lg-6">
+                <label class="form-label" for="fecha_exp"
+                  >Fecha expedicion:*</label
+                >
+                <input
+                  class="form-control"
+                  type="date"
+                  v-model="form.fec_expdoc"
+                  id="fecha_exp"
+                  required
+                />
+              </div>
+            </div>
+            <!-- Pais de Nacimiento y Departamento de Nacimiento -->
+            <div class="row">
+              <div class="col-12 col-lg-6">
+                <SearchList
+                  nombreCampo="Pais de nacimiento:*"
+                  @getPaises="getPaises"
+                  eventoCampo="getPaises"
+                  nombreItem="nom_pai"
+                  :consulta="cod_pai_name"
+                  :registros="paises"
+                  :index="2"
+                  placeholder="Seleccione una opción"
+                />
+              </div>
+              <div class="col-12 col-lg-6">
+                <SearchList
+                  nombreCampo="Departamento de nacimiento:*"
+                  @selectDepartamento="selectDepartamento"
+                  eventoCampo="selectDepartamento"
+                  nombreItem="nom_dep"
+                  :consulta="consulta_departamentos[2]"
+                  :registros="consulta_departamentos[2]"
+                  :index="2"
+                  :disabled="!form.cod_pai"
+                  placeholder="Seleccione una opción"
+                />
+              </div>
+            </div>
+            <!-- Ciudad de Nacimiento y Dirección Residencia -->
+            <div class="row mb-4">
+              <div class="col-12 was-validated col-lg-6">
+                <SearchList
+                  nombreCampo="Ciudad de nacimiento:*"
+                  @selectCiudad="selectCiudad"
+                  eventoCampo="selectCiudad"
+                  nombreItem="nom_ciu"
+                  :consulta="consulta_ciudades[2]"
+                  :registros="consulta_ciudades[2]"
+                  :index="2"
+                  :disabled="!form.cod_dep"
+                  placeholder="Seleccione una opción"
+                />
+              </div>
+              <div class="col-12 was-validated col-lg-6">
+                <label class="form-label" for="direccion"
+                  >Direccion residencia:*</label
+                >
+                <input
+                  class="form-control"
+                  type="text"
+                  v-model="form.dir_res"
+                  id="direccion"
+                  required
+                />
+              </div>
+            </div>
+            <!-- Fecha de Nacimiento y Teléfonos -->
+            <div class="row mb-4">
+              <div class="col-12 was-validated col-lg-6">
+                <label class="form-label" for="fecha_nac"
+                  >Fecha de nacimiento:*</label
+                >
+                <input
+                  class="form-control"
+                  type="date"
+                  v-model="form.fec_nac"
+                  id="fecha_nac"
+                  required
+                />
+              </div>
+              <div class="col-12 col-lg-6">
+                <label class="form-label" for="fijo">Teléfono fijo:</label>
+                <input
+                  class="form-control"
+                  type="text"
+                  v-model="form.tel_res"
+                  id="fijo"
+                  maxlength="7"
+                />
+              </div>
+            </div>
+            <!-- Teléfono Celular y Correo Electrónico -->
+            <div class="row mb-4">
+              <div class="col-12 was-validated col-lg-6">
+                <label class="form-label" for="celular"
+                  >Teléfono celular:*</label
+                >
+                <input
+                  class="form-control"
+                  type="text"
+                  v-model="form.tel_cel"
+                  id="celular"
+                  required
+                  maxlength="10"
+                />
+              </div>
+              <div class="col-12 was-validated col-lg-6">
+                <label class="form-label" for="email"
+                  >Correo electronico:*</label
+                >
+                <input
+                  class="form-control"
+                  type="email"
+                  v-model="form.e_mail"
+                  id="email"
+                  required
+                />
+              </div>
+            </div>
+            <!-- Pais de Residencia y Departamento de Residencia -->
+            <div class="row">
+              <div class="col-12 col-lg-6">
+                <SearchList
+                  nombreCampo="Pais de residencia:*"
+                  @getPaises="getPaises"
+                  eventoCampo="getPaises"
+                  nombreItem="nom_pai"
+                  :consulta="pai_res_name"
+                  :registros="paises"
+                  :index="3"
+                  placeholder="Seleccione una opción"
+                />
+              </div>
+              <div class="col-12 col-lg-6">
+                <SearchList
+                  nombreCampo="Departamento de residencia:*"
+                  @selectDepartamento="selectDepartamento"
+                  eventoCampo="selectDepartamento"
+                  nombreItem="nom_dep"
+                  :consulta="consulta_departamentos[3]"
+                  :registros="consulta_departamentos[3]"
+                  :index="3"
+                  :disabled="!form.pai_res"
+                  placeholder="Seleccione una opción"
+                />
+              </div>
+            </div>
+            <!-- Ciudad de Residencia y Banco -->
+            <div class="row">
+              <div class="col-12 col-lg-6">
+                <SearchList
+                  nombreCampo="Ciudad de residencia:*"
+                  @selectCiudad="selectCiudad"
+                  eventoCampo="selectCiudad"
+                  nombreItem="nom_ciu"
+                  :consulta="consulta_ciudades[3]"
+                  :registros="consulta_ciudades[3]"
+                  :index="3"
+                  :disabled="!form.dpt_res"
+                  placeholder="Seleccione una opción"
+                />
+              </div>
+              <div class="col-12 col-lg-6">
+                <SearchList
+                  nombreCampo="Banco:*"
+                  @selectBanco="selectBanco"
+                  eventoCampo="selectBanco"
+                  nombreItem="nom_ban"
+                  :consulta="consulta_banco"
+                  :registros="consulta_banco"
+                  placeholder="Seleccione una opción"
+                />
+              </div>
+            </div>
+            <!-- Número de Cuenta y Barrio -->
+            <div class="row mb-4">
+              <div class="col-12 col-lg-6">
+                <label class="form-label" for="cuenta">Número de cuenta:</label>
+                <input
+                  class="form-control"
+                  type="number"
+                  v-model="form.cta_ban"
+                  id="cuenta"
+                  :disabled="form.cod_ban === '' || form.cod_ban === 0"
+                  required
+                />
+              </div>
+              <div class="col-12 was-validated col-lg-6">
+                <label class="form-label" for="barrio">Barrio:*</label>
+                <input
+                  class="form-control"
+                  type="text"
+                  v-model="form.barrio"
+                  id="barrio"
+                  required
+                />
+              </div>
+            </div>
+            <!-- Nivel Académico y Género -->
+            <div class="row">
+              <div class="col-12 mt-2 was-validated p-2 col-lg-6">
+                <label class="form-label" for="genero"
+                  >Identidad de género:*</label
+                >
+                <select
+                  class="form-select"
+                  id="genero"
+                  v-model="form.sex_emp"
+                  required
+                >
+                  <option value="1">Mujer</option>
+                  <option value="2">Hombre</option>
+                  <option value="0">Otro</option>
+                </select>
                 <div class="invalid-feedback errorCheck">
                   {{ "" }}
                 </div>
               </div>
-            </div>
-          </div>
-          <!-- Pais de Expedicion y Departamento de Expedicion -->
-          <div class="row">
-            <div class="col-12 col-lg-6">
-              <SearchList
-                nombreCampo="Pais de expedicion:*"
-                @getPaises="getPaises"
-                eventoCampo="getPaises"
-                nombreItem="nom_pai"
-                :consulta="pai_exp_name"
-                :registros="paises"
-                :index="1"
-                placeholder="Seleccione una opción"
-              />
-            </div>
-            <div class="col-12 col-lg-6">
-              <SearchList
-                nombreCampo="Departamento de expedicion:*"
-                @selectDepartamento="selectDepartamento"
-                eventoCampo="selectDepartamento"
-                nombreItem="nom_dep"
-                :consulta="consulta_departamentos[1]"
-                :registros="consulta_departamentos[1]"
-                :index="1"
-                :disabled="!form.pai_exp"
-                placeholder="Seleccione una opción"
-              />
-            </div>
-          </div>
-          <!-- Ciudad de Expedicion y Fecha de Expedicion -->
-          <div class="row">
-            <div class="col-12 col-lg-6">
-              <SearchList
-                nombreCampo="Ciudad de expedicion:*"
-                @selectCiudad="selectCiudad"
-                eventoCampo="selectCiudad"
-                nombreItem="nom_ciu"
-                :consulta="consulta_ciudades[1]"
-                :registros="consulta_ciudades[1]"
-                :index="1"
-                :disabled="!form.dpt_exp"
-                placeholder="Seleccione una opción"
-              />
-            </div>
-            <div class="col-12 col-lg-6">
-              <label class="form-label" for="fecha_exp"
-                >Fecha expedicion:*</label
-              >
-              <input
-                class="form-control"
-                type="date"
-                v-model="form.fec_expdoc"
-                id="fecha_exp"
-                required
-              />
-            </div>
-          </div>
-          <!-- Pais de Nacimiento y Departamento de Nacimiento -->
-          <div class="row">
-            <div class="col-12 col-lg-6">
-              <SearchList
-                nombreCampo="Pais de nacimiento:*"
-                @getPaises="getPaises"
-                eventoCampo="getPaises"
-                nombreItem="nom_pai"
-                :consulta="cod_pai_name"
-                :registros="paises"
-                :index="2"
-                placeholder="Seleccione una opción"
-              />
-            </div>
-            <div class="col-12 col-lg-6">
-              <SearchList
-                nombreCampo="Departamento de nacimiento:*"
-                @selectDepartamento="selectDepartamento"
-                eventoCampo="selectDepartamento"
-                nombreItem="nom_dep"
-                :consulta="consulta_departamentos[2]"
-                :registros="consulta_departamentos[2]"
-                :index="2"
-                :disabled="!form.cod_pai"
-                placeholder="Seleccione una opción"
-              />
-            </div>
-          </div>
-          <!-- Ciudad de Nacimiento y Dirección Residencia -->
-          <div class="row mb-4">
-            <div class="col-12 was-validated col-lg-6">
-              <SearchList
-                nombreCampo="Ciudad de nacimiento:*"
-                @selectCiudad="selectCiudad"
-                eventoCampo="selectCiudad"
-                nombreItem="nom_ciu"
-                :consulta="consulta_ciudades[2]"
-                :registros="consulta_ciudades[2]"
-                :index="2"
-                :disabled="!form.cod_dep"
-                placeholder="Seleccione una opción"
-              />
-            </div>
-            <div class="col-12 was-validated col-lg-6">
-              <label class="form-label" for="direccion"
-                >Direccion residencia:*</label
-              >
-              <input
-                class="form-control"
-                type="text"
-                v-model="form.dir_res"
-                id="direccion"
-                required
-              />
-            </div>
-          </div>
-          <!-- Fecha de Nacimiento y Teléfonos -->
-          <div class="row mb-4">
-            <div class="col-12 was-validated col-lg-6">
-              <label class="form-label" for="fecha_nac"
-                >Fecha de nacimiento:*</label
-              >
-              <input
-                class="form-control"
-                type="date"
-                v-model="form.fec_nac"
-                id="fecha_nac"
-                required
-              />
-            </div>
-            <div class="col-12 col-lg-6">
-              <label class="form-label" for="fijo">Teléfono fijo:</label>
-              <input
-                class="form-control"
-                type="text"
-                v-model="form.tel_res"
-                id="fijo"
-                maxlength="7"
-              />
-            </div>
-          </div>
-          <!-- Teléfono Celular y Correo Electrónico -->
-          <div class="row mb-4">
-            <div class="col-12 was-validated col-lg-6">
-              <label class="form-label" for="celular">Teléfono celular:*</label>
-              <input
-                class="form-control"
-                type="text"
-                v-model="form.tel_cel"
-                id="celular"
-                required
-                maxlength="10"
-              />
-            </div>
-            <div class="col-12 was-validated col-lg-6">
-              <label class="form-label" for="email">Correo electronico:*</label>
-              <input
-                class="form-control"
-                type="email"
-                v-model="form.e_mail"
-                id="email"
-                required
-              />
-            </div>
-          </div>
-          <!-- Pais de Residencia y Departamento de Residencia -->
-          <div class="row">
-            <div class="col-12 col-lg-6">
-              <SearchList
-                nombreCampo="Pais de residencia:*"
-                @getPaises="getPaises"
-                eventoCampo="getPaises"
-                nombreItem="nom_pai"
-                :consulta="pai_res_name"
-                :registros="paises"
-                :index="3"
-                placeholder="Seleccione una opción"
-              />
-            </div>
-            <div class="col-12 col-lg-6">
-              <SearchList
-                nombreCampo="Departamento de residencia:*"
-                @selectDepartamento="selectDepartamento"
-                eventoCampo="selectDepartamento"
-                nombreItem="nom_dep"
-                :consulta="consulta_departamentos[3]"
-                :registros="consulta_departamentos[3]"
-                :index="3"
-                :disabled="!form.pai_res"
-                placeholder="Seleccione una opción"
-              />
-            </div>
-          </div>
-          <!-- Ciudad de Residencia y Banco -->
-          <div class="row">
-            <div class="col-12 col-lg-6">
-              <SearchList
-                nombreCampo="Ciudad de residencia:*"
-                @selectCiudad="selectCiudad"
-                eventoCampo="selectCiudad"
-                nombreItem="nom_ciu"
-                :consulta="consulta_ciudades[3]"
-                :registros="consulta_ciudades[3]"
-                :index="3"
-                :disabled="!form.dpt_res"
-                placeholder="Seleccione una opción"
-              />
-            </div>
-            <div class="col-12 col-lg-6">
-              <SearchList
-                nombreCampo="Banco:*"
-                @selectBanco="selectBanco"
-                eventoCampo="selectBanco"
-                nombreItem="nom_ban"
-                :consulta="consulta_banco"
-                :registros="consulta_banco"
-                placeholder="Seleccione una opción"
-              />
-            </div>
-          </div>
-          <!-- Número de Cuenta y Barrio -->
-          <div class="row mb-4">
-            <div class="col-12 col-lg-6">
-              <label class="form-label" for="cuenta">Número de cuenta:</label>
-              <input
-                class="form-control"
-                type="number"
-                v-model="form.cta_ban"
-                id="cuenta"
-                :disabled="form.cod_ban === '' || form.cod_ban === 0"
-                required
-              />
-            </div>
-            <div class="col-12 was-validated col-lg-6">
-              <label class="form-label" for="barrio">Barrio:*</label>
-              <input
-                class="form-control"
-                type="text"
-                v-model="form.barrio"
-                id="barrio"
-                required
-              />
-            </div>
-          </div>
-          <!-- Nivel Académico y Género -->
-          <div class="row">
-            <div class="col-12 mt-2 was-validated p-2 col-lg-6">
-              <label class="form-label" for="genero"
-                >Identidad de género:*</label
-              >
-              <select
-                class="form-select"
-                id="genero"
-                v-model="form.sex_emp"
-                required
-              >
-                <option value="1">Mujer</option>
-                <option value="2">Hombre</option>
-                <option value="0">Otro</option>
-              </select>
-              <div class="invalid-feedback errorCheck">
-                {{ "" }}
+              <div class="col-12 col-lg-6">
+                <SearchList
+                  nombreCampo="Estado civil:*"
+                  @selectEstadoCivil="selectEstadoCivil"
+                  eventoCampo="selectEstadoCivil"
+                  nombreItem="des_est"
+                  :consulta="est_civ_name"
+                  :registros="consulta_estado_civil"
+                  placeholder="Seleccione una opción"
+                />
               </div>
             </div>
-            <div class="col-12 col-lg-6">
-              <SearchList
-                nombreCampo="Estado civil:*"
-                @selectEstadoCivil="selectEstadoCivil"
-                eventoCampo="selectEstadoCivil"
-                nombreItem="des_est"
-                :consulta="est_civ_name"
-                :registros="consulta_estado_civil"
-                placeholder="Seleccione una opción"
-              />
-            </div>
-          </div>
-          <!-- Personas a Cargo y Grupo Sanguíneo -->
-          <div class="row mb-4">
-            <div class="col-12 was-validated col-lg-6">
-              <label class="form-label" for="personas_cargo"
-                >Personas a cargo(cantidad):*</label
-              >
-              <input
-                class="form-control"
-                type="number"
-                v-model="form.per_car"
-                id="personas_cargo"
-                required
-                min="0"
-              />
-            </div>
-            <div class="col-12 was-validated col-lg-6">
-              <label class="form-label" for="sangre">Grupo sanguíneo:*</label>
-              <select
-                class="form-select"
-                id="sangre"
-                v-model="form.gru_san"
-                required
-              >
-                <option value="A">A</option>
-                <option value="AB">AB</option>
-                <option value="B">B</option>
-                <option value="O">O</option>
-              </select>
-            </div>
-          </div>
-          <!-- Factor RH y Estado Civil -->
-          <div class="row">
-            <div class="col-12 mt-2 was-validated p-2 col-lg-6">
-              <label class="form-label" for="rh">Factor RH:*</label>
-              <select
-                class="form-select"
-                id="rh"
-                v-model="form.fac_rhh"
-                required
-              >
-                <option value="+">+</option>
-                <option value="-">-</option>
-              </select>
-              <div class="invalid-feedback errorCheck">
-                {{ mensaje_error }}
-              </div>
-            </div>
-            <div class="col-12 col-lg-6 mt-2 was-validated p-2">
-              <label class="form-label" for="estrato"
-                >Estrato socioeconomico:*</label
-              >
-              <select
-                class="form-select"
-                id="estrato"
-                v-model="form.est_soc"
-                required
-              >
-                <option :value="n" :key="n" v-for="n in 6">{{ n }}</option>
-              </select>
-              <div class="invalid-feedback errorCheck">
-                {{ mensaje_error }}
-              </div>
-            </div>
-          </div>
-          <!-- Grupo Étnico y Estrato Socioeconómico -->
-          <div class="row">
-            <div class="col-12 col-lg-6">
-              <SearchList
-                nombreCampo="Grupo étnico:*"
-                @selectEtnia="selectEtnia"
-                eventoCampo="selectEtnia"
-                nombreItem="descripcion"
-                :consulta="form.raza"
-                :registros="consulta_etnia"
-                placeholder="Seleccione una opción"
-              />
-            </div>
-          </div>
-        </div>
-        <div class="row">
-          <div class="col">
-            <h5
-              @click="experiencia_laboral = !experiencia_laboral"
-              style="cursor: pointer"
-            >
-              2. Experiencia laboral
-              <i v-if="experiencia_laboral" class="bi bi-chevron-compact-up"></i
-              ><i v-if="!experiencia_laboral" class="bi bi-chevron-down"></i>
-            </h5>
-          </div>
-        </div>
-        <div class="info_container pt-0" v-if="experiencia_laboral">
-          <div
-            v-for="(experiencia, index) in form.experiencias_laborales"
-            :key="index"
-          >
-            <div class="row mt-5">
-              <div class="col">
-                <h6>Experiencia {{ index + 1 }}</h6>
-              </div>
-              <div class="col-sm-12 col-md-6 mb-3">
-                <div
-                  class="d-flex justify-content-end align-items-end w-100 h-100"
+            <!-- Personas a Cargo y Grupo Sanguíneo -->
+            <div class="row mb-4">
+              <div class="col-12 was-validated col-lg-6">
+                <label class="form-label" for="personas_cargo"
+                  >Personas a cargo(cantidad):*</label
                 >
-                  <label
-                    class="bi bi-trash-fill labelOption"
-                    @click="deleteExperiencia(index)"
-                  >
-                    Eliminar</label
-                  >
+                <input
+                  class="form-control"
+                  type="number"
+                  v-model="form.per_car"
+                  id="personas_cargo"
+                  required
+                  min="0"
+                />
+              </div>
+              <div class="col-12 was-validated col-lg-6">
+                <label class="form-label" for="sangre">Grupo sanguíneo:*</label>
+                <select
+                  class="form-select"
+                  id="sangre"
+                  v-model="form.gru_san"
+                  required
+                >
+                  <option value="A">A</option>
+                  <option value="AB">AB</option>
+                  <option value="B">B</option>
+                  <option value="O">O</option>
+                </select>
+              </div>
+            </div>
+            <!-- Factor RH y Estado Civil -->
+            <div class="row">
+              <div class="col-12 mt-2 was-validated p-2 col-lg-6">
+                <label class="form-label" for="rh">Factor RH:*</label>
+                <select
+                  class="form-select"
+                  id="rh"
+                  v-model="form.fac_rhh"
+                  required
+                >
+                  <option value="+">+</option>
+                  <option value="-">-</option>
+                </select>
+                <div class="invalid-feedback errorCheck">
+                  {{ mensaje_error }}
+                </div>
+              </div>
+              <div class="col-12 col-lg-6 mt-2 was-validated p-2">
+                <label class="form-label" for="estrato"
+                  >Estrato socioeconomico:*</label
+                >
+                <select
+                  class="form-select"
+                  id="estrato"
+                  v-model="form.est_soc"
+                  required
+                >
+                  <option :value="n" :key="n" v-for="n in 6">{{ n }}</option>
+                </select>
+                <div class="invalid-feedback errorCheck">
+                  {{ mensaje_error }}
                 </div>
               </div>
             </div>
+            <!-- Grupo Étnico y Estrato Socioeconómico -->
             <div class="row">
-              <div class="col">
-                <label for="" class="form-label"> Cargo:* </label>
-                <input
-                  type="text"
-                  class="form-control"
-                  v-model="experiencia.cargo"
-                />
-              </div>
-              <div class="col">
-                <label for="" class="form-label"> Empresa:* </label>
-                <input
-                  type="text"
-                  class="form-control"
-                  v-model="experiencia.empresa"
+              <div class="col-12 col-lg-6">
+                <SearchList
+                  nombreCampo="Grupo étnico:*"
+                  @selectEtnia="selectEtnia"
+                  eventoCampo="selectEtnia"
+                  nombreItem="descripcion"
+                  :consulta="form.raza"
+                  :registros="consulta_etnia"
+                  placeholder="Seleccione una opción"
                 />
               </div>
             </div>
-            <div class="row">
-              <div class="col">
+          </div>
+          <div class="row">
+            <div class="col">
+              <h5
+                @click="experiencia_laboral = !experiencia_laboral"
+                style="cursor: pointer"
+              >
+                2. Experiencia laboral
+                <i
+                  v-if="experiencia_laboral"
+                  class="bi bi-chevron-compact-up"
+                ></i
+                ><i v-if="!experiencia_laboral" class="bi bi-chevron-down"></i>
+              </h5>
+            </div>
+          </div>
+          <div class="info_container pt-0" v-if="experiencia_laboral">
+            <div
+              v-for="(experiencia, index) in form.experiencias_laborales"
+              :key="index"
+            >
+              <div class="row mt-5">
+                <div class="col">
+                  <h6>Experiencia {{ index + 1 }}</h6>
+                </div>
+                <div class="col-sm-12 col-md-6 mb-3">
+                  <div
+                    class="d-flex justify-content-end align-items-end w-100 h-100"
+                  >
+                    <label
+                      class="bi bi-trash-fill labelOption"
+                      @click="deleteExperiencia(index)"
+                    >
+                      Eliminar</label
+                    >
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col">
+                  <label for="" class="form-label"> Cargo:* </label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    v-model="experiencia.cargo"
+                  />
+                </div>
+                <div class="col">
+                  <label for="" class="form-label"> Empresa:* </label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    v-model="experiencia.empresa"
+                  />
+                </div>
+              </div>
+              <div class="row">
+                <div class="col">
+                  <SearchList
+                    nombreCampo="Sector:*"
+                    @selectTipoId="selectTipoId"
+                    eventoCampo="selectTipoId"
+                    nombreItem="des_tip"
+                    :consulta="nom_tip_doc"
+                    :registros="consulta_tipo_id"
+                    placeholder="Seleccione una opción"
+                  />
+                </div>
+                <div class="col">
+                  <label for="" class="form-label"> Motivo del retiro:* </label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    v-model="experiencia.motivo_retiro"
+                  />
+                </div>
+              </div>
+              <div class="row">
+                <div class="col">
+                  <label for="" class="form-label">Funciones:*</label>
+                  <textarea
+                    name=""
+                    id=""
+                    class="form-control"
+                    v-model="experiencia.funciones"
+                  ></textarea>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col">
+                  <label for="" class="form-label">Fecha inicio:</label>
+                  <input
+                    type="month"
+                    class="form-control"
+                    v-model="experiencia.fecha_inicio"
+                  />
+                </div>
+                <div class="col">
+                  <label for="" class="form-label">Fecha fin:</label>
+                  <input
+                    type="month"
+                    class="form-control"
+                    v-model="experiencia.fecha_fin"
+                  />
+                </div>
+              </div>
+            </div>
+            <div
+              class="row mt-5 trash justify-content-center align-items-center padding-1"
+            >
+              <label
+                id="clasificador"
+                @click="addExperienciaLaboral()"
+                style="cursor: pointer"
+                ><i class="bi bi-plus-circle-fill"></i>
+                Agregar experiencia laboral
+              </label>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col">
+              <h5
+                @click="info_academica = !info_academica"
+                style="cursor: pointer"
+              >
+                3. Información académica
+                <i v-if="info_academica" class="bi bi-chevron-compact-up"></i
+                ><i v-if="!info_academica" class="bi bi-chevron-down"></i>
+              </h5>
+            </div>
+          </div>
+          <div class="info_container" v-if="info_academica">
+            <div class="row mb-5">
+              <div class="col-12 col-lg-6">
                 <SearchList
-                  nombreCampo="Sector:*"
+                  nombreCampo="Nivel académico:*"
+                  @selectAcademico="selectAcademico"
+                  eventoCampo="selectAcademico"
+                  nombreItem="des_est"
+                  :consulta="consulta_estudio"
+                  :registros="consulta_estudio"
+                  placeholder="Seleccione una opción"
+                />
+              </div>
+              <div class="col mt-0">
+                <SearchList
+                  nombreCampo="Sector académico:*"
                   @selectTipoId="selectTipoId"
                   eventoCampo="selectTipoId"
                   nombreItem="des_tip"
@@ -526,899 +626,829 @@
                   placeholder="Seleccione una opción"
                 />
               </div>
-              <div class="col">
-                <label for="" class="form-label"> Motivo del retiro:* </label>
-                <input
-                  type="text"
-                  class="form-control"
-                  v-model="experiencia.motivo_retiro"
-                />
-              </div>
             </div>
-            <div class="row">
-              <div class="col">
-                <label for="" class="form-label">Funciones:*</label>
-                <textarea
-                  name=""
-                  id=""
-                  class="form-control"
-                  v-model="experiencia.funciones"
-                ></textarea>
-              </div>
-            </div>
-            <div class="row">
-              <div class="col">
-                <label for="" class="form-label">Fecha inicio:</label>
-                <input
-                  type="month"
-                  class="form-control"
-                  v-model="experiencia.fecha_inicio"
-                />
-              </div>
-              <div class="col">
-                <label for="" class="form-label">Fecha fin:</label>
-                <input
-                  type="month"
-                  class="form-control"
-                  v-model="experiencia.fecha_fin"
-                />
-              </div>
-            </div>
-          </div>
-          <div
-            class="row mt-5 trash justify-content-center align-items-center padding-1"
-          >
-            <label
-              id="clasificador"
-              @click="addExperienciaLaboral()"
-              style="cursor: pointer"
-              ><i class="bi bi-plus-circle-fill"></i>
-              Agregar experiencia laboral
-            </label>
-          </div>
-        </div>
-        <div class="row">
-          <div class="col">
-            <h5
-              @click="info_academica = !info_academica"
-              style="cursor: pointer"
+            <div
+              v-for="(idioma, index) in form.idiomas"
+              class="row"
+              :key="index"
             >
-              3. Información académica
-              <i v-if="info_academica" class="bi bi-chevron-compact-up"></i
-              ><i v-if="!info_academica" class="bi bi-chevron-down"></i>
-            </h5>
-          </div>
-        </div>
-        <div class="info_container" v-if="info_academica">
-          <div class="row mb-5">
-            <div class="col-12 col-lg-6">
-              <SearchList
-                nombreCampo="Nivel académico:*"
-                @selectAcademico="selectAcademico"
-                eventoCampo="selectAcademico"
-                nombreItem="des_est"
-                :consulta="consulta_estudio"
-                :registros="consulta_estudio"
-                placeholder="Seleccione una opción"
-              />
-            </div>
-            <div class="col mt-0">
-              <SearchList
-                nombreCampo="Sector académico:*"
-                @selectTipoId="selectTipoId"
-                eventoCampo="selectTipoId"
-                nombreItem="des_tip"
-                :consulta="nom_tip_doc"
-                :registros="consulta_tipo_id"
-                placeholder="Seleccione una opción"
-              />
-            </div>
-          </div>
-          <div v-for="(idioma, index) in form.idiomas" class="row" :key="index">
-            <div class="row">
-              <div class="col"></div>
-              <div class="col-sm-12 col-md-6 mb-3">
-                <div
-                  class="d-flex justify-content-end align-items-end w-100 h-100"
-                >
-                  <label
-                    class="bi bi-trash-fill labelOption"
-                    @click="deleteIdioma(index)"
+              <div class="row">
+                <div class="col"></div>
+                <div class="col-sm-12 col-md-6 mb-3">
+                  <div
+                    class="d-flex justify-content-end align-items-end w-100 h-100"
                   >
-                    Eliminar idioma</label
+                    <label
+                      class="bi bi-trash-fill labelOption"
+                      @click="deleteIdioma(index)"
+                    >
+                      Eliminar idioma</label
+                    >
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col">
+                  <SearchList
+                    nombreCampo="Idioma:*"
+                    @selectTipoId="selectTipoId"
+                    eventoCampo="selectTipoId"
+                    nombreItem="des_tip"
+                    :consulta="nom_tip_doc"
+                    :registros="consulta_tipo_id"
+                    placeholder="Seleccione una opción"
+                  />
+                </div>
+                <div class="col">
+                  <label for="" class="form-label">Nivel:</label>
+                  <select
+                    name=""
+                    id=""
+                    class="form-select"
+                    v-model="idioma.nivel"
                   >
+                    <option value="1">Básico</option>
+                    <option value="2">Intermedio</option>
+                    <option value="3">Avanzado</option>
+                  </select>
                 </div>
               </div>
             </div>
+            <div
+              class="row mt-5 trash justify-content-center align-items-center padding-1"
+            >
+              <label
+                id="clasificador"
+                @click="addIdioma()"
+                style="cursor: pointer"
+                ><i class="bi bi-plus-circle-fill"></i>
+                Agregar idioma
+              </label>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col">
+              <h5
+                @click="medio_transporte = !medio_transporte"
+                style="cursor: pointer"
+              >
+                4. Medio de transporte
+                <i v-if="medio_transporte" class="bi bi-chevron-compact-up"></i
+                ><i v-if="!medio_transporte" class="bi bi-chevron-down"></i>
+              </h5>
+            </div>
+          </div>
+          <div class="info_container" v-if="medio_transporte">
             <div class="row">
-              <div class="col">
-                <SearchList
-                  nombreCampo="Idioma:*"
-                  @selectTipoId="selectTipoId"
-                  eventoCampo="selectTipoId"
-                  nombreItem="des_tip"
-                  :consulta="nom_tip_doc"
-                  :registros="consulta_tipo_id"
-                  placeholder="Seleccione una opción"
-                />
+              <div class="col flex">
+                <label for="" class="form-label">Tipo de transporte:</label>
+                <div>
+                  <div class="form-check form-check-inline">
+                    <input
+                      class="form-check-input"
+                      type="radio"
+                      name="transporteOptions"
+                      id="inlineRadio1"
+                      value="1"
+                      v-model="tipo_transporte"
+                    />
+                    <label class="form-check-label" for="inlineRadio1"
+                      >Vehiculo propio</label
+                    >
+                  </div>
+                  <div class="form-check form-check-inline">
+                    <input
+                      class="form-check-input"
+                      type="radio"
+                      name="transporteOptions"
+                      id="inlineRadio2"
+                      value="2"
+                      v-model="tipo_transporte"
+                    />
+                    <label class="form-check-label" for="inlineRadio2"
+                      >Transporte publico</label
+                    >
+                  </div>
+                  <div class="form-check form-check-inline">
+                    <input
+                      class="form-check-input"
+                      type="radio"
+                      name="transporteOptions"
+                      id="inlineRadio3"
+                      value="3"
+                      v-model="tipo_transporte"
+                    />
+                    <label class="form-check-label" for="inlineRadio3"
+                      >Otro</label
+                    >
+                  </div>
+                </div>
               </div>
               <div class="col">
-                <label for="" class="form-label">Nivel:</label>
+                <label for="" class="form-label"> Cuál?</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  v-model="otro_transporte"
+                  :disabled="tipo_transporte == 3 ? false : true"
+                />
+              </div>
+            </div>
+            <div class="row">
+              <div class="col flex">
+                <label for="" class="form-label">Licencia de conducción:</label>
+                <div>
+                  <div class="form-check form-check-inline">
+                    <input
+                      class="form-check-input"
+                      type="radio"
+                      name="licenciaConduccion"
+                      id="inlineRadioConduccion1"
+                      value="1"
+                      v-model="licencia_conduccion"
+                    />
+                    <label class="form-check-label" for="inlineRadio1"
+                      >Si</label
+                    >
+                  </div>
+                  <div class="form-check form-check-inline">
+                    <input
+                      class="form-check-input"
+                      type="radio"
+                      name="licenciaConduccion"
+                      id="inlineRadioConduccion2"
+                      v-model="licencia_conduccion"
+                      value="0"
+                    />
+                    <label class="form-check-label" for="inlineRadio2"
+                      >No</label
+                    >
+                  </div>
+                </div>
+              </div>
+              <div class="col">
+                <label for="" class="form-label">Categoría</label>
                 <select
                   name=""
                   id=""
                   class="form-select"
-                  v-model="idioma.nivel"
+                  v-model="form.categoria_licencia"
                 >
-                  <option value="1">Básico</option>
-                  <option value="2">Intermedio</option>
-                  <option value="3">Avanzado</option>
+                  <option value="A1">A1</option>
+                  <option value="A2">A2</option>
+                  <option value="B1">B1</option>
+                  <option value="B2">B2</option>
+                  <option value="B3">B3</option>
+                  <option value="C1">C1</option>
+                  <option value="C2">C2</option>
+                  <option value="C3">C3</option>
                 </select>
               </div>
             </div>
           </div>
-          <div
-            class="row mt-5 trash justify-content-center align-items-center padding-1"
-          >
-            <label
-              id="clasificador"
-              @click="addIdioma()"
-              style="cursor: pointer"
-              ><i class="bi bi-plus-circle-fill"></i>
-              Agregar idioma
-            </label>
-          </div>
-        </div>
-
-        <div class="row">
-          <div class="col">
-            <h5
-              @click="medio_transporte = !medio_transporte"
-              style="cursor: pointer"
-            >
-              4. Medio de transporte
-              <i v-if="medio_transporte" class="bi bi-chevron-compact-up"></i
-              ><i v-if="!medio_transporte" class="bi bi-chevron-down"></i>
-            </h5>
-          </div>
-        </div>
-        <div class="info_container" v-if="medio_transporte">
           <div class="row">
-            <div class="col flex">
-              <label for="" class="form-label">Tipo de transporte:</label>
-              <div>
-                <div class="form-check form-check-inline">
-                  <input
-                    class="form-check-input"
-                    type="radio"
-                    name="transporteOptions"
-                    id="inlineRadio1"
-                    value="1"
-                    v-model="tipo_transporte"
-                  />
-                  <label class="form-check-label" for="inlineRadio1"
-                    >Vehiculo propio</label
-                  >
-                </div>
-                <div class="form-check form-check-inline">
-                  <input
-                    class="form-check-input"
-                    type="radio"
-                    name="transporteOptions"
-                    id="inlineRadio2"
-                    value="2"
-                    v-model="tipo_transporte"
-                  />
-                  <label class="form-check-label" for="inlineRadio2"
-                    >Transporte publico</label
-                  >
-                </div>
-                <div class="form-check form-check-inline">
-                  <input
-                    class="form-check-input"
-                    type="radio"
-                    name="transporteOptions"
-                    id="inlineRadio3"
-                    value="3"
-                    v-model="tipo_transporte"
-                  />
-                  <label class="form-check-label" for="inlineRadio3"
-                    >Otro</label
-                  >
-                </div>
-              </div>
-            </div>
             <div class="col">
-              <label for="" class="form-label"> Cuál?</label>
-              <input
-                type="text"
-                class="form-control"
-                v-model="otro_transporte"
-                :disabled="tipo_transporte == 3 ? false : true"
-              />
-            </div>
-          </div>
-          <div class="row">
-            <div class="col flex">
-              <label for="" class="form-label">Licencia de conducción:</label>
-              <div>
-                <div class="form-check form-check-inline">
-                  <input
-                    class="form-check-input"
-                    type="radio"
-                    name="licenciaConduccion"
-                    id="inlineRadioConduccion1"
-                    value="1"
-                    v-model="licencia_conduccion"
-                  />
-                  <label class="form-check-label" for="inlineRadio1">Si</label>
-                </div>
-                <div class="form-check form-check-inline">
-                  <input
-                    class="form-check-input"
-                    type="radio"
-                    name="licenciaConduccion"
-                    id="inlineRadioConduccion2"
-                    v-model="licencia_conduccion"
-                    value="0"
-                  />
-                  <label class="form-check-label" for="inlineRadio2">No</label>
-                </div>
-              </div>
-            </div>
-            <div class="col">
-              <label for="" class="form-label">Categoría</label>
-              <select
-                name=""
-                id=""
-                class="form-select"
-                v-model="form.categoria_licencia"
+              <h5
+                @click="condiciones_salud = !condiciones_salud"
+                style="cursor: pointer"
               >
-                <option value="A1">A1</option>
-                <option value="A2">A2</option>
-                <option value="B1">B1</option>
-                <option value="B2">B2</option>
-                <option value="B3">B3</option>
-                <option value="C1">C1</option>
-                <option value="C2">C2</option>
-                <option value="C3">C3</option>
-              </select>
+                5. Condiciones de salud
+                <i v-if="condiciones_salud" class="bi bi-chevron-compact-up"></i
+                ><i v-if="!condiciones_salud" class="bi bi-chevron-down"></i>
+              </h5>
             </div>
           </div>
-        </div>
-        <div class="row">
-          <div class="col">
-            <h5
-              @click="condiciones_salud = !condiciones_salud"
-              style="cursor: pointer"
-            >
-              5. Condiciones de salud
-              <i v-if="condiciones_salud" class="bi bi-chevron-compact-up"></i
-              ><i v-if="!condiciones_salud" class="bi bi-chevron-down"></i>
-            </h5>
-          </div>
-        </div>
-        <div class="info_container" v-if="condiciones_salud">
-          <div class="row">
-            <div class="col flex">
-              <label for="" class="form-label">Accidentes laborales:</label>
-              <div>
-                <div class="form-check form-check-inline">
-                  <input
-                    class="form-check-input"
-                    type="radio"
-                    name="accidentesOptions"
-                    id="accidentesOptions1"
-                    v-model="form.acidente_laboral"
-                    value="1"
-                  />
-                  <label class="form-check-label" for="accidentesOptions1"
-                    >Si</label
-                  >
-                </div>
-                <div class="form-check form-check-inline">
-                  <input
-                    class="form-check-input"
-                    type="radio"
-                    name="accidentesOptions"
-                    id="accidentesOptions2"
-                    v-model="form.acidente_laboral"
-                    value="0"
-                  />
-                  <label class="form-check-label" for="accidentesOptions2"
-                    >No</label
-                  >
-                </div>
-              </div>
-            </div>
-            <div class="col flex">
-              <label for="" class="form-label">Enfermedades:</label>
-              <div>
-                <div class="form-check form-check-inline">
-                  <input
-                    class="form-check-input"
-                    type="radio"
-                    name="enfermedadesOptions"
-                    id="enfermedadesOptions1"
-                    v-model="form.enfermedad"
-                    value="1"
-                  />
-                  <label class="form-check-label" for="enfermedadesOptions1"
-                    >Si</label
-                  >
-                </div>
-                <div class="form-check form-check-inline">
-                  <input
-                    class="form-check-input"
-                    type="radio"
-                    name="enfermedadesOptions"
-                    id="enfermedadesOptions2"
-                    v-model="form.enfermedad"
-                    value="0"
-                  />
-                  <label class="form-check-label" for="enfermedadesOptions2"
-                    >No</label
-                  >
-                </div>
-              </div>
-            </div>
-            <div class="col flex">
-              <label for="" class="form-label">Tratamientos médicos:</label>
-              <div>
-                <div class="form-check form-check-inline">
-                  <input
-                    class="form-check-input"
-                    type="radio"
-                    name="inlineRadioOptionsTratamientoMedico"
-                    id="TratamientoMedico1"
-                    v-model="form.tratamiento_medico"
-                    value="1"
-                  />
-                  <label class="form-check-label" for="TratamientoMedico1"
-                    >Si</label
-                  >
-                </div>
-                <div class="form-check form-check-inline">
-                  <input
-                    class="form-check-input"
-                    type="radio"
-                    name="inlineRadioOptionsTratamientoMedico"
-                    id="TratamientoMedico2"
-                    v-model="form.tratamiento_medico"
-                    value="0"
-                  />
-                  <label class="form-check-label" for="TratamientoMedico2"
-                    >No</label
-                  >
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="row">
-            <div class="col flex">
-              <label for="" class="form-label"
-                >Tratamientos psicológicos:</label
-              >
-              <div>
-                <div class="form-check form-check-inline">
-                  <input
-                    class="form-check-input"
-                    type="radio"
-                    name="tratamientoPsicologicoOptions"
-                    id="tratamientoPsicologicoOptions1"
-                    v-model="form.tratamiento_psicologico"
-                    value="1"
-                  />
-                  <label
-                    class="form-check-label"
-                    for="tratamientoPsicologicoOptions1"
-                    >Si</label
-                  >
-                </div>
-                <div class="form-check form-check-inline">
-                  <input
-                    class="form-check-input"
-                    type="radio"
-                    name="tratamientoPsicologicoOptions"
-                    id="tratamientoPsicologicoOptions2"
-                    v-model="form.tratamiento_psicologico"
-                    value="0"
-                  />
-                  <label
-                    class="form-check-label"
-                    for="tratamientoPsicologicoOptions2"
-                    >No</label
-                  >
-                </div>
-              </div>
-            </div>
-            <div class="col flex">
-              <label for="" class="form-label"
-                >Tratamientos psiquiatricos:</label
-              >
-              <div>
-                <div class="form-check form-check-inline">
-                  <input
-                    class="form-check-input"
-                    type="radio"
-                    name="tratamientoPsiquiatricoRadioOptions"
-                    id="tratamientoPsiquiatricoRadioOptions1"
-                    v-model="form.tratamiento_psiquiatrico"
-                    value="1"
-                  />
-                  <label
-                    class="form-check-label"
-                    for="tratamientoPsiquiatricoRadioOptions1"
-                    >Si</label
-                  >
-                </div>
-                <div class="form-check form-check-inline">
-                  <input
-                    class="form-check-input"
-                    type="radio"
-                    name="tratamientoPsiquiatricoRadioOptions"
-                    v-model="form.tratamiento_psiquiatrico"
-                    id="tratamientoPsiquiatricoRadioOptions2"
-                    value="0"
-                  />
-                  <label
-                    class="form-check-label"
-                    for="tratamientoPsiquiatricoRadioOptions2"
-                    >No</label
-                  >
-                </div>
-              </div>
-            </div>
-            <div class="col flex">
-              <label for="" class="form-label"
-                >Tratamientos odontológicos:</label
-              >
-              <div>
-                <div class="form-check form-check-inline">
-                  <input
-                    class="form-check-input"
-                    type="radio"
-                    name="tratamientoOdontologicoRadioOptions"
-                    id="tratamientoOdontologicoRadioOptions1"
-                    v-model="form.tratamiento_odontologico"
-                    value="1"
-                  />
-                  <label
-                    class="form-check-label"
-                    for="tratamientoOdontologicoRadioOptions1"
-                    >Si</label
-                  >
-                </div>
-                <div class="form-check form-check-inline">
-                  <input
-                    class="form-check-input"
-                    type="radio"
-                    name="tratamientoOdontologicoRadioOptions"
-                    v-model="form.tratamiento_odontologico"
-                    id="tratamientoOdontologicoRadioOptions2"
-                    value="0"
-                  />
-                  <label
-                    class="form-check-label"
-                    for="tratamientoOdontologicoRadioOptions2"
-                    >No</label
-                  >
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="row">
-            <div class="col flex">
-              <label for="" class="form-label">Alergias:</label>
-              <div>
-                <div class="form-check form-check-inline">
-                  <input
-                    class="form-check-input"
-                    type="radio"
-                    name="AlergiasRadioOptions"
-                    v-model="form.alerigia"
-                    id="AlergiasRadioOptions1"
-                    value="1"
-                  />
-                  <label class="form-check-label" for="AlergiasRadioOptions1"
-                    >Si</label
-                  >
-                </div>
-                <div class="form-check form-check-inline">
-                  <input
-                    class="form-check-input"
-                    type="radio"
-                    name="AlergiasRadioOptions"
-                    v-model="form.alerigia"
-                    id="AlergiasRadioOptions2"
-                    value="0"
-                  />
-                  <label class="form-check-label" for="AlergiasRadioOptions2"
-                    >No</label
-                  >
-                </div>
-              </div>
-            </div>
-            <div class="col flex">
-              <label for="" class="form-label">Fracturas:</label>
-              <div>
-                <div class="form-check form-check-inline">
-                  <input
-                    class="form-check-input"
-                    type="radio"
-                    v-model="form.fractura"
-                    name="fracturaRadioOptions"
-                    id="fracturaRadioOptions1"
-                    value="1"
-                  />
-                  <label class="form-check-label" for="fracturaRadioOptions1"
-                    >Si</label
-                  >
-                </div>
-                <div class="form-check form-check-inline">
-                  <input
-                    class="form-check-input"
-                    type="radio"
-                    name="fracturaRadioOptions"
-                    v-model="form.fractura"
-                    id="fracturaRadioOptions2"
-                    value="0"
-                  />
-                  <label class="form-check-label" for="fracturaRadioOptions2"
-                    >No</label
-                  >
-                </div>
-              </div>
-            </div>
-            <div class="col flex">
-              <label for="" class="form-label">Cirugías:</label>
-              <div>
-                <div class="form-check form-check-inline">
-                  <input
-                    class="form-check-input"
-                    type="radio"
-                    v-model="form.cirugia"
-                    name="cirugiaRadioOptions"
-                    id="cirugiaRadioOptions1"
-                    value="1"
-                  />
-                  <label class="form-check-label" for="cirugiaRadioOptions1"
-                    >Si</label
-                  >
-                </div>
-                <div class="form-check form-check-inline">
-                  <input
-                    class="form-check-input"
-                    type="radio"
-                    name="cirugiaRadioOptions"
-                    id="cirugiaRadioOptions2"
-                    v-model="form.cirugia"
-                    value="0"
-                  />
-                  <label class="form-check-label" for="cirugiaRadioOptions2"
-                    >No</label
-                  >
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="row">
-            <div class="col flex">
-              <label for="" class="form-label"
-                >Consume sustancias psicoactivas:</label
-              >
-              <div>
-                <div class="form-check form-check-inline">
-                  <input
-                    v-model="form.sustencia_psicoactiva"
-                    class="form-check-input"
-                    type="radio"
-                    name="sustenciaPsicoactivaRadioOptions"
-                    id="sustenciaPsicoactivaRadioOptions1"
-                    value="1"
-                  />
-                  <label
-                    class="form-check-label"
-                    for="sustenciaPsicoactivaRadioOptions1"
-                    >Si</label
-                  >
-                </div>
-                <div class="form-check form-check-inline">
-                  <input
-                    v-model="form.sustencia_psicoactiva"
-                    class="form-check-input"
-                    type="radio"
-                    name="sustenciaPsicoactivaRadioOptions"
-                    id="sustenciaPsicoactivaRadioOptions2"
-                    value="0"
-                  />
-                  <label
-                    class="form-check-label"
-                    for="sustenciaPsicoactivaRadioOptions2"
-                    >No</label
-                  >
-                </div>
-              </div>
-            </div>
-            <div class="col flex">
-              <label for="" class="form-label">Lentes:</label>
-              <div>
-                <div class="form-check form-check-inline">
-                  <input
-                    class="form-check-input"
-                    type="radio"
-                    name="lentesRadioOptions"
-                    id="lentesRadioOptions1"
-                    v-model="form.lentes"
-                    value="1"
-                  />
-                  <label class="form-check-label" for="lentesRadioOptions1"
-                    >Si</label
-                  >
-                </div>
-                <div class="form-check form-check-inline">
-                  <input
-                    class="form-check-input"
-                    type="radio"
-                    name="lentesRadioOptions"
-                    id="lentesRadioOptions2"
-                    v-model="form.lentes"
-                    value="0"
-                  />
-                  <label class="form-check-label" for="lentesRadioOptions2"
-                    >No</label
-                  >
-                </div>
-              </div>
-            </div>
-            <div class="col flex"></div>
-          </div>
-          <div class="row">
-            <div class="col">
-              <label for="" class="form-label">Estatura(cm):</label>
-              <input
-                type="number"
-                class="form-control"
-                v-model="form.estatura"
-              />
-            </div>
-            <div class="col">
-              <label for="" class="form-label">Peso(kg):</label>
-              <input type="number" class="form-control" v-model="form.peso" />
-            </div>
-          </div>
-          <div class="row">
-            <div class="col">
-              <SearchList nombreCampo="EPS:*" />
-            </div>
-            <div class="col">
-              <SearchList
-                nombreCampo="AFP: *"
-                @getAFP="getAFP"
-                eventoCampo="getAFP"
-                nombreItem="nombre"
-                :consulta="consulta_afp"
-                :registros="lista_afp"
-                :ordenCampo="1"
-                :valida_campo="false"
-                placeholder="Seleccione una opción"
-              />
-            </div>
-          </div>
-          <div class="row">
-            <div class="col">
-              <label for="" class="form-label"
-                >Ampliación de las condiciones de salud:</label
-              >
-              <textarea
-                class="form-control"
-                v-model="form.descripcion_salud"
-                maxlength="300"
-              />
-            </div>
-          </div>
-        </div>
-        <div class="row">
-          <div class="col">
-            <h5
-              @click="referencias_personales = !referencias_personales"
-              style="cursor: pointer"
-            >
-              6. Referencias personales
-              <i
-                v-if="referencias_personales"
-                class="bi bi-chevron-compact-up"
-              ></i
-              ><i v-if="!referencias_personales" class="bi bi-chevron-down"></i>
-            </h5>
-          </div>
-        </div>
-        <div class="info_container" v-if="referencias_personales">
-          <div
-            class="row"
-            v-for="(referencia, index) in form.referencias"
-            :key="index"
-          >
-            <div class="info_container">
-              <div class="row">
-                <div class="col">
-                  <h6>{{ "Referencia " + (index + 1) }}</h6>
-                </div>
-                <div class="col-sm-12 col-md-6 mb-3">
-                  <div
-                    v-if="form.referencias.length > 2"
-                    class="d-flex justify-content-end align-items-end w-100 h-100"
-                  >
-                    <label
-                      class="bi bi-trash-fill labelOption"
-                      @click="deleteReferencia(index)"
+          <div class="info_container" v-if="condiciones_salud">
+            <div class="row">
+              <div class="col flex">
+                <label for="" class="form-label">Accidentes laborales:</label>
+                <div>
+                  <div class="form-check form-check-inline">
+                    <input
+                      class="form-check-input"
+                      type="radio"
+                      name="accidentesOptions"
+                      id="accidentesOptions1"
+                      v-model="form.acidente_laboral"
+                      value="1"
+                    />
+                    <label class="form-check-label" for="accidentesOptions1"
+                      >Si</label
                     >
-                      Eliminar</label
+                  </div>
+                  <div class="form-check form-check-inline">
+                    <input
+                      class="form-check-input"
+                      type="radio"
+                      name="accidentesOptions"
+                      id="accidentesOptions2"
+                      v-model="form.acidente_laboral"
+                      value="0"
+                    />
+                    <label class="form-check-label" for="accidentesOptions2"
+                      >No</label
                     >
                   </div>
                 </div>
               </div>
-
-              <div class="row">
-                <div class="col-12 col-lg-3">
-                  <label class="form-label" for="tipo_ref"
-                    >Tipo de referencia:</label
-                  >
-                  <select
-                    class="form-select"
-                    id="tipo_ref"
-                    v-model="referencia.tip_ref"
-                    required
-                  >
-                    <option value="1">Personal</option>
-                    <option value="2">Familiar</option>
-                  </select>
-                </div>
-                <div class="col-12 col-lg-3">
-                  <label class="form-label" for="parentesco">Parentesco:</label>
-                  <input
-                    class="form-control"
-                    type="text"
-                    v-model="referencia.parent"
-                    id="parentesco"
-                    required
-                  />
-                </div>
-
-                <div class="col-12 col-lg-3">
-                  <label class="form-label" for="fullName"
-                    >Nombre completo:</label
-                  >
-                  <input
-                    class="form-control"
-                    type="text"
-                    v-model="referencia.nom_ref"
-                    id="fullName"
-                    required
-                  />
-                </div>
-                <div class="col-12 col-lg-3">
-                  <label class="form-label" for="celular_ref"
-                    >Número celular:</label
-                  >
-                  <input
-                    class="form-control"
-                    type="text"
-                    v-model="referencia.cel_ref"
-                    id="celular_ref"
-                    required
-                  />
-                </div>
-              </div>
-            </div>
-          </div>
-          <div
-            class="row mt-5 trash justify-content-center align-items-center padding-1"
-          >
-            <label
-              id="clasificador"
-              @click="addReferencia()"
-              style="cursor: pointer"
-              ><i class="bi bi-plus-circle-fill"></i>
-              Agregar referencia
-            </label>
-          </div>
-        </div>
-
-        <!-- Hijos -->
-        <div class="row">
-          <div class="col">
-            <h5 @click="hijos_info = !hijos_info" style="cursor: pointer">
-              7. Hijos
-              <i v-if="hijos_info" class="bi bi-chevron-compact-up"></i
-              ><i v-if="!hijos_info" class="bi bi-chevron-down"></i>
-            </h5>
-          </div>
-        </div>
-        <div class="info_container" v-if="hijos_info">
-          <div
-            class="row"
-            v-for="(familiar, index) in form.familiares"
-            :key="index"
-          >
-            <div class="info_container">
-              <div class="row">
-                <div class="col">
-                  <h6>{{ "Hijo " + (index + 1) }}</h6>
-                </div>
-
-                <div class="col-sm-12 col-md-6 mb-3">
-                  <div
-                    class="d-flex justify-content-end align-items-end w-100 h-100"
-                  >
-                    <label
-                      class="bi bi-trash-fill labelOption"
-                      @click="deleteHijo(index)"
+              <div class="col flex">
+                <label for="" class="form-label">Enfermedades:</label>
+                <div>
+                  <div class="form-check form-check-inline">
+                    <input
+                      class="form-check-input"
+                      type="radio"
+                      name="enfermedadesOptions"
+                      id="enfermedadesOptions1"
+                      v-model="form.enfermedad"
+                      value="1"
+                    />
+                    <label class="form-check-label" for="enfermedadesOptions1"
+                      >Si</label
                     >
-                      Eliminar</label
+                  </div>
+                  <div class="form-check form-check-inline">
+                    <input
+                      class="form-check-input"
+                      type="radio"
+                      name="enfermedadesOptions"
+                      id="enfermedadesOptions2"
+                      v-model="form.enfermedad"
+                      value="0"
+                    />
+                    <label class="form-check-label" for="enfermedadesOptions2"
+                      >No</label
                     >
                   </div>
                 </div>
               </div>
-
-              <div class="row">
-                <div class="col-12 col-lg-3">
-                  <label class="form-label" for="primer_apellido_hijo"
-                    >Primer apellido:</label
-                  >
-                  <input
-                    class="form-control"
-                    type="text"
-                    v-model="familiar.ap1_fam"
-                    id="primer_apellido_hijo"
-                  />
-                </div>
-                <div class="col-12 col-lg-3">
-                  <label class="form-label" for="segundo_apellido_hijo"
-                    >Segundo apellido:</label
-                  >
-                  <input
-                    class="form-control"
-                    type="text"
-                    v-model="familiar.ap2_fam"
-                    id="segundo_apellido_hijo"
-                  />
-                </div>
-                <div class="col-12 col-lg-3">
-                  <label class="form-label" for="nombre_hijo">Nombre:</label>
-                  <input
-                    class="form-control"
-                    type="text"
-                    v-model="familiar.nom_fam"
-                    id="nombre_hijo"
-                  />
-                </div>
-                <div class="col-12 col-lg-3">
-                  <label class="form-label" for="fecha_nac_hijo"
-                    >Fecha de nacimiento:</label
-                  >
-                  <input
-                    class="form-control"
-                    type="date"
-                    @input="updateFecha($event, familiar)"
-                    :value="formattedDate(familiar.fec_nac)"
-                    id="fecha_nac_hijo"
-                  />
+              <div class="col flex">
+                <label for="" class="form-label">Tratamientos médicos:</label>
+                <div>
+                  <div class="form-check form-check-inline">
+                    <input
+                      class="form-check-input"
+                      type="radio"
+                      name="inlineRadioOptionsTratamientoMedico"
+                      id="TratamientoMedico1"
+                      v-model="form.tratamiento_medico"
+                      value="1"
+                    />
+                    <label class="form-check-label" for="TratamientoMedico1"
+                      >Si</label
+                    >
+                  </div>
+                  <div class="form-check form-check-inline">
+                    <input
+                      class="form-check-input"
+                      type="radio"
+                      name="inlineRadioOptionsTratamientoMedico"
+                      id="TratamientoMedico2"
+                      v-model="form.tratamiento_medico"
+                      value="0"
+                    />
+                    <label class="form-check-label" for="TratamientoMedico2"
+                      >No</label
+                    >
+                  </div>
                 </div>
               </div>
             </div>
+            <div class="row">
+              <div class="col flex">
+                <label for="" class="form-label"
+                  >Tratamientos psicológicos:</label
+                >
+                <div>
+                  <div class="form-check form-check-inline">
+                    <input
+                      class="form-check-input"
+                      type="radio"
+                      name="tratamientoPsicologicoOptions"
+                      id="tratamientoPsicologicoOptions1"
+                      v-model="form.tratamiento_psicologico"
+                      value="1"
+                    />
+                    <label
+                      class="form-check-label"
+                      for="tratamientoPsicologicoOptions1"
+                      >Si</label
+                    >
+                  </div>
+                  <div class="form-check form-check-inline">
+                    <input
+                      class="form-check-input"
+                      type="radio"
+                      name="tratamientoPsicologicoOptions"
+                      id="tratamientoPsicologicoOptions2"
+                      v-model="form.tratamiento_psicologico"
+                      value="0"
+                    />
+                    <label
+                      class="form-check-label"
+                      for="tratamientoPsicologicoOptions2"
+                      >No</label
+                    >
+                  </div>
+                </div>
+              </div>
+              <div class="col flex">
+                <label for="" class="form-label"
+                  >Tratamientos psiquiatricos:</label
+                >
+                <div>
+                  <div class="form-check form-check-inline">
+                    <input
+                      class="form-check-input"
+                      type="radio"
+                      name="tratamientoPsiquiatricoRadioOptions"
+                      id="tratamientoPsiquiatricoRadioOptions1"
+                      v-model="form.tratamiento_psiquiatrico"
+                      value="1"
+                    />
+                    <label
+                      class="form-check-label"
+                      for="tratamientoPsiquiatricoRadioOptions1"
+                      >Si</label
+                    >
+                  </div>
+                  <div class="form-check form-check-inline">
+                    <input
+                      class="form-check-input"
+                      type="radio"
+                      name="tratamientoPsiquiatricoRadioOptions"
+                      v-model="form.tratamiento_psiquiatrico"
+                      id="tratamientoPsiquiatricoRadioOptions2"
+                      value="0"
+                    />
+                    <label
+                      class="form-check-label"
+                      for="tratamientoPsiquiatricoRadioOptions2"
+                      >No</label
+                    >
+                  </div>
+                </div>
+              </div>
+              <div class="col flex">
+                <label for="" class="form-label"
+                  >Tratamientos odontológicos:</label
+                >
+                <div>
+                  <div class="form-check form-check-inline">
+                    <input
+                      class="form-check-input"
+                      type="radio"
+                      name="tratamientoOdontologicoRadioOptions"
+                      id="tratamientoOdontologicoRadioOptions1"
+                      v-model="form.tratamiento_odontologico"
+                      value="1"
+                    />
+                    <label
+                      class="form-check-label"
+                      for="tratamientoOdontologicoRadioOptions1"
+                      >Si</label
+                    >
+                  </div>
+                  <div class="form-check form-check-inline">
+                    <input
+                      class="form-check-input"
+                      type="radio"
+                      name="tratamientoOdontologicoRadioOptions"
+                      v-model="form.tratamiento_odontologico"
+                      id="tratamientoOdontologicoRadioOptions2"
+                      value="0"
+                    />
+                    <label
+                      class="form-check-label"
+                      for="tratamientoOdontologicoRadioOptions2"
+                      >No</label
+                    >
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col flex">
+                <label for="" class="form-label">Alergias:</label>
+                <div>
+                  <div class="form-check form-check-inline">
+                    <input
+                      class="form-check-input"
+                      type="radio"
+                      name="AlergiasRadioOptions"
+                      v-model="form.alerigia"
+                      id="AlergiasRadioOptions1"
+                      value="1"
+                    />
+                    <label class="form-check-label" for="AlergiasRadioOptions1"
+                      >Si</label
+                    >
+                  </div>
+                  <div class="form-check form-check-inline">
+                    <input
+                      class="form-check-input"
+                      type="radio"
+                      name="AlergiasRadioOptions"
+                      v-model="form.alerigia"
+                      id="AlergiasRadioOptions2"
+                      value="0"
+                    />
+                    <label class="form-check-label" for="AlergiasRadioOptions2"
+                      >No</label
+                    >
+                  </div>
+                </div>
+              </div>
+              <div class="col flex">
+                <label for="" class="form-label">Fracturas:</label>
+                <div>
+                  <div class="form-check form-check-inline">
+                    <input
+                      class="form-check-input"
+                      type="radio"
+                      v-model="form.fractura"
+                      name="fracturaRadioOptions"
+                      id="fracturaRadioOptions1"
+                      value="1"
+                    />
+                    <label class="form-check-label" for="fracturaRadioOptions1"
+                      >Si</label
+                    >
+                  </div>
+                  <div class="form-check form-check-inline">
+                    <input
+                      class="form-check-input"
+                      type="radio"
+                      name="fracturaRadioOptions"
+                      v-model="form.fractura"
+                      id="fracturaRadioOptions2"
+                      value="0"
+                    />
+                    <label class="form-check-label" for="fracturaRadioOptions2"
+                      >No</label
+                    >
+                  </div>
+                </div>
+              </div>
+              <div class="col flex">
+                <label for="" class="form-label">Cirugías:</label>
+                <div>
+                  <div class="form-check form-check-inline">
+                    <input
+                      class="form-check-input"
+                      type="radio"
+                      v-model="form.cirugia"
+                      name="cirugiaRadioOptions"
+                      id="cirugiaRadioOptions1"
+                      value="1"
+                    />
+                    <label class="form-check-label" for="cirugiaRadioOptions1"
+                      >Si</label
+                    >
+                  </div>
+                  <div class="form-check form-check-inline">
+                    <input
+                      class="form-check-input"
+                      type="radio"
+                      name="cirugiaRadioOptions"
+                      id="cirugiaRadioOptions2"
+                      v-model="form.cirugia"
+                      value="0"
+                    />
+                    <label class="form-check-label" for="cirugiaRadioOptions2"
+                      >No</label
+                    >
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col flex">
+                <label for="" class="form-label"
+                  >Consume sustancias psicoactivas:</label
+                >
+                <div>
+                  <div class="form-check form-check-inline">
+                    <input
+                      v-model="form.sustencia_psicoactiva"
+                      class="form-check-input"
+                      type="radio"
+                      name="sustenciaPsicoactivaRadioOptions"
+                      id="sustenciaPsicoactivaRadioOptions1"
+                      value="1"
+                    />
+                    <label
+                      class="form-check-label"
+                      for="sustenciaPsicoactivaRadioOptions1"
+                      >Si</label
+                    >
+                  </div>
+                  <div class="form-check form-check-inline">
+                    <input
+                      v-model="form.sustencia_psicoactiva"
+                      class="form-check-input"
+                      type="radio"
+                      name="sustenciaPsicoactivaRadioOptions"
+                      id="sustenciaPsicoactivaRadioOptions2"
+                      value="0"
+                    />
+                    <label
+                      class="form-check-label"
+                      for="sustenciaPsicoactivaRadioOptions2"
+                      >No</label
+                    >
+                  </div>
+                </div>
+              </div>
+              <div class="col flex">
+                <label for="" class="form-label">Lentes:</label>
+                <div>
+                  <div class="form-check form-check-inline">
+                    <input
+                      class="form-check-input"
+                      type="radio"
+                      name="lentesRadioOptions"
+                      id="lentesRadioOptions1"
+                      v-model="form.lentes"
+                      value="1"
+                    />
+                    <label class="form-check-label" for="lentesRadioOptions1"
+                      >Si</label
+                    >
+                  </div>
+                  <div class="form-check form-check-inline">
+                    <input
+                      class="form-check-input"
+                      type="radio"
+                      name="lentesRadioOptions"
+                      id="lentesRadioOptions2"
+                      v-model="form.lentes"
+                      value="0"
+                    />
+                    <label class="form-check-label" for="lentesRadioOptions2"
+                      >No</label
+                    >
+                  </div>
+                </div>
+              </div>
+              <div class="col flex"></div>
+            </div>
+            <div class="row">
+              <div class="col">
+                <label for="" class="form-label">Estatura(cm):</label>
+                <input
+                  type="number"
+                  class="form-control"
+                  v-model="form.estatura"
+                />
+              </div>
+              <div class="col">
+                <label for="" class="form-label">Peso(kg):</label>
+                <input type="number" class="form-control" v-model="form.peso" />
+              </div>
+            </div>
+            <div class="row">
+              <div class="col">
+                <SearchList nombreCampo="EPS:*" />
+              </div>
+              <div class="col">
+                <SearchList
+                  nombreCampo="AFP: *"
+                  @getAFP="getAFP"
+                  eventoCampo="getAFP"
+                  nombreItem="nombre"
+                  :consulta="consulta_afp"
+                  :registros="lista_afp"
+                  :ordenCampo="1"
+                  :valida_campo="false"
+                  placeholder="Seleccione una opción"
+                />
+              </div>
+            </div>
+            <div class="row">
+              <div class="col">
+                <label for="" class="form-label"
+                  >Ampliación de las condiciones de salud:</label
+                >
+                <textarea
+                  class="form-control"
+                  v-model="form.descripcion_salud"
+                  maxlength="300"
+                />
+              </div>
+            </div>
           </div>
-          <div
-            class="row mt-5 trash justify-content-center align-items-center padding-1"
-          >
-            <label id="clasificador" @click="addHijo()" style="cursor: pointer"
-              ><i class="bi bi-plus-circle-fill"></i>
-              Agregar hijo
-            </label>
+          <div class="row">
+            <div class="col">
+              <h5
+                @click="referencias_personales = !referencias_personales"
+                style="cursor: pointer"
+              >
+                6. Referencias personales
+                <i
+                  v-if="referencias_personales"
+                  class="bi bi-chevron-compact-up"
+                ></i
+                ><i
+                  v-if="!referencias_personales"
+                  class="bi bi-chevron-down"
+                ></i>
+              </h5>
+            </div>
           </div>
-        </div>
-        <button type="submit">Enviar</button>
-      </form>
+          <div class="info_container" v-if="referencias_personales">
+            <div
+              class="row"
+              v-for="(referencia, index) in form.referencias"
+              :key="index"
+            >
+              <div class="info_container">
+                <div class="row">
+                  <div class="col">
+                    <h6>{{ "Referencia " + (index + 1) }}</h6>
+                  </div>
+                  <div class="col-sm-12 col-md-6 mb-3">
+                    <div
+                      v-if="form.referencias.length > 2"
+                      class="d-flex justify-content-end align-items-end w-100 h-100"
+                    >
+                      <label
+                        class="bi bi-trash-fill labelOption"
+                        @click="deleteReferencia(index)"
+                      >
+                        Eliminar</label
+                      >
+                    </div>
+                  </div>
+                </div>
+
+                <div class="row">
+                  <div class="col-12 col-lg-3">
+                    <label class="form-label" for="tipo_ref"
+                      >Tipo de referencia:</label
+                    >
+                    <select
+                      class="form-select"
+                      id="tipo_ref"
+                      v-model="referencia.tip_ref"
+                      required
+                    >
+                      <option value="1">Personal</option>
+                      <option value="2">Familiar</option>
+                    </select>
+                  </div>
+                  <div class="col-12 col-lg-3">
+                    <label class="form-label" for="parentesco"
+                      >Parentesco:</label
+                    >
+                    <input
+                      class="form-control"
+                      type="text"
+                      v-model="referencia.parent"
+                      id="parentesco"
+                      required
+                    />
+                  </div>
+
+                  <div class="col-12 col-lg-3">
+                    <label class="form-label" for="fullName"
+                      >Nombre completo:</label
+                    >
+                    <input
+                      class="form-control"
+                      type="text"
+                      v-model="referencia.nom_ref"
+                      id="fullName"
+                      required
+                    />
+                  </div>
+                  <div class="col-12 col-lg-3">
+                    <label class="form-label" for="celular_ref"
+                      >Número celular:</label
+                    >
+                    <input
+                      class="form-control"
+                      type="text"
+                      v-model="referencia.cel_ref"
+                      id="celular_ref"
+                      required
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div
+              class="row mt-5 trash justify-content-center align-items-center padding-1"
+            >
+              <label
+                id="clasificador"
+                @click="addReferencia()"
+                style="cursor: pointer"
+                ><i class="bi bi-plus-circle-fill"></i>
+                Agregar referencia
+              </label>
+            </div>
+          </div>
+
+          <!-- Hijos -->
+          <div class="row">
+            <div class="col">
+              <h5 @click="hijos_info = !hijos_info" style="cursor: pointer">
+                7. Hijos
+                <i v-if="hijos_info" class="bi bi-chevron-compact-up"></i
+                ><i v-if="!hijos_info" class="bi bi-chevron-down"></i>
+              </h5>
+            </div>
+          </div>
+          <div class="info_container" v-if="hijos_info">
+            <div
+              class="row"
+              v-for="(familiar, index) in form.familiares"
+              :key="index"
+            >
+              <div class="info_container">
+                <div class="row">
+                  <div class="col">
+                    <h6>{{ "Hijo " + (index + 1) }}</h6>
+                  </div>
+
+                  <div class="col-sm-12 col-md-6 mb-3">
+                    <div
+                      class="d-flex justify-content-end align-items-end w-100 h-100"
+                    >
+                      <label
+                        class="bi bi-trash-fill labelOption"
+                        @click="deleteHijo(index)"
+                      >
+                        Eliminar</label
+                      >
+                    </div>
+                  </div>
+                </div>
+
+                <div class="row">
+                  <div class="col-12 col-lg-3">
+                    <label class="form-label" for="primer_apellido_hijo"
+                      >Primer apellido:</label
+                    >
+                    <input
+                      class="form-control"
+                      type="text"
+                      v-model="familiar.ap1_fam"
+                      id="primer_apellido_hijo"
+                    />
+                  </div>
+                  <div class="col-12 col-lg-3">
+                    <label class="form-label" for="segundo_apellido_hijo"
+                      >Segundo apellido:</label
+                    >
+                    <input
+                      class="form-control"
+                      type="text"
+                      v-model="familiar.ap2_fam"
+                      id="segundo_apellido_hijo"
+                    />
+                  </div>
+                  <div class="col-12 col-lg-3">
+                    <label class="form-label" for="nombre_hijo">Nombre:</label>
+                    <input
+                      class="form-control"
+                      type="text"
+                      v-model="familiar.nom_fam"
+                      id="nombre_hijo"
+                    />
+                  </div>
+                  <div class="col-12 col-lg-3">
+                    <label class="form-label" for="fecha_nac_hijo"
+                      >Fecha de nacimiento:</label
+                    >
+                    <input
+                      class="form-control"
+                      type="date"
+                      @input="updateFecha($event, familiar)"
+                      :value="formattedDate(familiar.fec_nac)"
+                      id="fecha_nac_hijo"
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div
+              class="row mt-5 trash justify-content-center align-items-center padding-1"
+            >
+              <label
+                id="clasificador"
+                @click="addHijo()"
+                style="cursor: pointer"
+                ><i class="bi bi-plus-circle-fill"></i>
+                Agregar hijo
+              </label>
+            </div>
+          </div>
+          <button type="submit">Enviar</button>
+        </form>
+      </div>
     </div>
   </div>
 </template>
@@ -1865,12 +1895,13 @@ const getPaises = (item = null, index = null) => {
 
 <style scoped>
 .progress-container {
-  width: 20px;
-  height: 200px; /* Altura del contenedor */
-  background-color: #e0e0e0;
+  width: 1em;
+  height: 60vh; /* Altura del contenedor */
+  background-color: #ffffff;
+  border: #006b3f solid 1px;
   border-radius: 10px;
   margin: 20px auto;
-  position: relative;
+  position: fixed;
   display: flex;
   align-items: flex-end; /* Para que la barra crezca desde abajo */
 }
@@ -1890,9 +1921,9 @@ const getPaises = (item = null, index = null) => {
   top: 50%;
   transform: translate(-50%, -50%) rotate(-90deg); /* Texto vertical */
   white-space: nowrap;
-  color: white;
+  color: rgb(156, 156, 156);
   font-weight: bold;
-  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+  font-size: 0.8rem;
 }
 h2 {
   text-align: center;
@@ -1990,5 +2021,10 @@ h5 {
 .flex {
   display: flex;
   flex-direction: column;
+}
+.flexRow {
+  display: flex;
+  flex-direction: row-reverse;
+  gap: 2em;
 }
 </style>
