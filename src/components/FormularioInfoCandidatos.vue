@@ -12,6 +12,50 @@
         <span class="progress-text"
           >{{ Math.round(progress) }}% completado</span
         >
+        <div class="textProgressContainer">
+          <p
+            @click="scrollToInformacionPersonal"
+            class="progress-text horizontalText"
+          >
+            -Informacion <br />
+            personal
+          </p>
+          <p class="progress-text horizontalText" @click="scrollToExperiencia">
+            -Experiencia <br />
+            laboral
+          </p>
+          <p
+            class="progress-text horizontalText"
+            @click="scrollToInformacionAcademica"
+          >
+            -Informacion <br />
+            académica
+          </p>
+          <p
+            class="progress-text horizontalText"
+            @click="scrollToInMedioTrasnporte"
+          >
+            -Medio de <br />
+            transporte
+          </p>
+          <p
+            class="progress-text horizontalText"
+            @click="scrollToInCondicionesSalud"
+          >
+            -Condiciones <br />
+            de salud
+          </p>
+          <p
+            class="progress-text horizontalText"
+            @click="scrollToInReferenciasPersonales"
+          >
+            -Referencias <br />
+            personales
+          </p>
+          <p class="progress-text horizontalText" @click="scrollToInHijos">
+            -Hijos
+          </p>
+        </div>
       </div>
       <div id="seccion">
         <form @submit.prevent="submitForm" class="row g-3">
@@ -24,6 +68,7 @@
               <h5
                 @click="informacion_personal = !informacion_personal"
                 style="cursor: pointer"
+                ref="informacionPersonalRef"
               >
                 1. Información personal
                 <i
@@ -108,7 +153,7 @@
                     type="number"
                     v-model="form.cod_emp"
                     id="documento"
-                    :disabled="form.tip_ide === '' || form.emp_id"
+                    :disabled="form.tip_ide === ''"
                     required
                   />
                   <div class="invalid-feedback errorCheck">
@@ -477,6 +522,7 @@
               <h5
                 @click="experiencia_laboral = !experiencia_laboral"
                 style="cursor: pointer"
+                ref="experienciaLaboralRef"
               >
                 2. Experiencia laboral
                 <i
@@ -595,6 +641,7 @@
               <h5
                 @click="info_academica = !info_academica"
                 style="cursor: pointer"
+                ref="informacionAcademicaRef"
               >
                 3. Información académica
                 <i v-if="info_academica" class="bi bi-chevron-compact-up"></i
@@ -692,6 +739,7 @@
               <h5
                 @click="medio_transporte = !medio_transporte"
                 style="cursor: pointer"
+                ref="medioTransporteRef"
               >
                 4. Medio de transporte
                 <i v-if="medio_transporte" class="bi bi-chevron-compact-up"></i
@@ -812,6 +860,7 @@
               <h5
                 @click="condiciones_salud = !condiciones_salud"
                 style="cursor: pointer"
+                ref="condicionesSaludRef"
               >
                 5. Condiciones de salud
                 <i v-if="condiciones_salud" class="bi bi-chevron-compact-up"></i
@@ -1244,6 +1293,7 @@
               <h5
                 @click="referencias_personales = !referencias_personales"
                 style="cursor: pointer"
+                ref="referenciasPersonalesRef"
               >
                 6. Referencias personales
                 <i
@@ -1354,7 +1404,11 @@
           <!-- Hijos -->
           <div class="row">
             <div class="col">
-              <h5 @click="hijos_info = !hijos_info" style="cursor: pointer">
+              <h5
+                @click="hijos_info = !hijos_info"
+                style="cursor: pointer"
+                ref="hijosRef"
+              >
                 7. Hijos
                 <i v-if="hijos_info" class="bi bi-chevron-compact-up"></i
                 ><i v-if="!hijos_info" class="bi bi-chevron-down"></i>
@@ -1498,6 +1552,13 @@ const experiencia_laboral = ref(false);
 const tipo_transporte = ref(2);
 const otro_transporte = ref("");
 const licencia_conduccion = ref(0);
+const informacionPersonalRef = ref(null);
+const experienciaLaboralRef = ref(null);
+const informacionAcademicaRef = ref(null);
+const medioTransporteRef = ref(null);
+const condicionesSaludRef = ref(null);
+const referenciasPersonalesRef = ref(null);
+const hijosRef = ref(null);
 // Formulario reactivo
 
 const requiredFieldsToComplete = [
@@ -1859,6 +1920,112 @@ const getDepartamentos = (item, index) => {
       console.error("Error al obtener departamentos:", error);
     });
 };
+const scrollToInformacionPersonal = () => {
+  if (informacionPersonalRef.value) {
+    // Asegura que la sección esté expandida
+    informacion_personal.value = true;
+
+    // Usa scrollIntoView con comportamiento suave
+    setTimeout(() => {
+      informacionPersonalRef.value.scrollIntoView({
+        behavior: "smooth",
+        block: "start",
+      });
+    }, 100); // Pequeño delay para permitir la renderización
+  }
+};
+
+const scrollToExperiencia = () => {
+  if (experienciaLaboralRef.value) {
+    // Asegura que la sección esté expandida
+    experiencia_laboral.value = true;
+
+    // Usa scrollIntoView con comportamiento suave
+    setTimeout(() => {
+      experienciaLaboralRef.value.scrollIntoView({
+        behavior: "smooth",
+        block: "start",
+      });
+    }, 100); // Pequeño delay para permitir la renderización
+  }
+};
+
+const scrollToInformacionAcademica = () => {
+  if (informacionAcademicaRef.value) {
+    // Asegura que la sección esté expandida
+    info_academica.value = true;
+
+    // Usa scrollIntoView con comportamiento suave
+    setTimeout(() => {
+      informacionAcademicaRef.value.scrollIntoView({
+        behavior: "smooth",
+        block: "start",
+      });
+    }, 100); // Pequeño delay para permitir la renderización
+  }
+};
+
+const scrollToInMedioTrasnporte = () => {
+  if (medioTransporteRef.value) {
+    // Asegura que la sección esté expandida
+
+    medio_transporte.value = true;
+
+    // Usa scrollIntoView con comportamiento suave
+    setTimeout(() => {
+      medioTransporteRef.value.scrollIntoView({
+        behavior: "smooth",
+        block: "start",
+      });
+    }, 100); // Pequeño delay para permitir la renderización
+  }
+};
+const scrollToInCondicionesSalud = () => {
+  if (condicionesSaludRef.value) {
+    // Asegura que la sección esté expandida
+
+    condiciones_salud.value = true;
+
+    // Usa scrollIntoView con comportamiento suave
+    setTimeout(() => {
+      condicionesSaludRef.value.scrollIntoView({
+        behavior: "smooth",
+        block: "start",
+      });
+    }, 100); // Pequeño delay para permitir la renderización
+  }
+};
+const scrollToInReferenciasPersonales = () => {
+  if (referenciasPersonalesRef.value) {
+    // Asegura que la sección esté expandida
+
+    referencias_personales.value = true;
+
+    // Usa scrollIntoView con comportamiento suave
+    setTimeout(() => {
+      referenciasPersonalesRef.value.scrollIntoView({
+        behavior: "smooth",
+        block: "start",
+      });
+    }, 100); // Pequeño delay para permitir la renderización
+  }
+};
+
+const scrollToInHijos = () => {
+  if (hijosRef.value) {
+    // Asegura que la sección esté expandida
+
+    hijos_info.value = true;
+
+    // Usa scrollIntoView con comportamiento suave
+    setTimeout(() => {
+      hijosRef.value.scrollIntoView({
+        behavior: "smooth",
+        block: "start",
+      });
+    }, 100); // Pequeño delay para permitir la renderización
+  }
+};
 
 const getPaises = (item = null, index = null) => {
   if (item != null) {
@@ -1894,6 +2061,15 @@ const getPaises = (item = null, index = null) => {
 </script>
 
 <style scoped>
+.textProgressContainer {
+  display: flex;
+  flex-direction: column-reverse;
+  justify-content: space-around;
+  align-items: left;
+  height: 100%;
+  width: 100%;
+  margin-left: 1.5em;
+}
 .progress-container {
   width: 1em;
   height: 60vh; /* Altura del contenedor */
@@ -1924,6 +2100,17 @@ const getPaises = (item = null, index = null) => {
   color: rgb(156, 156, 156);
   font-weight: bold;
   font-size: 0.8rem;
+}
+.horizontalText {
+  transform: translate(0%, 0%) rotate(0deg);
+  position: relative;
+  left: 0%;
+  top: 0%;
+  cursor: pointer;
+}
+.horizontalText:hover {
+  text-decoration: underline;
+  color: #006b3f;
 }
 h2 {
   text-align: center;
