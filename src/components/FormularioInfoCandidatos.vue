@@ -17,7 +17,7 @@
             @click="scrollToInformacionPersonal"
             class="progress-text horizontalText"
           >
-            -Informacion <br />
+            -Información <br />
             personal
           </p>
           <p class="progress-text horizontalText" @click="scrollToExperiencia">
@@ -28,7 +28,7 @@
             class="progress-text horizontalText"
             @click="scrollToInformacionAcademica"
           >
-            -Informacion <br />
+            -Información <br />
             académica
           </p>
           <p
@@ -2038,8 +2038,8 @@ const getPaises = (item = null, index = null) => {
 <style scoped>
 .textProgressContainer {
   display: flex;
-  flex-direction: column-reverse;
-  justify-content: space-around;
+  flex-direction: column;
+  justify-content: space-between;
   align-items: left;
   height: 100%;
   width: 100%;
@@ -2047,14 +2047,14 @@ const getPaises = (item = null, index = null) => {
 }
 .progress-container {
   width: 1em;
-  height: 60vh; /* Altura del contenedor */
+  height: 64vh; /* Altura del contenedor */
   background-color: #ffffff;
   border: #006b3f solid 1px;
   border-radius: 10px;
   margin: 20px auto;
   position: fixed;
   display: flex;
-  align-items: flex-end; /* Para que la barra crezca desde abajo */
+  align-items: flex-start; /* Para que la barra crezca desde abajo */
 }
 
 .progress-bar {
@@ -2063,7 +2063,8 @@ const getPaises = (item = null, index = null) => {
   border-radius: 10px;
   transition: height 0.5s ease-in-out;
   position: absolute;
-  bottom: 0%;
+  top: 0; /* Cambiado de bottom: 0 */
+  bottom: auto; /* Asegura que no quede fijo en la parte inferior */
 }
 
 .progress-text {
@@ -2082,6 +2083,7 @@ const getPaises = (item = null, index = null) => {
   left: 0%;
   top: 0%;
   cursor: pointer;
+  font-size: 0.9rem;
 }
 .horizontalText:hover {
   text-decoration: underline;
