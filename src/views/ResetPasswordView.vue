@@ -2,13 +2,7 @@
   <div class="containerPrincipal">
     <!-- Contenedor del Video de Fondo -->
     <div class="videoContainer">
-      <video
-        src="../assets/video.mp4"
-        autoplay
-        muted
-        loop
-        class="videoBackground"
-      ></video>
+      <img src="@/assets/imgLogin4.jpg" alt="" class="imgLogin" />
       <div class="background_color"></div>
     </div>
 
@@ -281,34 +275,31 @@ label {
 
 /* Contenedor Principal */
 .containerPrincipal {
-  padding: 0;
-  height: 100vh;
+  display: flex;
+  min-height: 100vh;
   position: relative;
-  width: 100%;
-  overflow: hidden; /* Evita scroll inesperado por el video */
+  justify-content: center;
+  align-items: center;
 }
 
 /* Tarjeta (Recuperar Contraseña) */
 .card {
-  max-width: 500px; /* Máximo ancho para la tarjeta */
-  width: 90%; /* Ocupa el 90% del ancho de la pantalla */
-  padding: 4em;
-  background-color: #fff;
+  width: 30em;
   margin: auto;
-  margin-top: 5vh;
-  min-width: 300px;
+  padding: 4em;
+  background-color: rgb(255, 255, 255);
+  min-width: 350px;
   box-shadow: rgba(0, 0, 0, 0.25) 0px 14px 28px,
     rgba(0, 0, 0, 0.22) 0px 10px 10px;
-  border-radius: 10px;
-  position: absolute;
-  top: 45%; /* Ubicación vertical en el medio */
-  left: 50%; /* Ubicación horizontal en el medio */
-  transform: translate(-50%, -50%); /* Centra la tarjeta */
+  position: relative;
   z-index: 100;
+  right: -25%;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  animation: fadeInDownBig; /* referring directly to the animation's @keyframe declaration */
+  animation-duration: 1s;
 }
 
 /* Líneas divisorias en los .row (opcional) */
@@ -356,6 +347,12 @@ label {
   margin-bottom: 1em;
 }
 
+.imgLogin {
+  width: 100%;
+  box-sizing: content-box;
+  position: absolute;
+  right: 0%;
+}
 .logo img {
   width: 100%;
 }
@@ -367,10 +364,10 @@ label {
 .videoContainer {
   z-index: 0;
   position: absolute;
-  width: 100%;
   height: 100%;
-  opacity: 0.8;
+  width: 100%;
   overflow: hidden;
+  opacity: 0.8;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -383,16 +380,18 @@ label {
 }
 
 .background_color {
-  height: 100%;
+  height: 180%;
   width: 100%;
   position: absolute;
-  top: 0;
-  left: 0;
+  top: -20%;
+  left: 45%;
+  border-radius: 50%;
   background: linear-gradient(
     90deg,
-    rgba(0, 107, 62, 0.8) 0%,
-    rgba(19, 114, 148, 0.8) 51%,
-    rgba(26, 148, 56, 0.8) 100%
+    rgba(255, 255, 255, 0.479) 0%,
+    rgba(255, 255, 255, 0.623) 10%,
+    rgba(255, 255, 255, 1) 20%,
+    rgba(255, 255, 255, 1) 100%
   );
 }
 
