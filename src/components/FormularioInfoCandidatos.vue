@@ -182,7 +182,7 @@
                   @selectDepartamento="selectDepartamento"
                   eventoCampo="selectDepartamento"
                   nombreItem="nom_dep"
-                  :consulta="consulta_departamentos[1]"
+                  :consulta="dep_exp_name"
                   :registros="consulta_departamentos[1]"
                   :index="1"
                   :disabled="!form.pai_exp"
@@ -198,7 +198,7 @@
                   @selectCiudad="selectCiudad"
                   eventoCampo="selectCiudad"
                   nombreItem="nom_ciu"
-                  :consulta="consulta_ciudades[1]"
+                  :consulta="ciu_exp_name"
                   :registros="consulta_ciudades[1]"
                   :index="1"
                   :disabled="!form.dpt_exp"
@@ -238,7 +238,7 @@
                   @selectDepartamento="selectDepartamento"
                   eventoCampo="selectDepartamento"
                   nombreItem="nom_dep"
-                  :consulta="consulta_departamentos[2]"
+                  :consulta="cod_dep_name"
                   :registros="consulta_departamentos[2]"
                   :index="2"
                   :disabled="!form.cod_pai"
@@ -254,7 +254,7 @@
                   @selectCiudad="selectCiudad"
                   eventoCampo="selectCiudad"
                   nombreItem="nom_ciu"
-                  :consulta="consulta_ciudades[2]"
+                  :consulta="cod_ciu_name"
                   :registros="consulta_ciudades[2]"
                   :index="2"
                   :disabled="!form.cod_dep"
@@ -347,7 +347,7 @@
                   @selectDepartamento="selectDepartamento"
                   eventoCampo="selectDepartamento"
                   nombreItem="nom_dep"
-                  :consulta="consulta_departamentos[3]"
+                  :consulta="dep_res_name"
                   :registros="consulta_departamentos[3]"
                   :index="3"
                   :disabled="!form.pai_res"
@@ -363,7 +363,7 @@
                   @selectCiudad="selectCiudad"
                   eventoCampo="selectCiudad"
                   nombreItem="nom_ciu"
-                  :consulta="consulta_ciudades[3]"
+                  :consulta="ciu_res_name"
                   :registros="consulta_ciudades[3]"
                   :index="3"
                   :disabled="!form.dpt_res"
@@ -377,7 +377,7 @@
                   eventoCampo="selectBanco"
                   nombreItem="nom_ban"
                   :consulta="consulta_banco"
-                  :registros="consulta_banco"
+                  :registros="lista_bancos"
                   placeholder="Seleccione una opción"
                 />
               </div>
@@ -406,7 +406,6 @@
                 />
               </div>
             </div>
-            <!-- Nivel Académico y Género -->
             <div class="row">
               <div class="col-12 mt-2 was-validated p-2 col-lg-6">
                 <label class="form-label" for="genero"
@@ -432,8 +431,8 @@
                   @selectEstadoCivil="selectEstadoCivil"
                   eventoCampo="selectEstadoCivil"
                   nombreItem="des_est"
-                  :consulta="est_civ_name"
-                  :registros="consulta_estado_civil"
+                  :consulta="consulta_estado_civil"
+                  :registros="lista_estado_civil"
                   placeholder="Seleccione una opción"
                 />
               </div>
@@ -511,7 +510,7 @@
                   eventoCampo="selectEtnia"
                   nombreItem="descripcion"
                   :consulta="form.raza"
-                  :registros="consulta_etnia"
+                  :registros="lista_etnia"
                   placeholder="Seleccione una opción"
                 />
               </div>
@@ -577,11 +576,15 @@
                 <div class="col">
                   <SearchList
                     nombreCampo="Sector:*"
-                    @selectTipoId="selectTipoId"
-                    eventoCampo="selectTipoId"
-                    nombreItem="des_tip"
-                    :consulta="nom_tip_doc"
-                    :registros="consulta_tipo_id"
+                    @getSectorEconomico="getSectorEconomico"
+                    eventoCampo="getSectorEconomico"
+                    nombreItem="nombre"
+                    :index="index"
+                    :consulta="
+                      form.experiencias_laborales[index]
+                        .consulta_sector_economico
+                    "
+                    :registros="lista_sectores_economicos"
                     placeholder="Seleccione una opción"
                   />
                 </div>
@@ -657,19 +660,19 @@
                   @selectAcademico="selectAcademico"
                   eventoCampo="selectAcademico"
                   nombreItem="des_est"
-                  :consulta="consulta_estudio"
-                  :registros="consulta_estudio"
+                  :consulta="consulta_nivel_academico"
+                  :registros="lista_nivel_academico"
                   placeholder="Seleccione una opción"
                 />
               </div>
               <div class="col mt-0">
                 <SearchList
                   nombreCampo="Sector académico:*"
-                  @selectTipoId="selectTipoId"
-                  eventoCampo="selectTipoId"
-                  nombreItem="des_tip"
-                  :consulta="nom_tip_doc"
-                  :registros="consulta_tipo_id"
+                  @getSectorAcademico="getSectorAcademico"
+                  eventoCampo="getSectorAcademico"
+                  nombreItem="nombre"
+                  :consulta="consulta_sector_academico"
+                  :registros="lista_sector_academico"
                   placeholder="Seleccione una opción"
                 />
               </div>
@@ -698,11 +701,12 @@
                 <div class="col">
                   <SearchList
                     nombreCampo="Idioma:*"
-                    @selectTipoId="selectTipoId"
-                    eventoCampo="selectTipoId"
-                    nombreItem="des_tip"
-                    :consulta="nom_tip_doc"
-                    :registros="consulta_tipo_id"
+                    @getIdioma="getIdioma"
+                    eventoCampo="getIdioma"
+                    nombreItem="nombre"
+                    :index="index"
+                    :consulta="form.idiomas[index].nombre"
+                    :registros="lista_idiomas"
                     placeholder="Seleccione una opción"
                   />
                 </div>
@@ -1259,7 +1263,17 @@
             </div>
             <div class="row">
               <div class="col">
-                <SearchList nombreCampo="EPS:*" />
+                <SearchList
+                  nombreCampo="EPS:*"
+                  @selectEps="selectEps"
+                  eventoCampo="selectEps"
+                  nombreItem="nombre"
+                  :consulta="consulta_eps"
+                  :registros="lista_eps"
+                  :ordenCampo="1"
+                  :valida_campo="false"
+                  placeholder="Seleccione una opción"
+                />
               </div>
               <div class="col">
                 <SearchList
@@ -1516,17 +1530,9 @@ import { ref, reactive, watch } from "vue";
 import axios from "axios";
 
 // Variables reactivas
-
 const { configHeader } = useToken();
 const loading = ref(false);
 const mensaje_error = "¡Este campo debe ser diligenciado!";
-const consulta_etnia = ref([]);
-const est_civ_name = ref("");
-const consulta_estado_civil = ref([]);
-/* const niv_aca_name = ref(""); */
-const consulta_estudio = ref([]);
-/* const banco_name = ref(""); */
-const consulta_banco = ref([]);
 const consulta_tipo_id = ref([]);
 const nom_tip_doc = ref("");
 const dep_res_name = ref("");
@@ -1595,12 +1601,26 @@ const requiredFieldsInfoPersonal = [
   "sex_emp",
   "cod_grupo",
 ];
+const lista_sectores_economicos = ref([]);
+const lista_bancos = ref([]);
+const lista_etnia = ref([]);
+const lista_estado_civil = ref([]);
 const lista_afp = ref([]);
+const lista_eps = ref([]);
+const lista_nivel_academico = ref([]);
+const lista_sector_academico = ref([]);
+const lista_idiomas = ref([]);
+const consulta_sector_academico = ref("");
+const consulta_nivel_academico = ref("");
+const consulta_banco = ref("");
+const consulta_estado_civil = ref("");
 const consulta_afp = ref("");
+const consulta_eps = ref("");
 const progress = ref(0);
 const form = reactive({
   descripcion_salud: "",
   afp_id: "",
+  eps_id: "",
   peso: 0,
   estatura: 0,
   sustencia_psicoactiva: 0,
@@ -1667,6 +1687,7 @@ watch(
   { deep: true }
 );
 
+//funciones para calcular el porcentaje de la progress bar
 const calculateProgress = () => {
   let completed = 0;
 
@@ -1675,55 +1696,61 @@ const calculateProgress = () => {
       completed++;
     }
   });
-
-  // Verificar campos especiales de componentes SearchList
-
   const totalFields =
     requiredFieldsInfoPersonal.length + requiredFieldsToComplete.length; // Campos adicionales
 
   progress.value = ((completed / totalFields) * 100) / 8;
 };
 
-// Función para enviar el formulario
+//funcion para  guardar el formulario
 const submitForm = async () => {
-  loading.value = true; // Activar el estado de carga
+  loading.value = true;
   try {
-    // Aquí puedes agregar validaciones adicionales si es necesario
-
-    // Realizar la solicitud POST al servidor
     const response = await axios.post(
       `${URL_API}/api/v1/registroDatosPersonales`,
       form
     );
-
-    // Manejar la respuesta exitosa
     console.log("Formulario enviado con éxito:", response.data);
-    // Opcional: Mostrar una alerta de éxito, limpiar el formulario, redirigir al usuario, etc.
   } catch (error) {
     console.error("Error al enviar el formulario:", error);
-    // Opcional: Mostrar una alerta de error al usuario
   } finally {
-    loading.value = false; // Desactivar el estado de carga
+    loading.value = false;
   }
 };
+
+//funciones para poner el formulario de forma dinámica
 const deleteIdioma = (index) => {
   form.idiomas.splice(index, 1);
 };
+
+const addIdioma = () => {
+  form.idiomas.push({
+    nombre: "",
+    id: "",
+    nivel: "",
+  });
+};
+
 const deleteExperiencia = (index) => {
   form.experiencias_laborales.splice(index, 1);
 };
+
 const addExperienciaLaboral = () => {
   form.experiencias_laborales.push({
     empresa: "",
     cargo: "",
     sector_econimico_id: "",
+    consulta_sector_economico: "",
     motivo_retiro: "",
     fecha_inicio: "",
     fecha_fin: "",
   });
 };
 
-// Función para agregar un hijo
+const deleteHijo = (index) => {
+  form.familiares.splice(index, 1);
+};
+
 const addHijo = () => {
   form.familiares.push({
     ap1_fam: "",
@@ -1733,12 +1760,6 @@ const addHijo = () => {
     fec_nac: "",
     ocu_fam: 7,
   });
-};
-
-// Formatear fecha
-const formattedDate = (date) => {
-  if (!date) return "";
-  return date.split(" ")[0];
 };
 
 const deleteReferencia = (index) => {
@@ -1754,92 +1775,108 @@ const addReferencia = () => {
     nom_ref: "",
   });
 };
-// Actualizar fecha de nacimiento
+
+//funciones para el formateo de la fecha
+const formattedDate = (date) => {
+  if (!date) return "";
+  return date.split(" ")[0];
+};
+
 const updateFecha = (event, familiar) => {
   const fecha = event.target.value;
   familiar.fec_nac = fecha;
 };
 
 // Funciones para seleccionar opciones
-const selectEtnia = (item) => {
-  axios
-    .get(`${URL_API}/api/v1/grupoEtnicoEmpleado`)
-    .then((result) => {
-      consulta_etnia.value = result.data;
-      form.cod_grupo = item.cod_grupo;
-    })
-    .catch((error) => {
-      console.error("Error al seleccionar etnia:", error);
-    });
+const selectEps = async (item) => {
+  if (item != null) {
+    consulta_eps.value = item.nombre;
+    form.eps_id = item.id;
+  }
+  const response = await axios.get(URL_API + "api/v1/eps", configHeader());
+  lista_eps.value = response.data;
 };
 
-const deleteHijo = (index) => {
-  form.familiares.splice(index, 1);
-};
-const selectEstadoCivil = (item) => {
-  axios
-    .get(`${URL_API}/api/v1/estadocivil`)
-    .then((result) => {
-      consulta_estado_civil.value = result.data;
-      form.est_civ = item.cod_est;
-    })
-    .catch((error) => {
-      console.error("Error al seleccionar estado civil:", error);
-    });
+const selectEtnia = async (item) => {
+  if (item != null) {
+    form.raza = item.descripcion;
+    form.cod_grupo = item.cod_grupo;
+  }
+  const response = await axios.get(`${URL_API}api/v1/grupoEtnicoEmpleado`);
+  lista_etnia.value = response.data;
 };
 
-const selectAcademico = (item) => {
-  axios
-    .get(`${URL_API}api/v1/nivelAcademicoFormEmpleado`)
-    .then((result) => {
-      consulta_estudio.value = result.data;
-      form.Niv_aca = item.tip_est;
-    })
-    .catch((error) => {
-      console.error("Error al seleccionar nivel académico:", error);
-    });
+const selectEstadoCivil = async (item) => {
+  if (item != null) {
+    consulta_estado_civil.value = item.des_est;
+    form.est_civ = item.cod_est;
+  }
+  const response = await axios.get(`${URL_API}api/v1/estadocivil`);
+  lista_estado_civil.value = response.data;
 };
 
-const selectBanco = (item) => {
-  axios
-    .get(`${URL_API}api/v1/bancosFormularioEmpleado`)
-    .then((result) => {
-      consulta_banco.value = result.data;
-      form.cod_ban = item.cod_ban;
-    })
-    .catch((error) => {
-      console.error("Error al seleccionar banco:", error);
-    });
+const selectAcademico = async (item) => {
+  if (item != null) {
+    consulta_nivel_academico.value = item.des_est;
+    form.Niv_aca = item.tip_est;
+  }
+  const response = await axios.get(
+    `${URL_API}api/v1/nivelAcademicoFormEmpleado`
+  );
+  lista_nivel_academico.value = response.data;
 };
-const addIdioma = () => {
-  form.idiomas.push({
-    nombre: "",
-    id: "",
-    nivel: "",
-  });
+
+const selectBanco = async (item) => {
+  if (item != null) {
+    consulta_banco.value = item.nom_ban;
+    form.cod_ban = item.cod_ban;
+  }
+  const response = await axios.get(`${URL_API}api/v1/bancosFormularioEmpleado`);
+  lista_bancos.value = response.data;
 };
+
 const getAFP = async (item = null) => {
   if (item != null) {
     consulta_afp.value = item.nombre;
     form.afp_id = item.id;
   }
-
   const response = await axios.get(URL_API + "api/v1/afp", configHeader());
   lista_afp.value = response.data;
 };
 
-/* const selectIdioma = (item) => {
-  axios
-    .get(`${URL_API}api/v1/getidiomas`)
-    .then((result) => {
-      form.idiomas.push({});
-      form.value = result.data;
-      form.tip_ide = item.cod_tip;
-    })
-    .catch((error) => {
-      console.error("Error al seleccionar tipo de identificación:", error);
-    });
-}; */
+const getSectorAcademico = async (item = null) => {
+  if (item != null) {
+    consulta_sector_academico.value = item.nombre;
+    form.sector_academico_id = item.id;
+  }
+  const response = await axios.get(
+    URL_API + "api/v1/sectoracademico",
+    configHeader()
+  );
+  lista_sector_academico.value = response.data;
+};
+
+const getIdioma = async (item = null, index) => {
+  if (item != null) {
+    form.idiomas[index].nombre = item.nombre;
+    form.idiomas[index].id = item.id;
+  }
+  const response = await axios.get(URL_API + "api/v1/idiomas", configHeader());
+  lista_idiomas.value = response.data;
+};
+
+const getSectorEconomico = async (item = null, index) => {
+  if (item != null) {
+    form.experiencias_laborales[index].consulta_sector_economico = item.nombre;
+    form.experiencias_laborales[index].sector_econimico_id = item.id;
+  }
+  const response = await axios.get(
+    URL_API + "api/v1/sectoreconomicocandidato",
+    configHeader()
+  );
+  lista_sectores_economicos.value = response.data;
+};
+
 const selectTipoId = (item) => {
   axios
     .get(`${URL_API}api/v1/tipoIdFormularioEmpleado`)
@@ -1910,96 +1947,11 @@ const getCiudades = (item, index) => {
     });
 };
 
-const getDepartamentos = (item, index) => {
-  axios
-    .get(`${URL_API}api/v1/departamentosFormularioEmpleado/${item.cod_pai}`)
-    .then((result) => {
-      consulta_departamentos[index] = result.data;
-    })
-    .catch((error) => {
-      console.error("Error al obtener departamentos:", error);
-    });
-};
-const scrollToInformacionPersonal = () => {
-  if (informacionPersonalRef.value) {
-    informacion_personal.value = true;
-    setTimeout(() => {
-      informacionPersonalRef.value.scrollIntoView({
-        behavior: "smooth",
-        block: "start",
-      });
-    }, 100);
-  }
-};
-
-const scrollToExperiencia = () => {
-  if (experienciaLaboralRef.value) {
-    experiencia_laboral.value = true;
-    setTimeout(() => {
-      experienciaLaboralRef.value.scrollIntoView({
-        behavior: "smooth",
-        block: "start",
-      });
-    }, 100);
-  }
-};
-
-const scrollToInformacionAcademica = () => {
-  if (informacionAcademicaRef.value) {
-    info_academica.value = true;
-    setTimeout(() => {
-      informacionAcademicaRef.value.scrollIntoView({
-        behavior: "smooth",
-        block: "start",
-      });
-    }, 100);
-  }
-};
-
-const scrollToInMedioTrasnporte = () => {
-  if (medioTransporteRef.value) {
-    medio_transporte.value = true;
-    setTimeout(() => {
-      medioTransporteRef.value.scrollIntoView({
-        behavior: "smooth",
-        block: "start",
-      });
-    }, 100);
-  }
-};
-const scrollToInCondicionesSalud = () => {
-  if (condicionesSaludRef.value) {
-    condiciones_salud.value = true;
-    setTimeout(() => {
-      condicionesSaludRef.value.scrollIntoView({
-        behavior: "smooth",
-        block: "start",
-      });
-    }, 100);
-  }
-};
-const scrollToInReferenciasPersonales = () => {
-  if (referenciasPersonalesRef.value) {
-    referencias_personales.value = true;
-    setTimeout(() => {
-      referenciasPersonalesRef.value.scrollIntoView({
-        behavior: "smooth",
-        block: "start",
-      });
-    }, 100);
-  }
-};
-
-const scrollToInHijos = () => {
-  if (hijosRef.value) {
-    hijos_info.value = true;
-    setTimeout(() => {
-      hijosRef.value.scrollIntoView({
-        behavior: "smooth",
-        block: "start",
-      });
-    }, 100);
-  }
+const getDepartamentos = async (item, index) => {
+  const response = await axios.get(
+    `${URL_API}api/v1/departamentosFormularioEmpleado/${item.cod_pai}`
+  );
+  consulta_departamentos[index] = response.data;
 };
 
 const getPaises = (item = null, index = null) => {
@@ -2032,6 +1984,119 @@ const getPaises = (item = null, index = null) => {
     .catch((error) => {
       console.error("Error al obtener países:", error);
     });
+};
+
+//funciones para el scroll desde el menu lateral
+const scrollToInformacionPersonal = () => {
+  if (informacionPersonalRef.value) {
+    informacion_personal.value = true;
+    ocultarSecciones("informacion_personal");
+    setTimeout(() => {
+      informacionPersonalRef.value.scrollIntoView({
+        behavior: "smooth",
+        block: "start",
+      });
+    }, 100);
+  }
+};
+
+const scrollToExperiencia = () => {
+  if (experienciaLaboralRef.value) {
+    experiencia_laboral.value = true;
+    ocultarSecciones("experiencia_laboral");
+    setTimeout(() => {
+      experienciaLaboralRef.value.scrollIntoView({
+        behavior: "smooth",
+        block: "start",
+      });
+    }, 100);
+  }
+};
+
+const scrollToInformacionAcademica = () => {
+  if (informacionAcademicaRef.value) {
+    info_academica.value = true;
+    ocultarSecciones("info_academica");
+    setTimeout(() => {
+      informacionAcademicaRef.value.scrollIntoView({
+        behavior: "smooth",
+        block: "start",
+      });
+    }, 100);
+  }
+};
+
+const scrollToInMedioTrasnporte = () => {
+  if (medioTransporteRef.value) {
+    medio_transporte.value = true;
+    ocultarSecciones("medio_transporte");
+    setTimeout(() => {
+      medioTransporteRef.value.scrollIntoView({
+        behavior: "smooth",
+        block: "start",
+      });
+    }, 100);
+  }
+};
+const scrollToInCondicionesSalud = () => {
+  if (condicionesSaludRef.value) {
+    condiciones_salud.value = true;
+    ocultarSecciones("condiciones_salud");
+    setTimeout(() => {
+      condicionesSaludRef.value.scrollIntoView({
+        behavior: "smooth",
+        block: "start",
+      });
+    }, 100);
+  }
+};
+const scrollToInReferenciasPersonales = () => {
+  if (referenciasPersonalesRef.value) {
+    referencias_personales.value = true;
+    ocultarSecciones("referencias_personales");
+    setTimeout(() => {
+      referenciasPersonalesRef.value.scrollIntoView({
+        behavior: "smooth",
+        block: "start",
+      });
+    }, 100);
+  }
+};
+
+const scrollToInHijos = () => {
+  if (hijosRef.value) {
+    hijos_info.value = true;
+    ocultarSecciones("hijos_info");
+    setTimeout(() => {
+      hijosRef.value.scrollIntoView({
+        behavior: "smooth",
+        block: "start",
+      });
+    }, 100);
+  }
+};
+const ocultarSecciones = (seccion) => {
+  seccion == "informacion_personal"
+    ? (informacion_personal.value = true)
+    : (informacion_personal.value = false);
+  seccion == "condiciones_salud"
+    ? (condiciones_salud.value = true)
+    : (condiciones_salud.value = false);
+  seccion == "medio_transporte"
+    ? (medio_transporte.value = true)
+    : (medio_transporte.value = false);
+  seccion == "referencias_personales"
+    ? (referencias_personales.value = true)
+    : (referencias_personales.value = false);
+  seccion == "hijos_info"
+    ? (hijos_info.value = true)
+    : (hijos_info.value = false);
+  seccion == "info_academica"
+    ? (info_academica.value = true)
+    : (info_academica.value = false);
+  seccion == "experiencia_laboral"
+    ? (experiencia_laboral.value = true)
+    : (experiencia_laboral.value = false);
 };
 </script>
 
