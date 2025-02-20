@@ -279,20 +279,6 @@ export default {
     logout() {
       this.$router.push({ name: "login" });
       localStorage.removeItem("access_token");
-      // let config = this.configHeader();
-      // let self = this
-      // axios
-      //   .post(self.URL_API+"api/v1/logout", config)
-      //   .then(function (result) {
-      //     localStorage.removeItem("access_token");
-      //     self.$router.push({ name: "login"});
-      //       console.log('error',result);
-      //   }).catch(function (error) {
-      //     if (error.response.data == "Unauthorized"){
-      //     self.$router.push("login");
-      //     localStorage.removeItem("access_token");
-      //     }
-      //   });
     },
     ocultarMenu() {
       var menu = document.getElementsByClassName("aside")[0];
@@ -306,11 +292,6 @@ export default {
       localStorage.setItem("menu_lateral", this.menu_lateral);
     },
     actualizar() {
-      // if( userlogued.rol != 'Cliente'){
-
-      // }else{
-
-      // }
       let ruta = "";
       let id = "";
       if (this.permisos[34].autorizado) {

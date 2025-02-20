@@ -105,7 +105,7 @@ const routes = [
     component: NavBar,
     children: [
       {
-        path: "formularioinfocandidato",
+        path: "formularioinfocandidato/:id?",
         name: "formularioinfocandidato",
         component: FormularioInfoCandidatos,
       },

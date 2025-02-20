@@ -141,6 +141,7 @@
                   :consulta="nom_tip_doc"
                   :registros="consulta_tipo_id"
                   placeholder="Seleccione una opción"
+                  disabled
                 />
               </div>
               <div class="col-12 mt-2 was-validated p-2 col-lg-6">
@@ -153,7 +154,7 @@
                     type="number"
                     v-model="form.cod_emp"
                     id="documento"
-                    :disabled="form.tip_ide === ''"
+                    disabled
                     required
                   />
                   <div class="invalid-feedback errorCheck">
@@ -319,6 +320,7 @@
                   >Correo electronico:*</label
                 >
                 <input
+                  disabled
                   class="form-control"
                   type="email"
                   v-model="form.e_mail"
@@ -1526,8 +1528,11 @@
 import SearchList from "./SearchList.vue";
 import { useToken } from "../composables/useToken";
 import Loading from "./Loading.vue";
-import { ref, reactive, watch } from "vue";
+import { ref, reactive, watch, defineProps, onMounted } from "vue";
 import axios from "axios";
+
+//props
+const { userlogued } = defineProps(["userlogued"]);
 
 // Variables reactivas
 const { configHeader } = useToken();
@@ -1538,7 +1543,6 @@ const nom_tip_doc = ref("");
 const dep_res_name = ref("");
 const dep_exp_name = ref("");
 const cod_dep_name = ref("");
-const paises = ref([]);
 const pai_exp_name = ref("");
 const cod_pai_name = ref("");
 const pai_res_name = ref("");
@@ -1555,7 +1559,7 @@ const referencias_personales = ref(false);
 const hijos_info = ref(false);
 const info_academica = ref(false);
 const experiencia_laboral = ref(false);
-const tipo_transporte = ref(2);
+const tipo_transporte = ref("");
 const otro_transporte = ref("");
 const licencia_conduccion = ref(0);
 const informacionPersonalRef = ref(null);
@@ -1567,7 +1571,7 @@ const referenciasPersonalesRef = ref(null);
 const hijosRef = ref(null);
 // Formulario reactivo
 
-const requiredFieldsToComplete = [
+const requiredFieldsInfoPersonal = [
   "dir_res",
   "cod_ban",
   "barrio",
@@ -1578,8 +1582,6 @@ const requiredFieldsToComplete = [
   "fac_rhh",
   "est_soc",
   "est_civ",
-];
-const requiredFieldsInfoPersonal = [
   "nom1_emp",
   "ap1_emp",
   "ap2_emp",
@@ -1601,6 +1603,7 @@ const requiredFieldsInfoPersonal = [
   "sex_emp",
   "cod_grupo",
 ];
+const paises = ref([]);
 const lista_sectores_economicos = ref([]);
 const lista_bancos = ref([]);
 const lista_etnia = ref([]);
@@ -1621,19 +1624,19 @@ const form = reactive({
   descripcion_salud: "",
   afp_id: "",
   eps_id: "",
-  peso: 0,
-  estatura: 0,
-  sustencia_psicoactiva: 0,
-  enfermedad: 0,
-  lentes: 0,
-  cirugia: 0,
-  alerigia: 0,
-  fractura: 0,
-  tratamiento_odontologico: 0,
-  tratamiento_psiquiatrico: 0,
-  tratamiento_psicologico: 0,
-  tratamiento_medico: 0,
-  acidente_laboral: 0,
+  peso: "",
+  estatura: "",
+  sustencia_psicoactiva: "",
+  enfermedad: "",
+  lentes: "",
+  cirugia: "",
+  alerigia: "",
+  fractura: "",
+  tratamiento_odontologico: "",
+  tratamiento_psiquiatrico: "",
+  tratamiento_psicologico: "",
+  tratamiento_medico: "",
+  acidente_laboral: "",
   emp_id: "",
   nom1_emp: "",
   nom2_emp: "",
@@ -1674,8 +1677,22 @@ const form = reactive({
   sector_academico_id: "",
   familiaresConsulta: [],
   referencias: [
-    { num_ref: 1, tip_ref: "", parent: "", cel_ref: "", nom_ref: "" },
-    { num_ref: 2, tip_ref: "", parent: "", cel_ref: "", nom_ref: "" },
+    {
+      num_ref: 1,
+      tip_ref: "",
+      parent: "",
+      cel_ref: "",
+      nom_ref: "",
+      fecha_nacimiento: "",
+    },
+    {
+      num_ref: 2,
+      tip_ref: "",
+      parent: "",
+      cel_ref: "",
+      nom_ref: "",
+      fecha_nacimiento: "",
+    },
   ],
   familiares: [],
 });
@@ -1696,19 +1713,104 @@ const calculateProgress = () => {
       completed++;
     }
   });
-  const totalFields =
-    requiredFieldsInfoPersonal.length + requiredFieldsToComplete.length; // Campos adicionales
-
-  progress.value = ((completed / totalFields) * 100) / 8;
+  const totalFields = requiredFieldsInfoPersonal.length; // Campos adicionales
+  progress.value = ((completed / totalFields) * 100) / 7;
 };
 
+const llenarFormulario = async () => {
+  const response = await axios.get(
+    `${URL_API}api/v1/formulariocandidato/${userlogued.id}`,
+    configHeader()
+  );
+  form.descripcion_salud = response.data.descripcion_salud;
+  form.afp_id = response.data.afp_id;
+  form.eps_id = response.data.eps_id;
+  form.peso = response.data.peso;
+  form.estatura = response.data.estatura;
+  form.sustencia_psicoactiva = response.data.sustencia_psicoactiva;
+  form.enfermedad = response.data.enfermedad;
+  form.lentes = response.data.lentes;
+  form.cirugia = response.data.cirugia;
+  form.alerigia = response.data.alerigia;
+  form.fractura = response.data.fractura;
+  form.tratamiento_odontologico = response.data.tratamiento_odontologico;
+  form.tratamiento_psiquiatrico = response.data.tratamiento_psiquiatrico;
+  form.tratamiento_psicologico = response.data.tratamiento_psicologico;
+  form.tratamiento_medico = response.data.tratamiento_medico;
+  form.acidente_laboral = response.data.acidente_laboral;
+  form.nom1_emp = response.data.primer_nombre;
+  form.nom2_emp = response.data.segundo_nombre;
+  form.cod_grupo = response.data.grupo_etnico_id;
+  form.cod_emp = response.data.num_doc;
+  form.ap1_emp = response.data.primer_apellido;
+  form.ap2_emp = response.data.segundo_apellido;
+  form.tip_ide = response.data.cod_tip;
+  form.pai_exp = response.data.novasoft.pai_exp;
+  form.dpt_exp = response.data.novasoft.dpt_exp;
+  form.ciu_exp = response.data.novasoft.ciu_exp;
+  form.cod_pai = response.data.novasoft.cod_pai;
+  form.cod_dep = response.data.novasoft.cod_dep;
+  form.cod_ciu = response.data.novasoft.cod_ciu;
+  form.fec_nac = response.data.fecha_nacimiento;
+  form.dir_res = response.data.direccion_residencia;
+  form.fec_expdoc = response.data.fecha_expedicion;
+  form.tel_res = response.data.telefono;
+  form.tel_cel = response.data.celular;
+  form.e_mail = userlogued.email;
+  form.pai_res = response.data.novasoft.pai_res;
+  form.dpt_res = response.data.novasoft.dpt_res;
+  form.ciu_res = response.data.novasoft.ciu_res;
+  form.cod_ban = response.data.cod_ban;
+  form.cta_ban = response.data.cuenta_bancaria;
+  form.barrio = response.data.novasoft.barrio;
+  form.Niv_aca = response.data.nivel_academico_id;
+  form.sex_emp = response.data.genero_id;
+  form.per_car = response.data.personas_cargo;
+  form.gru_san = response.data.grupo_sanguineo;
+  form.fac_rhh = response.data.factor_rh;
+  form.raza = response.data.novasoft.raza;
+  form.est_civ = response.data.novasoft.est_civ;
+  form.est_soc = response.data.estrato;
+  form.experiencias_laborales = response.data.experiencias_laborales;
+  if (form.experiencias_laborales.length > 0) {
+    form.experiencias_laborales.forEach((element) => {
+      element["consulta_sector_economico"] = element.nombre;
+    });
+  }
+  form.idiomas = response.data.idiomas;
+  form.categoria_licencia = response.data.categoria_licencia;
+  form.sector_academico_id = response.data.sector_academico_id;
+  form.familiaresConsulta = response.data.novasoft.familiares;
+  form.familiares = response.data.novasoft.familiares;
+  form.referencias = response.data.novasoft.referencias;
+
+  consulta_sector_academico.value = response.data.sector_academico_nombre;
+  consulta_nivel_academico.value = response.data.des_est;
+  consulta_banco.value = response.data.nom_ban;
+  consulta_estado_civil.value = response.data.novasoft.des_est;
+  consulta_afp.value = response.data.afp_nombre;
+  consulta_eps.value = response.data.eps_nombre;
+  nom_tip_doc.value = response.data.novasoft.tipIde_nombre;
+  dep_res_name.value = response.data.novasoft.dep_res_nombre;
+  dep_exp_name.value = response.data.novasoft.dep_exp_nombre;
+  cod_dep_name.value = response.data.novasoft.dep_nac_nombre;
+  pai_exp_name.value = response.data.novasoft.pais_exp_nombre;
+  cod_pai_name.value = response.data.novasoft.pais_nac_nombre;
+  pai_res_name.value = response.data.novasoft.pais_res_nombre;
+  ciu_exp_name.value = response.data.novasoft.ciudad_exp_nombre;
+  cod_ciu_name.value = response.data.novasoft.ciudad_nac_nombre;
+  ciu_res_name.value = response.data.novasoft.ciudad_res_nombre;
+  console.log(response);
+  loading.value = false;
+};
 //funcion para  guardar el formulario
 const submitForm = async () => {
   loading.value = true;
   try {
     const response = await axios.post(
-      `${URL_API}/api/v1/registroDatosPersonales`,
-      form
+      `${URL_API}api/v1/recepcionEmpleadoseiya/${userlogued.id}`,
+      form,
+      configHeader()
     );
     console.log("Formulario enviado con éxito:", response.data);
   } catch (error) {
@@ -2098,6 +2200,11 @@ const ocultarSecciones = (seccion) => {
     ? (experiencia_laboral.value = true)
     : (experiencia_laboral.value = false);
 };
+
+//cliclo de vida
+onMounted(() => {
+  llenarFormulario();
+});
 </script>
 
 <style scoped>
