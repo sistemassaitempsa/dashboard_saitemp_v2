@@ -1744,7 +1744,7 @@ const llenarFormulario = async () => {
   form.cod_emp = response.data.num_doc;
   form.ap1_emp = response.data.primer_apellido;
   form.ap2_emp = response.data.segundo_apellido;
-  form.tip_ide = response.data.cod_tip;
+  form.tip_ide = response.data.tip_doc_id;
   form.pai_exp = response.data.novasoft.pai_exp;
   form.dpt_exp = response.data.novasoft.dpt_exp;
   form.ciu_exp = response.data.novasoft.ciu_exp;
@@ -1780,9 +1780,17 @@ const llenarFormulario = async () => {
   form.idiomas = response.data.idiomas;
   form.categoria_licencia = response.data.categoria_licencia;
   form.sector_academico_id = response.data.sector_academico_id;
-  form.familiaresConsulta = response.data.novasoft.familiares;
-  form.familiares = response.data.novasoft.familiares;
-  form.referencias = response.data.novasoft.referencias;
+  form.familiaresConsulta = JSON.parse(
+    JSON.stringify(response.data.novasoft.familiares)
+  );
+  form.familiares =
+    response.data.novasoft.familiares.length > 0
+      ? response.data.novasoft.familiares
+      : form.familiares;
+  form.referencias =
+    response.data.novasoft.referencias.length > 0
+      ? response.data.novasoft.referencias
+      : form.referencias;
 
   consulta_sector_academico.value = response.data.sector_academico_nombre;
   consulta_nivel_academico.value = response.data.des_est;
@@ -1790,7 +1798,7 @@ const llenarFormulario = async () => {
   consulta_estado_civil.value = response.data.novasoft.des_est;
   consulta_afp.value = response.data.afp_nombre;
   consulta_eps.value = response.data.eps_nombre;
-  nom_tip_doc.value = response.data.novasoft.tipIde_nombre;
+  nom_tip_doc.value = response.data.des_tip;
   dep_res_name.value = response.data.novasoft.dep_res_nombre;
   dep_exp_name.value = response.data.novasoft.dep_exp_nombre;
   cod_dep_name.value = response.data.novasoft.dep_nac_nombre;
