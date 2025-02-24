@@ -839,7 +839,7 @@
                   type="text"
                   class="form-control"
                   v-model="otro_transporte"
-                  :disabled="tipo_transporte == 3 ? false : true"
+                  :disabled="form.tipo_transporte == 3 ? false : true"
                 />
               </div>
             </div>
@@ -856,7 +856,7 @@
                       value="1"
                       v-model="form.licencia_conduccion"
                     />
-                    <label class="form-check-label" for="inlineRadio1"
+                    <label class="form-check-label" for="inlineRadioConduccion1"
                       >Si</label
                     >
                   </div>
@@ -869,7 +869,7 @@
                       v-model="form.licencia_conduccion"
                       value="0"
                     />
-                    <label class="form-check-label" for="inlineRadio2"
+                    <label class="form-check-label" for="inlineRadioConduccion2"
                       >No</label
                     >
                   </div>
@@ -1638,7 +1638,6 @@ const requiredFieldsInfoPersonal = [
   "dir_res",
   "cod_ban",
   "barrio",
-  "dir_res",
   "cta_ban",
   "per_car",
   "gru_san",
@@ -1783,6 +1782,7 @@ const calculateProgress = () => {
       completedInfoPersonal++;
     }
   });
+  console.log(requiredFieldsInfoPersonal.length);
   requieredExperienceFields.forEach((field) => {
     if (
       form.experiencias_laborales[0][field] &&
@@ -1807,38 +1807,35 @@ const calculateProgress = () => {
     }
   });
   requieredFieldsReferencias.forEach((field) => {
-    if (form[field] && form[field].toString().trim() !== "") {
+    if (
+      form.referencias[0][field] &&
+      form.referencias[0][field].toString().trim() !== ""
+    ) {
       completedInfoReferencias++;
     }
   });
 
   const totalFieldsInfoPersonal =
-    (requiredFieldsInfoPersonal.length / completedInfoPersonal) * 100;
+    (completedInfoPersonal / requiredFieldsInfoPersonal.length) * 100;
   const totalFieldsExperiencias =
-    (requieredExperienceFields.length / completedExperience) * 100;
+    (completedExperience / requieredExperienceFields.length) * 100;
   const totalFieldsInfoAcademic =
-    (requieredFieldsInfoAcademi.length / completedInfoAcademi) * 100;
+    (completedInfoAcademi / requieredFieldsInfoAcademi.length) * 100;
   const totalFieldsInforTrans =
-    (requieredFieldsMedioTrans.length / completedInfoTrans) * 100;
+    (completedInfoTrans / requieredFieldsMedioTrans.length) * 100;
   const totalFieldsInfoSalud =
-    (requieredFieldsSalud.length / completedInfoSalud) * 100;
+    (completedInfoSalud / requieredFieldsSalud.length) * 100;
   const totalFieldsInfoReferencias =
-    (requieredFieldsReferencias.length / completedInfoReferencias) * 100;
-  /*  const experienceFields= requieredExperienceFields.length // Campos adicionales
-  if(form.experiencias_laborales.length>0 ){
-    const experienciaLaboralProgress=
+    (completedInfoReferencias / requieredFieldsReferencias.length) * 100;
 
-  } */
-  console.log(totalFieldsInforTrans);
-  console.log(
-    totalFieldsExperiencias +
+  progress.value =
+    (totalFieldsExperiencias +
       totalFieldsInfoPersonal +
       totalFieldsInfoAcademic +
       totalFieldsInforTrans +
       totalFieldsInfoSalud +
-      totalFieldsInfoReferencias
-  );
-  progress.value = /* (completed / totalFields / 7) * 100; */ 100;
+      totalFieldsInfoReferencias) /
+    6;
 };
 
 const llenarFormulario = async () => {
