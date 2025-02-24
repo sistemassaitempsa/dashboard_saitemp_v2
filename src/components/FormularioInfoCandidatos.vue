@@ -15,44 +15,78 @@
         <div class="textProgressContainer">
           <p
             @click="scrollToInformacionPersonal"
-            class="progress-text horizontalText"
+            :class="
+              informacion_personal
+                ? 'progress-text horizontalText activeLink'
+                : 'progress-text horizontalText'
+            "
           >
             -Información <br />
             personal
           </p>
-          <p class="progress-text horizontalText" @click="scrollToExperiencia">
+          <p
+            :class="
+              experiencia_laboral
+                ? 'progress-text horizontalText activeLink'
+                : 'progress-text horizontalText'
+            "
+            @click="scrollToExperiencia"
+          >
             -Experiencia <br />
             laboral
           </p>
           <p
-            class="progress-text horizontalText"
+            :class="
+              info_academica
+                ? 'progress-text horizontalText activeLink'
+                : 'progress-text horizontalText'
+            "
             @click="scrollToInformacionAcademica"
           >
             -Información <br />
             académica
           </p>
           <p
-            class="progress-text horizontalText"
+            :class="
+              medio_transporte
+                ? 'progress-text horizontalText activeLink'
+                : 'progress-text horizontalText'
+            "
             @click="scrollToInMedioTrasnporte"
           >
             -Medio de <br />
             transporte
           </p>
           <p
-            class="progress-text horizontalText"
+            :class="
+              condiciones_salud
+                ? 'progress-text horizontalText activeLink'
+                : 'progress-text horizontalText'
+            "
             @click="scrollToInCondicionesSalud"
           >
             -Condiciones <br />
             de salud
           </p>
           <p
-            class="progress-text horizontalText"
+            :class="
+              referencias_personales
+                ? 'progress-text horizontalText activeLink'
+                : 'progress-text horizontalText'
+            "
             @click="scrollToInReferenciasPersonales"
           >
             -Referencias <br />
             personales
           </p>
-          <p class="progress-text horizontalText" @click="scrollToInHijos">
+          <p
+            :class="
+              hijos_info
+                ? 'progress-text horizontalText activeLink'
+                : 'progress-text horizontalText'
+            "
+            @click="scrollToInHijos"
+          >
             -Hijos
           </p>
         </div>
@@ -765,7 +799,7 @@
                       name="transporteOptions"
                       id="inlineRadio1"
                       value="1"
-                      v-model="tipo_transporte"
+                      v-model="form.tipo_transporte"
                     />
                     <label class="form-check-label" for="inlineRadio1"
                       >Vehiculo propio</label
@@ -778,7 +812,7 @@
                       name="transporteOptions"
                       id="inlineRadio2"
                       value="2"
-                      v-model="tipo_transporte"
+                      v-model="form.tipo_transporte"
                     />
                     <label class="form-check-label" for="inlineRadio2"
                       >Transporte publico</label
@@ -791,7 +825,7 @@
                       name="transporteOptions"
                       id="inlineRadio3"
                       value="3"
-                      v-model="tipo_transporte"
+                      v-model="form.tipo_transporte"
                     />
                     <label class="form-check-label" for="inlineRadio3"
                       >Otro</label
@@ -820,7 +854,7 @@
                       name="licenciaConduccion"
                       id="inlineRadioConduccion1"
                       value="1"
-                      v-model="licencia_conduccion"
+                      v-model="form.licencia_conduccion"
                     />
                     <label class="form-check-label" for="inlineRadio1"
                       >Si</label
@@ -832,7 +866,7 @@
                       type="radio"
                       name="licenciaConduccion"
                       id="inlineRadioConduccion2"
-                      v-model="licencia_conduccion"
+                      v-model="form.licencia_conduccion"
                       value="0"
                     />
                     <label class="form-check-label" for="inlineRadio2"
@@ -1266,7 +1300,7 @@
             <div class="row">
               <div class="col">
                 <SearchList
-                  nombreCampo="EPS:*"
+                  nombreCampo="EPS a la que se encuentra afiliado:*"
                   @selectEps="selectEps"
                   eventoCampo="selectEps"
                   nombreItem="nombre"
@@ -1562,9 +1596,7 @@ const referencias_personales = ref(false);
 const hijos_info = ref(false);
 const info_academica = ref(false);
 const experiencia_laboral = ref(false);
-const tipo_transporte = ref("");
 const otro_transporte = ref("");
-const licencia_conduccion = ref(0);
 const informacionPersonalRef = ref(null);
 const experienciaLaboralRef = ref(null);
 const informacionAcademicaRef = ref(null);
@@ -1573,7 +1605,7 @@ const condicionesSaludRef = ref(null);
 const referenciasPersonalesRef = ref(null);
 const hijosRef = ref(null);
 // Formulario reactivo
-/* const requieredExperienceFields = [
+const requieredExperienceFields = [
   "empresa",
   "cargo",
   "sector_econimico_id",
@@ -1581,7 +1613,27 @@ const hijosRef = ref(null);
   "motivo_retiro",
   "fecha_inicio",
   "fecha_fin",
-]; */
+];
+const requieredFieldsReferencias = ["tip_ref", "parent", "cel_ref", "nom_ref"];
+const requieredFieldsInfoAcademi = ["sector_academico_id", "Niv_aca"];
+const requieredFieldsMedioTrans = ["tipo_transporte", "licencia_conduccion"];
+const requieredFieldsSalud = [
+  "lentes",
+  "acidente_laboral",
+  "enfermedad",
+  "tratamiento_medico",
+  "tratamiento_psicologico",
+  "tratamiento_psiquiatrico",
+  "tratamiento_odontologico",
+  "alerigia",
+  "fractura",
+  "cirugia",
+  "sustencia_psicoactiva",
+  "estatura",
+  "peso",
+  "afp_id",
+  "eps_id",
+];
 const requiredFieldsInfoPersonal = [
   "dir_res",
   "cod_ban",
@@ -1632,6 +1684,8 @@ const consulta_afp = ref("");
 const consulta_eps = ref("");
 const progress = ref(0);
 const form = reactive({
+  tipo_transporte: "",
+  licencia_conduccion: "",
   descripcion_salud: "",
   afp_id: "",
   eps_id: "",
@@ -1717,20 +1771,74 @@ watch(
 
 //funciones para calcular el porcentaje de la progress bar
 const calculateProgress = () => {
-  let completed = 0;
+  let completedInfoPersonal = 0;
+  let completedExperience = 0;
+  let completedInfoAcademi = 0;
+  let completedInfoTrans = 0;
+  let completedInfoSalud = 0;
+  let completedInfoReferencias = 0;
 
   requiredFieldsInfoPersonal.forEach((field) => {
     if (form[field] && form[field].toString().trim() !== "") {
-      completed++;
+      completedInfoPersonal++;
     }
   });
-  const totalFields = requiredFieldsInfoPersonal.length;
+  requieredExperienceFields.forEach((field) => {
+    if (
+      form.experiencias_laborales[0][field] &&
+      form.experiencias_laborales[0][field].toString().trim() !== ""
+    ) {
+      completedExperience++;
+    }
+  });
+  requieredFieldsInfoAcademi.forEach((field) => {
+    if (form[field] && form[field].toString().trim() !== "") {
+      completedInfoAcademi++;
+    }
+  });
+  requieredFieldsMedioTrans.forEach((field) => {
+    if (form[field] && form[field].toString().trim() !== "") {
+      completedInfoTrans++;
+    }
+  });
+  requieredFieldsSalud.forEach((field) => {
+    if (form[field] && form[field].toString().trim() !== "") {
+      completedInfoSalud++;
+    }
+  });
+  requieredFieldsReferencias.forEach((field) => {
+    if (form[field] && form[field].toString().trim() !== "") {
+      completedInfoReferencias++;
+    }
+  });
+
+  const totalFieldsInfoPersonal =
+    (requiredFieldsInfoPersonal.length / completedInfoPersonal) * 100;
+  const totalFieldsExperiencias =
+    (requieredExperienceFields.length / completedExperience) * 100;
+  const totalFieldsInfoAcademic =
+    (requieredFieldsInfoAcademi.length / completedInfoAcademi) * 100;
+  const totalFieldsInforTrans =
+    (requieredFieldsMedioTrans.length / completedInfoTrans) * 100;
+  const totalFieldsInfoSalud =
+    (requieredFieldsSalud.length / completedInfoSalud) * 100;
+  const totalFieldsInfoReferencias =
+    (requieredFieldsReferencias.length / completedInfoReferencias) * 100;
   /*  const experienceFields= requieredExperienceFields.length // Campos adicionales
   if(form.experiencias_laborales.length>0 ){
     const experienciaLaboralProgress=
 
   } */
-  progress.value = ((completed / totalFields) * 100) / 7;
+  console.log(totalFieldsInforTrans);
+  console.log(
+    totalFieldsExperiencias +
+      totalFieldsInfoPersonal +
+      totalFieldsInfoAcademic +
+      totalFieldsInforTrans +
+      totalFieldsInfoSalud +
+      totalFieldsInfoReferencias
+  );
+  progress.value = /* (completed / totalFields / 7) * 100; */ 100;
 };
 
 const llenarFormulario = async () => {
@@ -1739,6 +1847,7 @@ const llenarFormulario = async () => {
     `${URL_API}api/v1/formulariocandidato/${userlogued.id}`,
     configHeader()
   );
+  form.licencia_conduccion = response.data.licencia_conduccion;
   form.descripcion_salud = response.data.descripcion_salud;
   form.afp_id = response.data.afp_id;
   form.eps_id = response.data.eps_id;
@@ -1831,13 +1940,34 @@ const llenarFormulario = async () => {
   ciu_exp_name.value = response.data.novasoft.ciudad_exp_nombre;
   cod_ciu_name.value = response.data.novasoft.ciudad_nac_nombre;
   ciu_res_name.value = response.data.novasoft.ciudad_res_nombre;
-
+  if (response.data.vehiculo_propio == 1) {
+    form.tipo_transporte = 1;
+  }
+  if (response.data.transporte_publico == 1) {
+    form.tipo_transporte = 2;
+  }
+  if (
+    response.data.vehiculo_propio == 0 &&
+    response.data.transporte_publico == 0
+  ) {
+    form.tipo_transporte = 3;
+  }
   loading.value = false;
 };
 //funcion para  guardar el formulario
 const submitForm = async () => {
   loading.value = true;
   try {
+    if (form.tipo_transporte == 1) {
+      form.vehiculo_propio = 1;
+      form.transporte_publico = 0;
+    } else if (form.tipo_transporte == 2) {
+      form.vehiculo_propio = 0;
+      form.transporte_publico = 1;
+    } else if (form.tipo_transporte == 3) {
+      form.vehiculo_propio = 0;
+      form.transporte_publico = 0;
+    }
     const response = await axios.put(
       `${URL_API}api/v1/recepcionEmpleadoseiya/${userlogued.id}`,
       form,
@@ -2309,11 +2439,21 @@ onMounted(() => {
   left: 0%;
   top: 0%;
   cursor: pointer;
-  font-size: 0.9rem;
+  font-size: 0.8rem;
+  border: #c9c9c9 1px solid;
+  width: 7em;
+  text-align: left;
+  border-radius: 5px;
+  padding: 0.2em;
+  box-shadow: 3px 3px 6px #a0a0a0;
+}
+.activeLink {
+  color: #006b3f;
+  border: #006b3f 1px solid;
 }
 .horizontalText:hover {
-  text-decoration: underline;
   color: #006b3f;
+  border: #006b3f 1px solid;
 }
 h2 {
   text-align: center;
