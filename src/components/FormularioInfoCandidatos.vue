@@ -1448,6 +1448,7 @@
                       class="d-flex justify-content-end align-items-end w-100 h-100"
                     >
                       <label
+                        v-if="!familiar.cod_emp"
                         class="bi bi-trash-fill labelOption"
                         @click="deleteHijo(index)"
                       >
@@ -1530,11 +1531,13 @@ import { useToken } from "../composables/useToken";
 import Loading from "./Loading.vue";
 import { ref, reactive, watch, defineProps, onMounted } from "vue";
 import axios from "axios";
+import { useAlerts } from "@/composables/useAlerts";
 
 //props
 const { userlogued } = defineProps(["userlogued"]);
 
 // Variables reactivas
+const { showAlert } = useAlerts();
 const { configHeader } = useToken();
 const loading = ref(false);
 const mensaje_error = "¡Este campo debe ser diligenciado!";
@@ -1570,7 +1573,15 @@ const condicionesSaludRef = ref(null);
 const referenciasPersonalesRef = ref(null);
 const hijosRef = ref(null);
 // Formulario reactivo
-
+/* const requieredExperienceFields = [
+  "empresa",
+  "cargo",
+  "sector_econimico_id",
+  "consulta_sector_economico",
+  "motivo_retiro",
+  "fecha_inicio",
+  "fecha_fin",
+]; */
 const requiredFieldsInfoPersonal = [
   "dir_res",
   "cod_ban",
@@ -1713,11 +1724,17 @@ const calculateProgress = () => {
       completed++;
     }
   });
-  const totalFields = requiredFieldsInfoPersonal.length; // Campos adicionales
+  const totalFields = requiredFieldsInfoPersonal.length;
+  /*  const experienceFields= requieredExperienceFields.length // Campos adicionales
+  if(form.experiencias_laborales.length>0 ){
+    const experienciaLaboralProgress=
+
+  } */
   progress.value = ((completed / totalFields) * 100) / 7;
 };
 
 const llenarFormulario = async () => {
+  loading.value = true;
   const response = await axios.get(
     `${URL_API}api/v1/formulariocandidato/${userlogued.id}`,
     configHeader()
@@ -1775,6 +1792,12 @@ const llenarFormulario = async () => {
   if (form.experiencias_laborales.length > 0) {
     form.experiencias_laborales.forEach((element) => {
       element["consulta_sector_economico"] = element.nombre;
+      element["fecha_inicio"] = new Date(element.fecha_inicio)
+        .toISOString()
+        .substring(0, 7);
+      element["fecha_fin"] = new Date(element.fecha_fin)
+        .toISOString()
+        .substring(0, 7);
     });
   }
   form.idiomas = response.data.idiomas;
@@ -1808,20 +1831,22 @@ const llenarFormulario = async () => {
   ciu_exp_name.value = response.data.novasoft.ciudad_exp_nombre;
   cod_ciu_name.value = response.data.novasoft.ciudad_nac_nombre;
   ciu_res_name.value = response.data.novasoft.ciudad_res_nombre;
-  console.log(response);
+
   loading.value = false;
 };
 //funcion para  guardar el formulario
 const submitForm = async () => {
   loading.value = true;
   try {
-    const response = await axios.post(
+    const response = await axios.put(
       `${URL_API}api/v1/recepcionEmpleadoseiya/${userlogued.id}`,
       form,
       configHeader()
     );
+    showAlert(response.data.message, response.data.status);
     console.log("Formulario enviado con éxito:", response.data);
   } catch (error) {
+    showAlert("Error al enviar el formulario: intente nuevamente", "error");
     console.error("Error al enviar el formulario:", error);
   } finally {
     loading.value = false;
@@ -1829,19 +1854,37 @@ const submitForm = async () => {
 };
 
 //funciones para poner el formulario de forma dinámica
-const deleteIdioma = (index) => {
+const deleteIdioma = async (index) => {
+  if (form.idiomas[index].id) {
+    loading.value = true;
+    const id = form.idiomas[index].id;
+    const response = await axios.delete(
+      `${URL_API}api/v1/idiomacandidato/${id}`
+    );
+    showAlert(response.data.message, response.data.status);
+    loading.value = false;
+  }
   form.idiomas.splice(index, 1);
 };
 
 const addIdioma = () => {
   form.idiomas.push({
     nombre: "",
-    id: "",
+    idioma_id: "",
     nivel: "",
   });
 };
 
-const deleteExperiencia = (index) => {
+const deleteExperiencia = async (index) => {
+  if (form.experiencias_laborales[index].id) {
+    loading.value = true;
+    const id = form.experiencias_laborales[index].id;
+    const response = await axios.delete(
+      `${URL_API}api/v1/experiencialaboralcanidato/${id}`
+    );
+    showAlert(response.data.message, response.data.status);
+    loading.value = false;
+  }
   form.experiencias_laborales.splice(index, 1);
 };
 
@@ -1858,6 +1901,9 @@ const addExperienciaLaboral = () => {
 };
 
 const deleteHijo = (index) => {
+  if (form.familiares[index].cod_emp) {
+    return;
+  }
   form.familiares.splice(index, 1);
 };
 
@@ -1969,7 +2015,7 @@ const getSectorAcademico = async (item = null) => {
 const getIdioma = async (item = null, index) => {
   if (item != null) {
     form.idiomas[index].nombre = item.nombre;
-    form.idiomas[index].id = item.id;
+    form.idiomas[index].idioma_id = item.id;
   }
   const response = await axios.get(URL_API + "api/v1/idiomas", configHeader());
   lista_idiomas.value = response.data;

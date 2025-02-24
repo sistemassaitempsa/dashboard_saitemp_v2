@@ -24,7 +24,6 @@
         "
       ></div>
     </div>
-
     <div v-if="toogleLogin" :class="classCardLogin">
       <div class="logosContainer">
         <div class="logo saitemp">
@@ -140,7 +139,7 @@ export default {
   mixins: [Token, Alerts],
   data() {
     return {
-      classCardLogin: "card animate__animated fadeInDownBig",
+      classCardLogin: "card animate__animated animate__fadeInDownBig",
       email: "",
       password: "",
       URL_API: process.env.VUE_APP_URL_API,
