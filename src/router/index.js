@@ -61,6 +61,7 @@ import RecoverPassword from "@/components/RecoverPassword.vue";
 import FormularioInfoCandidatos from "@/components/FormularioInfoCandidatos.vue";
 import Cliente from "../components/Cliente.vue";
 import ResetPasswordView from "@/views/ResetPasswordView.vue";
+import ConsultaFormularioCandidatos from "@/components/ConsultaFormularioCandidatos.vue";
 
 // Configuración de rutas
 const routes = [
@@ -74,11 +75,11 @@ const routes = [
     name: "loginCandidatos",
     component: InicioSesionCandidatos,
   },
-  {
+  /*   {
     path: "/formularioinfocandidato",
     name: "formularioinfocandidato",
-    component: FormularioInfoCandidatos,
-  },
+    component: ConsultaFormularioCandidatos,
+  }, */
   {
     path: "/recuperarcontrasena",
     name: "recuperarcontrasena",
@@ -108,6 +109,11 @@ const routes = [
         path: "formularioinfocandidato/:id?",
         name: "formularioinfocandidato",
         component: FormularioInfoCandidatos,
+      },
+      {
+        path: "formularioinfocandidatoTabla",
+        name: "formularioinfocandidatoTabla",
+        component: ConsultaFormularioCandidatos,
       },
       {
         path: "editarUsuario/:id",

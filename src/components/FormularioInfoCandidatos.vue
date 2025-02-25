@@ -1551,6 +1551,28 @@
               </label>
             </div>
           </div>
+          <div class="row" v-if="userlogued.tipo_usuario_id == 1">
+            <div class="col">
+              <h5
+                @click="concepto = !concepto"
+                style="cursor: pointer"
+                ref="conceptoRef"
+              >
+                8. Concepto
+                <i v-if="concepto" class="bi bi-chevron-compact-up"></i
+                ><i v-if="!concepto" class="bi bi-chevron-down"></i>
+              </h5>
+            </div>
+          </div>
+          <div class="row" v-if="concepto">
+            <textarea
+              class="form-control textAreaRow"
+              name=""
+              id=""
+              placeholder="concepto"
+              v-model="form.concepto"
+            ></textarea>
+          </div>
           <button type="submit">Enviar</button>
         </form>
       </div>
@@ -1566,11 +1588,13 @@ import Loading from "./Loading.vue";
 import { ref, reactive, watch, defineProps, onMounted } from "vue";
 import axios from "axios";
 import { useAlerts } from "@/composables/useAlerts";
+import { useRoute } from "vue-router";
 
 //props
 const { userlogued } = defineProps(["userlogued"]);
 
 // Variables reactivas
+const route = useRoute();
 const { showAlert } = useAlerts();
 const { configHeader } = useToken();
 const loading = ref(false);
@@ -1596,6 +1620,7 @@ const referencias_personales = ref(false);
 const hijos_info = ref(false);
 const info_academica = ref(false);
 const experiencia_laboral = ref(false);
+const concepto = ref(false);
 const otro_transporte = ref("");
 const informacionPersonalRef = ref(null);
 const experienciaLaboralRef = ref(null);
@@ -1683,6 +1708,7 @@ const consulta_afp = ref("");
 const consulta_eps = ref("");
 const progress = ref(0);
 const form = reactive({
+  concepto: "",
   tipo_transporte: "",
   licencia_conduccion: "",
   descripcion_salud: "",
@@ -1782,15 +1808,16 @@ const calculateProgress = () => {
       completedInfoPersonal++;
     }
   });
-  console.log(requiredFieldsInfoPersonal.length);
-  requieredExperienceFields.forEach((field) => {
-    if (
-      form.experiencias_laborales[0][field] &&
-      form.experiencias_laborales[0][field].toString().trim() !== ""
-    ) {
-      completedExperience++;
-    }
-  });
+  if (form.experiencias_laborales.length > 0) {
+    requieredExperienceFields.forEach((field) => {
+      if (
+        form.experiencias_laborales[0][field] &&
+        form.experiencias_laborales[0][field].toString().trim() !== ""
+      ) {
+        completedExperience++;
+      }
+    });
+  }
   requieredFieldsInfoAcademi.forEach((field) => {
     if (form[field] && form[field].toString().trim() !== "") {
       completedInfoAcademi++;
@@ -1840,8 +1867,15 @@ const calculateProgress = () => {
 
 const llenarFormulario = async () => {
   loading.value = true;
+  console.log(route.params.id);
+  const id =
+    userlogued.tipo_usuario_id == 3
+      ? userlogued.id
+      : route.params.id
+      ? Number(route.params.id)
+      : null;
   const response = await axios.get(
-    `${URL_API}api/v1/formulariocandidato/${userlogued.id}`,
+    `${URL_API}api/v1/formulariocandidato/${id}`,
     configHeader()
   );
   form.licencia_conduccion = response.data.licencia_conduccion;
@@ -2553,5 +2587,8 @@ h5 {
   display: flex;
   flex-direction: row-reverse;
   gap: 2em;
+}
+.textAreaRow {
+  width: 100%;
 }
 </style>

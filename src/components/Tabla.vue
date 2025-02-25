@@ -953,6 +953,16 @@
                 Ver registro
               </button>
             </td>
+            <td v-if="ruta == '/navbar/formularioinfocandidatoTabla'">
+              <button
+                type="button"
+                class="btn btn-success btn-sm"
+                @click="verCandidato(item)"
+                v-if="item.nombre != 'S. Administrador'"
+              >
+                Ver registro
+              </button>
+            </td>
             <td v-if="ruta == '/navbar/ingresos-pendientes'">
               <button
                 type="button"
@@ -1416,6 +1426,7 @@ export default {
       analista: [],
       loading: false,
       columnaOculta: [
+        "usuario_id",
         "color_estado_firma",
         "nombre_estado_firma",
         "responsable",
@@ -1714,6 +1725,8 @@ export default {
       } else if (this.ruta.includes("crm-seguimiento")) {
         return true;
       } else if (this.ruta.includes("lista-riesgos")) {
+        return true;
+      } else if (this.ruta.includes("formularioinfocandidatoTabla")) {
         return true;
       }
     },
@@ -2248,6 +2261,12 @@ export default {
       this.$router.push({
         name: "formulario-supervision",
         params: { id: item.id },
+      });
+    },
+    verCandidato(item) {
+      this.$router.push({
+        name: "formularioinfocandidato",
+        params: { id: item.usuario_id },
       });
     },
     verOrdenServicio(item) {
