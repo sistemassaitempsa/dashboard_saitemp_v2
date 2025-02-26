@@ -128,10 +128,11 @@ import Loading from "./Loading.vue";
 import { ref, reactive, onBeforeMount } from "vue";
 import { useValidation } from "../composables/useValidations";
 import { useToken } from "@/composables/useToken";
-import { useRouter } from "vue-router";
+import { useRouter, useRoute } from "vue-router";
 import ModalCambioContrasena from "./ModalCambioContrasena";
 
 // Variables
+const route = useRoute();
 const { showAlert } = useAlerts();
 const router = useRouter();
 const { configHeader } = useToken();
@@ -178,7 +179,10 @@ const userLogued = async () => {
   const config = configHeader();
   loading.value = true;
   try {
-    const response = await axios.get(`${URL_API}api/v1/userlogued`, config);
+    const response = await axios.get(
+      `${URL_API}api/v1/userbyid/` + route.params.id,
+      config
+    );
     if (response.data) {
       cliente.id = response.data.id;
       cliente.numero_documento = response.data.num_doc;
