@@ -291,7 +291,22 @@ export default {
       this.menu_lateral = !this.menu_lateral;
       localStorage.setItem("menu_lateral", this.menu_lateral);
     },
+
     actualizar() {
+      this.$router.push({
+        name: "editarUsuario",
+        params: { tipo: this.user_type, id: this.user_id },
+      });
+    },
+    configuraUsuario(data) {
+      let self = this;
+      self.userlogued = data;
+      self.user_type = data.tipo_usuario_id;
+      self.user_id = data.usuario_id;
+      self.autoriced = true;
+      self.getMenu();
+    },
+    /*  actualizar() {
       let ruta = "";
       let id = "";
       if (this.permisos[34].autorizado) {
@@ -308,8 +323,26 @@ export default {
         name: ruta,
         params: { id: id },
       });
-    },
+    }, */
     async userLogued() {
+      let self = this;
+      let config = this.configHeader();
+      try {
+        const response = await axios.get(
+          self.URL_API + "api/v1/userlogued",
+          config
+        );
+        if (response.data) {
+          self.configuraUsuario(response.data);
+        } else {
+          self.$router.push("/");
+        }
+      } catch (error) {
+        console.log(error);
+        self.$router.push("/");
+      }
+    },
+    /*  async userLogued() {
       let self = this;
       let config = this.configHeader();
       try {
@@ -343,7 +376,7 @@ export default {
         console.log(error);
         self.$router.push("/");
       }
-    },
+    }, */
     getMenu() {
       let self = this;
       let config = this.configHeader();

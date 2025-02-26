@@ -115,8 +115,9 @@ const routes = [
         name: "formularioinfocandidatoTabla",
         component: ConsultaFormularioCandidatos,
       },
+
       {
-        path: "editarUsuario/:id",
+        path: "editarUsuario/:tipo?/:id",
         name: "editarUsuario",
         component: EditarUsuario,
       },
