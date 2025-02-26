@@ -9,8 +9,13 @@
     <div class="flexRow">
       <div class="progress-container">
         <div class="progress-bar" :style="{ height: progress + '%' }"></div>
-        <span class="progress-text"
-          >{{ Math.round(progress) }}% completado</span
+        <span
+          :class="
+            progress >= 60
+              ? 'progress-text progress-text-half'
+              : 'progress-text'
+          "
+          >{{ Math.ceil(progress) }}% completado</span
         >
         <div class="textProgressContainer">
           <p
@@ -83,7 +88,7 @@
             :class="
               hijos_info
                 ? 'progress-text horizontalText activeLink'
-                : 'progress-text horizontalText'
+                : 'progress-text horizontalText '
             "
             @click="scrollToInHijos"
           >
@@ -640,8 +645,14 @@
                     name=""
                     id=""
                     class="form-control"
+                    maxlength="1000"
                     v-model="experiencia.funciones"
                   ></textarea>
+                  <div class="d-flex justify-content-end">
+                    <small class="char-count"
+                      >{{ remainingCharsExperiencia(index) }}/1000</small
+                    >
+                  </div>
                 </div>
               </div>
               <div class="row">
@@ -1333,8 +1344,13 @@
                 <textarea
                   class="form-control"
                   v-model="form.descripcion_salud"
-                  maxlength="300"
+                  maxlength="500"
                 />
+                <div class="d-flex justify-content-end">
+                  <small class="char-count"
+                    >{{ remainingCharsCondicionesSalud() }}/500</small
+                  >
+                </div>
               </div>
             </div>
           </div>
@@ -1566,12 +1582,19 @@
           </div>
           <div class="row" v-if="concepto">
             <textarea
+              rows="7"
               class="form-control textAreaRow"
               name=""
               id=""
               placeholder="concepto"
               v-model="form.concepto"
+              maxlength="4000"
             ></textarea>
+            <div class="d-flex justify-content-end">
+              <small class="char-count"
+                >{{ remainingCharsConcepto() }}/4000</small
+              >
+            </div>
           </div>
           <button type="submit">Enviar</button>
         </form>
@@ -1865,6 +1888,19 @@ const calculateProgress = () => {
     6;
 };
 
+const remainingCharsConcepto = () => {
+  return 0 + (form.concepto != null ? form.concepto.length || 0 : 0);
+};
+const remainingCharsCondicionesSalud = () => {
+  return (
+    0 +
+    (form.descripcion_salud != null ? form.descripcion_salud.length || 0 : 0)
+  );
+};
+const remainingCharsExperiencia = (index) => {
+  return 0 + (form.experiencias_laborales[index]?.funciones.length || 0);
+};
+
 const llenarFormulario = async () => {
   loading.value = true;
   console.log(route.params.id);
@@ -1913,11 +1949,14 @@ const llenarFormulario = async () => {
   form.fec_expdoc = response.data.fecha_expedicion;
   form.tel_res = response.data.telefono;
   form.tel_cel = response.data.celular;
-  form.e_mail = userlogued.email;
+  form.e_mail =
+    userlogued.tipo_usuario_id == 3
+      ? userlogued.email
+      : response.data.novasoft.e_mail;
   form.pai_res = response.data.novasoft.pai_res;
   form.dpt_res = response.data.novasoft.dpt_res;
   form.ciu_res = response.data.novasoft.ciu_res;
-  form.cod_ban = response.data.cod_ban;
+  form.cod_ban = response.data.gen_banco_id;
   form.cta_ban = response.data.cuenta_bancaria;
   form.barrio = response.data.novasoft.barrio;
   form.Niv_aca = response.data.nivel_academico_id;
@@ -1929,6 +1968,7 @@ const llenarFormulario = async () => {
   form.est_civ = response.data.novasoft.est_civ;
   form.est_soc = response.data.estrato;
   form.experiencias_laborales = response.data.experiencias_laborales;
+  form.concepto = response.data.concepto;
   if (form.experiencias_laborales.length > 0) {
     form.experiencias_laborales.forEach((element) => {
       element["consulta_sector_economico"] = element.nombre;
@@ -1988,6 +2028,12 @@ const llenarFormulario = async () => {
 //funcion para  guardar el formulario
 const submitForm = async () => {
   loading.value = true;
+  const id =
+    userlogued.tipo_usuario_id == 3
+      ? userlogued.id
+      : route.params.id
+      ? Number(route.params.id)
+      : null;
   try {
     if (form.tipo_transporte == 1) {
       form.vehiculo_propio = 1;
@@ -2000,7 +2046,7 @@ const submitForm = async () => {
       form.transporte_publico = 0;
     }
     const response = await axios.put(
-      `${URL_API}api/v1/recepcionEmpleadoseiya/${userlogued.id}`,
+      `${URL_API}api/v1/recepcionEmpleadoseiya/${id}`,
       form,
       configHeader()
     );
@@ -2051,6 +2097,7 @@ const deleteExperiencia = async (index) => {
 
 const addExperienciaLaboral = () => {
   form.experiencias_laborales.push({
+    funciones: "",
     empresa: "",
     cargo: "",
     sector_econimico_id: "",
@@ -2453,19 +2500,22 @@ onMounted(() => {
   top: 0; /* Cambiado de bottom: 0 */
   bottom: auto; /* Asegura que no quede fijo en la parte inferior */
 }
-
 .progress-text {
   position: absolute;
   left: 50%;
   top: 50%;
   transform: translate(-50%, -50%) rotate(-90deg); /* Texto vertical */
   white-space: nowrap;
-  color: rgb(156, 156, 156);
+  color: rgb(119, 119, 119);
   font-weight: bold;
   font-size: 0.8rem;
 }
+.progress-text-half {
+  color: rgb(255, 255, 255);
+}
 .horizontalText {
   transform: translate(0%, 0%) rotate(0deg);
+  color: rgb(119, 119, 119);
   position: relative;
   left: 0%;
   top: 0%;
@@ -2477,6 +2527,7 @@ onMounted(() => {
   border-radius: 5px;
   padding: 0.2em;
   box-shadow: 3px 3px 6px #a0a0a0;
+  font-weight: normal;
 }
 .activeLink {
   color: #006b3f;
