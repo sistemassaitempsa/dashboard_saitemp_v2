@@ -277,7 +277,11 @@ export default {
       this.collapse = !this.collapse;
     },
     logout() {
-      this.$router.push({ name: "login" });
+      if (this.userlogued.tipo_usuario_id == "3") {
+        this.$router.push({ name: "loginCandidatos" });
+      } else {
+        this.$router.push({ name: "login" });
+      }
       localStorage.removeItem("access_token");
     },
     ocultarMenu() {

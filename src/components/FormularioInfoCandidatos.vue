@@ -84,7 +84,7 @@
             -Referencias <br />
             personales
           </p>
-          <p
+          <!--  <p
             :class="
               hijos_info
                 ? 'progress-text horizontalText activeLink'
@@ -93,7 +93,7 @@
             @click="scrollToInHijos"
           >
             -Hijos
-          </p>
+          </p> -->
         </div>
       </div>
       <div id="seccion">
@@ -254,6 +254,7 @@
                   type="date"
                   v-model="form.fec_expdoc"
                   id="fecha_exp"
+                  :max="new Date().toISOString().split('T')[0]"
                   required
                 />
               </div>
@@ -325,6 +326,7 @@
                   type="date"
                   v-model="form.fec_nac"
                   id="fecha_nac"
+                  :max="new Date().toISOString().split('T')[0]"
                   required
                 />
               </div>
@@ -432,7 +434,7 @@
                   type="number"
                   v-model="form.cta_ban"
                   id="cuenta"
-                  :disabled="form.cod_ban === '' || form.cod_ban === 0"
+                  :disabled="form.cod_ban === '' || form.cod_ban == '0 '"
                   required
                 />
               </div>
@@ -1468,7 +1470,7 @@
           </div>
 
           <!-- Hijos -->
-          <div class="row">
+          <!--   <div class="row">
             <div class="col">
               <h5
                 @click="hijos_info = !hijos_info"
@@ -1480,8 +1482,8 @@
                 ><i v-if="!hijos_info" class="bi bi-chevron-down"></i>
               </h5>
             </div>
-          </div>
-          <div class="info_container" v-if="hijos_info">
+          </div> -->
+          <!--  <div class="info_container" v-if="hijos_info">
             <div
               class="row"
               v-for="(familiar, index) in form.familiares"
@@ -1549,6 +1551,7 @@
                       type="date"
                       @input="updateFecha($event, familiar)"
                       :value="formattedDate(familiar.fec_nac)"
+                      :max="new Date().toISOString().split('T')[0]"
                       id="fecha_nac_hijo"
                     />
                   </div>
@@ -1566,7 +1569,7 @@
                 Agregar hijo
               </label>
             </div>
-          </div>
+          </div> -->
           <div class="row" v-if="userlogued.tipo_usuario_id == 1">
             <div class="col">
               <h5
@@ -1574,7 +1577,7 @@
                 style="cursor: pointer"
                 ref="conceptoRef"
               >
-                8. Concepto
+                7. Concepto
                 <i v-if="concepto" class="bi bi-chevron-compact-up"></i
                 ><i v-if="!concepto" class="bi bi-chevron-down"></i>
               </h5>
@@ -1651,7 +1654,7 @@ const informacionAcademicaRef = ref(null);
 const medioTransporteRef = ref(null);
 const condicionesSaludRef = ref(null);
 const referenciasPersonalesRef = ref(null);
-const hijosRef = ref(null);
+/* const hijosRef = ref(null); */
 // Formulario reactivo
 const requieredExperienceFields = [
   "empresa",
@@ -1792,7 +1795,7 @@ const form = reactive({
   referencias: [
     {
       num_ref: 1,
-      tip_ref: "",
+      tip_ref: 1,
       parent: "",
       cel_ref: "",
       nom_ref: "",
@@ -1800,7 +1803,7 @@ const form = reactive({
     },
     {
       num_ref: 2,
-      tip_ref: "",
+      tip_ref: 1,
       parent: "",
       cel_ref: "",
       nom_ref: "",
@@ -2108,14 +2111,14 @@ const addExperienciaLaboral = () => {
   });
 };
 
-const deleteHijo = (index) => {
+/* const deleteHijo = (index) => {
   if (form.familiares[index].cod_emp) {
     return;
   }
   form.familiares.splice(index, 1);
-};
+}; */
 
-const addHijo = () => {
+/* const addHijo = () => {
   form.familiares.push({
     ap1_fam: "",
     ap2_fam: "",
@@ -2124,7 +2127,7 @@ const addHijo = () => {
     fec_nac: "",
     ocu_fam: 7,
   });
-};
+}; */
 
 const deleteReferencia = (index) => {
   form.referencias.splice(index, 1);
@@ -2141,15 +2144,15 @@ const addReferencia = () => {
 };
 
 //funciones para el formateo de la fecha
-const formattedDate = (date) => {
+/* const formattedDate = (date) => {
   if (!date) return "";
   return date.split(" ")[0];
-};
+}; */
 
-const updateFecha = (event, familiar) => {
+/* const updateFecha = (event, familiar) => {
   const fecha = event.target.value;
   familiar.fec_nac = fecha;
-};
+}; */
 
 // Funciones para seleccionar opciones
 const selectEps = async (item) => {
@@ -2427,7 +2430,7 @@ const scrollToInReferenciasPersonales = () => {
   }
 };
 
-const scrollToInHijos = () => {
+/* const scrollToInHijos = () => {
   if (hijosRef.value) {
     hijos_info.value = true;
     ocultarSecciones("hijos_info");
@@ -2438,7 +2441,7 @@ const scrollToInHijos = () => {
       });
     }, 100);
   }
-};
+}; */
 const ocultarSecciones = (seccion) => {
   seccion == "informacion_personal"
     ? (informacion_personal.value = true)
