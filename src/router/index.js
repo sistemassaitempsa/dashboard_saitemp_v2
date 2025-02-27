@@ -75,11 +75,7 @@ const routes = [
     name: "loginCandidatos",
     component: InicioSesionCandidatos,
   },
-  /*   {
-    path: "/formularioinfocandidato",
-    name: "formularioinfocandidato",
-    component: ConsultaFormularioCandidatos,
-  }, */
+
   {
     path: "/recuperarcontrasena",
     name: "recuperarcontrasena",

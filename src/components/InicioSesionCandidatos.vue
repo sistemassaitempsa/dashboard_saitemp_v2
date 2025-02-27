@@ -183,7 +183,7 @@ export default {
         }
       } catch (error) {
         console.log(error);
-        self.showAlert(error.message, "error");
+        self.showAlert(error.response.data.message, "error");
       }
     },
   },
