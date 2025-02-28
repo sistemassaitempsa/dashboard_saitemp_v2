@@ -250,10 +250,10 @@ export default {
 
   created() {
     this.urlExterna();
-    if (this.$route.params.id != "") {
+    if (this.$route.params.id != undefined) {
       this.getUser();
+      this.userLogued();
     }
-    this.userLogued();
     this.getRoles();
     this.getEstados();
   },
