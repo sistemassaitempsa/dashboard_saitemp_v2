@@ -2029,6 +2029,9 @@ const llenarFormulario = async () => {
   ) {
     form.tipo_transporte = 3;
   }
+  getDepartamentos({ cod_pai: form.pai_exp }, 1);
+  getDepartamentos({ cod_pai: form.cod_pai }, 2);
+  getDepartamentos({ cod_pai: form.pai_res }, 3);
   loading.value = false;
 };
 //funcion para  guardar el formulario
@@ -2288,16 +2291,22 @@ const selectDepartamento = (item = null, index = null) => {
       case 1:
         form.dpt_exp = item.cod_dep;
         dep_exp_name.value = item.nom_dep;
+        form.ciu_exp = "";
+        ciu_exp_name.value = "";
         getCiudades(item, index);
         break;
       case 2:
         form.cod_dep = item.cod_dep;
         cod_dep_name.value = item.nom_dep;
+        form.cod_ciu = "";
+        cod_ciu_name.value = "";
         getCiudades(item, index);
         break;
       case 3:
         form.dpt_res = item.cod_dep;
         dep_res_name.value = item.nom_dep;
+        form.ciu_res = "";
+        ciu_res_name.value = "";
         getCiudades(item, index);
         break;
       default:
@@ -2332,16 +2341,28 @@ const getPaises = (item = null, index = null) => {
       case 1:
         form.pai_exp = item.cod_pai;
         pai_exp_name.value = item.nom_pai;
+        form.dpt_exp = "";
+        form.ciu_exp = "";
+        dep_exp_name.value = "";
+        ciu_exp_name.value = "";
         getDepartamentos(item, index);
         break;
       case 2:
         form.cod_pai = item.cod_pai;
         cod_pai_name.value = item.nom_pai;
+        form.cod_dep = "";
+        form.cod_ciu = "";
+        cod_dep_name.value = "";
+        cod_ciu_name.value = "";
         getDepartamentos(item, index);
         break;
       case 3:
         form.pai_res = item.cod_pai;
         pai_res_name.value = item.nom_pai;
+        form.dpt_res = "";
+        form.ciu_res = "";
+        ciu_res_name.value = "";
+        dep_res_name.value = "";
         getDepartamentos(item, index);
         break;
       default:
