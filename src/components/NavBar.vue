@@ -305,29 +305,18 @@ export default {
     configuraUsuario(data) {
       let self = this;
       self.userlogued = data;
+      if (data.tipo_usuario_id == "3") {
+        self.nombre = data.primer_nombre + " " + data.primer_apellido;
+      } else if (data.tipo_usuario_id == "1") {
+        self.nombre = data.nombres + " " + data.apellidos;
+      } else {
+        self.nombre = data.nombres;
+      }
       self.user_type = data.tipo_usuario_id;
       self.user_id = data.usuario_id;
       self.autoriced = true;
       self.getMenu();
     },
-    /*  actualizar() {
-      let ruta = "";
-      let id = "";
-      if (this.permisos[34].autorizado) {
-        ruta = "editarUsuario";
-        id = this.user_id;
-      } else if (this.user_type == 3) {
-        ruta = "editarUsuario";
-        id = this.user_id;
-      } else {
-        ruta = "cliente";
-        id = this.documento_identidad;
-      }
-      this.$router.push({
-        name: ruta,
-        params: { id: id },
-      });
-    }, */
     async userLogued() {
       let self = this;
       let config = this.configHeader();
@@ -346,41 +335,6 @@ export default {
         self.$router.push("/");
       }
     },
-    /*  async userLogued() {
-      let self = this;
-      let config = this.configHeader();
-      try {
-        const response = await axios.get(
-          self.URL_API + "api/v1/userlogued",
-          config
-        );
-        if (response.data) {
-          self.userlogued = response.data;
-          self.user_type = response.data.tipo_usuario_id;
-          if (response.data.tipo_usuario_id == "3") {
-            self.user_id = response.data.id;
-            self.documento_identidad = response.data.num_doc;
-            self.nombre = response.data.primer_nombre.concat(
-              " ",
-              response.data.primer_apellido
-            );
-            self.autoriced = true;
-            self.getMenu();
-          } else if (response.data.tipo_usuario_id == "1") {
-            self.user_id = response.data.usuario_id;
-            self.documento_identidad = response.data.documento_identidad;
-            self.nombre = response.data.nombres;
-            self.autoriced = true;
-            self.getMenu();
-          } else {
-            self.$router.push("/");
-          }
-        }
-      } catch (error) {
-        console.log(error);
-        self.$router.push("/");
-      }
-    }, */
     getMenu() {
       let self = this;
       let config = this.configHeader();

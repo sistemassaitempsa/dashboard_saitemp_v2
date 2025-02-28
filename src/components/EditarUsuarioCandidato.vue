@@ -2,7 +2,7 @@
   <div>
     <Loading :loading="loading" />
     <div class="container my-4">
-      <h3 class="text-center mb-5">Editar Datos de Usuario</h3>
+      <h3 class="mb-5">Editar Datos de Usuario</h3>
       <div class="card mx-auto">
         <form @submit.prevent="guardarDatos">
           <div class="row mb-4">
@@ -262,13 +262,11 @@ onBeforeMount(() => {
   border-radius: 0.5rem;
   box-shadow: rgba(0, 0, 0, 0.25) 0px 14px 28px,
     rgba(0, 0, 0, 0.22) 0px 10px 10px;
-  width: 60%;
+  width: 70%;
 }
-
 h3 {
-  font-weight: bold;
+  margin: 20px;
 }
-
 label {
   float: left;
   font-weight: 500;
@@ -291,11 +289,6 @@ button {
     width: 80%;
     margin: auto;
   }
-
-  h3 {
-    font-size: 1.5rem;
-  }
-
   button {
     padding: 0.5rem;
     font-size: 0.9rem;

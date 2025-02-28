@@ -164,9 +164,6 @@ export default {
       this.toogleRegister = !this.toogleRegister;
       this.toogleLogin = !this.toogleLogin;
     },
-    /*    goToRecoverPassword() {
-      self.$router.push("/recuperarcontrasena");
-    }, */
     async login() {
       let self = this;
       let username = { email: this.email, password: this.password };
@@ -197,7 +194,7 @@ export default {
     rgba(19, 114, 148, 1) 51%,
     rgba(26, 148, 56, 1) 100%
   );
-  transition: all 0.5s ease-out; /* Cambiado a 0.5s */
+  transition: all 0.5s ease-out;
   border: none;
   color: white;
   position: relative;
@@ -211,7 +208,7 @@ export default {
     rgba(19, 114, 148, 1) 100%
   );
   background-size: 200% auto;
-  background-position: right center; /* Crea efecto de movimiento */
+  background-position: right center;
 }
 .btn-success::before {
   content: "";
