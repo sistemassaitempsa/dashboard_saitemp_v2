@@ -1619,8 +1619,7 @@ import axios from "axios";
 import { useAlerts } from "@/composables/useAlerts";
 import { useRoute } from "vue-router";
 
-//props
-const { userlogued } = defineProps(["userlogued"]);
+const { userlogued } = defineProps(["userlogued"]); //props
 
 // Variables reactivas
 const route = useRoute();
@@ -1944,12 +1943,12 @@ const llenarFormulario = async () => {
   form.ap1_emp = response.data.primer_apellido;
   form.ap2_emp = response.data.segundo_apellido;
   form.tip_ide = response.data.tip_doc_id;
-  form.pai_exp = response.data.novasoft.pai_exp;
-  form.dpt_exp = response.data.novasoft.dpt_exp;
-  form.ciu_exp = response.data.novasoft.ciu_exp;
-  form.cod_pai = response.data.novasoft.cod_pai;
-  form.cod_dep = response.data.novasoft.cod_dep;
-  form.cod_ciu = response.data.novasoft.cod_ciu;
+  form.pai_exp = response.data.novasoft ? response.data.novasoft.pai_exp : "";
+  form.dpt_exp = response.data.novasoft ? response.data.novasoft.dpt_exp : "";
+  form.ciu_exp = response.data.novasoft ? response.data.novasoft.ciu_exp : "";
+  form.cod_pai = response.data.novasoft ? response.data.novasoft.cod_pai : "";
+  form.cod_dep = response.data.novasoft ? response.data.novasoft.cod_dep : "";
+  form.cod_ciu = response.data.novasoft ? response.data.novasoft.cod_ciu : "";
   form.fec_nac = response.data.fecha_nacimiento;
   form.dir_res = response.data.direccion_residencia;
   form.fec_expdoc = response.data.fecha_expedicion;
@@ -1958,20 +1957,22 @@ const llenarFormulario = async () => {
   form.e_mail =
     userlogued.tipo_usuario_id == 3
       ? userlogued.email
-      : response.data.novasoft.e_mail;
-  form.pai_res = response.data.novasoft.pai_res;
-  form.dpt_res = response.data.novasoft.dpt_res;
-  form.ciu_res = response.data.novasoft.ciu_res;
+      : response.data.novasoft
+      ? response.data.novasoft.e_mail
+      : "";
+  form.pai_res = response.data.novasoft ? response.data.novasoft.pai_res : "";
+  form.dpt_res = response.data.novasoft ? response.data.novasoft.dpt_res : "";
+  form.ciu_res = response.data.novasoft ? response.data.novasoft.ciu_res : "";
   form.cod_ban = response.data.gen_banco_id;
   form.cta_ban = response.data.cuenta_bancaria;
-  form.barrio = response.data.novasoft.barrio;
+  form.barrio = response.data.novasoft ? response.data.novasoft.barrio : "";
   form.Niv_aca = response.data.nivel_academico_id;
   form.sex_emp = response.data.genero_id;
   form.per_car = response.data.personas_cargo;
   form.gru_san = response.data.grupo_sanguineo;
   form.fac_rhh = response.data.factor_rh;
-  form.raza = response.data.novasoft.raza;
-  form.est_civ = response.data.novasoft.est_civ;
+  form.raza = response.data.novasoft ? response.data.novasoft.raza : "";
+  form.est_civ = response.data.novasoft ? response.data.novasoft.est_civ : "";
   form.est_soc = response.data.estrato;
   form.experiencias_laborales = response.data.experiencias_laborales;
   form.concepto = response.data.concepto;
@@ -1989,34 +1990,58 @@ const llenarFormulario = async () => {
   form.idiomas = response.data.idiomas;
   form.categoria_licencia = response.data.categoria_licencia;
   form.sector_academico_id = response.data.sector_academico_id;
-  form.familiaresConsulta = JSON.parse(
-    JSON.stringify(response.data.novasoft.familiares)
-  );
-  form.familiares =
-    response.data.novasoft.familiares.length > 0
-      ? response.data.novasoft.familiares
-      : form.familiares;
-  form.referencias =
-    response.data.novasoft.referencias.length > 0
-      ? response.data.novasoft.referencias
-      : form.referencias;
+
+  if (response.data.novasoft) {
+    form.familiaresConsulta = JSON.parse(
+      JSON.stringify(response.data.novasoft.familiares)
+    );
+    form.familiares =
+      response.data.novasoft.familiares.length > 0
+        ? response.data.novasoft.familiares
+        : form.familiares;
+
+    form.referencias =
+      response.data.novasoft.referencias.length > 0
+        ? response.data.novasoft.referencias
+        : form.referencias;
+  }
 
   consulta_sector_academico.value = response.data.sector_academico_nombre;
   consulta_nivel_academico.value = response.data.des_est;
   consulta_banco.value = response.data.nom_ban;
-  consulta_estado_civil.value = response.data.novasoft.des_est;
+  consulta_estado_civil.value = response.data.novasoft
+    ? response.data.novasoft.des_est
+    : "";
   consulta_afp.value = response.data.afp_nombre;
   consulta_eps.value = response.data.eps_nombre;
   nom_tip_doc.value = response.data.des_tip;
-  dep_res_name.value = response.data.novasoft.dep_res_nombre;
-  dep_exp_name.value = response.data.novasoft.dep_exp_nombre;
-  cod_dep_name.value = response.data.novasoft.dep_nac_nombre;
-  pai_exp_name.value = response.data.novasoft.pais_exp_nombre;
-  cod_pai_name.value = response.data.novasoft.pais_nac_nombre;
-  pai_res_name.value = response.data.novasoft.pais_res_nombre;
-  ciu_exp_name.value = response.data.novasoft.ciudad_exp_nombre;
-  cod_ciu_name.value = response.data.novasoft.ciudad_nac_nombre;
-  ciu_res_name.value = response.data.novasoft.ciudad_res_nombre;
+  dep_res_name.value = response.data.novasoft
+    ? response.data.novasoft.dep_res_nombre
+    : "";
+  dep_exp_name.value = response.data.novasoft
+    ? response.data.novasoft.dep_exp_nombre
+    : "";
+  cod_dep_name.value = response.data.novasoft
+    ? response.data.novasoft.dep_nac_nombre
+    : "";
+  pai_exp_name.value = response.data.novasoft
+    ? response.data.novasoft.pais_exp_nombre
+    : "";
+  cod_pai_name.value = response.data.novasoft
+    ? response.data.novasoft.pais_nac_nombre
+    : "";
+  pai_res_name.value = response.data.novasoft
+    ? response.data.novasoft.pais_res_nombre
+    : "";
+  ciu_exp_name.value = response.data.novasoft
+    ? response.data.novasoft.ciudad_exp_nombre
+    : "";
+  cod_ciu_name.value = response.data.novasoft
+    ? response.data.novasoft.ciudad_nac_nombre
+    : "";
+  ciu_res_name.value = response.data.novasoft
+    ? response.data.novasoft.ciudad_res_nombre
+    : "";
   if (response.data.vehiculo_propio == 1) {
     form.tipo_transporte = 1;
   }
@@ -2029,9 +2054,15 @@ const llenarFormulario = async () => {
   ) {
     form.tipo_transporte = 3;
   }
-  getDepartamentos({ cod_pai: form.pai_exp }, 1);
-  getDepartamentos({ cod_pai: form.cod_pai }, 2);
-  getDepartamentos({ cod_pai: form.pai_res }, 3);
+  if (form.pai_exp != "") {
+    getDepartamentos({ cod_pai: form.pai_exp }, 1);
+  }
+  if (form.cod_pai) {
+    getDepartamentos({ cod_pai: form.cod_pai }, 2);
+  }
+  if (form.pai_res) {
+    getDepartamentos({ cod_pai: form.pai_res }, 3);
+  }
   loading.value = false;
 };
 //funcion para  guardar el formulario

@@ -91,6 +91,20 @@
               />
             </div>
           </div>
+          <div class="row mb-4" v-if="user_type == 1">
+            <div class="col">
+              <label class="form-label" for="">Estado</label
+              ><select
+                name=""
+                id=""
+                class="form-select"
+                v-model="cliente.estado_id"
+              >
+                <option value="1">Activo</option>
+                <option value="2">Inactivo</option>
+              </select>
+            </div>
+          </div>
 
           <div class="row mb-4">
             <div class="col-md-6 mb-3 mb-md-0">
@@ -125,13 +139,14 @@
 import { useAlerts } from "@/composables/useAlerts";
 import axios from "axios";
 import Loading from "./Loading.vue";
-import { ref, reactive, onBeforeMount } from "vue";
+import { ref, reactive, onBeforeMount, defineProps } from "vue";
 import { useValidation } from "../composables/useValidations";
 import { useToken } from "@/composables/useToken";
 import { useRouter, useRoute } from "vue-router";
 import ModalCambioContrasena from "./ModalCambioContrasena";
 
 // Variables
+const { user_type } = defineProps(["user_type"]); //props
 const route = useRoute();
 const { showAlert } = useAlerts();
 const router = useRouter();
@@ -150,6 +165,7 @@ const cliente = reactive({
   celular: "",
   doc_tip_id: "",
   password: "",
+  estado_id: "",
 });
 
 // Funciones
@@ -191,6 +207,7 @@ const userLogued = async () => {
       cliente.email = response.data.email;
       cliente.celular = response.data.celular;
       cliente.doc_tip_id = response.data.tip_doc_id;
+      cliente.estado_id = response.data.estado_id;
     } else {
       router.push("/");
     }
@@ -229,6 +246,7 @@ const guardarDatos = async () => {
       celular: cliente.celular,
       tip_doc_id: cliente.doc_tip_id,
       password: cliente.password,
+      estado_id: cliente.estado_id,
       // Agrega otros campos según sea necesario
     };
     const response = await axios.put(

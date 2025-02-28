@@ -2,7 +2,7 @@
   <div>
     <FormularioUsuario :titulo="titulo" v-if="usuario()" />
     <Cliente :titulo="titulo" v-if="cliente()" />
-    <EditarUsuarioCandidato v-if="candidato()" />
+    <EditarUsuarioCandidato v-if="candidato()" :user_type="user_type" />
   </div>
 </template>
 <script>
