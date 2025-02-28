@@ -881,6 +881,7 @@
                       id="inlineRadioConduccion2"
                       v-model="form.licencia_conduccion"
                       value="0"
+                      @click="form.categoria_licencia = ''"
                     />
                     <label class="form-check-label" for="inlineRadioConduccion2"
                       >No</label
@@ -895,7 +896,9 @@
                   id=""
                   class="form-select"
                   v-model="form.categoria_licencia"
+                  :disabled="form.licencia_conduccion != 1"
                 >
+                  <option value=""></option>
                   <option value="A1">A1</option>
                   <option value="A2">A2</option>
                   <option value="B1">B1</option>
@@ -2261,6 +2264,8 @@ const selectCiudad = (item = null, index = null) => {
     switch (index) {
       case 1:
         form.ciu_exp = item.cod_ciu;
+        form.pai_exp = item.cod_pai;
+        form.dpt_exp = item.cod_dep;
         ciu_exp_name.value = item.nom_ciu;
         break;
       case 2:
