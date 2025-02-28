@@ -183,11 +183,11 @@
             </div>
           </div>
           <div class="row mb-3">
-            <div class="col">
+            <div class="col positionRelative">
               <label for="" class="form-label">Contraseña:*</label>
               <input
-                type="password"
-                class="form-control"
+                class="form-control widthPassword"
+                :type="!contraseña ? 'password' : 'text'"
                 v-model="cliente.password"
                 @focus="isFocusPassword = true"
                 @input="validatePassword(cliente.password)"
@@ -204,12 +204,28 @@
               >
                 {{ passwordError }}
               </div>
+              <div class="positionAbsolute">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  class="input-icon password"
+                  viewBox="0 0 20 20"
+                  fill="currentColor"
+                  @click="contraseña = !contraseña"
+                >
+                  <path d="M10 12a2 2 0 100-4 2 2 0 000 4z" />
+                  <path
+                    fill-rule="evenodd"
+                    d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z"
+                    clip-rule="evenodd"
+                  />
+                </svg>
+              </div>
             </div>
-            <div class="col">
+            <div class="col positionRelative">
               <label for="" class="form-label">Confirme contraseña:*</label>
               <input
-                type="password"
-                class="form-control"
+                class="form-control widthPassword"
+                :type="!confirmContraseña ? 'password' : 'text'"
                 v-model="cliente.password_confirmation"
                 @focus="isFocusPasswordConfirmation = true"
                 @blur="isFocusPasswordConfirmation = false"
@@ -231,6 +247,22 @@
                 class="invalid-feedback"
               >
                 {{ errorConfirmationPassword }}
+              </div>
+              <div class="positionAbsolute">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  class="input-icon password"
+                  viewBox="0 0 20 20"
+                  fill="currentColor"
+                  @click="confirmContraseña = !confirmContraseña"
+                >
+                  <path d="M10 12a2 2 0 100-4 2 2 0 000 4z" />
+                  <path
+                    fill-rule="evenodd"
+                    d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z"
+                    clip-rule="evenodd"
+                  />
+                </svg>
               </div>
             </div>
           </div>
@@ -332,7 +364,8 @@ const isFocusEmail = ref(false);
 const isFocusEmailConfirmation = ref(false);
 const isFocusPassword = ref(false);
 const isFocusPasswordConfirmation = ref(false);
-
+const contraseña = ref(false);
+const confirmContraseña = ref(false);
 //funciones
 const emitLoginToggle = () => {
   emit("toogleRegisterChild");
@@ -636,7 +669,30 @@ label {
 .fadeInUpBig-leave-active {
   animation: fadeOutDownBig 1s;
 }
+.positionAbsolute {
+  position: absolute;
+  left: 92%;
+  top: 2.4em;
+}
+.input-icon {
+  color: #191919;
 
+  width: 20px;
+  height: 20px;
+}
+.input-icon.password {
+  left: unset;
+  right: 40px;
+  top: unset;
+  bottom: 110px;
+  cursor: pointer;
+}
+.positionRelative {
+  position: relative;
+}
+.widthPassword {
+  width: 92%;
+}
 /* Animaciones Personalizadas (Puedes ajustar o eliminar estas animaciones según tus necesidades) */
 @keyframes fadeInUpBig {
   from {
