@@ -285,6 +285,11 @@
               </label>
             </div>
           </div>
+          <Recaptcha
+            sitekey="6LezgukqAAAAAIR8TfYU01KdXu0HyUphZM1_3-0X"
+            @verified="handleCaptchaVerified"
+            @error="handleCaptchaError"
+          />
           <div class="row mb-3 mb-3">
             <div class="col">
               <button class="btn btn-success" @click="saveForm">
@@ -320,8 +325,11 @@ import { onMounted, onBeforeMount } from "vue";
 import { reactive } from "vue";
 import { useAlerts } from "@/composables/useAlerts";
 import { useValidation } from "../composables/useValidations";
+import Recaptcha from "./Recaptcha.vue";
 
 //variables
+
+const captchaValid = ref(false);
 const {
   emailError,
   numeroDocumentoError,
@@ -338,6 +346,7 @@ const tiposDocumentos = ref([]);
 const numero_documento_confirmation = ref("");
 const email_confirmation = ref("");
 let cliente = reactive({
+  captchaToken: null,
   nombre: "",
   apellidos: "",
   numero_documento: "",
@@ -366,6 +375,15 @@ const isFocusPassword = ref(false);
 const isFocusPasswordConfirmation = ref(false);
 const contraseña = ref(false);
 const confirmContraseña = ref(false);
+
+//funciones captcha
+const handleCaptchaVerified = (token) => {
+  cliente.captchaToken.value = token;
+  captchaValid.value = true;
+};
+const handleCaptchaError = () => {
+  captchaValid.value = false;
+};
 //funciones
 const emitLoginToggle = () => {
   emit("toogleRegisterChild");
@@ -449,6 +467,7 @@ const limpiarFormulario = () => {
   validateNumeroDocConfimation();
 };
 const saveForm = async () => {
+  if (!captchaValid.value) return;
   if (autorizacion.value) {
     if (
       validateForm(cliente) &&

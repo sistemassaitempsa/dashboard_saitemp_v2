@@ -165,7 +165,6 @@
                   type="text"
                   v-model="form.ap2_emp"
                   id="apellido2"
-                  required
                 />
               </div>
             </div>
@@ -435,7 +434,6 @@
                   v-model="form.cta_ban"
                   id="cuenta"
                   :disabled="form.cod_ban === '' || form.cod_ban == '0 '"
-                  required
                 />
               </div>
               <div class="col-12 was-validated col-lg-6">
@@ -1699,7 +1697,6 @@ const requiredFieldsInfoPersonal = [
   "est_civ",
   "nom1_emp",
   "ap1_emp",
-  "ap2_emp",
   "tip_ide",
   "cod_emp",
   "pai_exp",
@@ -2074,6 +2071,12 @@ const submitForm = async () => {
       : route.params.id
       ? Number(route.params.id)
       : null;
+
+  if (!validateInfoPersonal()) {
+    showAlert("Debe llenar como mínimo la información personal", "error");
+    loading.value = false;
+    return;
+  }
   try {
     if (form.tipo_transporte == 1) {
       form.vehiculo_propio = 1;
@@ -2112,6 +2115,14 @@ const deleteIdioma = async (index) => {
     loading.value = false;
   }
   form.idiomas.splice(index, 1);
+};
+
+const validateInfoPersonal = () => {
+  let llenos = true;
+  requiredFieldsInfoPersonal.forEach((element) => {
+    if (form[element] == "") llenos = false;
+  });
+  return llenos;
 };
 
 const addIdioma = () => {
@@ -2619,7 +2630,7 @@ h2 {
 }
 
 button {
-  width: 100%;
+  width: 20%;
   padding: 10px;
   background-color: #006b3f;
   color: white;
@@ -2640,7 +2651,7 @@ button:hover {
 }
 
 h5 {
-  color: #006b3f;
+  color: #237db0;
   text-align: left;
 }
 

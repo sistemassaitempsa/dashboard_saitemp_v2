@@ -252,8 +252,8 @@ export default {
     this.urlExterna();
     if (this.$route.params.id != undefined) {
       this.getUser();
-      this.userLogued();
     }
+    this.userLogued();
     this.getRoles();
     this.getEstados();
   },
@@ -276,7 +276,7 @@ export default {
       this.file.forEach(function (item, index) {
         form.append("archivo" + index, item);
       });
-      if (this.$route.params.id != "") {
+      if (this.$route.params.id != undefined) {
         form.append("estado_id", this.estadoId_);
         form.append("id_user", this.$route.params.id);
         accion = "user";
