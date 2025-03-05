@@ -10,7 +10,7 @@
             <img src="@/assets/logoAlInstante.png" alt="" />
           </div>
         </div>
-        <form class="formRegister" action="">
+        <form class="formRegister" @submit.prevent action="">
           <h2 class="mb-3">Crea tu cuenta</h2>
           <div class="row mb-3">
             <div class="col">
@@ -292,7 +292,12 @@
           />
           <div class="row mb-3 mb-3">
             <div class="col">
-              <button class="btn btn-success" @click="saveForm">
+              <button
+                type="submit"
+                class="btn btn-success"
+                @click="saveForm"
+                :disabled="!captchaValid"
+              >
                 Registrarse
               </button>
             </div>
@@ -378,12 +383,23 @@ const confirmContraseña = ref(false);
 
 //funciones captcha
 const handleCaptchaVerified = (token) => {
-  cliente.captchaToken.value = token;
-  captchaValid.value = true;
+  try {
+    cliente.captchaToken = token;
+    captchaValid.value = true;
+  } catch (error) {
+    console.error("Error en verified handler:", error);
+  }
 };
-const handleCaptchaError = () => {
-  captchaValid.value = false;
+
+const handleCaptchaError = (error) => {
+  try {
+    captchaValid.value = false;
+    console.error("Error de CAPTCHA:", error);
+  } catch (e) {
+    console.error("Error en error handler:", e);
+  }
 };
+
 //funciones
 const emitLoginToggle = () => {
   emit("toogleRegisterChild");
@@ -442,6 +458,7 @@ const limpiarFormulario = () => {
     password_confirmation: "",
     telefono: "",
     doc_tip_id: "01",
+    captchaToken: null,
   };
   autorizacion.value = false;
   errorConfirmationNumDoc.value = "";
@@ -467,7 +484,10 @@ const limpiarFormulario = () => {
   validateNumeroDocConfimation();
 };
 const saveForm = async () => {
-  if (!captchaValid.value) return;
+  if (captchaValid.value == false) {
+    console.log("No es valido el captcha");
+    return;
+  }
   if (autorizacion.value) {
     if (
       validateForm(cliente) &&

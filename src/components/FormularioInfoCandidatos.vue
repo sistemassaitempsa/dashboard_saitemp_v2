@@ -6,85 +6,76 @@
     <!-- barra para el pocrcentaje de llenado -->
 
     <!-- --------------------------- -->
-    <div class="flexRow">
-      <div class="progress-container">
-        <div class="progress-bar" :style="{ height: progress + '%' }"></div>
-        <span
+    <div class="todoProgressContainer">
+      <div class="textProgressContainer">
+        <i class="bi bi-passport"></i>
+        <p
+          @click="scrollToInformacionPersonal"
           :class="
-            progress >= 60
-              ? 'progress-text progress-text-half'
-              : 'progress-text'
+            informacion_personal
+              ? 'progress-text horizontalText activeLink'
+              : 'progress-text horizontalText'
           "
-          >{{ Math.ceil(progress) }}% completado</span
         >
-        <div class="textProgressContainer">
-          <p
-            @click="scrollToInformacionPersonal"
-            :class="
-              informacion_personal
-                ? 'progress-text horizontalText activeLink'
-                : 'progress-text horizontalText'
-            "
-          >
-            -Información <br />
-            personal
-          </p>
-          <p
-            :class="
-              experiencia_laboral
-                ? 'progress-text horizontalText activeLink'
-                : 'progress-text horizontalText'
-            "
-            @click="scrollToExperiencia"
-          >
-            -Experiencia <br />
-            laboral
-          </p>
-          <p
-            :class="
-              info_academica
-                ? 'progress-text horizontalText activeLink'
-                : 'progress-text horizontalText'
-            "
-            @click="scrollToInformacionAcademica"
-          >
-            -Información <br />
-            académica
-          </p>
-          <p
-            :class="
-              medio_transporte
-                ? 'progress-text horizontalText activeLink'
-                : 'progress-text horizontalText'
-            "
-            @click="scrollToInMedioTrasnporte"
-          >
-            -Medio de <br />
-            transporte
-          </p>
-          <p
-            :class="
-              condiciones_salud
-                ? 'progress-text horizontalText activeLink'
-                : 'progress-text horizontalText'
-            "
-            @click="scrollToInCondicionesSalud"
-          >
-            -Condiciones <br />
-            de salud
-          </p>
-          <p
-            :class="
-              referencias_personales
-                ? 'progress-text horizontalText activeLink'
-                : 'progress-text horizontalText'
-            "
-            @click="scrollToInReferenciasPersonales"
-          >
-            -Referencias <br />
-            personales
-          </p>
-          <!--  <p
+          -Información <br />
+          personal
+        </p>
+        <p
+          :class="
+            experiencia_laboral
+              ? 'progress-text horizontalText activeLink'
+              : 'progress-text horizontalText'
+          "
+          @click="scrollToExperiencia"
+        >
+          -Experiencia <br />
+          laboral
+        </p>
+        <p
+          :class="
+            info_academica
+              ? 'progress-text horizontalText activeLink'
+              : 'progress-text horizontalText'
+          "
+          @click="scrollToInformacionAcademica"
+        >
+          -Información <br />
+          académica
+        </p>
+        <p
+          :class="
+            medio_transporte
+              ? 'progress-text horizontalText activeLink'
+              : 'progress-text horizontalText'
+          "
+          @click="scrollToInMedioTrasnporte"
+        >
+          -Medio de <br />
+          transporte
+        </p>
+        <p
+          :class="
+            condiciones_salud
+              ? 'progress-text horizontalText activeLink'
+              : 'progress-text horizontalText'
+          "
+          @click="scrollToInCondicionesSalud"
+        >
+          -Condiciones <br />
+          de salud
+        </p>
+        <p
+          :class="
+            referencias_personales
+              ? 'progress-text horizontalText activeLink'
+              : 'progress-text horizontalText'
+          "
+          @click="scrollToInReferenciasPersonales"
+        >
+          -Referencias <br />
+          personales
+        </p>
+        <!--  <p
             :class="
               hijos_info
                 ? 'progress-text horizontalText activeLink'
@@ -94,8 +85,20 @@
           >
             -Hijos
           </p> -->
-        </div>
       </div>
+      <div class="progress-container">
+        <div class="progress-bar" :style="{ width: progress + '%' }"></div>
+        <!--  <span
+          :class="
+            progress >= 60
+              ? 'progress-text progress-text-half'
+              : 'progress-text'
+          "
+          >{{ Math.ceil(progress) }}% completado</span
+        > -->
+      </div>
+    </div>
+    <div class="flexRow">
       <div id="seccion">
         <form @submit.prevent="submitForm" class="row g-3">
           <p>
@@ -2541,29 +2544,32 @@ onMounted(() => {
 </script>
 
 <style scoped>
-.textProgressContainer {
+.todoProgressContainer {
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
-  align-items: left;
+}
+.textProgressContainer {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  align-items: baseline;
   height: 100%;
   width: 100%;
-  margin-left: 1.5em;
 }
 .progress-container {
-  width: 1em;
-  height: 64vh; /* Altura del contenedor */
+  width: 100%;
+  height: 0.5em; /* Altura del contenedor */
   background-color: #ffffff;
   border: #006b3f solid 1px;
   border-radius: 10px;
   margin: 20px auto;
-  position: fixed;
+  position: sticky;
   display: flex;
-  align-items: flex-start; /* Para que la barra crezca desde abajo */
+  /* Para que la barra crezca desde abajo */
 }
 
 .progress-bar {
-  width: 100%;
+  height: 0.5em;
   background: linear-gradient(0deg, #006b3f 0%, #137294 51%, #1a9438 100%);
   border-radius: 10px;
   transition: height 0.5s ease-in-out;
@@ -2575,7 +2581,6 @@ onMounted(() => {
   position: absolute;
   left: 50%;
   top: 50%;
-  transform: translate(-50%, -50%) rotate(-90deg); /* Texto vertical */
   white-space: nowrap;
   color: rgb(119, 119, 119);
   font-weight: bold;
@@ -2585,19 +2590,20 @@ onMounted(() => {
   color: rgb(255, 255, 255);
 }
 .horizontalText {
-  transform: translate(0%, 0%) rotate(0deg);
-  color: rgb(119, 119, 119);
+  color: rgb(32, 32, 32);
   position: relative;
   left: 0%;
   top: 0%;
   cursor: pointer;
-  font-size: 0.8rem;
-  border: #c9c9c9 1px solid;
+  font-size: 1rem;
+
   width: 7em;
-  text-align: left;
+  text-align: center;
   border-radius: 5px;
   padding: 0.2em;
-  box-shadow: 3px 3px 6px #a0a0a0;
+
+  background-color: #ffffff;
+  z-index: 100;
   font-weight: normal;
 }
 .activeLink {
@@ -2707,7 +2713,7 @@ h5 {
 }
 .flexRow {
   display: flex;
-  flex-direction: row-reverse;
+  flex-direction: column;
   gap: 2em;
 }
 .textAreaRow {
