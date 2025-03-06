@@ -2083,13 +2083,13 @@ const llenarFormulario = async () => {
   form.cod_dep = response.data.novasoft ? response.data.novasoft.cod_dep : "";
   form.cod_ciu = response.data.novasoft ? response.data.novasoft.cod_ciu : "";
   form.fec_nac = response.data.novasoft
-    ? response.data.novasoft.fec_nac
+    ? formattedDate(response.data.novasoft.fec_nac)
     : response.data.fecha_nacimiento;
   form.dir_res = response.data.novasoft
     ? response.data.novasoft.dir_res
     : response.data.direccion_residencia;
   form.fec_expdoc = response.data.novasoft
-    ? response.data.novasoft.fec_expdoc
+    ? formattedDate(response.data.novasoft.fec_expdoc)
     : response.data.fecha_expedicion;
   form.tel_res = response.data.novasoft
     ? response.data.novasoft.tel_res
@@ -2225,6 +2225,10 @@ const llenarFormulario = async () => {
     getDepartamentos({ cod_pai: form.pai_res }, 3);
   }
   loading.value = false;
+};
+
+const formattedDate = (date) => {
+  return date.split(" ")[0];
 };
 //funcion para  guardar el formulario
 const submitForm = async () => {
@@ -2648,7 +2652,7 @@ const getPaises = (item = null, index = null) => {
     }, 100);
   }
 }; */
-/* 
+/*
 const scrollToInMedioTrasnporte = () => {
   if (medioTransporteRef.value) {
     medio_transporte.value = true;
