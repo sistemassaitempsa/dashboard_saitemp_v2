@@ -2,79 +2,208 @@
   <div class="container">
     <Loading :loading="loading" />
 
-    <h2>Registro de datos personales</h2>
+    <h2 ref="informacionPersonalRef" id="tab">Registro de datos personales</h2>
     <!-- barra para el pocrcentaje de llenado -->
 
     <!-- --------------------------- -->
     <div class="todoProgressContainer">
       <div class="textProgressContainer">
-        <i class="bi bi-passport"></i>
-        <p
-          @click="scrollToInformacionPersonal"
+        <div
+          @click="ocultarSecciones('informacion_personal')"
           :class="
             informacion_personal
-              ? 'progress-text horizontalText activeLink'
-              : 'progress-text horizontalText'
+              ? ' textIconContainer activeLink'
+              : ' textIconContainer'
           "
         >
-          -Información <br />
-          personal
-        </p>
-        <p
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="25"
+            height="25"
+            fill="currentColor"
+            class="bi bi-passport iconProgress"
+            viewBox="0 0 16 16"
+          >
+            <path
+              d="M8 5a3 3 0 1 0 0 6 3 3 0 0 0 0-6M6 8a2 2 0 1 1 4 0 2 2 0 0 1-4 0m-.5 4a.5.5 0 0 0 0 1h5a.5.5 0 0 0 0-1z"
+            />
+            <path
+              d="M3.232 1.776A1.5 1.5 0 0 0 2 3.252v10.95c0 .445.191.838.49 1.11.367.422.908.688 1.51.688h8a2 2 0 0 0 2-2V4a2 2 0 0 0-1-1.732v-.47A1.5 1.5 0 0 0 11.232.321l-8 1.454ZM4 3h8a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1"
+            />
+          </svg>
+          <p
+            :class="
+              informacion_personal
+                ? ' horizontalText activeLink'
+                : ' horizontalText'
+            "
+          >
+            Información <br />
+            personal
+          </p>
+        </div>
+        <div
+          @click="ocultarSecciones('experiencia_laboral')"
           :class="
             experiencia_laboral
-              ? 'progress-text horizontalText activeLink'
-              : 'progress-text horizontalText'
+              ? ' textIconContainer activeLink'
+              : ' textIconContainer'
           "
-          @click="scrollToExperiencia"
         >
-          -Experiencia <br />
-          laboral
-        </p>
-        <p
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="25"
+            height="25"
+            fill="currentColor"
+            class="bi bi-briefcase"
+            viewBox="0 0 16 16"
+          >
+            <path
+              d="M6.5 1A1.5 1.5 0 0 0 5 2.5V3H1.5A1.5 1.5 0 0 0 0 4.5v8A1.5 1.5 0 0 0 1.5 14h13a1.5 1.5 0 0 0 1.5-1.5v-8A1.5 1.5 0 0 0 14.5 3H11v-.5A1.5 1.5 0 0 0 9.5 1zm0 1h3a.5.5 0 0 1 .5.5V3H6v-.5a.5.5 0 0 1 .5-.5m1.886 6.914L15 7.151V12.5a.5.5 0 0 1-.5.5h-13a.5.5 0 0 1-.5-.5V7.15l6.614 1.764a1.5 1.5 0 0 0 .772 0M1.5 4h13a.5.5 0 0 1 .5.5v1.616L8.129 7.948a.5.5 0 0 1-.258 0L1 6.116V4.5a.5.5 0 0 1 .5-.5"
+            />
+          </svg>
+          <p
+            :class="
+              experiencia_laboral
+                ? ' horizontalText activeLink'
+                : 'horizontalText'
+            "
+          >
+            Experiencia <br />
+            laboral
+          </p>
+        </div>
+        <div
+          @click="ocultarSecciones('info_academica')"
           :class="
             info_academica
-              ? 'progress-text horizontalText activeLink'
-              : 'progress-text horizontalText'
+              ? ' textIconContainer activeLink'
+              : ' textIconContainer'
           "
-          @click="scrollToInformacionAcademica"
         >
-          -Información <br />
-          académica
-        </p>
-        <p
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="25"
+            height="25"
+            fill="currentColor"
+            class="bi bi-mortarboard"
+            viewBox="0 0 16 16"
+          >
+            <path
+              d="M8.211 2.047a.5.5 0 0 0-.422 0l-7.5 3.5a.5.5 0 0 0 .025.917l7.5 3a.5.5 0 0 0 .372 0L14 7.14V13a1 1 0 0 0-1 1v2h3v-2a1 1 0 0 0-1-1V6.739l.686-.275a.5.5 0 0 0 .025-.917zM8 8.46 1.758 5.965 8 3.052l6.242 2.913z"
+            />
+            <path
+              d="M4.176 9.032a.5.5 0 0 0-.656.327l-.5 1.7a.5.5 0 0 0 .294.605l4.5 1.8a.5.5 0 0 0 .372 0l4.5-1.8a.5.5 0 0 0 .294-.605l-.5-1.7a.5.5 0 0 0-.656-.327L8 10.466zm-.068 1.873.22-.748 3.496 1.311a.5.5 0 0 0 .352 0l3.496-1.311.22.748L8 12.46z"
+            />
+          </svg>
+          <p
+            :class="
+              info_academica ? 'horizontalText activeLink' : 'horizontalText'
+            "
+          >
+            Información <br />
+            académica
+          </p>
+        </div>
+        <div
+          @click="ocultarSecciones('medio_transporte')"
           :class="
             medio_transporte
-              ? 'progress-text horizontalText activeLink'
-              : 'progress-text horizontalText'
+              ? ' textIconContainer activeLink'
+              : ' textIconContainer'
           "
-          @click="scrollToInMedioTrasnporte"
         >
-          -Medio de <br />
-          transporte
-        </p>
-        <p
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="25"
+            height="25"
+            fill="currentColor"
+            class="bi bi-car-front iconProgress"
+            viewBox="0 0 16 16"
+          >
+            <path
+              d="M4 9a1 1 0 1 1-2 0 1 1 0 0 1 2 0m10 0a1 1 0 1 1-2 0 1 1 0 0 1 2 0M6 8a1 1 0 0 0 0 2h4a1 1 0 1 0 0-2zM4.862 4.276 3.906 6.19a.51.51 0 0 0 .497.731c.91-.073 2.35-.17 3.597-.17s2.688.097 3.597.17a.51.51 0 0 0 .497-.731l-.956-1.913A.5.5 0 0 0 10.691 4H5.309a.5.5 0 0 0-.447.276"
+            />
+            <path
+              d="M2.52 3.515A2.5 2.5 0 0 1 4.82 2h6.362c1 0 1.904.596 2.298 1.515l.792 1.848c.075.175.21.319.38.404.5.25.855.715.965 1.262l.335 1.679q.05.242.049.49v.413c0 .814-.39 1.543-1 1.997V13.5a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1-.5-.5v-1.338c-1.292.048-2.745.088-4 .088s-2.708-.04-4-.088V13.5a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1-.5-.5v-1.892c-.61-.454-1-1.183-1-1.997v-.413a2.5 2.5 0 0 1 .049-.49l.335-1.68c.11-.546.465-1.012.964-1.261a.8.8 0 0 0 .381-.404l.792-1.848ZM4.82 3a1.5 1.5 0 0 0-1.379.91l-.792 1.847a1.8 1.8 0 0 1-.853.904.8.8 0 0 0-.43.564L1.03 8.904a1.5 1.5 0 0 0-.03.294v.413c0 .796.62 1.448 1.408 1.484 1.555.07 3.786.155 5.592.155s4.037-.084 5.592-.155A1.48 1.48 0 0 0 15 9.611v-.413q0-.148-.03-.294l-.335-1.68a.8.8 0 0 0-.43-.563 1.8 1.8 0 0 1-.853-.904l-.792-1.848A1.5 1.5 0 0 0 11.18 3z"
+            />
+          </svg>
+          <p
+            :class="
+              medio_transporte ? 'horizontalText activeLink' : 'horizontalText'
+            "
+          >
+            Medio de <br />
+            transporte
+          </p>
+        </div>
+        <div
+          @click="ocultarSecciones('condiciones_salud')"
           :class="
             condiciones_salud
-              ? 'progress-text horizontalText activeLink'
-              : 'progress-text horizontalText'
+              ? ' textIconContainer activeLink'
+              : ' textIconContainer'
           "
-          @click="scrollToInCondicionesSalud"
         >
-          -Condiciones <br />
-          de salud
-        </p>
-        <p
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="25"
+            height="25"
+            fill="currentColor"
+            class="bi bi-clipboard2-heart"
+            viewBox="0 0 16 16"
+          >
+            <path
+              d="M10.058.501a.5.5 0 0 0-.5-.501h-2.98c-.276 0-.5.225-.5.501A.5.5 0 0 1 5.582 1a.497.497 0 0 0-.497.497V2a.5.5 0 0 0 .5.5h4.968a.5.5 0 0 0 .5-.5v-.503A.497.497 0 0 0 10.555 1a.5.5 0 0 1-.497-.499"
+            />
+            <path
+              d="M3.605 2a.5.5 0 0 0-.5.5v12a.5.5 0 0 0 .5.5h9a.5.5 0 0 0 .5-.5v-12a.5.5 0 0 0-.5-.5h-.5a.5.5 0 0 1 0-1h.5a1.5 1.5 0 0 1 1.5 1.5v12a1.5 1.5 0 0 1-1.5 1.5h-9a1.5 1.5 0 0 1-1.5-1.5v-12a1.5 1.5 0 0 1 1.5-1.5h.5a.5.5 0 0 1 0 1z"
+            />
+            <path
+              d="M8.068 6.482c1.656-1.673 5.795 1.254 0 5.018-5.795-3.764-1.656-6.69 0-5.018"
+            />
+          </svg>
+          <p
+            :class="
+              condiciones_salud ? 'horizontalText activeLink' : 'horizontalText'
+            "
+          >
+            Condiciones <br />
+            de salud
+          </p>
+        </div>
+        <div
+          @click="ocultarSecciones('referencias_personales')"
           :class="
             referencias_personales
-              ? 'progress-text horizontalText activeLink'
-              : 'progress-text horizontalText'
+              ? ' textIconContainer activeLink'
+              : ' textIconContainer'
           "
-          @click="scrollToInReferenciasPersonales"
         >
-          -Referencias <br />
-          personales
-        </p>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="25"
+            height="25"
+            fill="currentColor"
+            class="bi bi-person"
+            viewBox="0 0 16 16"
+          >
+            <path
+              d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6m2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0m4 8c0 1-1 1-1 1H3s-1 0-1-1 1-4 6-4 6 3 6 4m-1-.004c-.001-.246-.154-.986-.832-1.664C11.516 10.68 10.289 10 8 10s-3.516.68-4.168 1.332c-.678.678-.83 1.418-.832 1.664z"
+            />
+          </svg>
+          <p
+            :class="
+              referencias_personales
+                ? 'horizontalText activeLink'
+                : 'horizontalText'
+            "
+          >
+            Referencias <br />
+            personales
+          </p>
+        </div>
+
         <!--  <p
             :class="
               hijos_info
@@ -100,12 +229,12 @@
     </div>
     <div class="flexRow">
       <div id="seccion">
-        <form @submit.prevent="submitForm" class="row g-3">
+        <form @submit.prevent="" class="row g-3">
           <p>
             Ingrese la información requerida en cada sección, para desplegar una
             seccion debe hacer clic en ella.
           </p>
-          <div class="row">
+          <!-- <div class="row">
             <div class="col">
               <h5
                 @click="informacion_personal = !informacion_personal"
@@ -121,7 +250,7 @@
               </h5>
             </div>
           </div>
-
+ -->
           <div class="info_container" v-if="informacion_personal">
             <!-- Primer Nombre y Segundo Nombre -->
             <div class="row mb-4">
@@ -560,7 +689,7 @@
               </div>
             </div>
           </div>
-          <div class="row">
+          <!-- <div class="row">
             <div class="col">
               <h5
                 @click="experiencia_laboral = !experiencia_laboral"
@@ -575,7 +704,7 @@
                 ><i v-if="!experiencia_laboral" class="bi bi-chevron-down"></i>
               </h5>
             </div>
-          </div>
+          </div> -->
           <div class="info_container pt-0" v-if="experiencia_laboral">
             <div
               v-for="(experiencia, index) in form.experiencias_laborales"
@@ -689,7 +818,7 @@
               </label>
             </div>
           </div>
-          <div class="row">
+          <!--  <div class="row">
             <div class="col">
               <h5
                 @click="info_academica = !info_academica"
@@ -701,7 +830,7 @@
                 ><i v-if="!info_academica" class="bi bi-chevron-down"></i>
               </h5>
             </div>
-          </div>
+          </div> -->
           <div class="info_container" v-if="info_academica">
             <div class="row mb-5">
               <div class="col-12 col-lg-6">
@@ -788,7 +917,7 @@
             </div>
           </div>
 
-          <div class="row">
+          <!--  <div class="row">
             <div class="col">
               <h5
                 @click="medio_transporte = !medio_transporte"
@@ -800,7 +929,7 @@
                 ><i v-if="!medio_transporte" class="bi bi-chevron-down"></i>
               </h5>
             </div>
-          </div>
+          </div> -->
           <div class="info_container" v-if="medio_transporte">
             <div class="row">
               <div class="col flex">
@@ -912,7 +1041,7 @@
               </div>
             </div>
           </div>
-          <div class="row">
+          <!--   <div class="row">
             <div class="col">
               <h5
                 @click="condiciones_salud = !condiciones_salud"
@@ -924,7 +1053,7 @@
                 ><i v-if="!condiciones_salud" class="bi bi-chevron-down"></i>
               </h5>
             </div>
-          </div>
+          </div> -->
           <div class="info_container" v-if="condiciones_salud">
             <div class="row">
               <div class="col flex">
@@ -1360,7 +1489,7 @@
               </div>
             </div>
           </div>
-          <div class="row">
+          <!--  <div class="row">
             <div class="col">
               <h5
                 @click="referencias_personales = !referencias_personales"
@@ -1378,7 +1507,7 @@
                 ></i>
               </h5>
             </div>
-          </div>
+          </div> -->
           <div class="info_container" v-if="referencias_personales">
             <div
               class="row"
@@ -1603,7 +1732,13 @@
               >
             </div>
           </div>
-          <button type="submit">Enviar</button>
+          <div class="row">
+            <div class="col">
+              <button type="button" @click="submitForm">
+                {{ activeSeccion == 5 ? "Guardar" : "Siguiente" }}
+              </button>
+            </div>
+          </div>
         </form>
       </div>
     </div>
@@ -1615,7 +1750,7 @@
 import SearchList from "./SearchList.vue";
 import { useToken } from "../composables/useToken";
 import Loading from "./Loading.vue";
-import { ref, reactive, watch, defineProps, onMounted } from "vue";
+import { ref, reactive, watch, defineProps, onMounted, nextTick } from "vue";
 import axios from "axios";
 import { useAlerts } from "@/composables/useAlerts";
 import { useRoute } from "vue-router";
@@ -1623,6 +1758,7 @@ import { useRoute } from "vue-router";
 const { userlogued } = defineProps(["userlogued"]); //props
 
 // Variables reactivas
+const activeSeccion = ref(0);
 const route = useRoute();
 const { showAlert } = useAlerts();
 const { configHeader } = useToken();
@@ -1642,7 +1778,7 @@ const ciu_exp_name = ref("");
 const cod_ciu_name = ref("");
 const ciu_res_name = ref("");
 const URL_API = process.env.VUE_APP_URL_API;
-const informacion_personal = ref(false);
+const informacion_personal = ref(true);
 const condiciones_salud = ref(false);
 const medio_transporte = ref(false);
 const referencias_personales = ref(false);
@@ -1652,11 +1788,6 @@ const experiencia_laboral = ref(false);
 const concepto = ref(false);
 const otro_transporte = ref("");
 const informacionPersonalRef = ref(null);
-const experienciaLaboralRef = ref(null);
-const informacionAcademicaRef = ref(null);
-const medioTransporteRef = ref(null);
-const condicionesSaludRef = ref(null);
-const referenciasPersonalesRef = ref(null);
 /* const hijosRef = ref(null); */
 // Formulario reactivo
 const requieredExperienceFields = [
@@ -1938,7 +2069,9 @@ const llenarFormulario = async () => {
   form.acidente_laboral = response.data.acidente_laboral;
   form.nom1_emp = response.data.primer_nombre;
   form.nom2_emp = response.data.segundo_nombre;
-  form.cod_grupo = response.data.grupo_etnico_id;
+  form.cod_grupo = response.data.novasoft
+    ? response.data.novasoft.cod_grupo
+    : response.data.grupo_etnico_id;
   form.cod_emp = response.data.num_doc;
   form.ap1_emp = response.data.primer_apellido;
   form.ap2_emp = response.data.segundo_apellido;
@@ -1949,11 +2082,21 @@ const llenarFormulario = async () => {
   form.cod_pai = response.data.novasoft ? response.data.novasoft.cod_pai : "";
   form.cod_dep = response.data.novasoft ? response.data.novasoft.cod_dep : "";
   form.cod_ciu = response.data.novasoft ? response.data.novasoft.cod_ciu : "";
-  form.fec_nac = response.data.fecha_nacimiento;
-  form.dir_res = response.data.direccion_residencia;
-  form.fec_expdoc = response.data.fecha_expedicion;
-  form.tel_res = response.data.telefono;
-  form.tel_cel = response.data.celular;
+  form.fec_nac = response.data.novasoft
+    ? response.data.novasoft.fec_nac
+    : response.data.fecha_nacimiento;
+  form.dir_res = response.data.novasoft
+    ? response.data.novasoft.dir_res
+    : response.data.direccion_residencia;
+  form.fec_expdoc = response.data.novasoft
+    ? response.data.novasoft.fec_expdoc
+    : response.data.fecha_expedicion;
+  form.tel_res = response.data.novasoft
+    ? response.data.novasoft.tel_res
+    : response.data.telefono;
+  form.tel_cel = response.data.novasoft
+    ? response.data.novasoft.tel_cel
+    : response.data.celular;
   form.e_mail =
     userlogued.tipo_usuario_id == 3
       ? userlogued.email
@@ -1963,17 +2106,31 @@ const llenarFormulario = async () => {
   form.pai_res = response.data.novasoft ? response.data.novasoft.pai_res : "";
   form.dpt_res = response.data.novasoft ? response.data.novasoft.dpt_res : "";
   form.ciu_res = response.data.novasoft ? response.data.novasoft.ciu_res : "";
-  form.cod_ban = response.data.gen_banco_id;
-  form.cta_ban = response.data.cuenta_bancaria;
+  form.cod_ban = response.data.novasoft
+    ? response.data.novasoft.cod_ban
+    : response.data.gen_banco_id;
+  form.cta_ban = response.data.novasoft
+    ? response.data.novasoft.cta_ban
+    : response.data.cuenta_bancaria;
   form.barrio = response.data.novasoft ? response.data.novasoft.barrio : "";
-  form.Niv_aca = response.data.nivel_academico_id;
-  form.sex_emp = response.data.genero_id;
+  form.Niv_aca = response.data.novasoft
+    ? response.data.novasoft.Niv_aca
+    : response.data.nivel_academico_id;
+  form.sex_emp = response.data.novasoft
+    ? response.data.novasoft.sex_emp
+    : response.data.genero_id;
   form.per_car = response.data.personas_cargo;
-  form.gru_san = response.data.grupo_sanguineo;
-  form.fac_rhh = response.data.factor_rh;
+  form.gru_san = response.data.novasoft
+    ? response.data.novasoft.gru_san.trim()
+    : response.data.grupo_sanguineo;
+  form.fac_rhh = response.data.novasoft
+    ? response.data.novasoft.fac_rhh
+    : response.data.factor_rh;
   form.raza = response.data.novasoft ? response.data.novasoft.raza : "";
   form.est_civ = response.data.novasoft ? response.data.novasoft.est_civ : "";
-  form.est_soc = response.data.estrato;
+  form.est_soc = response.data.novasoft
+    ? response.data.novasoft.est_soc
+    : response.data.estrato;
   form.experiencias_laborales = response.data.experiencias_laborales;
   form.concepto = response.data.concepto;
   if (form.experiencias_laborales.length > 0) {
@@ -2007,8 +2164,12 @@ const llenarFormulario = async () => {
   }
 
   consulta_sector_academico.value = response.data.sector_academico_nombre;
-  consulta_nivel_academico.value = response.data.des_est;
-  consulta_banco.value = response.data.nom_ban;
+  consulta_nivel_academico.value = response.data.novasoft
+    ? response.data.novasoft.nivelAcademico_nombre
+    : response.data.des_est;
+  consulta_banco.value = response.data.novasoft
+    ? response.data.novasoft.banco_nombre
+    : response.data.nom_ban;
   consulta_estado_civil.value = response.data.novasoft
     ? response.data.novasoft.des_est
     : "";
@@ -2098,6 +2259,26 @@ const submitForm = async () => {
     );
     showAlert(response.data.message, response.data.status);
     console.log("Formulario enviado con éxito:", response.data);
+    if (activeSeccion.value != 5) {
+      const arraySecciones = [
+        "informacion_personal",
+        "experiencia_laboral",
+        "info_academica",
+        "medio_transporte",
+        "condiciones_salud",
+        "referencias_personales",
+      ];
+      ocultarSecciones(arraySecciones[activeSeccion.value + 1]);
+      await nextTick();
+
+      // 3. Scroll con opciones mejoradas
+
+      setTimeout(() => {
+        scrollToDiv();
+      }, 2000);
+      // 4. Forzar layout sincrónico
+      document.documentElement.getBoundingClientRect();
+    }
   } catch (error) {
     showAlert("Error al enviar el formulario: intente nuevamente", "error");
     console.error("Error al enviar el formulario:", error);
@@ -2105,7 +2286,11 @@ const submitForm = async () => {
     loading.value = false;
   }
 };
-
+const scrollToDiv = () => {
+  document
+    .getElementById("tab")
+    .scrollIntoView({ behavior: "smooth", block: "start" });
+};
 //funciones para poner el formulario de forma dinámica
 const deleteIdioma = async (index) => {
   if (form.idiomas[index].id) {
@@ -2425,7 +2610,7 @@ const getPaises = (item = null, index = null) => {
 };
 
 //funciones para el scroll desde el menu lateral
-const scrollToInformacionPersonal = () => {
+/* const scrollToInformacionPersonal = () => {
   if (informacionPersonalRef.value) {
     informacion_personal.value = true;
     ocultarSecciones("informacion_personal");
@@ -2436,9 +2621,9 @@ const scrollToInformacionPersonal = () => {
       });
     }, 100);
   }
-};
+}; */
 
-const scrollToExperiencia = () => {
+/* const scrollToExperiencia = () => {
   if (experienciaLaboralRef.value) {
     experiencia_laboral.value = true;
     ocultarSecciones("experiencia_laboral");
@@ -2449,9 +2634,9 @@ const scrollToExperiencia = () => {
       });
     }, 100);
   }
-};
+}; */
 
-const scrollToInformacionAcademica = () => {
+/* const scrollToInformacionAcademica = () => {
   if (informacionAcademicaRef.value) {
     info_academica.value = true;
     ocultarSecciones("info_academica");
@@ -2462,8 +2647,8 @@ const scrollToInformacionAcademica = () => {
       });
     }, 100);
   }
-};
-
+}; */
+/* 
 const scrollToInMedioTrasnporte = () => {
   if (medioTransporteRef.value) {
     medio_transporte.value = true;
@@ -2475,8 +2660,8 @@ const scrollToInMedioTrasnporte = () => {
       });
     }, 100);
   }
-};
-const scrollToInCondicionesSalud = () => {
+}; */
+/* const scrollToInCondicionesSalud = () => {
   if (condicionesSaludRef.value) {
     condiciones_salud.value = true;
     ocultarSecciones("condiciones_salud");
@@ -2487,8 +2672,8 @@ const scrollToInCondicionesSalud = () => {
       });
     }, 100);
   }
-};
-const scrollToInReferenciasPersonales = () => {
+}; */
+/* const scrollToInReferenciasPersonales = () => {
   if (referenciasPersonalesRef.value) {
     referencias_personales.value = true;
     ocultarSecciones("referencias_personales");
@@ -2499,7 +2684,7 @@ const scrollToInReferenciasPersonales = () => {
       });
     }, 100);
   }
-};
+}; */
 
 /* const scrollToInHijos = () => {
   if (hijosRef.value) {
@@ -2515,25 +2700,25 @@ const scrollToInReferenciasPersonales = () => {
 }; */
 const ocultarSecciones = (seccion) => {
   seccion == "informacion_personal"
-    ? (informacion_personal.value = true)
+    ? ((informacion_personal.value = true), (activeSeccion.value = 0))
     : (informacion_personal.value = false);
   seccion == "condiciones_salud"
-    ? (condiciones_salud.value = true)
+    ? ((condiciones_salud.value = true), (activeSeccion.value = 4))
     : (condiciones_salud.value = false);
   seccion == "medio_transporte"
-    ? (medio_transporte.value = true)
+    ? ((medio_transporte.value = true), (activeSeccion.value = 3))
     : (medio_transporte.value = false);
   seccion == "referencias_personales"
-    ? (referencias_personales.value = true)
+    ? ((referencias_personales.value = true), (activeSeccion.value = 5))
     : (referencias_personales.value = false);
   seccion == "hijos_info"
     ? (hijos_info.value = true)
     : (hijos_info.value = false);
   seccion == "info_academica"
-    ? (info_academica.value = true)
+    ? ((info_academica.value = true), (activeSeccion.value = 2))
     : (info_academica.value = false);
   seccion == "experiencia_laboral"
-    ? (experiencia_laboral.value = true)
+    ? ((experiencia_laboral.value = true), (activeSeccion.value = 1))
     : (experiencia_laboral.value = false);
 };
 
@@ -2544,9 +2729,25 @@ onMounted(() => {
 </script>
 
 <style scoped>
-.todoProgressContainer {
+.textIconContainer {
   display: flex;
-  flex-direction: column;
+  background-color: #ffffff;
+  height: 100%;
+  z-index: 300;
+  align-items: center;
+  justify-content: left;
+  gap: 0.8em;
+  border-radius: 10px;
+  padding-left: 0.5em;
+  border: #1a9438 1px solid;
+  transition: 0.5s;
+}
+.textIconContainer:hover {
+  box-shadow: -1px 0px 17px 0px rgba(155, 179, 219, 1);
+}
+.todoProgressContainer {
+  position: relative;
+  margin-bottom: 1em;
 }
 .textProgressContainer {
   display: flex;
@@ -2557,15 +2758,15 @@ onMounted(() => {
   width: 100%;
 }
 .progress-container {
+  top: 0;
   width: 100%;
   height: 0.5em; /* Altura del contenedor */
   background-color: #ffffff;
   border: #006b3f solid 1px;
   border-radius: 10px;
   margin: 20px auto;
-  position: sticky;
+  position: absolute;
   display: flex;
-  /* Para que la barra crezca desde abajo */
 }
 
 .progress-bar {
@@ -2577,7 +2778,7 @@ onMounted(() => {
   top: 0; /* Cambiado de bottom: 0 */
   bottom: auto; /* Asegura que no quede fijo en la parte inferior */
 }
-.progress-text {
+/* .progress-text {
   position: absolute;
   left: 50%;
   top: 50%;
@@ -2585,35 +2786,32 @@ onMounted(() => {
   color: rgb(119, 119, 119);
   font-weight: bold;
   font-size: 0.8rem;
-}
+} */
 .progress-text-half {
   color: rgb(255, 255, 255);
 }
 .horizontalText {
-  color: rgb(32, 32, 32);
+  color: rgb(94, 92, 92);
   position: relative;
-  left: 0%;
-  top: 0%;
   cursor: pointer;
   font-size: 1rem;
-
-  width: 7em;
-  text-align: center;
-  border-radius: 5px;
-  padding: 0.2em;
-
+  text-align: left;
   background-color: #ffffff;
+  margin: 0;
   z-index: 100;
   font-weight: normal;
+  border-radius: 10px;
+  padding-top: 0.5em;
+  padding-right: 0.5em;
+  padding-bottom: 0.5em;
+  transition: 0.5s;
 }
 .activeLink {
-  color: #006b3f;
-  border: #006b3f 1px solid;
+  color: #ffffff;
+  /*   border: #006b3f 1px solid; */
+  background-color: #1a9765;
 }
-.horizontalText:hover {
-  color: #006b3f;
-  border: #006b3f 1px solid;
-}
+
 h2 {
   text-align: center;
 }
