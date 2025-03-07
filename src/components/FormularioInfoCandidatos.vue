@@ -1088,7 +1088,7 @@
                 </div>
               </div>
               <div class="col flex">
-                <label for="" class="form-label">Enfermedades:</label>
+                <label for="" class="form-label">Enfermedades generales:</label>
                 <div>
                   <div class="form-check form-check-inline">
                     <input
@@ -1397,7 +1397,7 @@
                 </div>
               </div>
               <div class="col flex">
-                <label for="" class="form-label">Lentes:</label>
+                <label for="" class="form-label">Lentes permanentes:</label>
                 <div>
                   <div class="form-check form-check-inline">
                     <input
@@ -1471,7 +1471,7 @@
                 />
               </div>
             </div>
-            <div class="row">
+            <div class="row" v-if="userlogued.tipo_usuario_id == 1">
               <div class="col">
                 <label for="" class="form-label"
                   >Ampliación de las condiciones de salud:</label

@@ -122,7 +122,6 @@
         @toogleRegisterChild="toogleLoginrHandler"
       ></RegistroCandidatos>
     </div>
-
     <router-view />
   </div>
 </template>
@@ -148,6 +147,29 @@ export default {
       toogleRegister: false,
       toogleLogin: true,
     };
+  },
+  async mounted() {
+    const token_confirmacion = this.$route.query.token;
+    const email_confirmacion = this.$route.query.email;
+    const self = this;
+    if (token_confirmacion && email_confirmacion) {
+      try {
+        const clienteConfirmacion = {
+          token: token_confirmacion,
+          email: email_confirmacion,
+        };
+        const response = await axios.post(
+          self.URL_API + "api/v1/verificarCorreo",
+          clienteConfirmacion
+        );
+        this.showAlertConfirm(response.data.message, response.data.status);
+      } catch (error) {
+        this.showAlert(
+          "Error al verificar el correo, contacte con el administrador",
+          "error"
+        );
+      }
+    }
   },
   created() {
     this.urlExterna();

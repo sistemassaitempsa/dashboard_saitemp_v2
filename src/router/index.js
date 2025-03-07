@@ -1,5 +1,5 @@
 import { createRouter, createWebHashHistory } from "vue-router";
-import InicioSesion from "../components/InicioSesion.vue";
+/* import InicioSesion from "../components/InicioSesion.vue"; */
 import NavBar from "../components/NavBar.vue";
 import Usuarios from "../components/Usuarios.vue";
 import RolesUsuario from "../components/RolesUsuario.vue";
@@ -68,7 +68,7 @@ const routes = [
   {
     path: "/",
     name: "login",
-    component: InicioSesion,
+    component: InicioSesionCandidatos,
   },
   {
     path: "/loginCandidatos",
