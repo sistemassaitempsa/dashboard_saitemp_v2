@@ -174,7 +174,15 @@ export default {
         );
         if (response.data.access_token != undefined) {
           localStorage.setItem("access_token", response.data.access_token);
-          self.$router.push("/navbar/formularioinfocandidato");
+          console.log(response.data.tipo_usuario_id);
+          if (
+            response.data.tipo_usuario_id &&
+            response.data.tipo_usuario_id == "3"
+          ) {
+            self.$router.push("/navbar/formularioinfocandidato");
+          } else {
+            self.$router.push("/navbar/landing");
+          }
         } else if (response.data.status == "error") {
           self.showAlert(response.data.message, response.data.status);
         }
