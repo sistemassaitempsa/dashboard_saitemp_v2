@@ -978,12 +978,30 @@
               </div>
               <div class="col">
                 <label for="" class="form-label"> Cuál?</label>
-                <input
+                <select
+                  name=""
+                  id=""
+                  class="form-select"
+                  v-model="form.otro_transporte"
+                  :disabled="form.tipo_transporte == 3 ? false : true"
+                >
+                  <option value="Bicicleta">Bicicleta</option>
+                  <option value="Moto compartida">Moto compartida</option>
+                  <option value="Vehiculo compartido">
+                    Vehiculo compartido
+                  </option>
+                  <option value="Patineta eléctrica">Patineta eléctrica</option>
+                  <option value="A pie">A pie</option>
+                  <option value="Transporte de la empresa">
+                    Transporte de la empresa
+                  </option>
+                </select>
+                <!--   <input
                   type="text"
                   class="form-control"
                   v-model="otro_transporte"
                   :disabled="form.tipo_transporte == 3 ? false : true"
-                />
+                /> -->
               </div>
             </div>
             <div class="row">
@@ -1802,7 +1820,6 @@ const hijos_info = ref(false);
 const info_academica = ref(false);
 const experiencia_laboral = ref(false);
 const concepto = ref(false);
-const otro_transporte = ref("");
 const informacionPersonalRef = ref(null);
 /* const hijosRef = ref(null); */
 // Formulario reactivo
@@ -1883,6 +1900,7 @@ const consulta_afp = ref("");
 const consulta_eps = ref("");
 const progress = ref(0);
 const form = reactive({
+  otro_transporte: "",
   concepto: "",
   tipo_transporte: "",
   licencia_conduccion: "",
@@ -2066,6 +2084,7 @@ const llenarFormulario = async () => {
     `${URL_API}api/v1/formulariocandidato/${id}`,
     configHeader()
   );
+
   form.licencia_conduccion = response.data.licencia_conduccion;
   form.descripcion_salud = response.data.descripcion_salud;
   form.afp_id = response.data.afp_id;
@@ -2240,6 +2259,10 @@ const llenarFormulario = async () => {
   if (form.pai_res) {
     getDepartamentos({ cod_pai: form.pai_res }, 3);
   }
+  form.otro_transporte =
+    response.data.otro_transporte && form.tipo_transporte == "3"
+      ? response.data.otro_transporte
+      : "";
   loading.value = false;
 };
 
