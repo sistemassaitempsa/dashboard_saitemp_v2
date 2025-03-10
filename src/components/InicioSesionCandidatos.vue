@@ -219,10 +219,7 @@ export default {
                 config
               );
               self.id = logued.data.id;
-              if (
-                logued.data.confirma_terminos == null ||
-                logued.data.confirma_terminos
-              ) {
+              if (logued.data.confirma_terminos != "1") {
                 self.toogleModalTratamientos = true;
                 return;
               }

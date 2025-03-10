@@ -385,7 +385,7 @@
                   type="date"
                   v-model="form.fec_expdoc"
                   id="fecha_exp"
-                  :max="new Date().toISOString().split('T')[0]"
+                  :max="maxDate"
                   required
                 />
               </div>
@@ -457,7 +457,7 @@
                   type="date"
                   v-model="form.fec_nac"
                   id="fecha_nac"
-                  :max="new Date().toISOString().split('T')[0]"
+                  :max="maxDate"
                   required
                 />
               </div>
@@ -1436,11 +1436,19 @@
                   type="number"
                   class="form-control"
                   v-model="form.estatura"
+                  min="0"
+                  @input="forceIntegerEstatura"
                 />
               </div>
               <div class="col">
                 <label for="" class="form-label">Peso(kg):</label>
-                <input type="number" class="form-control" v-model="form.peso" />
+                <input
+                  type="number"
+                  class="form-control"
+                  v-model="form.peso"
+                  min="0"
+                  @input="forceIntegerPeso"
+                />
               </div>
             </div>
             <div class="row">
@@ -1750,7 +1758,15 @@
 import SearchList from "./SearchList.vue";
 import { useToken } from "../composables/useToken";
 import Loading from "./Loading.vue";
-import { ref, reactive, watch, defineProps, onMounted, nextTick } from "vue";
+import {
+  ref,
+  reactive,
+  watch,
+  defineProps,
+  onMounted,
+  nextTick,
+  computed,
+} from "vue";
 import axios from "axios";
 import { useAlerts } from "@/composables/useAlerts";
 import { useRoute } from "vue-router";
@@ -2568,6 +2584,14 @@ const getDepartamentos = async (item, index) => {
   );
   consulta_departamentos[index] = response.data;
 };
+const forceIntegerEstatura = (e) => {
+  e.target.value = e.target.value.replace(/[^\d]/g, "");
+  form.estatura = parseInt(e.target.value) || 0;
+};
+const forceIntegerPeso = (e) => {
+  e.target.value = e.target.value.replace(/[^\d]/g, "");
+  form.peso = parseInt(e.target.value) || 0;
+};
 
 const getPaises = (item = null, index = null) => {
   if (item != null) {
@@ -2612,96 +2636,6 @@ const getPaises = (item = null, index = null) => {
       console.error("Error al obtener países:", error);
     });
 };
-
-//funciones para el scroll desde el menu lateral
-/* const scrollToInformacionPersonal = () => {
-  if (informacionPersonalRef.value) {
-    informacion_personal.value = true;
-    ocultarSecciones("informacion_personal");
-    setTimeout(() => {
-      informacionPersonalRef.value.scrollIntoView({
-        behavior: "smooth",
-        block: "start",
-      });
-    }, 100);
-  }
-}; */
-
-/* const scrollToExperiencia = () => {
-  if (experienciaLaboralRef.value) {
-    experiencia_laboral.value = true;
-    ocultarSecciones("experiencia_laboral");
-    setTimeout(() => {
-      experienciaLaboralRef.value.scrollIntoView({
-        behavior: "smooth",
-        block: "start",
-      });
-    }, 100);
-  }
-}; */
-
-/* const scrollToInformacionAcademica = () => {
-  if (informacionAcademicaRef.value) {
-    info_academica.value = true;
-    ocultarSecciones("info_academica");
-    setTimeout(() => {
-      informacionAcademicaRef.value.scrollIntoView({
-        behavior: "smooth",
-        block: "start",
-      });
-    }, 100);
-  }
-}; */
-/*
-const scrollToInMedioTrasnporte = () => {
-  if (medioTransporteRef.value) {
-    medio_transporte.value = true;
-    ocultarSecciones("medio_transporte");
-    setTimeout(() => {
-      medioTransporteRef.value.scrollIntoView({
-        behavior: "smooth",
-        block: "start",
-      });
-    }, 100);
-  }
-}; */
-/* const scrollToInCondicionesSalud = () => {
-  if (condicionesSaludRef.value) {
-    condiciones_salud.value = true;
-    ocultarSecciones("condiciones_salud");
-    setTimeout(() => {
-      condicionesSaludRef.value.scrollIntoView({
-        behavior: "smooth",
-        block: "start",
-      });
-    }, 100);
-  }
-}; */
-/* const scrollToInReferenciasPersonales = () => {
-  if (referenciasPersonalesRef.value) {
-    referencias_personales.value = true;
-    ocultarSecciones("referencias_personales");
-    setTimeout(() => {
-      referenciasPersonalesRef.value.scrollIntoView({
-        behavior: "smooth",
-        block: "start",
-      });
-    }, 100);
-  }
-}; */
-
-/* const scrollToInHijos = () => {
-  if (hijosRef.value) {
-    hijos_info.value = true;
-    ocultarSecciones("hijos_info");
-    setTimeout(() => {
-      hijosRef.value.scrollIntoView({
-        behavior: "smooth",
-        block: "start",
-      });
-    }, 100);
-  }
-}; */
 const ocultarSecciones = (seccion) => {
   seccion == "informacion_personal"
     ? ((informacion_personal.value = true), (activeSeccion.value = 0))
@@ -2725,7 +2659,11 @@ const ocultarSecciones = (seccion) => {
     ? ((experiencia_laboral.value = true), (activeSeccion.value = 1))
     : (experiencia_laboral.value = false);
 };
-
+const maxDate = computed(() => {
+  const today = new Date();
+  today.setFullYear(today.getFullYear() - 18);
+  return today.toISOString().split("T")[0];
+});
 //cliclo de vida
 onMounted(() => {
   llenarFormulario();
