@@ -116,7 +116,11 @@
         </div>
       </form>
     </div>
-
+    <ModalTratamientoDatos
+      v-if="toogleModalTratamientos"
+      :id="id"
+      @logout="toogleTratamientoHandler"
+    ></ModalTratamientoDatos>
     <div class="registerContainer" v-if="toogleRegister">
       <RegistroCandidatos
         @toogleRegisterChild="toogleLoginrHandler"
@@ -130,10 +134,12 @@ import axios from "axios";
 import { Alerts } from "../Mixins/Alerts.js";
 import { Token } from "../Mixins/Token.js";
 import RegistroCandidatos from "./RegistroCandidatos.vue";
+import ModalTratamientoDatos from "./ModalTratamientoDatos.vue";
 
 export default {
   components: {
     RegistroCandidatos,
+    ModalTratamientoDatos,
   },
   mixins: [Token, Alerts],
   data() {
@@ -146,6 +152,8 @@ export default {
       RegistroCandidatos,
       toogleRegister: false,
       toogleLogin: true,
+      toogleModalTratamientos: false,
+      id: "",
     };
   },
   async mounted() {
@@ -186,6 +194,9 @@ export default {
       this.toogleRegister = !this.toogleRegister;
       this.toogleLogin = !this.toogleLogin;
     },
+    toogleTratamientoHandler() {
+      this.toogleModalTratamientos = !this.toogleModalTratamientos;
+    },
     async login() {
       let self = this;
       let username = { email: this.email, password: this.password };
@@ -196,11 +207,28 @@ export default {
         );
         if (response.data.access_token != undefined) {
           localStorage.setItem("access_token", response.data.access_token);
-          console.log(response.data.tipo_usuario_id);
+
           if (
             response.data.tipo_usuario_id &&
             response.data.tipo_usuario_id == "3"
           ) {
+            let config = this.configHeader();
+            try {
+              const logued = await axios.get(
+                self.URL_API + "api/v1/userlogued",
+                config
+              );
+              self.id = logued.data.id;
+              if (
+                logued.data.confirma_terminos == null ||
+                logued.data.confirma_terminos
+              ) {
+                self.toogleModalTratamientos = true;
+                return;
+              }
+            } catch (error) {
+              console.log(error);
+            }
             self.$router.push("/navbar/formularioinfocandidato");
           } else {
             self.$router.push("/navbar/landing");

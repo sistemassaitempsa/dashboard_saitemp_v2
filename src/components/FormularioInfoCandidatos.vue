@@ -489,7 +489,7 @@
               </div>
               <div class="col-12 was-validated col-lg-6">
                 <label class="form-label" for="email"
-                  >Correo electronico:*</label
+                  >Correo electrónico:*</label
                 >
                 <input
                   disabled
