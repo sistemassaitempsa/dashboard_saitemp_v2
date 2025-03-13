@@ -3,7 +3,7 @@
     <div class="modal-content" @click.stop>
       <Loading :loading="loading" />
       <div class="container">
-        <h3>Politica de tratamiento de datos</h3>
+        <h3>Política de tratamiento de datos</h3>
 
         <div class="row">
           <div class="col">
