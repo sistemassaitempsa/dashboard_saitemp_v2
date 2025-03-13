@@ -3135,7 +3135,7 @@
                 name="radio"
                 id="radio1"
               />
-              Si acepto
+              Si
             </div>
             <div class="form-check m-2">
               <input
@@ -3147,7 +3147,7 @@
                 id="radio2"
                 checked
               />
-              No acepto
+              No
             </div>
           </div>
         </div>
@@ -6866,13 +6866,6 @@ export default {
         );
         return true;
       }
-      if (this.declaraciones_autorizaciones == false) {
-        this.showAlert(
-          "Error, debe aceptar las declaraciones y autorizaciones.",
-          "error"
-        );
-        return true;
-      }
 
       valida_campo = 0;
       var valida_campos_expuestas = 0;
@@ -7833,7 +7826,7 @@ export default {
         this.consulta_sucursal_facturacion = item.sucursal_facturacion;
         this.sucursal = item.sucursal_facturacion_id;
         this.declaraciones_autorizaciones =
-          item.declaraciones_autorizaciones == "1" ? true : false;
+          item.declaraciones_autorizaciones == "0" ? true : false;
         this.tratamiento_datos_personales =
           item.tratamiento_datos_personales == "1" ? true : false;
         this.tipo_operacion_internacional =
