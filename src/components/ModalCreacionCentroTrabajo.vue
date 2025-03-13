@@ -4,13 +4,15 @@
       <Loading :loading="loading" />
       <div class="container">
         <div class="d-flex justify-content-end">
-          <button class="btn btn-danger btn-sm" @click="close">X</button>
+          <button class="btn btn-danger btn-sm" @click="close" type="button">
+            X
+          </button>
         </div>
         <h3>Crear centro de trabajo</h3>
         <div class="row">
-          <div class="col">
+          <div class="col mt-3">
             <label for="" class="form-label">Nombre:*</label
-            ><input type="text" class="form-control" />
+            ><input type="text" class="form-control" v-model="nombre" />
           </div>
           <div class="col">
             <SearchList
@@ -54,8 +56,20 @@
         </div>
 
         <div class="row">
-          <div class="col"><button>Cancelar</button></div>
-          <div class="col"><button>Guardar</button></div>
+          <div class="col">
+            <button class="btn btn-danger" type="button" @click="close">
+              Cancelar
+            </button>
+          </div>
+          <div class="col">
+            <button
+              class="btn btn-success"
+              type="button"
+              @click="crearCentroTrabajoHandler"
+            >
+              Guardar
+            </button>
+          </div>
         </div>
       </div>
     </div>
@@ -63,8 +77,18 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
+import { ref, onMounted, defineEmits } from "vue";
+import { useToken } from "@/composables/useToken";
+import axios from "axios";
+import Loading from "./Loading.vue";
+import SearchTable from "./SearchTable.vue";
+import SearchList from "./SearchList.vue";
+import { useAlerts } from "@/composables/useAlerts";
+import { useRoute } from "vue-router";
 
+const route = useRoute();
+const emit = defineEmits(["closeModalCentrosTrabajo"]);
+const { showAlert } = useAlerts();
 const actividad_ciiu_disabled = ref(true);
 const codigo_ciiu_id = ref("");
 const consulta_codigo_ciiu = ref("");
@@ -76,15 +100,20 @@ const consulta_riesgo_cliente = ref("");
 const riesgos_laborales = ref([]);
 const codigos_ciiu = ref([]);
 const campos_actividad_ciiu = ref(["codigo_actividad", "descripcion"]);
+const URL_API = process.env.VUE_APP_URL_API;
+const { configHeader } = useToken();
+const nombre = ref("");
+const loading = ref(false);
 
 const getRiesgosLaborales = async (item = null, index = null) => {
   if (item != null && index != null) {
+    console.log("pasé por riesgos");
   }
   if (item != null && index == null) {
     riesgo_laboral.value = item.id;
   }
   if (riesgos_laborales.value.length <= 0) {
-    config = configHeader();
+    const config = configHeader();
     axios.get(URL_API + "api/v1/riesgolaboral", config).then(function (result) {
       riesgos_laborales.value = result.data;
     });
@@ -95,7 +124,7 @@ const setActividadesCiiu = (item) => {
   if (item != null) {
     consulta_actvidad_ciiu.value = item;
     actividad_ciiu.value = item.split(" ")[0];
-    riesgos_laborales.forEach(function (item) {
+    riesgos_laborales.value.forEach(function (item) {
       if (item.id == actividad_ciiu.value.split("")[0]) {
         riesgo_laboral.value = actividad_ciiu.value.split("")[0];
         consulta_riesgo_cliente.value = item.nombre;
@@ -122,6 +151,35 @@ const getActividadesCiiu = async (item = null) => {
       actividades_ciiu.value = result.data;
     });
 };
+const crearCentroTrabajoHandler = async () => {
+  if (
+    actividad_ciiu.value == "" ||
+    codigo_ciiu_id.value == "" ||
+    nombre.value == ""
+  ) {
+    showAlert("Debe diligenciar los campos requeridos", "error");
+    return;
+  }
+  const config = configHeader();
+
+  try {
+    const infoCentroTrabajo = {
+      cliente_id: route.params.id,
+      actividad_ciiu: actividad_ciiu.value,
+      nombre: nombre.value,
+    };
+    const response = await axios.post(
+      `${URL_API}api/v1/centrosdetarabajo`,
+      infoCentroTrabajo,
+      config
+    );
+
+    showAlert(response.data.message, response.data.status);
+    close();
+  } catch (error) {
+    showAlert(error.response.data.message, error.response.data.status);
+  }
+};
 
 const getCodigosCiiu = async () => {
   if (codigos_ciiu.value.length >= 0) {
@@ -131,9 +189,20 @@ const getCodigosCiiu = async () => {
     });
   }
 };
+const close = () => {
+  emit("closeModalCentrosTrabajo");
+};
+
+onMounted(() => {
+  getRiesgosLaborales();
+});
 </script>
 
 <style scoped>
+label {
+  float: left;
+  font-weight: 500;
+}
 .modal-overlay {
   position: fixed;
   top: 0;

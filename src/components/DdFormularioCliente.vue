@@ -3618,6 +3618,37 @@
         </div>
       </div>
       <h6 v-if="$route.params.id != ''" class="tituloseccion">
+        Centros de trabajo.
+      </h6>
+      <div id="seccion" v-if="$route.params.id != ''">
+        <div class="row">
+          <div class="col"></div>
+          <div class="col-md-4 offset-md-4">
+            <button
+              class="btn btn-success"
+              @click="toogleCentroTrabajoModal"
+              type="button"
+            >
+              Crear centro de trabajo
+            </button>
+            <ModalCreacionCentroTrabajo
+              v-if="toogleCentroTrabajoModalData"
+              @closeModalCentrosTrabajo="toogleCentroTrabajoModal"
+            ></ModalCreacionCentroTrabajo>
+          </div>
+        </div>
+        <div class="row" v-if="centros_de_trabajo.length > 0">
+          <div class="col">
+            <TablaHistoricoEstados
+              :columnasocultas="columnasocultas()"
+              :datosformateados="datosformateados()"
+              :total_registros="total_registros_pie"
+              :columnas="columnas"
+            ></TablaHistoricoEstados>
+          </div>
+        </div>
+      </div>
+      <h6 v-if="$route.params.id != ''" class="tituloseccion">
         Observaciones del responsable.
       </h6>
       <div id="seccion" v-if="$route.params.id != ''">
@@ -3894,6 +3925,7 @@
   </div>
 </template>
 <script>
+import TablaHistoricoEstados from "./TablaHistoricoEstados.vue";
 import axios from "axios";
 import ModalHistoricoActualizaciones from "./ModalHistoricoActualizaciones.vue";
 import ModalCorreos from "./ModalCorreos.vue";
@@ -3913,10 +3945,12 @@ import RegistroCambio from "./RegistroCambio.vue";
 import FlotanteInteraccionCliente from "./FlotanteInteraccionCliente.vue";
 import FlotanteSelecciondd from "./FlotanteSelecciondd.vue";
 import ModalEstadoContrato from "./ModalEstadoContrato.vue";
+import ModalCreacionCentroTrabajo from "./ModalCreacionCentroTrabajo.vue";
 
 export default {
   components: {
     ModalEstadoContrato,
+    TablaHistoricoEstados,
     ModalCorreos,
     SearchList,
     SearchTable,
@@ -3928,6 +3962,7 @@ export default {
     FlotanteInteraccionCliente,
     FlotanteSelecciondd,
     ModalHistoricoActualizaciones,
+    ModalCreacionCentroTrabajo,
   },
   mixins: [Scroll, Alerts, Token, Permisos],
 
@@ -3939,6 +3974,17 @@ export default {
   },
   data() {
     return {
+      total_registros: 0,
+      total_registros_pie: 0,
+      columnas: [
+        "Codigo centro de trabajo",
+        "Nombre",
+        "Actividad ciiu",
+        "Descripción actividad ciiu",
+        "Riesgo",
+        "Fecha de creación",
+      ],
+      centros_de_trabajo: [],
       profesionales_sst: [],
       profesionales_cartera: [],
       profesionales_nomina: [],
@@ -4332,6 +4378,7 @@ export default {
       contratacion_pago_31_id: "",
       versiones: [],
       actividad_ciiu_disabled: true,
+      toogleCentroTrabajoModalData: false,
     };
   },
   computed: {
@@ -4378,6 +4425,7 @@ export default {
     window.addEventListener("keydown", this.convinacionGuardado);
     window.addEventListener("keydown", this.convinacionAutoRelleno);
     this.getModulo();
+    this.getCentrosDeTrabajo();
   },
   beforeDestroy() {
     window.removeEventListener("keydown", this.convinacionGuardado);
@@ -4462,8 +4510,30 @@ export default {
         }
       }
     },
+    getCentrosDeTrabajo() {
+      let self = this;
+      let config = this.configHeader();
+      const id = self.$route.params.id;
+      if (id != "") {
+        axios
+          .get(self.URL_API + "api/v1/centrosdetarabajobycliente/" + id, config)
+          .then(function (result) {
+            self.centros_de_trabajo = result.data;
+          });
+      }
+    },
+    columnasocultas() {
+      return this.centros_de_trabajo.map((item) => ({
+        id: item.id,
+        cliente_id: item.cliente_id,
+      }));
+    },
     abrirCalendario(event) {
       event.target.showPicker(); // Abre el selector de fecha
+    },
+    toogleCentroTrabajoModal() {
+      this.toogleCentroTrabajoModalData = !this.toogleCentroTrabajoModalData;
+      this.getCentrosDeTrabajo();
     },
     setLabelDepartamento(item = null, campo = null, index = null) {
       if (item != null) {
@@ -7182,6 +7252,48 @@ export default {
           });
           return archivo;
         });
+    },
+    datosformateados() {
+      return this.centros_de_trabajo.map((item) => ({
+        codigo_centro_trabajo: item.codigo_centro_trabajo,
+        nombre: item.nombre,
+        codigo_actividad: item.codigo_actividad,
+        actividad_ciiu_descripcion: item.actividad_ciiu_descripcion,
+        riesgo: item.codigo_actividad.split("")[0],
+        created_at: item.created_at
+          ? this.formatearFecha(item.created_at)
+          : this.formatearFecha(item.estado_created_at),
+      }));
+    },
+    formatearFecha(fechaISO) {
+      try {
+        // Intenta crear una fecha a partir del formato original
+        let fecha = new Date(fechaISO);
+
+        // Si la fecha es inválida, intenta reemplazar ciertos formatos problemáticos
+        if (isNaN(fecha)) {
+          // Corrige fechas con espacios o con un formato incorrecto
+          fechaISO = fechaISO.replace(" ", "T"); // Reemplaza espacio por "T" en caso de que falte
+          fecha = new Date(fechaISO);
+        }
+
+        // Si sigue siendo inválida, lanza un error
+        if (isNaN(fecha)) {
+          throw new Error("Formato de fecha no válido");
+        }
+
+        // Retorna la fecha formateada
+        return fecha.toLocaleDateString("es-ES", {
+          year: "numeric",
+          month: "short",
+          day: "numeric",
+          hour: "numeric",
+          minute: "numeric",
+        });
+      } catch (error) {
+        console.error("Error al formatear la fecha:", error.message);
+        return "Fecha no válida"; // Valor por defecto en caso de error
+      }
     },
     getEstadosIngreso(item = null) {
       if (item != null) {
