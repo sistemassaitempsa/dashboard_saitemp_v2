@@ -81,10 +81,10 @@
         <div class="row">
           <div class="col">
             <button class="btn btn-danger btn-sm" @click="logout">
-              No acepto
+              {{ acciones ? "No acepto" : "Cerrar" }}
             </button>
           </div>
-          <div class="col">
+          <div class="col" v-if="acciones">
             <button @click="aceptoHandle" class="btn btn-success btn-sm">
               Si, Acepto
             </button>
@@ -100,7 +100,8 @@ import { defineProps, defineEmits } from "vue";
 import axios from "axios";
 
 const emit = defineEmits(["logout", "submit"]);
-const { id } = defineProps(["id"]);
+const { id, acciones } = defineProps(["id", "acciones"]);
+
 const URL_API = process.env.VUE_APP_URL_API;
 const router = useRouter();
 const logout = () => {

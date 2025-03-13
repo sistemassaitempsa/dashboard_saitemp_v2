@@ -119,6 +119,7 @@
     <ModalTratamientoDatos
       v-if="toogleModalTratamientos"
       :id="id"
+      :acciones="true"
       @logout="toogleTratamientoHandler"
     ></ModalTratamientoDatos>
     <div class="registerContainer" v-if="toogleRegister">

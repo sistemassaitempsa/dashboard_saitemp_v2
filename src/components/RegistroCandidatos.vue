@@ -277,7 +277,7 @@
                   id=""
                   v-model="autorizacion"
                 />He leído y acepto la
-                <span class="spanRegister"
+                <span class="spanRegister" @click="toogleTratamientoHandler"
                   >Política de Tratamiento de Datos Personales de Saitemp
                   S.A.</span
                 >, autorizando el uso de mis datos conforme a lo establecido en
@@ -317,6 +317,12 @@
             </div>
           </div>
         </form>
+        <ModalTratamientoDatos
+          v-if="toogleModalTratamientos"
+          :id="id"
+          :acciones="false"
+          @logout="toogleTratamientoHandler"
+        ></ModalTratamientoDatos>
       </div>
     </div>
   </transition>
@@ -331,6 +337,7 @@ import { reactive } from "vue";
 import { useAlerts } from "@/composables/useAlerts";
 import { useValidation } from "../composables/useValidations";
 import Recaptcha from "./Recaptcha.vue";
+import ModalTratamientoDatos from "./ModalTratamientoDatos.vue";
 
 //variables
 
@@ -361,6 +368,7 @@ let cliente = reactive({
   telefono: "",
   doc_tip_id: "01",
 });
+const toogleModalTratamientos = ref(false);
 const autorizacion = ref(false);
 const error = "";
 const errorConfirmationNumDoc = ref("");
@@ -401,6 +409,10 @@ const handleCaptchaError = (error) => {
 };
 
 //funciones
+const toogleTratamientoHandler = () => {
+  toogleModalTratamientos.value = !toogleModalTratamientos.value;
+};
+
 const emitLoginToggle = () => {
   emit("toogleRegisterChild");
 };
