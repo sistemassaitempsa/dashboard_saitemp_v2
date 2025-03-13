@@ -963,6 +963,16 @@
                 Ver registro
               </button>
             </td>
+            <td v-if="ruta == '/navbar/consultatodoscentrosdetrabajo'">
+              <button
+                type="button"
+                class="btn btn-success btn-sm"
+                @click="verContrato2(item)"
+                v-if="item.nombre != 'S. Administrador'"
+              >
+                Ver registro
+              </button>
+            </td>
             <td v-if="ruta == '/navbar/ingresos-pendientes'">
               <button
                 type="button"
@@ -2258,6 +2268,12 @@ export default {
       this.$router.push({
         name: "debida-diligencia/formulario-clientes",
         params: { id: item.id },
+      });
+    },
+    verContrato2(item) {
+      this.$router.push({
+        name: "debida-diligencia/formulario-clientes",
+        params: { id: item.cliente_id },
       });
     },
     verFormularioSuper(item) {
