@@ -381,6 +381,8 @@
                   >Fecha expedicion:*</label
                 >
                 <input
+                  @keydown.prevent
+                  @click="abrirCalendario"
                   class="form-control"
                   type="date"
                   v-model="form.fec_expdoc"
@@ -453,6 +455,8 @@
                   >Fecha de nacimiento:*</label
                 >
                 <input
+                  @keydown.prevent
+                  @click="abrirCalendario"
                   class="form-control"
                   type="date"
                   v-model="form.fec_nac"
@@ -791,6 +795,8 @@
                 <div class="col">
                   <label for="" class="form-label">Fecha inicio:</label>
                   <input
+                    @keydown.prevent
+                    @click="abrirCalendario"
                     type="month"
                     class="form-control"
                     v-model="experiencia.fecha_inicio"
@@ -799,6 +805,8 @@
                 <div class="col">
                   <label for="" class="form-label">Fecha fin:</label>
                   <input
+                    @keydown.prevent
+                    @click="abrirCalendario"
                     type="month"
                     class="form-control"
                     v-model="experiencia.fecha_fin"
@@ -2268,6 +2276,10 @@ const llenarFormulario = async () => {
 
 const formattedDate = (date) => {
   return date.split(" ")[0];
+};
+
+const abrirCalendario = (event) => {
+  event.target.showPicker(); // Abre el selector de fecha
 };
 //funcion para  guardar el formulario
 const submitForm = async () => {
