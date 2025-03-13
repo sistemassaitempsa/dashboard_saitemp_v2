@@ -62,6 +62,7 @@ import FormularioInfoCandidatos from "@/components/FormularioInfoCandidatos.vue"
 import Cliente from "../components/Cliente.vue";
 import ResetPasswordView from "@/views/ResetPasswordView.vue";
 import ConsultaFormularioCandidatos from "@/components/ConsultaFormularioCandidatos.vue";
+import TablaCentrosDeTrabajo from "@/components/TablaCentrosDeTrabajo.vue";
 
 // Configuración de rutas
 const routes = [
@@ -111,7 +112,11 @@ const routes = [
         name: "formularioinfocandidatoTabla",
         component: ConsultaFormularioCandidatos,
       },
-
+      {
+        path: "consultatodoscentrosdetrabajo",
+        name: "consultatodoscentrosdetrabajo",
+        component: TablaCentrosDeTrabajo,
+      },
       {
         path: "editarUsuario/:tipo?/:id",
         name: "editarUsuario",

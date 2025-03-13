@@ -1426,6 +1426,7 @@ export default {
       analista: [],
       loading: false,
       columnaOculta: [
+        "cliente_id",
         "usuario_id",
         "color_estado_firma",
         "nombre_estado_firma",
@@ -1727,6 +1728,8 @@ export default {
       } else if (this.ruta.includes("lista-riesgos")) {
         return true;
       } else if (this.ruta.includes("formularioinfocandidatoTabla")) {
+        return true;
+      } else if (this.ruta.includes("consultatodoscentrosdetrabajo")) {
         return true;
       }
     },
