@@ -3967,9 +3967,12 @@ export default {
   mixins: [Scroll, Alerts, Token, Permisos],
 
   props: {
-    menu: [],
+    menu: {
+      type: Array,
+      required: true,
+    },
     userlogued: {
-      default: "",
+      default: {},
     },
   },
   data() {
