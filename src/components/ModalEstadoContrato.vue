@@ -297,11 +297,15 @@ export default {
           if (result.data.status == "success") {
             this.firmado_cliente_com = result.data.contrato.firmado_cliente;
             this.firmado_empresa_com = result.data.contrato.firmado_empresa;
-            axios.get(
-              self.URL_API +
-                `api/v1/consultaProcesoFirma/${this.contrato.transaccion_id}`,
-              config
-            );
+            axios
+              .get(
+                self.URL_API +
+                  `api/v1/consultaProcesoFirma/${this.contrato.transaccion_id}`,
+                config
+              )
+              .catch((error) =>
+                console.log("Error en consultaProcesoFirma", error)
+              );
           }
         });
     },
