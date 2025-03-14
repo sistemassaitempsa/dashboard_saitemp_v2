@@ -238,6 +238,8 @@ export default {
   width: 100%;
   max-width: 100%;
   overflow: hidden;
+  border: 1px rgb(182, 182, 182) solid;
+  border-radius: 5px;
 }
 
 .control-group {
