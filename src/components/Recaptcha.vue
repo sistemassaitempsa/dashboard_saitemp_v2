@@ -7,7 +7,7 @@
 </template>
 
 <script>
-import { onMounted, ref, onBeforeUnmount } from "vue";
+import { onMounted, ref /* onBeforeUnmount */ } from "vue";
 
 export default {
   props: {
@@ -75,12 +75,12 @@ export default {
 
     onMounted(loadScript);
 
-    onBeforeUnmount(() => {
+    /*  onBeforeUnmount(() => {
       if (window.grecaptcha && widgetId.value) {
         window.grecaptcha.reset(widgetId.value);
       }
       delete window.vueRecaptchaLoaded;
-    });
+    }); */
 
     return {
       recaptchaContainer,
