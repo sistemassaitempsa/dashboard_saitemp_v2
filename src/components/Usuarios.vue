@@ -37,7 +37,7 @@
             <option>30</option>
           </select>
         </div>
-        <div class="col-xs-3 col-md-4" v-if="users.length > 0">
+        <div class="col-xs-3 col-md-4">
           <label for="exampleFormControlInput1" class="form-label">Tipo de usuario a listar</label>
           <select class="form-select form-select-sm" @change="getUsers(tipo_usuario_id)" v-model="tipo_usuario_id"
             aria-label="Default select example">
@@ -194,7 +194,7 @@ export default {
       let config = this.configHeader();
       axios
         .get(
-          self.URL_API + "api/v1/users/" + self.usuario + "/" + self.cantidad,
+          self.URL_API + "api/v1/usersfiltro/" + self.usuario + "/" + self.cantidad,
           config
         )
         .then(function (result) {
@@ -248,11 +248,9 @@ export default {
     },
     userLogued() {
       let self = this;
-      const userType = localStorage.getItem("user_type");
-      console.log("pasé por el log");
       let config = this.configHeader();
       axios
-        .get(self.URL_API + "api/v1/userlogued/" + userType, config)
+        .get(self.URL_API + "api/v1/userlogued", config)
         .then(function (result) {
           self.roluserlogued = result.data.rol;
         })

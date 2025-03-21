@@ -7473,8 +7473,6 @@ export default {
       if (item != null) {
         this.encargado_id = item.usuario_id;
         this.consulta_encargado_corregir = item.nombre;
-        console.log(this.encargado_id);
-        console.log(this.encargado_id_copia);
         if (this.encargado_id != this.encargado_id_copia) {
           this.encargado_corregir_correo = item.email;
         }

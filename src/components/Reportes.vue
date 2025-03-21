@@ -48,6 +48,7 @@
       :search="subcategory_reports_apl"
       :search2="subcategory_reports_cod"
       :endpoint="endpoint"
+      :checked="false"
     />
   </div>
 </template>

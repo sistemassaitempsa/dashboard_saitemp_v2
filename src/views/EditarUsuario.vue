@@ -1,8 +1,8 @@
 <template>
     <div>
-        <FormularioUsuario :titulo="titulo" v-if="usuario()" />
-        <Cliente :titulo="titulo" v-if="cliente()" />
-        <EditarUsuarioCandidato v-if="candidato()" />
+        <FormularioUsuario :titulo="titulo" :userlogued="userlogued" v-if="usuario()" />
+        <Cliente :titulo="titulo" :userlogued="userlogued" v-if="cliente()" />
+        <EditarUsuarioCandidato :userlogued="userlogued" v-if="candidato()" />
     </div>
 </template>
 <script>
@@ -18,6 +18,10 @@ export default {
     props: {
         user_type: {
             type: String,
+            required: true
+        },
+        userlogued: {
+            type: Object,
             required: true
         }
     },

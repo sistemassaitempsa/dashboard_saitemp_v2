@@ -983,7 +983,6 @@ export default {
     consultaFormulario(id) {
       let self = this;
       let config = this.configHeader();
-      // console.log(config)
       axios
         .get(self.URL_API + "api/v1/formulariosupervision/" + id, config)
         .then(function (result) {

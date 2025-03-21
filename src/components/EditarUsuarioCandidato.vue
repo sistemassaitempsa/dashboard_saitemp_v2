@@ -178,7 +178,6 @@ const userLogued = async () => {
       router.push("/");
     }
   } catch (error) {
-    console.log(error);
     if (error.response && error.response.data === "Unauthorized.") {
       router.push("/");
       localStorage.removeItem("access_token");

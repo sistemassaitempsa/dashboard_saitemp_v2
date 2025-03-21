@@ -118,6 +118,7 @@
       :search="search"
       :tabla="tabla"
       :endpoint="endpoint"
+      :checked="false"
     />
   </div>
 </template>

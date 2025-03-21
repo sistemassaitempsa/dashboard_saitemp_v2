@@ -8,6 +8,7 @@
         :tabla="tabla"
         :endpoint="endpoint"
         :endpointexport="endpointexport"
+        :filtro_visible="true"
       />
       <!-- @filtrando="filtrando" -->
     </div>

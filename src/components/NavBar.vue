@@ -1,7 +1,7 @@
 <template>
   <div v-if="autoriced">
     <NotificacionesSocket />
-    <nav class="navbar navbar-expand-lg navbar-dark gradient-background" style="height: 100px">
+    <nav class="navbar navbar-expand-lg navbar-dark gradient-background">
       <div class="container-fluid">
         <a class="navbar-brand" href="">
           <!-- <img

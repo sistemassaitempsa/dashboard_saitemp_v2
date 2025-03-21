@@ -3,6 +3,12 @@
     <h2>Módulo cliente</h2>
     <div class="card p-3">
       <form class="was-validated" @submit.prevent="save()">
+        <div class="row" v-if="props.userlogued.tipo_usuario_id == 1 && route.path.includes('/cliente')">
+          <div class="col-6 mb-3">
+            <label for="nit" class="form-label">Buscar por Nit/Documento:</label>
+            <input type="text" class="form-control" id="nit" aria-describedby="emailHelp" v-model="consulta_nit" required />
+          </div>
+        </div>
         <div class="row">
           <div class="col">
             <div class="mb-3">
@@ -16,7 +22,7 @@
           <div class="col">
             <div class="mb-3">
               <label for="nit" class="form-label">Nit</label>
-              <input type="text" class="form-control" id="nit" aria-describedby="emailHelp" v-model="nit" required />
+              <input type="text" class="form-control" id="nit" aria-describedby="emailHelp" v-model="nit" disabled />
             </div>
           </div>
           <div class="col">
@@ -68,7 +74,7 @@
             </div>
           </div>
         </div>
-        <div class="row">
+        <div class="row" v-if="props.userlogued.tipo_usuario_id == 1">
           <div class="col mb-3" id="no-sede" tabindex="0">
             <SearchList nombreCampo="Rol*" @getRoles="getRoles" eventoCampo="getRoles" nombreItem="nombre"
               :registros="roles" placeholder="Seleccione una opción" :consulta="consulta_rol" />
@@ -82,13 +88,13 @@
           </div>
         </div>
         <div class="row">
-          <div class="col">
+          <div class="col" v-if="props.userlogued.tipo_usuario_id == 1 && route.path.includes('/cliente')">
             <button type="button" class="btn btn-success" @click="consultaCliente">
               Consultar cliente
             </button>
           </div>
           <div class="col">
-            <button type="submit" class="btn btn-success">Guardar</button>
+            <button type="submit" class="btn btn-success" :disabled="habilita_guardado">Guardar</button>
           </div>
         </div>
       </form>
@@ -104,9 +110,16 @@ import { useConfig } from "../composables/token"; // Asegúrate de ajustar la ru
 import SearchList from "./SearchList.vue";
 import { Alerts } from "../composables/Alerts";
 import { useRoute } from "vue-router";
+import { defineProps } from 'vue';
+
+
+const props = defineProps({
+  userlogued: { type: Object, default: () => { } }
+});
 
 const { URL_API, configHeader } = useConfig();
 const { showAlert } = Alerts();
+let usuario_id = ref("");
 let nit = ref("");
 let razon_social = ref("");
 let usuario = ref("");
@@ -123,6 +136,9 @@ let estado_id = ref("");
 let nombre_contacto = ref("");
 let telefono_contacto = ref("");
 let cargo_contacto = ref("");
+let consulta_nit = ref("");
+let cliente_id = ref("");
+let habilita_guardado = ref(true);
 const route = useRoute();
 
 getRoles();
@@ -155,15 +171,17 @@ function save() {
 
 function crearObjetoFormulario() {
   let formulario = {
+    usuario_id: usuario_id.value,
     nombres: razon_social.value,
     email: correo.value,
-    password: nit.value,
+    password: contrasena.value,
     rol_id: rol_id.value,
-    estado_id:  estado_id.value,
+    estado_id: estado_id.value,
     nit: nit.value,
     nombre_contacto: nombre_contacto.value,
     telefono_contacto: telefono_contacto.value,
     cargo_contacto: cargo_contacto.value,
+    cliente_id : cliente_id.value
   };
   return formulario;
 }
@@ -181,6 +199,7 @@ function llenarFormulario(formulario) {
   nombre_contacto.value = formulario.nombre_contacto
   telefono_contacto.value = formulario.telefono_contacto
   cargo_contacto.value = formulario.cargo_contacto
+  habilita_guardado = false
 }
 
 function getRoles(item = null) {
@@ -207,14 +226,29 @@ function getEstados(item = null) {
 function consultaCliente() {
   axios
     .get(
-      URL_API.value + "api/v1/formularioclientenit/" + nit.value,
+      URL_API.value + "api/v1/formularioclientenit/" + consulta_nit.value,
       configHeader()
     )
     .then(function (result) {
-      razon_social.value = result.data.razon_social;
-      usuario.value = result.data.nit;
-      consulta_rol.value = "Cliente";
-      consulta_estado.value = "Activo";
+      if(Object.keys(result.data).length <= 0){
+        showAlert('No se encontraron registros de cliente.', 'error');
+        usuario_id.value ='';
+        razon_social.value = '';
+        nit.value = '';
+        usuario.value ='';
+        consulta_rol.value = '';
+        consulta_estado.value = '';
+        habilita_guardado.value = true
+      }else{
+        usuario_id.value = result.data.id;
+        razon_social.value = result.data.razon_social;
+        nit.value = result.data.nit;
+        usuario.value = result.data.nit;
+        consulta_rol.value = "Cliente";
+        consulta_estado.value = "Activo";
+        habilita_guardado.value = false
+        cliente_id.value = result.data.id
+      }
     });
 }
 

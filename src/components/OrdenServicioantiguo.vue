@@ -1690,14 +1690,14 @@ export default {
               result.data.nit != '' &&
               self.$route.params.id == ''
             ) {
-              self.showAlertConfirm(self.mensaje_cliente, "success");
+              self.showAlertConfirm(self.mensaje_cliente,'', "success");
               self.cliente_existe = true;
               return;
             } else if (
               result.data.numero_identificacion != '' &&
               self.$route.params.id == ''
             ) {
-              self.showAlertConfirm(self.mensaje_cliente, "success");
+              self.showAlertConfirm(self.mensaje_cliente,'', "success");
               self.cliente_existe = true;
               return;
             } else {

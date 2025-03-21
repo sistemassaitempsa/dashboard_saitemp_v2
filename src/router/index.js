@@ -60,6 +60,10 @@ import InicioSesionCandidatos from "@/components/InicioSesionCandidatos.vue";
 import RecoverPassword from "@/components/RecoverPassword.vue";
 import Cliente from '../components/Cliente.vue';
 import FormularioInfoCandidatos from "@/components/FormularioInfoCandidatos.vue";
+import SectorEconomico from "@/components/SectorEconomico.vue";
+import SectorECiiu from "@/components/SectorECiiu.vue";
+import ProfesionalSector from "@/components/ProfesionalSector.vue";
+import AsignacionServicio from "@/components/AsignacionServicio.vue";
 
 
 // Configuración de rutas
@@ -368,6 +372,26 @@ const routes = [
         path: "cliente/:id?",
         name: "cliente",
         component: Cliente,
+      },
+      {
+        path: "sector-economico/:?",
+        name: "sector-economico",
+        component: SectorEconomico,
+      },
+      {
+        path: "sectore-ciiu",
+        name: "sectore-ciiu",
+        component: SectorECiiu,
+      },
+      {
+        path: "profesional-sector",
+        name: "profesional-sector",
+        component: ProfesionalSector,
+      },
+      {
+        path: "asignacion-servicio",
+        name: "asignacion-servicio",
+        component: AsignacionServicio,
       },
     ],
   },
