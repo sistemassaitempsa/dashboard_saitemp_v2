@@ -46,10 +46,6 @@ export default {
         if (item.id == estado.id) {
           item.activo = "1";
         }
-        // if(item.activo == estado.activo){
-        //     console.log('prueba',estado)
-        //     item.activo = '0'
-        // }
       });
 
       this.$emit("estado", estado);

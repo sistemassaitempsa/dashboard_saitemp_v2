@@ -4,6 +4,7 @@
     <h2>Registro de ingresos</h2>
     <Tabla
       :datos="datos"
+      :filtro_visible="true"
       :tabla="tabla"
       :userlogued="userlogued"
       :endpoint="endpoint"
@@ -14,6 +15,7 @@
       @actualizaResponsable="actualizaResponsable"
       @filtrando="filtrando"
       @filtrarFechaIngreso="filtroFechaIngreso"
+      :label_accion="true"
     />
   </div>
 </template>

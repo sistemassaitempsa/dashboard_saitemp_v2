@@ -250,10 +250,10 @@ export default {
 
   created() {
     this.urlExterna();
-    if (this.$route.params.id != '') {
+    if (this.$route.params.id != undefined) {
       this.getUser();
+      this.userLogued();
     }
-    this.userLogued();
     this.getRoles();
     this.getEstados();
   },
@@ -276,7 +276,7 @@ export default {
       this.file.forEach(function (item, index) {
         form.append("archivo" + index, item);
       });
-      if (this.$route.params.id != '') {
+      if (this.$route.params.id != "") {
         form.append("estado_id", this.estadoId_);
         form.append("id_user", this.$route.params.id);
         accion = "user";
@@ -334,25 +334,22 @@ export default {
         .get(self.URL_API + "api/v1/userbyid/" + self.$route.params.id, config)
         .then(function (result) {
           self.nombres =
-            result.data[0].nombres != "null" ? result.data[0].nombres : "";
+            result.data.nombres != "null" ? result.data.nombres : "";
           self.apellidos =
-            result.data[0].apellidos != "null" ? result.data[0].apellidos : "";
-          self.usuario = result.data[0].usuario;
+            result.data.apellidos != "null" ? result.data.apellidos : "";
+          self.usuario = result.data.correo;
           self.email =
-            result.data[0].email != "null" ? result.data[0].email : "";
-          self.rol = result.data[0].rol;
-          self.estado = result.data[0].estado;
-          self.estadoId_ = result.data[0].id_estado;
-          self.rolId_ = result.data[0].id_rol;
+            result.data.email != "null" ? result.data.email : "";
+          self.rol = result.data.rol;
+          self.estado = result.data.estado;
+          self.estadoId_ = result.data.estado_id;
+          self.rolId_ = result.data.rol_id;
           self.documento_identidad =
-            result.data[0].documento_identidad != "null"
-              ? result.data[0].documento_identidad
+            result.data.documento_identidad != "null"
+              ? result.data.documento_identidad
               : "";
           self.loading = false;
         })
-        .catch(function () {
-          // self.$router.push("/");
-        });
     },
     userLogued() {
       let self = this;
@@ -360,7 +357,7 @@ export default {
       axios
         .get(self.URL_API + "api/v1/userlogued", config)
         .then(function (result) {
-          self.roluserlogued = result.data[0].rol;
+          self.roluserlogued = result.data.rol;
         })
         .catch(function (error) {
           if (error.response.data == "Unauthorized.") {
@@ -377,9 +374,6 @@ export default {
         .then(function (result) {
           self.roles = result.data;
         })
-        .catch(function () {
-          // self.$router.push("/");
-        });
     },
     getEstados() {
       let self = this;
@@ -389,9 +383,6 @@ export default {
         .then(function (result) {
           self.estados = result.data;
         })
-        .catch(function () {
-          // self.$router.push("/");
-        });
     },
     cargarArchivo(event) {
       var self = this;
