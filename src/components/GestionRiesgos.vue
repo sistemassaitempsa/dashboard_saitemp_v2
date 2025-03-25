@@ -1145,7 +1145,7 @@ export default {
       },
       deep: true,
     },
-   
+
     indice() {
       this.contador = 2;
       this.setIndice();

@@ -15,13 +15,13 @@ import Tiptap from "./Tiptap.vue";
 export default {
   components: {
     // VueEditor,
-    Tiptap
+    Tiptap,
   },
   props: {
     enviar_correo: {},
     index: {
-      type: Boolean,
-      default: false,
+      type: Number,
+      default: 0,
     },
     // showToolbar: {
     //   type: Boolean,

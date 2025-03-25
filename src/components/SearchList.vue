@@ -18,7 +18,6 @@
           class="form-control"
           @blur="validarSeleccion()"
           :placeholder="placeholder"
-          aria-describedby="emailHelp"
           v-model="registro"
           :disabled="disabled"
           :required="valida_campo"

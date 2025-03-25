@@ -1,25 +1,25 @@
 // Mixin para retornar el token de usuario
 export const Token = {
-  data () {
+  data() {
     return {};
   },
   methods: {
-    urlExterna () {
+    urlExterna() {
       const urlCompleta = window.location.href;
-      if (urlCompleta.includes ('debidadiligencia.saitempsa.com')) {
+      if (urlCompleta.includes("debidadiligencia")) {
         this.URL_API =
-          'https://debidadiligencia.saitempsa.com:8484/aplicaciones/api/public/';
+          "https://debidadiligencia.saitempsa.com:8484/aplicaciones/api/public/";
       }
     },
-    configHeader () {
+    configHeader() {
       let config = {
         headers: {
-          Authorization: 'Bearer ' + localStorage.getItem ('access_token'),
+          Authorization: "Bearer " + localStorage.getItem("access_token"),
         },
       };
       return config;
     },
   },
   computed: {},
-  created () {},
+  created() {},
 }; // MiMixin.js

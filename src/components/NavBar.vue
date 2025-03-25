@@ -1,10 +1,7 @@
 <template>
   <div v-if="autoriced">
     <NotificacionesSocket />
-    <nav
-      class="navbar navbar-expand-lg navbar-dark gradient-background"
-      style="heigth: 100px"
-    >
+    <nav class="navbar navbar-expand-lg navbar-dark gradient-background">
       <div class="container-fluid">
         <a class="navbar-brand" href="">
           <!-- <img
@@ -48,7 +45,7 @@
               :style="actualizacion ? 'padding-top: 15px' : ''"
             >
               <router-link class="nav-link active" to=""
-                >{{ saludo }} {{ userlogued.nombres }}</router-link
+                >{{ saludo }} {{ nombre }}</router-link
               >
             </li>
             <li>
@@ -156,6 +153,7 @@
       :class="{ ancho_componente: anchocomponente }"
       :userlogued="userlogued"
       :menu="menu"
+      :user_type="user_type"
       @getMenu="getMenu"
       :actualizacion="actualizacion"
     />
@@ -180,12 +178,14 @@ export default {
   mixins: [Token, Alerts, Permisos],
   data() {
     return {
+      user_type: "",
       username: "",
       collapse: false,
       expand: false,
       saludo: "Bienvenido",
       ruta: "",
       menu: [],
+      nombre: "",
       userlogued: { nombres: "", rol: "" },
       logo: [],
       user_id: "",
@@ -203,7 +203,7 @@ export default {
         seconds: "Segundos",
       },
       actualizacion: true,
-      documento_identidad:'',
+      documento_identidad: "",
     };
   },
   watch: {
@@ -259,7 +259,8 @@ export default {
                 newPath.includes("empleado") ||
                 newPath.includes("editarUsuario") ||
                 newPath.includes("timeLine") ||
-                newPath.includes("landing")
+                newPath.includes("landing") ||
+                newPath.includes("formularioinfocandidato")
               ) {
                 bandera = true;
               }
@@ -276,22 +277,12 @@ export default {
       this.collapse = !this.collapse;
     },
     logout() {
-      this.$router.push({ name: "login" });
+      if (this.userlogued.tipo_usuario_id == "3") {
+        this.$router.push({ name: "loginCandidatos" });
+      } else {
+        this.$router.push({ name: "login" });
+      }
       localStorage.removeItem("access_token");
-      // let config = this.configHeader();
-      // let self = this
-      // axios
-      //   .post(self.URL_API+"api/v1/logout", config)
-      //   .then(function (result) {
-      //     localStorage.removeItem("access_token");
-      //     self.$router.push({ name: "login"});
-      //       console.log('error',result);
-      //   }).catch(function (error) {
-      //     if (error.response.data == "Unauthorized"){
-      //     self.$router.push("login");
-      //     localStorage.removeItem("access_token");
-      //     }
-      //   });
     },
     ocultarMenu() {
       var menu = document.getElementsByClassName("aside")[0];
@@ -304,45 +295,45 @@ export default {
       this.menu_lateral = !this.menu_lateral;
       localStorage.setItem("menu_lateral", this.menu_lateral);
     },
+
     actualizar() {
-      // if( userlogued.rol != 'Cliente'){
-
-      // }else{
-
-      // }
-      let ruta = "";
-      let id = "";
-      if (this.permisos[34].autorizado) {
-        ruta = "editarUsuario";
-        id = this.user_id;
-      } else {
-        ruta = "cliente";
-        id = this.documento_identidad;
-      }
       this.$router.push({
-        name: ruta,
-        params: { id: id },
+        name: "editarUsuario",
+        params: { tipo: this.user_type, id: this.user_id },
       });
     },
-    userLogued() {
+    configuraUsuario(data) {
+      let self = this;
+      self.userlogued = data;
+      if (data.tipo_usuario_id == "3") {
+        self.nombre = data.primer_nombre + " " + data.primer_apellido;
+      } else if (data.tipo_usuario_id == "1") {
+        self.nombre = data.nombres + " " + data.apellidos;
+      } else {
+        self.nombre = data.nombres;
+      }
+      self.user_type = data.tipo_usuario_id;
+      self.user_id = data.usuario_id;
+      self.autoriced = true;
+      self.getMenu();
+    },
+    async userLogued() {
       let self = this;
       let config = this.configHeader();
-      axios
-        .get(self.URL_API + "api/v1/userlogued", config)
-        .then(function (result) {
-          if (result.data[0] != undefined) {
-            self.userlogued = result.data[0];
-            self.user_id = result.data[0].usuario_id;
-            self.documento_identidad = result.data[0].documento_identidad;
-            self.autoriced = true;
-            self.getMenu();
-          } else {
-            self.$router.push("/");
-          }
-        })
-        .catch(function () {
+      try {
+        const response = await axios.get(
+          self.URL_API + "api/v1/userlogued",
+          config
+        );
+        if (response.data) {
+          self.configuraUsuario(response.data);
+        } else {
           self.$router.push("/");
-        });
+        }
+      } catch (error) {
+        console.log(error);
+        self.$router.push("/");
+      }
     },
     getMenu() {
       let self = this;

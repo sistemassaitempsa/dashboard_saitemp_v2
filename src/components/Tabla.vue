@@ -953,6 +953,26 @@
                 Ver registro
               </button>
             </td>
+            <td v-if="ruta == '/navbar/formularioinfocandidatoTabla'">
+              <button
+                type="button"
+                class="btn btn-success btn-sm"
+                @click="verCandidato(item)"
+                v-if="item.nombre != 'S. Administrador'"
+              >
+                Ver registro
+              </button>
+            </td>
+            <td v-if="ruta == '/navbar/consultatodoscentrosdetrabajo'">
+              <button
+                type="button"
+                class="btn btn-success btn-sm"
+                @click="verContrato2(item)"
+                v-if="item.nombre != 'S. Administrador'"
+              >
+                Ver registro
+              </button>
+            </td>
             <td v-if="ruta == '/navbar/ingresos-pendientes'">
               <button
                 type="button"
@@ -1416,6 +1436,8 @@ export default {
       analista: [],
       loading: false,
       columnaOculta: [
+        "cliente_id",
+        "usuario_id",
         "color_estado_firma",
         "nombre_estado_firma",
         "responsable",
@@ -1714,6 +1736,10 @@ export default {
       } else if (this.ruta.includes("crm-seguimiento")) {
         return true;
       } else if (this.ruta.includes("lista-riesgos")) {
+        return true;
+      } else if (this.ruta.includes("formularioinfocandidatoTabla")) {
+        return true;
+      } else if (this.ruta.includes("consultatodoscentrosdetrabajo")) {
         return true;
       }
     },
@@ -2244,10 +2270,22 @@ export default {
         params: { id: item.id },
       });
     },
+    verContrato2(item) {
+      this.$router.push({
+        name: "debida-diligencia/formulario-clientes",
+        params: { id: item.cliente_id },
+      });
+    },
     verFormularioSuper(item) {
       this.$router.push({
         name: "formulario-supervision",
         params: { id: item.id },
+      });
+    },
+    verCandidato(item) {
+      this.$router.push({
+        name: "formularioinfocandidato",
+        params: { id: item.usuario_id },
       });
     },
     verOrdenServicio(item) {

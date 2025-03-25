@@ -219,27 +219,17 @@ export default {
 
       if (filtroSeleccionado) {
         // Asigna las comparaciones y el tipo del filtro seleccionado
-        this.$set(this.filtrosDinamicos[index], "valor_ingresado", "" || []);
-        this.$set(
-          this.filtrosDinamicos[index],
-          "comparaciones",
-          filtroSeleccionado.opciones || []
-        );
-        this.$set(
-          this.filtrosDinamicos[index],
-          "opciones_select",
-          filtroSeleccionado.opciones_select || []
-        );
-        this.$set(
-          this.filtrosDinamicos[index],
-          "type",
-          filtroSeleccionado.type || "text"
-        );
+        this.filtrosDinamicos[index].valor_ingresado = "" || [];
+        this.filtrosDinamicos[index].comparaciones =
+          filtroSeleccionado.opciones || [];
+        this.filtrosDinamicos[index].opciones_select =
+          filtroSeleccionado.opciones_select || [];
+        this.filtrosDinamicos[index].type = filtroSeleccionado.type || "text";
       } else {
         // Restablece comparaciones y tipo si no se encuentra un filtro válido
-        this.$set(this.filtrosDinamicos[index], "comparaciones", []);
-        this.$set(this.filtrosDinamicos[index], "valor_ingresado", "");
-        this.$set(this.filtrosDinamicos[index], "type", "text");
+        this.filtrosDinamicos[index].comparaciones = [];
+        this.filtrosDinamicos[index].valor_ingresado = "";
+        this.filtrosDinamicos[index].type = "text";
       }
 
       // Reinicia el valor de la comparación seleccionada
