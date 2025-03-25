@@ -3,17 +3,9 @@
     <Loading :loading="loading" />
     <NotificacionesSocket />
     <h2>Debida diligencia clientes</h2>
-    <Tabla
-      :datos="datos"
-      :tabla="tabla"
-      :userlogued="userlogued"
-      :endpoint="endpoint"
-      :listas="listas"
-      :endpointexport="endpointexport"
-      :estados_firma="estados_firma"
-      @actualizaResponsableDD="actualizaResponsableDD"
-      @actualizaEstadoPadre="actualizaEstado"
-    />
+    <Tabla :datos="datos" :tabla="tabla" :userlogued="userlogued" :endpoint="endpoint" :listas="listas"
+      :endpointexport="endpointexport" :estados_firma="estados_firma" @actualizaResponsableDD="actualizaResponsableDD"
+      @actualizaEstadoPadre="actualizaEstado" :filtro_visible="true" :acciones="acciones" @accion="accion" :checked="false" :label_accion="true"/>
   </div>
 </template>
 <script>
@@ -103,11 +95,16 @@ export default {
       listas: [],
       estados_firma: [],
       first_page_url: "",
+      acciones: [
+        {
+          nombre: "ver registro",
+        },
+      ],
     };
   },
   computed: {},
   watch: {},
-  mounted() {},
+  mounted() { },
   created() {
     this.urlExterna();
     this.getEstadosFirma();
@@ -116,6 +113,12 @@ export default {
     this.getEjecutivosComerciales();
   },
   methods: {
+    accion(item) {
+      this.$router.push({
+        name: "debida-diligencia/formulario-clientes",
+        params: { id: item.id },
+      });
+    },
     actualizaResponsableDD(
       item_id,
       responsable_id,
@@ -139,12 +142,12 @@ export default {
       axios
         .get(
           self.URL_API +
-            "api/v1/actualizaResponsableCliente/" +
-            item_id +
-            "/" +
-            responsable_id +
-            "/" +
-            responsable_ingreso,
+          "api/v1/actualizaResponsableCliente/" +
+          item_id +
+          "/" +
+          responsable_id +
+          "/" +
+          responsable_ingreso,
           config
         )
         .then(function (result) {
@@ -179,12 +182,12 @@ export default {
       axios
         .get(
           self.URL_API +
-            "api/v1/actualizaestadofirma/" +
-            item_id +
-            "/" +
-            estado +
-            "/" +
-            responsable_id,
+          "api/v1/actualizaestadofirma/" +
+          item_id +
+          "/" +
+          estado +
+          "/" +
+          responsable_id,
           config
         )
         .then(function (result) {

@@ -58,11 +58,17 @@ import EstadosDebidaDIligenciaAdmin from "../components/EstadosDebidaDiligenciaA
 import EditarCliente from "../components/EditarCliente.vue";
 import InicioSesionCandidatos from "@/components/InicioSesionCandidatos.vue";
 import RecoverPassword from "@/components/RecoverPassword.vue";
+import Cliente from '../components/Cliente.vue';
 import FormularioInfoCandidatos from "@/components/FormularioInfoCandidatos.vue";
 import Cliente from "../components/Cliente.vue";
 import ResetPasswordView from "@/views/ResetPasswordView.vue";
 import ConsultaFormularioCandidatos from "@/components/ConsultaFormularioCandidatos.vue";
 import TablaCentrosDeTrabajo from "@/components/TablaCentrosDeTrabajo.vue";
+import SectorEconomico from "@/components/SectorEconomico.vue";
+import SectorECiiu from "@/components/SectorECiiu.vue";
+import ProfesionalSector from "@/components/ProfesionalSector.vue";
+import AsignacionServicio from "@/components/AsignacionServicio.vue";
+
 
 // Configuración de rutas
 const routes = [
@@ -95,28 +101,13 @@ const routes = [
   {
     path: "/:pathMatch(.*)*",
     name: "catchAll",
-    component: InicioSesionCandidatos,
+    component: InicioSesion,
   },
   {
     path: "/navbar",
     name: "navbar",
     component: NavBar,
     children: [
-      {
-        path: "formularioinfocandidato/:id?",
-        name: "formularioinfocandidato",
-        component: FormularioInfoCandidatos,
-      },
-      {
-        path: "formularioinfocandidatoTabla",
-        name: "formularioinfocandidatoTabla",
-        component: ConsultaFormularioCandidatos,
-      },
-      {
-        path: "consultatodoscentrosdetrabajo",
-        name: "consultatodoscentrosdetrabajo",
-        component: TablaCentrosDeTrabajo,
-      },
       {
         path: "editarUsuario/:tipo?/:id",
         name: "editarUsuario",
@@ -386,6 +377,26 @@ const routes = [
         path: "cliente/:id?",
         name: "cliente",
         component: Cliente,
+      },
+      {
+        path: "sector-economico/:?",
+        name: "sector-economico",
+        component: SectorEconomico,
+      },
+      {
+        path: "sectore-ciiu",
+        name: "sectore-ciiu",
+        component: SectorECiiu,
+      },
+      {
+        path: "profesional-sector",
+        name: "profesional-sector",
+        component: ProfesionalSector,
+      },
+      {
+        path: "asignacion-servicio",
+        name: "asignacion-servicio",
+        component: AsignacionServicio,
       },
     ],
   },

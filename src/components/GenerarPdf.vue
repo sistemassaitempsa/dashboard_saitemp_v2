@@ -1266,7 +1266,6 @@ export default {
       this.agregarPasosProcedimiento(); // agrega pasos de procedimiento de manera dinámica al pdf
       this.agregarEmpleado(); // agrega empleados de manera dinámica al pdf
       this.agregarFirmasEncargados(); // agrega las firmas al pie del documento de forma dinámica para validar si vienen vacías
-      // console.log(this.docDefinition.content[0].table.body) //descomentar para ver el array completo del pdf con sus respectivas posiciones
       pdfMake.createPdf(this.docDefinition).open();
     },
   },

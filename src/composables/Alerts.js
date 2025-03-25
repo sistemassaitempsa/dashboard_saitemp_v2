@@ -12,7 +12,18 @@ export function Alerts() {
     });
   };
 
+
+  const confirmAlert = (titulo, mensaje, icono) => {
+    Swal.fire({
+      position: 'top',
+      icon: icono,
+      title: titulo,
+      text: mensaje,
+    });
+  };
+
+
   return {
-    showAlert,
+    showAlert,confirmAlert
   };
 }

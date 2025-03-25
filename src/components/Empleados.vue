@@ -22,13 +22,13 @@
             <h5> Empleado: {{ user_name.nombre }} - {{ user_name.cod_emp }}</h5>
         </div>
         <Tabla :datos="datos" :search="search" :tabla="tabla" :endpoint="endpoint" :massiveUpdate="massiveUpdate"
-            :campos="campos" @response="response" @clear="clear" @check="check" @getUser="getUser" />
+            :campos="campos" @response="response" @clear="clear" @check="check" @getUser="getUser" :checked="false" />
     </div>
 </template>
 <script>
 import axios from 'axios'
 import Tabla from './Tabla.vue';
-import {Token} from '../Mixins/Token'
+import { Token } from '../Mixins/Token'
 // import ReporteWeb from './ReporteWeb.vue';
 export default {
     components: {
@@ -59,7 +59,7 @@ export default {
                 { nombre: "Analista", orden: "DESC", tipo: "texto", calculado: 'false' },
             ],
             download_excel: false,
-            user_name: ''
+            user_name: '',
         }
     },
     computed: {
@@ -69,7 +69,7 @@ export default {
 
     },
     mounted() {
-        this.search = this.$route.params.id == '' ? undefined:this.$route.params.id
+        this.search = this.$route.params.id == '' ? undefined : this.$route.params.id
         this.getUser(this.search)
     },
     methods: {
@@ -142,7 +142,7 @@ export default {
     },
 };
 </script>
-<style  scoped>
+<style scoped>
 h2 {
     font-family: "Montserrat", sans-serif;
     margin: 20px 0px 20px 0px;

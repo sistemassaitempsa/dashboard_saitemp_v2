@@ -1,162 +1,152 @@
 <template>
-  <div class="container">
-    <h2>Lista servicios</h2>
-    <FiltrosTabla
-      @enviarFiltros="aplicarFiltro"
-      :filtros="filtros"
-      @borrarBusqueda="aplicarFiltro"
-      @descargarExcel="descargarExcel"
-    />
-    <div class="col animationHistorico">
-      <TablaHistoricoEstados
-        :columnasocultas="columnasocultas"
-        :datosformateados="datosformateados"
-        :total_registros="total_registros_pie"
-        :columnas="columnas"
-        :acciones="acciones"
-        :linkRegistro="'/navbar/debida-diligencia/formulario-clientes/'"
-        @cantidadRegistros="cantidadRegistrosLista"
-      ></TablaHistoricoEstados>
-      <TablaPaginador
-        :pagination="pagination"
-        @navigate="(url, page_label) => getDatos(url, page_label)"
-      />
+    <div class="container">
+        <h2>Lista servicios</h2>
+        <Tabla :datos="datos" :tabla="tabla" :endpoint="endpoint" :endpointexport="endpointexport" :acciones="acciones"
+            @accion="accion" :filtro_visible="true" :checked="false" :label_accion="true" />
     </div>
-  </div>
 </template>
 
 <script setup>
-import { onMounted } from "vue";
-import { ref, computed } from "vue";
+import { ref, defineProps, onMounted } from "vue";
 import axios from "axios";
 import { useConfig } from "../composables/token"; // Asegúrate de ajustar la ruta
-import TablaHistoricoEstados from "./TablaHistoricoEstados.vue";
-import TablaPaginador from "./TablaPaginador.vue";
-import FiltrosTabla from "./FiltrosTabla.vue";
-import { useRoute } from "vue-router";
+import Tabla from "./Tabla.vue";
+import { useRouter } from "vue-router";
 
+const router = useRouter();
 const { URL_API, configHeader } = useConfig();
-// const items = ref([]); // Tu lista de items
+
+const props = defineProps({
+    userlogued: Object
+});
+
 let datos = ref([]);
-let columnas = ref([
-  "Número radicado",
-  "Fecha radicado",
-  "Radicador",
-  "Fecha inicio",
-  "Fecha fin",
-  "linea_servicio",
-  "ciudad prestacion_servicio",
-  // "Nombre contacto",
-  // "Teléfono contacto",
-  // "Cargo",
-  "Motivo servicio",
+let endpoint = ref('ordenservicio');
+let endpointexport = ref('ordenservicio');
+let tabla = ref([
+    { nombre: "#", orden: "DESC" },
+    {
+        nombre: "Radicado",
+        orden: "DESC",
+        tipo: "texto",
+        calculado: "false",
+    },
+    {
+        nombre: "Fecha radicado",
+        orden: "DESC",
+        tipo: "texto",
+        calculado: "false",
+    },
+    {
+        nombre: "radicador",
+        orden: "DESC",
+        tipo: "texto",
+        calculado: "false",
+    },
+    {
+        nombre: "fecha inicio",
+        orden: "DESC",
+        tipo: "texto",
+        calculado: "false",
+    },
+    {
+        nombre: "fecha fin",
+        orden: "DESC",
+        tipo: "texto",
+        calculado: "false",
+    },
+    {
+        nombre: "Linea servicio",
+        orden: "DESC",
+        tipo: "texto",
+        calculado: "false",
+    },
+    {
+        nombre: "Ciudad prestación servicio",
+        orden: "DESC",
+        tipo: "texto",
+        calculado: "false",
+    },
+    {
+        nombre: "Motivo servicio",
+        orden: "DESC",
+        tipo: "texto",
+        calculado: "false",
+    },
+    {
+        nombre: "Cantidad contrataciones",
+        orden: "DESC",
+        tipo: "texto",
+        calculado: "false",
+    },
+    {
+        nombre: "salario",
+        orden: "DESC",
+        tipo: "texto",
+        calculado: "false",
+    },
 ]);
-// const page_label = ref("");
-const pagination = ref({});
-// const historicoToggle = ref(true);
-const filtros = ref([
-  {
-    value: "radicado",
-    label: "Radicado",
-    opciones: ["Igual a", "Contiene"],
-    type: "text",
-  },
-  //   {
-  //     value: "responsable_final",
-  //     label: "Responsable",
-  //     opciones: ["Contiene"],
-  //     type: "select",
-  //     opciones_select: [],
-  //   },
-  //   {
-  //     value: "nombre_estado",
-  //     label: "Estado",
-  //     opciones: ["Igual a"],
-  //     type: "select",
-  //     opciones_select: [],
-  //   },
-  //   {
-  //     value: "created_at",
-  //     label: "Fecha creación",
-  //     opciones: ["Igual a", "Entre"],
-  //     type: "date",
-  //   },
-  //   {
-  //     value: "updated_at",
-  //     label: "Fecha finalización",
-  //     opciones: ["Igual a", "Entre"],
-  //     type: "date",
-  //   },
-  //   {
-  //     value: "tiempo",
-  //     label: "Tiempo",
-  //     opciones: ["Igual a", "Entre"],
-  //     type: "text",
-  //   },
-  //   {
-  //     value: "oportuno",
-  //     label: "Oportuno",
-  //     opciones: ["Igual a"],
-  //     type: "select",
-  //     opciones_select: ["Si", "No", "Estado pendiente"],
-  //   },
+const acciones = ref([
+    {
+        nombre: "ver registro",
+        url: 'orden-servicio/',
+        accion: '1'
+    }
 ]);
 
 onMounted(() => {
-  const route = useRoute();
-  let url;
-  if (route.params.id != "") {
-    url = URL_API.value + "api/v1/ordenservicio/" + route.params.id;
-  } else {
-    url = URL_API.value + "api/v1/ordenservicio";
-  }
-  axios.get(url, configHeader()).then(function (result) {
-    datos.value = result.data;
-  });
+    getItems()
+    botonCrearRadicado()
 });
 
-const columnasocultas = computed(() =>
-  datos.value.map((item) => ({
-    id: item.id,
-  }))
-);
+function botonCrearRadicado() {
+    // Esta función agrega la opción para ver el botón de crear radicado solo para usuarios internos de saitemp con el permiso
+    if (props.userlogued.tipo_usuario_id == 1) {
+        acciones.value.push({
+            nombre: "Crear radicado",
+            url: 'gestion-ingresos',
+            accion: "2"
+        })
+    }
+}
 
-const datosformateados = computed(() =>
-  datos.value.map((item) => ({
-  numero_radicado: item.numero_radicado,
-  fecha_radicado: formatearFecha(item.created_at),
-  radicador: item.radicador,
-  fecha_inicio: formatearFecha(item.fecha_inicio),
-  fecha_fin: formatearFecha(item.fecha_fin),
-  linea_servicio: item.linea_servicio,
-  ciudad_prestacion_servicio: item.ciudad_prestacion_servicio,
-  motivo_servicio: item.motivo_servicio,
-  nombre_contacto: item.nombre_contacto,
-  telefono_contacto: item.telefono_contacto,
-  cargo: item.Cargo,
-  }))
-);
 
-const formatearFecha = (fecha) => {
-  return new Date(fecha).toLocaleDateString();
-};
+function getItems() {
+    axios.get(URL_API.value + 'api/v1/ordenservicio/10', configHeader()).then(function (result) {
+        datos.value = result;
+    });
+}
+
+function accion(item, opcion) {
+    switch (opcion.accion) {
+        case '1':
+            // Redirije al componente con el id del registro en la url
+            router.push(opcion.url + item.id);
+            break;
+        case '2':
+            // Redirije al componente con el objeto del registro oculto
+            router.push({
+                path: opcion.url,
+                state: item
+            });
+            break;
+    }
+}
 
 
 </script>
 <style scoped>
 .card {
-  /* height: 520px; */
-  margin: auto;
-  padding: 20px;
-  /* background-color: rgba(239, 237, 237, 0.642); */
-  min-width: 350px;
-  margin-bottom: 30px;
-  box-shadow: rgba(0, 0, 0, 0.25) 0px 14px 28px,
-    rgba(0, 0, 0, 0.22) 0px 10px 10px;
+    margin: auto;
+    padding: 20px;
+    min-width: 350px;
+    margin-bottom: 30px;
+    box-shadow: rgba(0, 0, 0, 0.25) 0px 14px 28px,
+        rgba(0, 0, 0, 0.22) 0px 10px 10px;
 }
 
 h2 {
-  font-family: "Montserrat", sans-serif;
-  margin: 20px 0px 20px 0px;
+    font-family: "Montserrat", sans-serif;
+    margin: 20px 0px 20px 0px;
 }
 </style>

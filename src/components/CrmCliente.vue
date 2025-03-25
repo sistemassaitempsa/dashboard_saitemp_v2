@@ -1739,7 +1739,6 @@ export default {
     },
     /* funcion para cambiar el estado de cada "pad" */
     signature(array, index) {
-      console.log(array);
       array.forEach((asistencia) => {
         asistencia.show_pad = false;
       });
@@ -2009,7 +2008,6 @@ export default {
       this.compromisos.forEach((item, index) => {
         // Usar Vue.set para garantizar reactividad
         const fechaFormateada = this.formateoFechaSinHora(item.fecha_cierre);
-        console.log(fechaFormateada);
         if (fechaFormateada) {
           this.compromisos[index] = {
             ...item,
@@ -2352,10 +2350,7 @@ export default {
       return correosResponsables;
     },
     crearFormulario() {
-      console.log(this.asistencias);
-
       const formulario = new FormData();
-
       // Creacion del formulario con los datos que no corresponden a visita
       formulario.append("nombre_contacto", this.nombre_contacto);
       formulario.append("latitud", this.latitud);

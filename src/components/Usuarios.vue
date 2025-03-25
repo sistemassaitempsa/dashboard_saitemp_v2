@@ -68,6 +68,13 @@
           </select>
         </div>
         <div class="col-xs-3 col-md-4">
+          <label for="exampleFormControlInput1" class="form-label">Tipo de usuario a listar</label>
+          <select class="form-select form-select-sm" @change="getUsers(tipo_usuario_id)" v-model="tipo_usuario_id"
+            aria-label="Default select example">
+            <option v-for="item in tipos_usuarios" :key="item" :value ="item.id">{{ item.nombre }}</option>
+          </select>
+        </div>
+        <div class="col-xs-3 col-md-4">
           <label for="exampleFormControlInput1" class="form-label"
             >Tipo de usuario a listar</label
           >
@@ -116,44 +123,26 @@
               <td>{{ item.estado }}</td>
               <td>{{ item.rol }}</td>
               <td>
-                <button
-                  type="button"
-                  v-if="item.rol != 'S. Administrador'"
-                  class="btn btn-warning btn-sm"
-                  @click="actualizar(item.usuario_id, item.tipo_usuario_id)"
-                >
+                <button type="button" v-if="item.rol != 'S. Administrador'" class="btn btn-warning btn-sm"
+                  @click="actualizar(item.usuario_id, item.tipo_usuario_id)">
                   <i class="bi bi-pencil-square"></i>
                 </button>
-                <button
-                  v-if="
-                    item.rol == 'S. Administrador' &&
-                    roluserlogued == 'S. Administrador'
-                  "
-                  type="button"
-                  class="btn btn-warning btn-sm"
-                  @click="actualizar(item.usuario_id, item.tipo_usuario_id)"
-                >
+                <button v-if="
+                  item.rol == 'S. Administrador' &&
+                  roluserlogued == 'S. Administrador'
+                " type="button" class="btn btn-warning btn-sm" @click="actualizar(item.usuario_id, item.tipo_usuario_id)">
                   <i class="bi bi-pencil-square"></i>
                 </button>
               </td>
               <td>
-                <button
-                  v-if="item.rol != 'S. Administrador'"
-                  type="button"
-                  class="btn btn-danger btn-sm"
-                  @click="messageDelete(item.usuario_id)"
-                >
+                <button v-if="item.rol != 'S. Administrador'" type="button" class="btn btn-danger btn-sm"
+                  @click="messageDelete(item.usuario_id)">
                   <i class="bi bi-trash"></i>
                 </button>
-                <button
-                  v-if="
-                    item.rol == 'S. Administrador' &&
-                    roluserlogued == 'S. Administrador'
-                  "
-                  type="button"
-                  class="btn btn-danger btn-sm"
-                  @click="messageDelete(item.usuario_id)"
-                >
+                <button v-if="
+                  item.rol == 'S. Administrador' &&
+                  roluserlogued == 'S. Administrador'
+                " type="button" class="btn btn-danger btn-sm" @click="messageDelete(item.usuario_id)">
                   <i class="bi bi-trash"></i>
                 </button>
               </td>
@@ -206,8 +195,8 @@ export default {
       loading: false,
       tipo_usuario: false,
       mensaje_tipo_usuario: "Usuarios cliente",
-      tipo_usuario_id: "",
-      tipos_usuarios: [],
+      tipo_usuario_id:"",
+      tipos_usuarios:[],
     };
   },
   mounted() {
@@ -217,6 +206,7 @@ export default {
     // ruta() {
     //   this.autorizado(this.menu)
     // }
+   
   },
   created() {
     this.getUsers();
@@ -244,14 +234,7 @@ export default {
       let self = this;
       let config = this.configHeader();
       axios
-        .get(
-          self.URL_API +
-            "api/v1/users/" +
-            self.cantidad +
-            "/" +
-            tipo_usuario_id,
-          config
-        ) //se anexa un 0 a la consulta para el tipo de usuario
+        .get(self.URL_API + "api/v1/users/" + self.cantidad+'/'+tipo_usuario_id, config) //se anexa un 0 a la consulta para el tipo de usuario
         .then(function (result) {
           self.users = result.data.data;
           self.result = result;
@@ -263,11 +246,7 @@ export default {
       let config = this.configHeader();
       axios
         .get(
-          self.URL_API +
-            "api/v1/usersfiltro/" +
-            self.usuario +
-            "/" +
-            self.cantidad,
+          self.URL_API + "api/v1/usersfiltro/" + self.usuario + "/" + self.cantidad,
           config
         )
         .then(function (result) {
@@ -317,10 +296,7 @@ export default {
         });
     },
     actualizar(id, tipo_usuario_id) {
-      this.$router.push({
-        name: "editarUsuario",
-        params: { tipo: tipo_usuario_id, id: id },
-      });
+      this.$router.push({ name: "editarUsuario", params: { tipo:tipo_usuario_id, id: id } });
     },
     userLogued() {
       let self = this;

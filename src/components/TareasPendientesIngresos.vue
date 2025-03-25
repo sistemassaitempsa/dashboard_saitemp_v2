@@ -1,18 +1,9 @@
 <template>
   <div class="container">
     <h2>Tareas pendientes</h2>
-    <Tabla
-      :datos="datos"
-      :tabla="tabla"
-      :userlogued="userlogued"
-      :endpoint="endpoint"
-      :listas="listas"
-      :endpointexport="endpointexport"
-      :estados_ingreso="estados_ingreso"
-      @actualizaEstado="actualizaEstado"
-      @actualizaResponsable="actualizaResponsable"
-      @filtrando="filtrando"
-    />
+    <Tabla :datos="datos" :tabla="tabla" :userlogued="userlogued" :endpoint="endpoint" :listas="listas"
+      :endpointexport="endpointexport" :estados_ingreso="estados_ingreso" @actualizaEstado="actualizaEstado"
+      @actualizaResponsable="actualizaResponsable" @filtrando="filtrando" :acciones="acciones" @accion="accion" />
   </div>
 </template>
 
@@ -88,11 +79,12 @@ export default {
       estados_ingreso: [],
       first_page_url: "",
       filtro_gestion_ingresos: false,
+      acciones: [{ nombre: "ver registro", }]
     };
   },
   computed: {},
   watch: {},
-  mounted() {},
+  mounted() { },
   created() {
     this.getItems();
     this.getEstadosIngreso();
@@ -116,12 +108,12 @@ export default {
       axios
         .get(
           self.URL_API +
-            "api/v1/actualizaResponsableingreso/" +
-            item_id +
-            "/" +
-            responsable_id +
-            "/" +
-            responsable_ingreso,
+          "api/v1/actualizaResponsableingreso/" +
+          item_id +
+          "/" +
+          responsable_id +
+          "/" +
+          responsable_ingreso,
           config
         )
         .then(function (result) {
@@ -154,10 +146,10 @@ export default {
       axios
         .get(
           self.URL_API +
-            "api/v1/actualizaestadoingreso/" +
-            item_id +
-            "/" +
-            estado,
+          "api/v1/actualizaestadoingreso/" +
+          item_id +
+          "/" +
+          estado,
           config
         )
         .then(function (result) {
@@ -175,6 +167,9 @@ export default {
         self.datos = result;
       });
     },
+    accion(item) {
+      this.$router.push({ name: "gestion-ingresos", params: { id: item.id } });
+    }
   },
 };
 </script>

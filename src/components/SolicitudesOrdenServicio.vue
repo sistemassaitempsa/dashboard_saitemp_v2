@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <h2>solicitudes ordenes de servicio</h2>
-    <Tabla :datos="datos" :tabla="tabla" :endpoint="endpoint" />
+    <Tabla :datos="datos" :tabla="tabla" :endpoint="endpoint" :checked="false" :acciones="acciones" @accion="accion" />
   </div>
 </template>
 <script>
@@ -56,6 +56,7 @@ export default {
         // { nombre: "Numero de cargos solicitados", orden: "DESC", tipo: "texto", calculado: 'false' },
         // { nombre: "Encargado", orden: "DESC", tipo: "texto", calculado: 'true' },
       ],
+      acciones: [{ nombre: "ver registro", }]
     };
   },
   computed: {},
@@ -74,6 +75,9 @@ export default {
           self.datos = result;
         });
     },
+    accion(item) {
+      this.$router.push({ name: "orden-servicios", params: { id: item.id } });
+    }
   },
 };
 </script>

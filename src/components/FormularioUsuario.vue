@@ -251,9 +251,10 @@ export default {
   created() {
     this.urlExterna();
     if (this.$route.params.id != undefined) {
+    if (this.$route.params.id != undefined) {
       this.getUser();
+      this.userLogued();
     }
-    this.userLogued();
     this.getRoles();
     this.getEstados();
   },
@@ -334,11 +335,12 @@ export default {
         .get(self.URL_API + "api/v1/userbyid/" + self.$route.params.id, config)
         .then(function (result) {
           self.nombres =
-            result.data.nombres != "null" ? result.data.nombres : " ";
+            result.data.nombres != "null" ? result.data.nombres : "";
           self.apellidos =
-            result.data.apellidos != "null" ? result.data.apellidos : " ";
+            result.data.apellidos != "null" ? result.data.apellidos : "";
           self.usuario = result.data.correo;
-          self.email = result.data.email != "null" ? result.data.email : " ";
+          self.email =
+            result.data.email != "null" ? result.data.email : "";
           self.rol = result.data.rol;
           self.estado = result.data.estado;
           self.estadoId_ = result.data.estado_id;
@@ -346,9 +348,9 @@ export default {
           self.documento_identidad =
             result.data.documento_identidad != "null"
               ? result.data.documento_identidad
-              : " ";
+              : "";
           self.loading = false;
-        });
+        })
     },
     userLogued() {
       let self = this;
@@ -373,9 +375,6 @@ export default {
         .then(function (result) {
           self.roles = result.data;
         })
-        .catch(function () {
-          // self.$router.push("/");
-        });
     },
     getEstados() {
       let self = this;
@@ -385,9 +384,6 @@ export default {
         .then(function (result) {
           self.estados = result.data;
         })
-        .catch(function () {
-          // self.$router.push("/");
-        });
     },
     cargarArchivo(event) {
       var self = this;
