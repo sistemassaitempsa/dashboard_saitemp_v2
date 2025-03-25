@@ -2,7 +2,7 @@
     <div class="container">
         <h2>Radicados CRM</h2>
         <Tabla :datos="datos" :tabla="tabla" :userlogued="userlogued" :endpoint="endpoint"
-            :endpointexport="endpointexport" :filtro_visible="true" :acciones="acciones" @accion="accion" />
+            :endpointexport="endpointexport" :filtro_visible="true" :checked="false" :acciones="acciones" @accion="accion" />
     </div>
 </template>
 <script>
