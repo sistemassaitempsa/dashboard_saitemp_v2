@@ -10,6 +10,8 @@
       :endpoint="endpoint"
       :listas="listas"
       :endpointexport="endpointexport"
+      :acciones="acciones"
+      @accion="accion"
     />
   </div>
 </template>
@@ -79,6 +81,11 @@ export default {
       ],
       listas: [],
       first_page_url: "",
+      acciones: [
+        {
+          nombre: "ver registro",
+        },
+      ],
     };
   },
   computed: {},
@@ -90,6 +97,12 @@ export default {
     this.llenarLista();
   },
   methods: {
+    accion(item) {
+      this.$router.push({
+        name: "debida-diligencia/formulario-clientes",
+        params: { id: item.cliente_id },
+      });
+    },
     llenarLista() {
       this.tabla.forEach((item) => {
         if (item.calculado == "false") {

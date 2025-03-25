@@ -24,6 +24,7 @@
                 required
                 :class="{ 'is-invalid': !cliente.nombre }"
               />
+
               <div v-if="cliente.nombre == ''" class="invalid-feedback">
                 {{ error }}
               </div>
@@ -39,6 +40,7 @@
                 :class="{ 'is-invalid': !cliente.apellidos }"
                 required
               />
+
               <div v-if="cliente.apellidos == ''" class="invalid-feedback">
                 {{ error }}
               </div>
@@ -127,45 +129,14 @@
                 }"
                 required
               />
+
               <div v-if="errorConfirmationStyle" class="invalid-feedback">
                 {{ errorConfirmationNumDoc }}
               </div>
             </div>
           </div>
-          <div class="row mb-4">
-            <div class="col">
-              <label for="" class="form-label">Tipo de documento:*</label>
-              <select
-                class="form-select"
-                name=""
-                id=""
-                v-model="cliente.doc_tip_id"
-              >
-                <option
-                  v-for="tipo_doc in tiposDocumentos"
-                  :value="tipo_doc.cod_tip"
-                  :key="tipo_doc.cod_tip"
-                >
-                  {{ tipo_doc.des_tip }}
-                </option>
-              </select>
-            </div>
-            <div class="col">
-              <label for="" class="form-label">Teléfono:*</label>
-              <input
-                type="text"
-                class="form-control"
-                v-model="cliente.telefono"
-                @focus="isFocusTel = true"
-                @blur="isFocusTel = false"
-                :class="{ 'is-invalid': !cliente.telefono }"
-              />
-              <div v-if="cliente.telefono == ''" class="invalid-feedback">
-                {{ error }}
-              </div>
-            </div>
-          </div>
-          <div class="row mb-4">
+
+          <div class="row mb-3">
             <div class="col">
               <label for="" class="form-label">Correo electónico:*</label>
               <input
@@ -226,7 +197,11 @@
                 }"
                 required
               />
-              <div v-if="passwordError" class="invalid-feedback">
+
+              <div
+                v-if="passwordError || cliente.password == ''"
+                class="invalid-feedback"
+              >
                 {{ passwordError }}
               </div>
               <div class="positionAbsolute">
@@ -266,6 +241,7 @@
                     cliente.password_confirmation == '',
                 }"
               />
+
               <div
                 v-show="errorConfirmationPasswordStyle"
                 class="invalid-feedback"
@@ -663,6 +639,7 @@ label {
 }
 
 /* Fila y Columna */
+
 .col {
   flex: 1;
   min-width: 250px;
