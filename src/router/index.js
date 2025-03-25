@@ -60,7 +60,6 @@ import InicioSesionCandidatos from "@/components/InicioSesionCandidatos.vue";
 import RecoverPassword from "@/components/RecoverPassword.vue";
 import Cliente from '../components/Cliente.vue';
 import FormularioInfoCandidatos from "@/components/FormularioInfoCandidatos.vue";
-import Cliente from "../components/Cliente.vue";
 import ResetPasswordView from "@/views/ResetPasswordView.vue";
 import ConsultaFormularioCandidatos from "@/components/ConsultaFormularioCandidatos.vue";
 import TablaCentrosDeTrabajo from "@/components/TablaCentrosDeTrabajo.vue";
@@ -98,11 +97,11 @@ const routes = [
     name: "reset-password",
     component: ResetPasswordView,
   },
-  {
-    path: "/:pathMatch(.*)*",
-    name: "catchAll",
-    component: InicioSesion,
-  },
+  // {
+  //   path: "/:pathMatch(.*)*",
+  //   name: "catchAll",
+  //   component: InicioSesion,
+  // },
   {
     path: "/navbar",
     name: "navbar",
@@ -398,6 +397,22 @@ const routes = [
         name: "asignacion-servicio",
         component: AsignacionServicio,
       },
+      {
+        path: "formularioinfocandidato/:id?",
+        name: "formularioinfocandidato",
+        component: FormularioInfoCandidatos,
+      },
+      {
+        path: "formularioinfocandidatoTabla",
+        name: "formularioinfocandidatoTabla",
+        component: ConsultaFormularioCandidatos,
+      },
+      {
+        path: "consultatodoscentrosdetrabajo",
+        name: "consultatodoscentrosdetrabajo",
+        component: TablaCentrosDeTrabajo,
+      },
+
     ],
   },
 ];

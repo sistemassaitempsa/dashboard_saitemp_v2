@@ -55,7 +55,6 @@
             <label for="" v-else>
               {{ valor }}
             </label>
-            <!--  {{ key != "id" ? valor : null }} -->
           </td>
           <div style="display: flex; gap:1em; align-content: center;">
             <button type="button" class="btn btn-success" v-for="item in acciones" :key="item" @click="accion(item,columnasocultas[index].id)">{{item.nombre}}</button>

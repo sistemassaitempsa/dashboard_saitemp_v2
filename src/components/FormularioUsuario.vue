@@ -9,67 +9,38 @@
             <div class="col">
               <div class="mb-3">
                 <label class="form-label">Nombres</label>
-                <input
-                  type="text"
-                  autocomplete="off"
-                  class="form-control"
-                  v-model="nombres"
-                />
+                <input type="text" autocomplete="off" class="form-control" v-model="nombres" />
               </div>
             </div>
             <div class="col">
               <div class="mb-3">
                 <label class="form-label">Apellidos</label>
-                <input
-                  type="text"
-                  autocomplete="off"
-                  class="form-control"
-                  v-model="apellidos"
-                />
+                <input type="text" autocomplete="off" class="form-control" v-model="apellidos" />
               </div>
             </div>
           </div>
           <div class="mb-3">
             <label class="form-label">N. Documento de identidad</label>
-            <input
-              type="text"
-              class="form-control"
-              v-model="documento_identidad"
-              autocomplete="off"
-              :disabled="
-                roluserlogued == 'S. Administrador' ||
+            <input type="text" class="form-control" v-model="documento_identidad" autocomplete="off" :disabled="roluserlogued == 'S. Administrador' ||
                 roluserlogued == 'Administrador'
-                  ? false
-                  : true
-              "
-            />
+                ? false
+                : true
+              " />
           </div>
           <div class="row">
             <div class="col">
               <div class="mb-3">
                 <label class="form-label">Correo electrónico</label>
-                <input
-                  type="email"
-                  class="form-control"
-                  id="exampleInputEmail1"
-                  aria-describedby="prueba"
-                  v-model="usuario"
-                  autocomplete="off"
-                />
+                <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="prueba"
+                  v-model="usuario" autocomplete="off" />
                 <!-- :disabled="roluserlogued == 'S. Administrador' || roluserlogued == 'Administrador' ? false : true" -->
               </div>
             </div>
             <div class="col">
               <div class="mb-3">
                 <label class="form-label">Contraseña correo</label>
-                <input
-                  type="password"
-                  class="form-control"
-                  id="exampleInputEmail1"
-                  aria-describedby="prueba"
-                  v-model="contrasena_correo"
-                  autocomplete="off"
-                />
+                <input type="password" class="form-control" id="exampleInputEmail1" aria-describedby="prueba"
+                  v-model="contrasena_correo" autocomplete="off" />
                 <!-- :disabled="roluserlogued == 'S. Administrador' || roluserlogued == 'Administrador' ? false : true" -->
               </div>
             </div>
@@ -78,33 +49,19 @@
             <div class="col">
               <div class="mb-3">
                 <label class="form-label">Usuario</label>
-                <input
-                  type="email"
-                  class="form-control"
-                  id="exampleInputEmail1"
-                  aria-describedby="prueba"
-                  v-model="email"
-                  autocomplete="off"
-                  :disabled="
-                    roluserlogued == 'S. Administrador' ||
-                    roluserlogued == 'Administrador'
+                <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="prueba"
+                  v-model="email" autocomplete="off" :disabled="roluserlogued == 'S. Administrador' ||
+                      roluserlogued == 'Administrador'
                       ? false
                       : true
-                  "
-                />
+                    " />
               </div>
             </div>
             <div class="col">
               <div class="mb-3">
                 <label class="form-label">Contraseña</label>
-                <input
-                  type="password"
-                  autocomplete="new-password"
-                  required
-                  class="form-control"
-                  id="exampleInputPassword1"
-                  v-model="password"
-                />
+                <input type="password" autocomplete="new-password" required class="form-control"
+                  id="exampleInputPassword1" v-model="password" />
               </div>
             </div>
           </div>
@@ -112,18 +69,11 @@
             <div class="col">
               <div class="mb-3">
                 <label class="form-label">Rol</label>
-                <select
-                  id="inputState1"
-                  class="form-select"
-                  v-model="rol"
-                  @change="rolId(rol)"
-                  :disabled="
-                    roluserlogued == 'S. Administrador' ||
+                <select id="inputState1" class="form-select" v-model="rol" @change="rolId(rol)" :disabled="roluserlogued == 'S. Administrador' ||
                     roluserlogued == 'Administrador'
-                      ? false
-                      : true
-                  "
-                >
+                    ? false
+                    : true
+                  ">
                   <option v-for="(item, index) in roles" :key="index">
                     {{ item.nombre }}
                   </option>
@@ -133,18 +83,11 @@
             <div class="col">
               <div class="mb-3" v-if="$route.params.id != ''">
                 <label class="form-label">Estado</label>
-                <select
-                  id="inputState2"
-                  class="form-select"
-                  v-model="estado"
-                  @change="estadoId(estado)"
-                  :disabled="
-                    roluserlogued == 'S. Administrador' ||
+                <select id="inputState2" class="form-select" v-model="estado" @change="estadoId(estado)" :disabled="roluserlogued == 'S. Administrador' ||
                     roluserlogued == 'Administrador'
-                      ? false
-                      : true
-                  "
-                >
+                    ? false
+                    : true
+                  ">
                   <option v-for="(item, index) in estados" :key="index">
                     {{ item.nombre }}
                   </option>
@@ -152,46 +95,22 @@
               </div>
             </div>
             <div class="row">
-              <label for="formFileMultiple" class="form-label"
-                >Adjuntar imagen firma correo</label
-              >
+              <label for="formFileMultiple" class="form-label">Adjuntar imagen firma correo</label>
               <div class="input-group mb-3">
-                <input
-                  class="form-control"
-                  type="file"
-                  @change="cargarArchivo($event)"
-                  id="formFileMultiple"
-                  multiple
-                />
-                <span
-                  style="cursor: pointer"
-                  class="input-group-text"
-                  @click="quitarAdjuntos()"
-                  id="basic-addon1"
-                  >Quitar archivos</span
-                >
+                <input class="form-control" type="file" @change="cargarArchivo($event)" id="formFileMultiple"
+                  multiple />
+                <span style="cursor: pointer" class="input-group-text" @click="quitarAdjuntos()"
+                  id="basic-addon1">Quitar archivos</span>
               </div>
             </div>
             <div class="row">
-              <div
-                class="col botones"
-                v-for="(item, index) in file"
-                :key="index"
-              >
-                <div
-                  class="btn-group btn-group"
-                  role="group"
-                  aria-label="Small button group"
-                >
+              <div class="col botones" v-for="(item, index) in file" :key="index">
+                <div class="btn-group btn-group" role="group" aria-label="Small button group">
                   <button type="button" class="btn btn-success btn adjunto">
                     <i class="bi bi-file-earmark-check"></i> {{ item.name }}
                     {{ "(" + formatearPesoArchivo(item.size) + ")" }}
                   </button>
-                  <button
-                    type="button"
-                    @click="file.splice(index, 1)"
-                    class="btn btn-success"
-                  >
+                  <button type="button" @click="file.splice(index, 1)" class="btn btn-success">
                     <i class="bi bi-x"></i>
                   </button>
                 </div>
@@ -251,12 +170,13 @@ export default {
   created() {
     this.urlExterna();
     if (this.$route.params.id != undefined) {
-    if (this.$route.params.id != undefined) {
-      this.getUser();
-      this.userLogued();
+      if (this.$route.params.id != undefined) {
+        this.getUser();
+        this.userLogued();
+      }
+      this.getRoles();
+      this.getEstados();
     }
-    this.getRoles();
-    this.getEstados();
   },
   methods: {
     register() {
