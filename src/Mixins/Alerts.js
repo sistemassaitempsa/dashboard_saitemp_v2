@@ -22,7 +22,7 @@ export const Alerts = {
     //   });
     // },
 
-     showAlertConfirm(titulo, icono,  mensaje = null) {
+    showAlertConfirm(titulo, icono, mensaje = null) {
       this.$swal({
         position: "top",
         icon: icono,
@@ -32,7 +32,6 @@ export const Alerts = {
       });
     },
     messageDelete(titulo = null, funcion, id) {
-      const self = this;
       var title =
         titulo == null ? "Estas seguro de elimiar el resgistro?" : titulo;
       this.$swal
@@ -47,9 +46,7 @@ export const Alerts = {
         })
         .then((result) => {
           if (result.isConfirmed) {
-            funcion(id).then((result) => {
-              self.showAlert(result.data.message, result.data.status);
-            });
+            funcion(id);
           }
         });
     },
