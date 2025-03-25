@@ -70,23 +70,8 @@
         <div class="col-xs-3 col-md-4">
           <label for="exampleFormControlInput1" class="form-label">Tipo de usuario a listar</label>
           <select class="form-select form-select-sm" @change="getUsers(tipo_usuario_id)" v-model="tipo_usuario_id"
-            aria-label="Default select example">
+            aria-label="Usuario">
             <option v-for="item in tipos_usuarios" :key="item" :value ="item.id">{{ item.nombre }}</option>
-          </select>
-        </div>
-        <div class="col-xs-3 col-md-4">
-          <label for="exampleFormControlInput1" class="form-label"
-            >Tipo de usuario a listar</label
-          >
-          <select
-            class="form-select form-select-sm"
-            @change="getUsers(tipo_usuario_id)"
-            v-model="tipo_usuario_id"
-            aria-label="Default select example"
-          >
-            <option v-for="item in tipos_usuarios" :key="item" :value="item.id">
-              {{ item.nombre }}
-            </option>
           </select>
         </div>
       </div>
