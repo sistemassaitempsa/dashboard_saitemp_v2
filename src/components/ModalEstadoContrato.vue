@@ -341,6 +341,8 @@ export default {
                 this.loading = false;
                 this.close();
               });
+          } else {
+            this.loading = false;
           }
         });
     },
