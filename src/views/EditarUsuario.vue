@@ -1,8 +1,8 @@
 <template>
-  <div>
-    <FormularioUsuario :titulo="titulo" v-if="usuario()" />
-    <Cliente :titulo="titulo" v-if="cliente()" />
-    <EditarUsuarioCandidato v-if="candidato()" :user_type="user_type" />
+    <div>
+      <FormularioUsuario :titulo="titulo" :userlogued="userlogued" v-if="usuario()" />
+      <Cliente :titulo="titulo" :userlogued="userlogued" v-if="cliente()" />
+      <EditarUsuarioCandidato v-if="candidato()" :user_type="user_type" />
   </div>
 </template>
 <script>
