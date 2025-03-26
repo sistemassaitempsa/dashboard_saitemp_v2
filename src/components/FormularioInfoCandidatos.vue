@@ -864,6 +864,119 @@
                 />
               </div>
             </div>
+            <div class="row mb-5">
+              <div class="row">
+                <h5>Cursos adicionales:</h5>
+              </div>
+              <div class="col flex">
+                <label for="" class="form-label">Curso de alturas:</label>
+                <div>
+                  <div class="form-check form-check-inline">
+                    <input
+                      class="form-check-input"
+                      type="radio"
+                      name="cursoAlturasOptions"
+                      id="cursoAlturasOptions1"
+                      v-model="form.curso_alturas"
+                      value="1"
+                    />
+                    <label class="form-check-label" for="cursoAlturasOptions1"
+                      >Si</label
+                    >
+                  </div>
+                  <div class="form-check form-check-inline">
+                    <input
+                      class="form-check-input"
+                      type="radio"
+                      name="cursoAlturasOptions"
+                      id="cursoAlturasOptions2"
+                      v-model="form.curso_alturas"
+                      value="0"
+                    />
+                    <label class="form-check-label" for="cursoAlturasOptions2"
+                      >No</label
+                    >
+                  </div>
+                </div>
+              </div>
+              <div class="col flex">
+                <label for="" class="form-label"
+                  >Curso de manipulación de alimentos:</label
+                >
+                <div>
+                  <div class="form-check form-check-inline">
+                    <input
+                      class="form-check-input"
+                      type="radio"
+                      name="manipulacionAlimentosOptions"
+                      id="manipulacionAlimentosOptions1"
+                      v-model="form.manipulacion_alimentos"
+                      value="1"
+                    />
+                    <label
+                      class="form-check-label"
+                      for="manipulacionAlimentosOptions1"
+                      >Si</label
+                    >
+                  </div>
+                  <div class="form-check form-check-inline">
+                    <input
+                      class="form-check-input"
+                      type="radio"
+                      name="manipulacionAlimentosOptions"
+                      id="manipulacionAlimentosOptions2"
+                      v-model="form.manipulacion_alimentos"
+                      value="0"
+                    />
+                    <label
+                      class="form-check-label"
+                      for="manipulacionAlimentosOptions2"
+                      >No</label
+                    >
+                  </div>
+                </div>
+              </div>
+              <div class="col flex">
+                <label for="" class="form-label"
+                  >Curso de espacios confinados:</label
+                >
+                <div>
+                  <div class="form-check form-check-inline">
+                    <input
+                      class="form-check-input"
+                      type="radio"
+                      name="cursoConfinadosOptions"
+                      id="cursoConfinadosOptions1"
+                      v-model="form.curso_confinados"
+                      value="1"
+                    />
+                    <label
+                      class="form-check-label"
+                      for="cursoConfinadosOptions1"
+                      >Si</label
+                    >
+                  </div>
+                  <div class="form-check form-check-inline">
+                    <input
+                      class="form-check-input"
+                      type="radio"
+                      name="cursoConfinadosOptions"
+                      id="cursoConfinadosOptions2"
+                      v-model="form.curso_confinados"
+                      value="0"
+                    />
+                    <label
+                      class="form-check-label"
+                      for="cursoConfinadosOptions2"
+                      >No</label
+                    >
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <h5>Idiomas:</h5>
+            </div>
             <div
               v-for="(idioma, index) in form.idiomas"
               class="row"
@@ -1841,7 +1954,13 @@ const requieredExperienceFields = [
   "fecha_fin",
 ];
 const requieredFieldsReferencias = ["tip_ref", "parent", "cel_ref", "nom_ref"];
-const requieredFieldsInfoAcademi = ["sector_academico_id", "Niv_aca"];
+const requieredFieldsInfoAcademi = [
+  "sector_academico_id",
+  "Niv_aca",
+  "manipulacion_alimentos",
+  "curso_alturas",
+  "curso_confinados",
+];
 const requieredFieldsMedioTrans = ["tipo_transporte", "licencia_conduccion"];
 const requieredFieldsSalud = [
   "lentes",
@@ -1908,6 +2027,9 @@ const consulta_afp = ref("");
 const consulta_eps = ref("");
 const progress = ref(0);
 const form = reactive({
+  curso_confinados: "",
+  manipulacion_alimentos: "",
+  curso_alturas: "",
   otro_transporte: "",
   concepto: "",
   tipo_transporte: "",
@@ -2092,7 +2214,9 @@ const llenarFormulario = async () => {
     `${URL_API}api/v1/formulariocandidato/${id}`,
     configHeader()
   );
-
+  form.curso_alturas = response.data.curso_alturas;
+  form.curso_confinados = response.data.curso_confinados;
+  form.manipulacion_alimentos = response.data.manipulacion_alimentos;
   form.licencia_conduccion = response.data.licencia_conduccion;
   form.descripcion_salud = response.data.descripcion_salud;
   form.afp_id = response.data.afp_id;
@@ -2832,7 +2956,7 @@ button:hover {
 }
 
 h5 {
-  color: #237db0;
+  color: #3d3d3d;
   text-align: left;
 }
 
