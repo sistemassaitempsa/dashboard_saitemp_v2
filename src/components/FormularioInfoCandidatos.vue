@@ -866,13 +866,56 @@
             </div>
             <div class="row mb-5">
               <div class="row">
-                <h5>Cursos adicionales:</h5>
+                <h5>Cursos y certificaciones:</h5>
               </div>
-              <div class="col flex">
+              <div class="row">
+                <div class="col">
+                  <SearchList
+                    nombreCampo=""
+                    :valida_campo="false"
+                    nombreItem="nombre"
+                    @getCertificados="getCertificados"
+                    eventoCampo="getCertificados"
+                    :consulta="certificado"
+                    :registros="certificados"
+                    placeholder="Seleccione una opción"
+                    :disabled="disabled"
+                  />
+                </div>
+                <div class="col">
+                  <div
+                    class="mb-3"
+                    style="
+                      padding: 10px;
+                      border: solid #d5dbdb 0.5px;
+                      border-radius: 10px;
+                    "
+                  >
+                    <button
+                      type="button"
+                      style="margin: 10px 10px 5px 10px"
+                      id="btnMenu"
+                      class="btn btn-sm"
+                      data-bs-toggle="button"
+                      v-for="(usuario, index) in form.requisitos_asignados"
+                      :key="index"
+                    >
+                      <div class="cardRequisito">
+                        <i
+                          class="bi bi-x"
+                          @click="form.requisitos_asignados.splice(index, 1)"
+                        ></i>
+                        {{ usuario.nombre }}
+                      </div>
+                    </button>
+                  </div>
+                </div>
+              </div>
+              <!--   <div class="col flex">
                 <label for="" class="form-label">Curso de alturas:</label>
                 <div>
                   <div class="form-check form-check-inline">
-                    <input
+                    <input  
                       class="form-check-input"
                       type="radio"
                       name="cursoAlturasOptions"
@@ -898,8 +941,8 @@
                     >
                   </div>
                 </div>
-              </div>
-              <div class="col flex">
+              </div> -->
+              <!--     <div class="col flex">
                 <label for="" class="form-label"
                   >Curso de manipulación de alimentos:</label
                 >
@@ -935,8 +978,8 @@
                     >
                   </div>
                 </div>
-              </div>
-              <div class="col flex">
+              </div> -->
+              <!--      <div class="col flex">
                 <label for="" class="form-label"
                   >Curso de espacios confinados:</label
                 >
@@ -972,7 +1015,7 @@
                     >
                   </div>
                 </div>
-              </div>
+              </div> -->
             </div>
             <div class="row">
               <h5>Idiomas:</h5>
@@ -2009,6 +2052,8 @@ const requiredFieldsInfoPersonal = [
   "sex_emp",
   "cod_grupo",
 ];
+const certificado = ref("");
+const certificados = ref([]);
 const paises = ref([]);
 const lista_sectores_economicos = ref([]);
 const lista_bancos = ref([]);
@@ -2027,6 +2072,7 @@ const consulta_afp = ref("");
 const consulta_eps = ref("");
 const progress = ref(0);
 const form = reactive({
+  requisitos_asignados: [],
   curso_confinados: "",
   manipulacion_alimentos: "",
   curso_alturas: "",
@@ -2637,7 +2683,19 @@ const getSectorAcademico = async (item = null) => {
   );
   lista_sector_academico.value = response.data;
 };
-
+const getCertificados = async (item = null) => {
+  if (item != null) {
+    form.requisitos_asignados.push({
+      requisito_id: item.id,
+      nombre: item.nombre,
+    });
+  }
+  const response = await axios.get(
+    URL_API + "api/v1/requisitosCandidatos",
+    configHeader()
+  );
+  certificados.value = response.data;
+};
 const getIdioma = async (item = null, index) => {
   if (item != null) {
     form.idiomas[index].nombre = item.nombre;
@@ -3017,5 +3075,14 @@ h5 {
 }
 .textAreaRow {
   width: 100%;
+}
+#btnMenu {
+  background-color: rgb(28, 146, 77);
+  color: white;
+  width: 40%;
+}
+.cardRequisito {
+  display: flex;
+  gap: 0.5em;
 }
 </style>
