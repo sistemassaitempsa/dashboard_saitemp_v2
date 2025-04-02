@@ -903,7 +903,7 @@
                       <div class="cardRequisito">
                         <i
                           class="bi bi-x"
-                          @click="form.requisitos_asignados.splice(index, 1)"
+                          @click="deleteRequisitoHandler(index)"
                         ></i>
                         {{ usuario.nombre }}
                       </div>
@@ -2260,6 +2260,7 @@ const llenarFormulario = async () => {
     `${URL_API}api/v1/formulariocandidato/${id}`,
     configHeader()
   );
+  form.requisitos_asignados = response.data.cumple_requisitos;
   form.curso_alturas = response.data.curso_alturas;
   form.curso_confinados = response.data.curso_confinados;
   form.manipulacion_alimentos = response.data.manipulacion_alimentos;
@@ -2443,7 +2444,16 @@ const llenarFormulario = async () => {
       : "";
   loading.value = false;
 };
-
+const deleteRequisitoHandler = async (index) => {
+  if (form.requisitos_asignados[index].id) {
+    loading.value = true;
+    await axios.delete(
+      `${URL_API}api/v1/cumplerequisitocandidato/${form.requisitos_asignados[index].id}`
+    );
+    loading.value = false;
+  }
+  form.requisitos_asignados.splice(index, 1);
+};
 const formattedDate = (date) => {
   return date.split(" ")[0];
 };
@@ -2685,10 +2695,20 @@ const getSectorAcademico = async (item = null) => {
 };
 const getCertificados = async (item = null) => {
   if (item != null) {
-    form.requisitos_asignados.push({
-      requisito_id: item.id,
-      nombre: item.nombre,
-    });
+    if (form.requisitos_asignados.length > 0) {
+      let encontrado = false;
+      form.requisitos_asignados.forEach((element) => {
+        if (element.requisito_id == item.id) {
+          encontrado = true;
+        }
+      });
+      if (encontrado == false) {
+        form.requisitos_asignados.push({
+          requisito_id: item.id,
+          nombre: item.nombre,
+        });
+      }
+    }
   }
   const response = await axios.get(
     URL_API + "api/v1/requisitosCandidatos",
