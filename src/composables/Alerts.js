@@ -22,8 +22,25 @@ export function Alerts() {
     });
   };
 
+  const confirmSaveAlert = (titulo, funcion) => {
+  Swal.fire({
+    title: titulo,
+    showCancelButton: true,
+    confirmButtonText: "Guardar",
+    confirmButtonColor: "#dc3545",
+    cancelButtonColor: "#7066e0",
+  }).then((result) => {
+    if (result.isConfirmed) {
+      // showAlert("Registro guardado exitosamente!", "success");
+      funcion();
+    } else if (result.isDenied) {
+      showAlert("Los cambios no fueron guardados", "info");
+    }
+  });
+};
+
 
   return {
-    showAlert,confirmAlert
+    showAlert,confirmAlert, confirmSaveAlert
   };
 }
