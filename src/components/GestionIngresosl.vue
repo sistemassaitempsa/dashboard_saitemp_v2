@@ -40,6 +40,7 @@ export default {
   data() {
     return {
       filtro: {},
+      filtro_ingreso_active: false,
       filtro_rapido: false,
       show_table: false,
       datos: [],
@@ -175,6 +176,7 @@ export default {
       localStorage.getItem("ordenar_prioridad") ||
       localStorage.getItem("filtro_mios")
     ) {
+      this.filtro_ingreso_active = true;
       this.filtro = {
         ordenar_prioridad: JSON.parse(
           localStorage.getItem("ordenar_prioridad")
@@ -189,7 +191,10 @@ export default {
 
     var self = this;
     this.interval = setInterval(() => {
-      if (!self.filtro_gestion_ingresos) {
+      if (
+        !self.filtro_gestion_ingresos &&
+        self.filtro_ingreso_active == false
+      ) {
         self.getItems(this.pagina_filtro); // Llama a la función que quieres ejecutar cada 30 segundos
       }
     }, 300000);
@@ -199,6 +204,7 @@ export default {
   },
   methods: {
     filtroFechaIngreso(filtro, url = null) {
+      this.filtro_ingreso_active = !this.filtro_ingreso_active;
       this.filtro = filtro;
       let self = this;
       let config = this.configHeader();
@@ -211,7 +217,7 @@ export default {
       } else {
         axios
           .post(
-            self.URL_API + "api/v1/formularioIngreso/filtrofechaingreso/" + 500,
+            self.URL_API + "api/v1/formularioIngreso/filtrofechaingreso/" + 50,
             filtro,
             config
           )
@@ -253,10 +259,17 @@ export default {
       let self = this;
       let config = this.configHeader();
       if (url != null && url != "") {
-        axios.get(url, config).then(function (result) {
-          self.first_page_url = result.data.first_page_url.replace('"');
-          self.datos = result;
-        });
+        if (this.filtro_ingreso_active == false) {
+          axios.get(url, config).then(function (result) {
+            self.first_page_url = result.data.first_page_url.replace('"');
+            self.datos = result;
+          });
+        } else {
+          axios.post(url, config).then(function (result) {
+            self.first_page_url = result.data.first_page_url.replace('"');
+            self.datos = result;
+          });
+        }
       } else {
         axios
           .get(self.URL_API + "api/v1/formularioingreso/" + 50, config)

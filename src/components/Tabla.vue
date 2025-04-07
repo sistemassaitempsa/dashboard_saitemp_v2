@@ -1947,7 +1947,7 @@ export default {
         if (pag.includes("filtrofechaingreso")) {
           axios.post(pag, this.filtro, config).then(function (result) {
             self.links = result.data;
-            // self.llenarTabla(result)
+            self.llenarTabla(result);
             self.items_tabla2 = Object.values(result.data.data); // se está llenando la tabla con los datos cuando se pagina
             // desde acá porque en la función llenartabla() está dando error al llenar la tabla
             self.loading = false;
