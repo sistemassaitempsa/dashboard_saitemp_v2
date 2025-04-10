@@ -1,11 +1,12 @@
 <template>
   <div class="container">
     <Loading :loading="loading" />
-
+    <ModalAgregarCandidatoServicio
+      v-if="toogleModalAddServicio"
+      :candidato_id="candidato_id"
+      @closeModalAgregaraServicio="toogleModalAddServicioHandle"
+    />
     <h2 ref="informacionPersonalRef" id="tab">Registro de datos personales</h2>
-    <!-- barra para el pocrcentaje de llenado -->
-
-    <!-- --------------------------- -->
     <div class="todoProgressContainer">
       <div class="textProgressContainer">
         <div
@@ -230,27 +231,23 @@
     <div class="flexRow">
       <div id="seccion">
         <form @submit.prevent="" class="row g-3">
-          <p>
-            Ingrese la información requerida en cada sección, para desplegar una
-            seccion debe hacer clic en ella.
-          </p>
-          <!-- <div class="row">
-            <div class="col">
-              <h5
-                @click="informacion_personal = !informacion_personal"
-                style="cursor: pointer"
-                ref="informacionPersonalRef"
+          <div class="row">
+            <div class="col-9 mt-4">
+              <p>
+                Ingrese la información requerida en cada sección, para desplegar
+                una seccion debe hacer clic en ella.
+              </p>
+            </div>
+            <div class="col" v-if="userlogued.tipo_usuario_id == 1">
+              <button
+                class="btn btn-success btn-addServicio"
+                type="button"
+                @click="toogleModalAddServicioHandle"
               >
-                1. Información personal
-                <i
-                  v-if="informacion_personal"
-                  class="bi bi-chevron-compact-up"
-                ></i
-                ><i v-if="!informacion_personal" class="bi bi-chevron-down"></i>
-              </h5>
+                Agregar a orden de servicio
+              </button>
             </div>
           </div>
- -->
           <div class="info_container" v-if="informacion_personal">
             <!-- Primer Nombre y Segundo Nombre -->
             <div class="row mb-4">
@@ -1952,10 +1949,12 @@ import {
 import axios from "axios";
 import { useAlerts } from "@/composables/useAlerts";
 import { useRoute } from "vue-router";
+import ModalAgregarCandidatoServicio from "./ModalAgregarCandidatoServicio.vue";
 
 const { userlogued } = defineProps(["userlogued"]); //props
 
 // Variables reactivas
+const toogleModalAddServicio = ref(false);
 const activeSeccion = ref(0);
 const route = useRoute();
 const { showAlert } = useAlerts();
@@ -2052,6 +2051,7 @@ const requiredFieldsInfoPersonal = [
   "sex_emp",
   "cod_grupo",
 ];
+const candidato_id = ref("");
 const certificado = ref("");
 const certificados = ref([]);
 const paises = ref([]);
@@ -2249,7 +2249,6 @@ const remainingCharsExperiencia = (index) => {
 
 const llenarFormulario = async () => {
   loading.value = true;
-  console.log(route.params.id);
   const id =
     userlogued.tipo_usuario_id == 3
       ? userlogued.id
@@ -2260,6 +2259,7 @@ const llenarFormulario = async () => {
     `${URL_API}api/v1/formulariocandidato/${id}`,
     configHeader()
   );
+  candidato_id.value = response.data.id;
   form.requisitos_asignados = response.data.cumple_requisitos;
   form.curso_alturas = response.data.curso_alturas;
   form.curso_confinados = response.data.curso_confinados;
@@ -2493,7 +2493,7 @@ const submitForm = async () => {
       configHeader()
     );
     showAlert(response.data.message, response.data.status);
-    console.log("Formulario enviado con éxito:", response.data);
+
     if (activeSeccion.value != 5) {
       const arraySecciones = [
         "informacion_personal",
@@ -2801,7 +2801,9 @@ const selectDepartamento = (item = null, index = null) => {
     }
   }
 };
-
+const toogleModalAddServicioHandle = () => {
+  toogleModalAddServicio.value = !toogleModalAddServicio.value;
+};
 const getCiudades = (item, index) => {
   axios
     .get(
@@ -3104,5 +3106,8 @@ h5 {
 .cardRequisito {
   display: flex;
   gap: 0.5em;
+}
+.btn-addServicio {
+  width: 100%;
 }
 </style>
