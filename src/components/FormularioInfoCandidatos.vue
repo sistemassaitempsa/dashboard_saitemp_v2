@@ -1919,6 +1919,70 @@
               >
             </div>
           </div>
+          <div class="row" v-if="userlogued.tipo_usuario_id == 1">
+            <div class="col">
+              <h5
+                @click="
+                  historico_conceptos_servicios = !historico_conceptos_servicios
+                "
+                style="cursor: pointer"
+                ref="conceptoRef"
+              >
+                8. Historico de conceptos en servicios
+                <i
+                  v-if="historico_conceptos_servicios"
+                  class="bi bi-chevron-compact-up"
+                ></i
+                ><i
+                  v-if="!historico_conceptos_servicios"
+                  class="bi bi-chevron-down"
+                ></i>
+              </h5>
+            </div>
+          </div>
+          <div class="table-responsive" v-if="!historico_conceptos_servicios">
+            <table
+              class="table table-striped table-hover table-bordered align-middle"
+            >
+              <thead>
+                <tr>
+                  <th scope="col">#</th>
+                  <th scope="col">Servicio</th>
+                  <th scope="col">Razon social</th>
+                  <th scope="col">Cargo</th>
+                  <th scope="col">concepto</th>
+                  <th scope="col">Fecha de creación</th>
+                  <th scope="col">Acciones</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr
+                  v-for="(item, index) in lista_historico_servicios"
+                  :key="index"
+                >
+                  <th scope="row">{{ index }}</th>
+                  <td>{{ item.remitente }}</td>
+                  <td>{{ item.destinatario }}</td>
+                  <td>{{ item.con_copia }}</td>
+                  <td>{{ item.con_copia_oculta }}</td>
+                  <td>{{ item.asunto }}</td>
+                  <td>{{ item.mensaje }}</td>
+                  <td>{{ item.adjunto }}</td>
+                  <td>{{ reformatearFecha(item.created_at) }}</td>
+                  <td scope="col">
+                    <button
+                      class="btn btn-success"
+                      type="button"
+                      @click="reenviar(item)"
+                    >
+                      Reenviar
+                    </button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
           <div class="row">
             <div class="col">
               <button type="button" @click="submitForm">
@@ -1954,6 +2018,7 @@ import ModalAgregarCandidatoServicio from "./ModalAgregarCandidatoServicio.vue";
 const { userlogued } = defineProps(["userlogued"]); //props
 
 // Variables reactivas
+const lista_historico_servicios = ref([]);
 const toogleModalAddServicio = ref(false);
 const activeSeccion = ref(0);
 const route = useRoute();
@@ -1983,6 +2048,7 @@ const hijos_info = ref(false);
 const info_academica = ref(false);
 const experiencia_laboral = ref(false);
 const concepto = ref(false);
+const historico_conceptos_servicios = ref(false);
 const informacionPersonalRef = ref(null);
 /* const hijosRef = ref(null); */
 // Formulario reactivo
@@ -2259,6 +2325,7 @@ const llenarFormulario = async () => {
     `${URL_API}api/v1/formulariocandidato/${id}`,
     configHeader()
   );
+  lista_historico_servicios.value = response.data.historico_conceptos_servicios;
   candidato_id.value = response.data.id;
   form.requisitos_asignados = response.data.cumple_requisitos;
   form.curso_alturas = response.data.curso_alturas;
