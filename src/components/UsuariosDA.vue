@@ -292,7 +292,6 @@ export default {
           self.boton(result);
         });
     },
-
     getUsers() {
       let self = this;
       let config = this.configHeader();

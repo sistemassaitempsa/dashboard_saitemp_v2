@@ -49,7 +49,7 @@
               @getClienteServicio="getClienteServicio"
               eventoCampo="getClienteServicio"
               @setClienteServicio="setClienteServicio"
-              :valida_campo="$route.params.id == ''"
+              :valida_campo="route.params.id == ''"
             />
           </div>
           <div
@@ -198,7 +198,7 @@
                 v-model="fecha_inicio"
                 required
                 :min="fecha_actual"
-                :disabled="inhabilita_campo"
+                :disabled="route.params.id != ''"
                 @input="validaFecha()"
               />
               <div class="invalid-feedback">
@@ -222,7 +222,7 @@
                 required
                 :min="fecha_actual"
                 @input="validaFecha()"
-                :disabled="inhabilita_campo"
+                :disabled="route.params.id != ''"
               />
               <div class="invalid-feedback">
                 {{ mensaje_error }}
@@ -373,8 +373,8 @@
           <div class="col">
             <SearchList
               nombreCampo="Cargo solicitado: *"
-              nombreItem="nombre"
-              :registros="cargos"
+              nombreItem="cargo"
+              :registros="cargos_cliente"
               :ordenCampo="1"
               :consulta="consulta_cargo_solicitado"
               @getCargos="getCargos"
@@ -680,8 +680,12 @@
                   :candidato="item"
                 />
               </div>
-              <!-- :motivos_cancelacion_servicio="motivos_cancelacion_servicio" -->
-              <div class="col">
+              <div
+                class="col"
+                v-if="
+                  route.params.id != '' && props.userlogued.tipo_usuario_id == 1
+                "
+              >
                 <ModalCancelaServicio
                   @motivoCancelacion="motivoCancelacion"
                   @getMotivosCancelacionServicio="getMotivosCancelacionServicio"
@@ -693,11 +697,6 @@
                   :candidato="item"
                 />
               </div>
-              <!-- <div class="col">
-                <button type="button" class="btn btn-danger btn-sm">
-                  Bloquear candidato
-                </button>
-              </div> -->
               <div class="col text-end">
                 <button
                   type="button"
@@ -813,7 +812,6 @@ let clientes = ref([]);
 let params_id = ref(route.params.id);
 let candidatos = ref([]);
 let error_documento_identidad = ref([]);
-// let error_documento_identidad = ref(true);
 let boton_crear_seiya = ref(false);
 let fecha_actual = ref(false);
 let inhabilita_campo = ref(false);
@@ -825,6 +823,7 @@ let motivos_cancelacion_servicio = ref([]);
 let consulta_motivo_cancelacion = ref("");
 let motivo_cancelacion_id = ref("");
 let servicio_cancelado = ref("");
+let cargos_cliente = ref([]);
 
 watch(
   () => route.path,
@@ -843,7 +842,7 @@ onMounted(() => {
   lineaServicio();
 getDepartamentos(43);
 getMotivosServicio();
-getCargos();
+
 if (props.userlogued.tipo_usuario_id == 1) {
   getClienteServicio();
 }
@@ -854,6 +853,14 @@ if (route.params.id != "") {
   ordenservicio(route.params.id);
 } else {
   getDatosCliente();
+}
+
+function getCargoCliente(cliente_id) {
+  axios
+    .get(URL_API.value + "api/v1/cargoscliente/" + cliente_id, configHeader())
+    .then(function (result) {
+      cargos_cliente.value = result.data;
+    });
 }
 
 function getEstadoServicio(item = null) {
@@ -971,14 +978,10 @@ function motivoCancelacion(motivo, tipo, candidato) {
     console.log(candidato.numero_documento_candidato);
     console.log(candidato.nombre_candidato);
     console.log(candidato.apellido_candidato);
-    candidato.motivo = motivo
+    candidato.motivo = motivo;
     console.log(motivo);
     axios
-      .post(
-        URL_API.value + "api/v1/listatrump",
-        candidato,
-        configHeader()
-      )
+      .post(URL_API.value + "api/v1/listatrump", candidato, configHeader())
       .then(function (result) {
         showAlert(result.data.message, result.data.status);
       });
@@ -1125,7 +1128,6 @@ function save() {
       const nuevosParametros = { ...rutaActual.params, id: result.data.id };
       router.replace({ ...rutaActual, params: nuevosParametros });
       boton_crear_seiya.value = true;
-      // showAlert(result.data.message, result.data.status);
       confirmAlert(result.data.titulo, result.data.message, result.data.status);
     } else if (result.data.status == "error") {
       confirmAlert(result.data.titulo, result.data.message, result.data.status);
@@ -1150,6 +1152,9 @@ function getDatosCliente() {
       telefono_contacto.value = result.data.telefono_contacto;
       cargo_contacto.value = result.data.cargo_contacto;
       sector_economico_id.value = result.data.sector_economico_id;
+      if (props.userlogued.tipo_usuario_id == 2) {
+        getCargoCliente(result.data.id);
+      }
     });
 }
 
@@ -1212,16 +1217,13 @@ function getMotivosServicio(item = null) {
 
 function getCargos(item = null) {
   if (item) {
-    cargo_solicitado_id.value = item.id;
-    consulta_cargo_solicitado.value = item.nombre;
-    getRecomendaciones(item.subcategoria_cargo_id);
-    getExamenes(item.subcategoria_cargo_id);
+    cargo_solicitado_id.value = item.cargo_id;
+    consulta_cargo_solicitado.value = item.cargo;
+    array_lista_recomendaciones.value = item.recomendaciones;
+    array_lista_examenes.value = item.examenes;
+    funciones_cargo.value = item.funcion_cargo;
   }
-  axios
-    .get(URL_API.value + "api/v1/listacargoscompleta", configHeader())
-    .then(function (result) {
-      cargos = result.data;
-    });
+  return cargos_cliente.value;
 }
 function getRecomendaciones(id) {
   axios
@@ -1242,7 +1244,6 @@ function lineaServicio(item = null) {
     consulta_linea_servicio.value = item.nombre;
     linea_servicio_id.value = item.id;
     if (item.id == 3 || item.id == 4) {
-      // error_documento_identidad.value = false
       candidatos.value = [];
     } else if (item.id == 2) {
       agregarCandidato();
@@ -1377,6 +1378,7 @@ function setClienteServicio(item) {
       nombre_contacto.value = result.data.nombre_contacto;
       telefono_contacto.value = result.data.telefono_contacto;
       cargo_contacto.value = result.data.cargo_contacto;
+      getCargoCliente(result.data.id);
     });
 }
 
