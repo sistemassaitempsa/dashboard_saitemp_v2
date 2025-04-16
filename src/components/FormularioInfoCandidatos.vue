@@ -294,6 +294,7 @@
                   type="text"
                   v-model="form.ap2_emp"
                   id="apellido2"
+                  required
                 />
               </div>
             </div>
@@ -730,11 +731,21 @@
               </div>
               <div class="row">
                 <div class="col">
-                  <label for="" class="form-label"> Cargo:* </label>
-                  <input
+                  <!-- <label for="" class="form-label"> Cargo:* </label> -->
+                  <!--       <input
                     type="text"
                     class="form-control"
                     v-model="experiencia.cargo"
+                  /> -->
+                  <SearchList
+                    nombreCampo="Cargo:*"
+                    @getCargos="getCargos"
+                    eventoCampo="getCargos"
+                    nombreItem="nombre"
+                    :index="index"
+                    :consulta="form.experiencias_laborales[index].cargo"
+                    :registros="lista_cargos"
+                    placeholder="Seleccione una opción"
                   />
                 </div>
                 <div class="col">
@@ -876,7 +887,6 @@
                     :consulta="certificado"
                     :registros="certificados"
                     placeholder="Seleccione una opción"
-                    :disabled="disabled"
                   />
                 </div>
                 <div class="col">
@@ -1897,7 +1907,7 @@
                 style="cursor: pointer"
                 ref="conceptoRef"
               >
-                7. Concepto
+                Concepto
                 <i v-if="concepto" class="bi bi-chevron-compact-up"></i
                 ><i v-if="!concepto" class="bi bi-chevron-down"></i>
               </h5>
@@ -1928,7 +1938,7 @@
                 style="cursor: pointer"
                 ref="conceptoRef"
               >
-                8. Historico de conceptos en servicios
+                Historico de conceptos en servicios
                 <i
                   v-if="historico_conceptos_servicios"
                   class="bi bi-chevron-compact-up"
@@ -1940,7 +1950,7 @@
               </h5>
             </div>
           </div>
-          <div class="table-responsive" v-if="!historico_conceptos_servicios">
+          <div class="table-responsive" v-if="historico_conceptos_servicios">
             <table
               class="table table-striped table-hover table-bordered align-middle"
             >
@@ -1950,7 +1960,7 @@
                   <th scope="col">Servicio</th>
                   <th scope="col">Razon social</th>
                   <th scope="col">Cargo</th>
-                  <th scope="col">concepto</th>
+                  <th scope="col">Concepto</th>
                   <th scope="col">Fecha de creación</th>
                   <th scope="col">Acciones</th>
                 </tr>
@@ -1961,28 +1971,74 @@
                   :key="index"
                 >
                   <th scope="row">{{ index }}</th>
-                  <td>{{ item.remitente }}</td>
-                  <td>{{ item.destinatario }}</td>
-                  <td>{{ item.con_copia }}</td>
-                  <td>{{ item.con_copia_oculta }}</td>
-                  <td>{{ item.asunto }}</td>
-                  <td>{{ item.mensaje }}</td>
-                  <td>{{ item.adjunto }}</td>
+                  <td>{{ item.numero_radicado }}</td>
+                  <td>{{ item.razon_social }}</td>
+                  <td>{{ item.cargo }}</td>
+                  <td>{{ item.concepto }}</td>
                   <td>{{ reformatearFecha(item.created_at) }}</td>
                   <td scope="col">
                     <button
-                      class="btn btn-success"
+                      class="btn btn-success btn-addServicio"
                       type="button"
-                      @click="reenviar(item)"
+                      @click="verRegistroSeiya(item)"
                     >
-                      Reenviar
+                      Ver registro
                     </button>
                   </td>
                 </tr>
               </tbody>
             </table>
           </div>
-
+          <div class="row" v-if="userlogued.tipo_usuario_id == 1">
+            <div class="col">
+              <h5
+                @click="
+                  historico_conceptos_servicios_generales =
+                    !historico_conceptos_servicios_generales
+                "
+                style="cursor: pointer"
+                ref="conceptoRef"
+              >
+                Historico de conceptos generales
+                <i
+                  v-if="historico_conceptos_servicios_generales"
+                  class="bi bi-chevron-compact-up"
+                ></i
+                ><i
+                  v-if="!historico_conceptos_servicios_generales"
+                  class="bi bi-chevron-down"
+                ></i>
+              </h5>
+            </div>
+          </div>
+          <div
+            class="table-responsive"
+            v-if="historico_conceptos_servicios_generales"
+          >
+            <table
+              class="table table-striped table-hover table-bordered align-middle"
+            >
+              <thead>
+                <tr>
+                  <th scope="col">#</th>
+                  <th scope="col">Concepto</th>
+                  <th scope="col">Usuario que generó</th>
+                  <th scope="col">Fecha de creación</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr
+                  v-for="(item, index) in lista_historico_servicios_generales"
+                  :key="index"
+                >
+                  <th scope="row">{{ index }}</th>
+                  <td>{{ item.concepto }}</td>
+                  <td>{{ item.usuario_guarda }}</td>
+                  <td>{{ reformatearFecha(item.created_at) }}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
           <div class="row">
             <div class="col">
               <button type="button" @click="submitForm">
@@ -2012,12 +2068,15 @@ import {
 } from "vue";
 import axios from "axios";
 import { useAlerts } from "@/composables/useAlerts";
-import { useRoute } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 import ModalAgregarCandidatoServicio from "./ModalAgregarCandidatoServicio.vue";
 
 const { userlogued } = defineProps(["userlogued"]); //props
 
 // Variables reactivas
+const router = useRouter();
+const lista_historico_servicios_generales = ref([]);
+const historico_conceptos_servicios_generales = ref(false);
 const lista_historico_servicios = ref([]);
 const toogleModalAddServicio = ref(false);
 const activeSeccion = ref(0);
@@ -2121,6 +2180,7 @@ const candidato_id = ref("");
 const certificado = ref("");
 const certificados = ref([]);
 const paises = ref([]);
+const lista_cargos = ref([]);
 const lista_sectores_economicos = ref([]);
 const lista_bancos = ref([]);
 const lista_etnia = ref([]);
@@ -2313,6 +2373,25 @@ const remainingCharsExperiencia = (index) => {
   return 0 + (form.experiencias_laborales[index]?.funciones.length || 0);
 };
 
+const verRegistroSeiya = (item) => {
+  router.push({
+    path: `/navbar/gestion-ingresos/${item.formulario_ingreso_id}`,
+  });
+};
+
+const reformatearFecha = (fechaOriginal) => {
+  const fechaHora = new Date(fechaOriginal);
+  const año = fechaHora.getFullYear();
+  const mes = (fechaHora.getMonth() + 1).toString().padStart(2, "0"); // Los meses son indexados desde 0
+  const dia = fechaHora.getDate().toString().padStart(2, "0");
+  const horas = fechaHora.getHours().toString().padStart(2, "0");
+  const minutos = fechaHora.getMinutes().toString().padStart(2, "0");
+  const segundos = fechaHora.getSeconds().toString().padStart(2, "0");
+  const fechaFormateada = `${dia}/${mes}/${año}  `;
+  const horaFormateada = `${horas}:${minutos}:${segundos}`;
+  return fechaFormateada + " " + horaFormateada;
+};
+
 const llenarFormulario = async () => {
   loading.value = true;
   const id =
@@ -2325,6 +2404,8 @@ const llenarFormulario = async () => {
     `${URL_API}api/v1/formulariocandidato/${id}`,
     configHeader()
   );
+  lista_historico_servicios_generales.value =
+    response.data.historico_conceptos_servicios_generales;
   lista_historico_servicios.value = response.data.historico_conceptos_servicios;
   candidato_id.value = response.data.id;
   form.requisitos_asignados = response.data.cumple_requisitos;
@@ -2762,19 +2843,18 @@ const getSectorAcademico = async (item = null) => {
 };
 const getCertificados = async (item = null) => {
   if (item != null) {
-    if (form.requisitos_asignados.length > 0) {
-      let encontrado = false;
-      form.requisitos_asignados.forEach((element) => {
-        if (element.requisito_id == item.id) {
-          encontrado = true;
-        }
+    console.log(item);
+    // Verificar si el requisito ya existe
+    const existe = form.requisitos_asignados.some(
+      (element) => element.requisito_id === item.id
+    );
+
+    // Agregar si no existe
+    if (!existe) {
+      form.requisitos_asignados.push({
+        requisito_id: item.id,
+        nombre: item.nombre,
       });
-      if (encontrado == false) {
-        form.requisitos_asignados.push({
-          requisito_id: item.id,
-          nombre: item.nombre,
-        });
-      }
     }
   }
   const response = await axios.get(
@@ -2790,6 +2870,16 @@ const getIdioma = async (item = null, index) => {
   }
   const response = await axios.get(URL_API + "api/v1/idiomas", configHeader());
   lista_idiomas.value = response.data;
+};
+const getCargos = async (item = null, index) => {
+  if (item != null) {
+    form.experiencias_laborales[index].cargo = item.nombre;
+  }
+  const response = await axios.get(
+    URL_API + "api/v1/cargosCandidato",
+    configHeader()
+  );
+  lista_cargos.value = response.data;
 };
 
 const getSectorEconomico = async (item = null, index) => {
