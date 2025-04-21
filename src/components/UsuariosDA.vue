@@ -289,10 +289,6 @@ export default {
       axios
         .get(self.URL_API + "api/v1/ldapuserfilter/" + user, config)
         .then(function (result) {
-          // self.users = result.data.data;
-          // self.result = result;
-          // self.totalRegistros = result.data.total
-          // self.paginaActual = result.data.current_page
           self.boton(result);
         });
     },

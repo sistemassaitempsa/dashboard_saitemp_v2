@@ -1777,7 +1777,7 @@
             <div class="row">
               <div class="col">
                 <label class="form-check-label" for="flexSwitchCheckChecked"
-                  >Por favor seleccione si el tipo de cargo:</label
+                  >Por favor seleccione el tipo de cargo:</label
                 >
               </div>
               <div style="display: flex">
