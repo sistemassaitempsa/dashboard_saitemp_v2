@@ -2464,7 +2464,7 @@ const llenarFormulario = async () => {
       ? userlogued.email
       : response.data.novasoft
       ? response.data.novasoft.e_mail
-      : "";
+      : response.data.email;
   form.pai_res = response.data.novasoft ? response.data.novasoft.pai_res : "";
   form.dpt_res = response.data.novasoft ? response.data.novasoft.dpt_res : "";
   form.ciu_res = response.data.novasoft ? response.data.novasoft.ciu_res : "";
