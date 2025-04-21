@@ -1371,6 +1371,7 @@ function setClienteServicio(item) {
     )
     .then(function (result) {
       nit.value = result.data.nit;
+      cliente_id.value = result.data.id;
       razon_social.value = result.data.razon_social;
       actividad_ciiu.value = result.data.actividad_ciiu;
       sector_economico.value = result.data.sector_economico;

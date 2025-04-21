@@ -249,7 +249,7 @@
             Actualizar Cargo
           </button>
         </div>
-        <div class="col">
+        <div class="col" v-if="cargos_cliente.length > 0">
           <button type="submit" class="btn btn-sm btn-success mt-4 mb-4">
             Guardar
           </button>
