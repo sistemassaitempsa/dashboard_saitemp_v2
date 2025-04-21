@@ -17,7 +17,7 @@ const router = useRouter();
 const { URL_API, configHeader } = useConfig();
 
 const props = defineProps({
-    userlogued: Object
+  userlogued: { type: Object, default: () => { } }
 });
 
 let datos = ref([]);

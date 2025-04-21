@@ -58,7 +58,7 @@ import EstadosDebidaDIligenciaAdmin from "../components/EstadosDebidaDiligenciaA
 import EditarCliente from "../components/EditarCliente.vue";
 import InicioSesionCandidatos from "@/components/InicioSesionCandidatos.vue";
 import RecoverPassword from "@/components/RecoverPassword.vue";
-import Cliente from '../components/Cliente.vue';
+import Cliente from "../components/Cliente.vue";
 import FormularioInfoCandidatos from "@/components/FormularioInfoCandidatos.vue";
 import ResetPasswordView from "@/views/ResetPasswordView.vue";
 import ConsultaFormularioCandidatos from "@/components/ConsultaFormularioCandidatos.vue";
@@ -67,7 +67,7 @@ import SectorEconomico from "@/components/SectorEconomico.vue";
 import SectorECiiu from "@/components/SectorECiiu.vue";
 import ProfesionalSector from "@/components/ProfesionalSector.vue";
 import AsignacionServicio from "@/components/AsignacionServicio.vue";
-
+import CargosCliente from "@/components/CargosCliente.vue";
 
 // Configuración de rutas
 const routes = [
@@ -412,7 +412,11 @@ const routes = [
         name: "consultatodoscentrosdetrabajo",
         component: TablaCentrosDeTrabajo,
       },
-
+      {
+        path: "cargos-cliente",
+        name: "cargos-cliente",
+        component: CargosCliente,
+      },
     ],
   },
 ];

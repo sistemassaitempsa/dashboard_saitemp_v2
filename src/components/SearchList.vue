@@ -217,12 +217,7 @@ export default {
           );
           break;
         case "getAfirmacionNegacion":
-          this.$emit(
-            "setAfirmacionNegacion",
-            item,
-            this.ordenCampo,
-            this.index
-          );
+          this.$emit("setAfirmacionNegacion", item, this.ordenCampo, this.index );
           break;
         case "getBancos":
           this.$emit("setBanco", item, this.ordenCampo, this.index);

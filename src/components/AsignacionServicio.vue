@@ -104,7 +104,7 @@ onMounted(() => {
 function getUsuariosDisponibles() {
     axios.get(URL_API.value + 'api/v1/usuariodisponibleservicio', configHeader()).then(function (result) {
         result.data.usuarios.forEach(element => {
-            if (element.rol_usuario_interno_id == 9) {
+            if (element.rol_usuario_interno_id == 5) {
                 asignar_facilitadores.value.push(element);
             } else if (element.rol_usuario_interno_id == 4) {
                 asignar_profesionales.value.push(element);
@@ -138,7 +138,7 @@ function getFacilitadores(item = null) {
     if (item != null && !asignar_facilitadores.value.some(array => array.id === item.id)) {
         asignar_facilitadores.value.push(item);
     }
-    axios.get(URL_API.value + 'api/v1/usuariointernorol/9', configHeader()).then(function (result) {
+    axios.get(URL_API.value + 'api/v1/usuariointernorol/5', configHeader()).then(function (result) {
         facilitadores.value = result.data;
     });
 }
