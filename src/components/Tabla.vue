@@ -2,11 +2,20 @@
   <div id="container2">
     <Loading :loading="loading" />
     <div v-if="toogleModal">
-      <ModalResponsableDD v-if="estado_firma_id" :estado_firma_id="estado_firma_id" :nombre_estado="nombre_estado"
-        @actualizaEstadoHijo="actualizaEstadoPadreDD" @closeModalDD="closeModalDD" />
+      <ModalResponsableDD
+        v-if="estado_firma_id"
+        :estado_firma_id="estado_firma_id"
+        :nombre_estado="nombre_estado"
+        @actualizaEstadoHijo="actualizaEstadoPadreDD"
+        @closeModalDD="closeModalDD"
+      />
     </div>
 
-    <div class="row" id="container" style="float: left; clear: both; color: #d06519">
+    <div
+      class="row"
+      id="container"
+      style="float: left; clear: both; color: #d06519"
+    >
       <div class="col-xs-12 col-md-12">
         <h5 v-if="!sin_registros">
           Mostrando {{ this.items_tabla2.length }} de
@@ -14,21 +23,41 @@
         </h5>
       </div>
     </div>
-    <div v-if="items_tabla2.length > 0 && filtro_visible" class="row" style="text-align: left; clear: both">
-      <span @click="filtros = !filtros" style="cursor: pointer">Filtro avanzado de búsqueda
-        <i v-if="filtros" class="bi bi-chevron-down"></i><i v-if="!filtros" class="bi bi-chevron-compact-up"></i></span>
+    <div
+      v-if="items_tabla2.length > 0 && filtro_visible"
+      class="row"
+      style="text-align: left; clear: both"
+    >
+      <span @click="filtros = !filtros" style="cursor: pointer"
+        >Filtro avanzado de búsqueda
+        <i v-if="filtros" class="bi bi-chevron-down"></i
+        ><i v-if="!filtros" class="bi bi-chevron-compact-up"></i
+      ></span>
     </div>
-    <div class="row" v-if="filtros && ruta == '/navbar/gestion-ingresosl'" style="
+    <div
+      class="row"
+      v-if="filtros && ruta == '/navbar/gestion-ingresosl'"
+      style="
         clear: both;
         padding: 30px;
         border: solid #d5dbdb 0.5px;
         border-radius: 10px;
-      ">
+      "
+    >
       <div v-for="(item, index1) in 3" :key="item" class="row">
         <div class="col-xs-3 col-md-3">
-          <label for="exampleFormControlInput1" class="form-label" style="float: left">Campo</label>
-          <select class="form-select form-select-sm" @change="tipoCampo2(indice_campos[index1], index1)"
-            v-model="indice_campos[index1]" aria-label="Default select example">
+          <label
+            for="exampleFormControlInput1"
+            class="form-label"
+            style="float: left"
+            >Campo</label
+          >
+          <select
+            class="form-select form-select-sm"
+            @change="tipoCampo2(indice_campos[index1], index1)"
+            v-model="indice_campos[index1]"
+            aria-label="Default select example"
+          >
             <option v-for="(item, index) in tabla3" :key="index">
               {{
                 index == 0 ? "Por favor seleccione un" + " campo" : item.nombre
@@ -37,8 +66,17 @@
           </select>
         </div>
         <div class="col-xs-3 col-md-3">
-          <label for="exampleFormControlInput1" class="form-label" style="float: left">Comparación</label>
-          <select class="form-select form-select-sm" v-model="operadores[index1]" aria-label="Default select example">
+          <label
+            for="exampleFormControlInput1"
+            class="form-label"
+            style="float: left"
+            >Comparación</label
+          >
+          <select
+            class="form-select form-select-sm"
+            v-model="operadores[index1]"
+            aria-label="Default select example"
+          >
             <option v-if="tipos_de_campo[index1] == 'numero'">Menor que</option>
             <option v-if="tipos_de_campo[index1] == 'numero'">Mayor que</option>
             <option v-if="tipos_de_campo[index1] == 'numero'">
@@ -50,103 +88,194 @@
             <option v-if="tipos_de_campo[index1] == 'numero'">
               Igual a número
             </option>
-            <option v-if="
-              tipos_de_campo[index1] == 'numero' ||
-              tipos_de_campo[index1] == 'fecha'
-            ">
+            <option
+              v-if="
+                tipos_de_campo[index1] == 'numero' ||
+                tipos_de_campo[index1] == 'fecha'
+              "
+            >
               Entre
             </option>
             <option v-if="tipos_de_campo[index1] == 'texto'">Igual a</option>
             <option v-if="tipos_de_campo[index1] == 'fecha'">
               Igual a fecha
             </option>
-            <option v-if="
-              tipos_de_campo[index1] == 'texto' &&
-              calculados[index1] == 'false'
-            ">
+            <option
+              v-if="
+                tipos_de_campo[index1] == 'texto' &&
+                calculados[index1] == 'false'
+              "
+            >
               Contiene
             </option>
           </select>
         </div>
         <div v-if="tipos_de_campo[index1] == 'fecha'" class="col-xs-3 col-md-3">
           <div class="mb-3">
-            <label for="exampleInputEmail1" style="float: left" class="form-label">{{
-              operadores[index1] != "Entre" ? "Fecha" : "Fecha inicial"
-            }}</label>
-            <input type="date" class="form-control form-control-sm" id="exampleInputEmail2" aria-describedby="emailHelp"
-              v-model="valores_comparar[index1]" />
+            <label
+              for="exampleInputEmail1"
+              style="float: left"
+              class="form-label"
+              >{{
+                operadores[index1] != "Entre" ? "Fecha" : "Fecha inicial"
+              }}</label
+            >
+            <input
+              type="date"
+              class="form-control form-control-sm"
+              id="exampleInputEmail2"
+              aria-describedby="emailHelp"
+              v-model="valores_comparar[index1]"
+            />
           </div>
         </div>
         <div v-else class="col-xs-3 col-md-3">
           <div v-if="calculados[index1] == 'true'">
-            <label for="exampleFormControlInput1" class="form-label" style="float: left">Valor</label>
-            <select class="form-select form-select-sm" @change="idCampo2(valores_comparar2[index1], index1)"
-              v-model="valores_comparar2[index1]" aria-label="Default select example">
+            <label
+              for="exampleFormControlInput1"
+              class="form-label"
+              style="float: left"
+              >Valor</label
+            >
+            <select
+              class="form-select form-select-sm"
+              @change="idCampo2(valores_comparar2[index1], index1)"
+              v-model="valores_comparar2[index1]"
+              aria-label="Default select example"
+            >
               <option v-for="(item, index) in listaItem" :key="index">
                 {{ item.nombre }}
               </option>
             </select>
           </div>
           <div v-if="calculados[index1] == 'false'" class="mb-3">
-            <label for="exampleInputEmail1" style="float: left" class="form-label">{{
-              operadores[index1] != "Entre" ? "Valor" : "Valor inicial"
-            }}</label>
-            <input type="text" class="form-control form-control-sm" autocomplete="off" id="exampleInputEmail2"
-              aria-describedby="emailHelp" v-model="valores_comparar[index1]" />
+            <label
+              for="exampleInputEmail1"
+              style="float: left"
+              class="form-label"
+              >{{
+                operadores[index1] != "Entre" ? "Valor" : "Valor inicial"
+              }}</label
+            >
+            <input
+              type="text"
+              class="form-control form-control-sm"
+              autocomplete="off"
+              id="exampleInputEmail2"
+              aria-describedby="emailHelp"
+              v-model="valores_comparar[index1]"
+            />
           </div>
         </div>
-        <div v-if="
-          tipos_de_campo[index1] == 'fecha' && operadores[index1] == 'Entre'
-        " class="col-xs-3 col-md-3">
+        <div
+          v-if="
+            tipos_de_campo[index1] == 'fecha' && operadores[index1] == 'Entre'
+          "
+          class="col-xs-3 col-md-3"
+        >
           <div class="mb-3">
-            <label for="exampleInputEmail1" style="float: left" class="form-label">Fecha final</label>
-            <input type="date" class="form-control form-control-sm" id="exampleInputEmail2" aria-describedby="emailHelp"
-              v-model="valores_comparar2[index1]" />
+            <label
+              for="exampleInputEmail1"
+              style="float: left"
+              class="form-label"
+              >Fecha final</label
+            >
+            <input
+              type="date"
+              class="form-control form-control-sm"
+              id="exampleInputEmail2"
+              aria-describedby="emailHelp"
+              v-model="valores_comparar2[index1]"
+            />
           </div>
         </div>
-        <div v-if="
-          tipos_de_campo[index1] == 'numero' && operadores[index1] == 'Entre'
-        " class="col-xs-3 col-md-3">
+        <div
+          v-if="
+            tipos_de_campo[index1] == 'numero' && operadores[index1] == 'Entre'
+          "
+          class="col-xs-3 col-md-3"
+        >
           <div class="mb-3">
-            <label for="exampleInputEmail1" style="float: left" class="form-label">Valor final</label>
-            <input type="text" class="form-control form-control-sm" id="exampleInputEmail2" aria-describedby="emailHelp"
-              v-model="valores_comparar2[index1]" />
+            <label
+              for="exampleInputEmail1"
+              style="float: left"
+              class="form-label"
+              >Valor final</label
+            >
+            <input
+              type="text"
+              class="form-control form-control-sm"
+              id="exampleInputEmail2"
+              aria-describedby="emailHelp"
+              v-model="valores_comparar2[index1]"
+            />
           </div>
         </div>
       </div>
       <div class="row">
         <div class="col-xs-3 col-md-3">
-          <button @click="filtrar2(false)" type="button" style="margin-top: 30px" class="btn btn-success btn-sm">
+          <button
+            @click="filtrar2(false)"
+            type="button"
+            style="margin-top: 30px"
+            class="btn btn-success btn-sm"
+          >
             Realizar búsqueda
           </button>
         </div>
-        <div v-if="ruta == '/navbar/gestion-ingresosl'" class="col-xs-3 col-md-3">
+        <div
+          v-if="ruta == '/navbar/gestion-ingresosl'"
+          class="col-xs-3 col-md-3"
+        >
           <button id="exportar" type="button" class="btn btn-success btn-sm">
-            <a :href="URL_API +
-              'api/v1/' +
-              endpointexport +
-              '/' +
-              base64consultaingresos
-              " rel="noopener noreferrer">Exportar excel</a>
+            <a
+              :href="
+                URL_API +
+                'api/v1/' +
+                endpointexport +
+                '/' +
+                base64consultaingresos
+              "
+              rel="noopener noreferrer"
+              >Exportar excel</a
+            >
           </button>
         </div>
         <div class="col-xs-3 col-md-3">
-          <button @click="getRegistros()" type="button" style="margin-top: 30px" class="btn btn-success btn-sm">
+          <button
+            @click="getRegistros()"
+            type="button"
+            style="margin-top: 30px"
+            class="btn btn-success btn-sm"
+          >
             Borrar búsqueda
           </button>
         </div>
       </div>
     </div>
-    <div v-if="filtros && ruta != '/navbar/gestion-ingresosl'" class="row" style="
+    <div
+      v-if="filtros && ruta != '/navbar/gestion-ingresosl'"
+      class="row"
+      style="
         clear: both;
         padding: 30px;
         border: solid #d5dbdb 0.5px;
         border-radius: 10px;
-      ">
+      "
+    >
       <div class="col-xs-3 col-md-3">
-        <label for="exampleFormControlInput1" class="form-label" style="float: left">Campo</label>
-        <select class="form-select form-select-sm" @change="tipoCampo(indice_campo)" v-model="indice_campo"
-          aria-label="Default select example">
+        <label
+          for="exampleFormControlInput1"
+          class="form-label"
+          style="float: left"
+          >Campo</label
+        >
+        <select
+          class="form-select form-select-sm"
+          @change="tipoCampo(indice_campo)"
+          v-model="indice_campo"
+          aria-label="Default select example"
+        >
           <option v-for="(item, index) in tabla2" :key="index">
             {{
               index == 0 ? "Por favor seleccione un" + " campo" : item.nombre
@@ -155,8 +284,17 @@
         </select>
       </div>
       <div class="col-xs-3 col-md-3">
-        <label for="exampleFormControlInput1" class="form-label" style="float: left">Comparación</label>
-        <select class="form-select form-select-sm" v-model="operador" aria-label="Default select example">
+        <label
+          for="exampleFormControlInput1"
+          class="form-label"
+          style="float: left"
+          >Comparación</label
+        >
+        <select
+          class="form-select form-select-sm"
+          v-model="operador"
+          aria-label="Default select example"
+        >
           <option v-if="tipo_de_campo == 'numero'">Menor que</option>
           <option v-if="tipo_de_campo == 'numero'">Mayor que</option>
           <option v-if="tipo_de_campo == 'numero'">Menor o igual que</option>
@@ -174,123 +312,238 @@
       </div>
       <div v-if="tipo_de_campo == 'fecha'" class="col-xs-3 col-md-3">
         <div class="mb-3">
-          <label for="exampleInputEmail1" style="float: left" class="form-label">{{ operador != "Entre" ? "Fecha" :
-            "Fecha inicial" }}</label>
-          <input type="date" class="form-control form-control-sm" id="exampleInputEmail2" aria-describedby="emailHelp"
-            v-model="valor_comparar" />
+          <label
+            for="exampleInputEmail1"
+            style="float: left"
+            class="form-label"
+            >{{ operador != "Entre" ? "Fecha" : "Fecha inicial" }}</label
+          >
+          <input
+            type="date"
+            class="form-control form-control-sm"
+            id="exampleInputEmail2"
+            aria-describedby="emailHelp"
+            v-model="valor_comparar"
+          />
         </div>
       </div>
       <div v-else class="col-xs-3 col-md-3">
         <div v-if="calculado == 'true'">
-          <label for="exampleFormControlInput1" class="form-label" style="float: left">Valor</label>
-          <select class="form-select form-select-sm" @change="idCampo(valor_comparar2)" v-model="valor_comparar2"
-            aria-label="Default select example">
+          <label
+            for="exampleFormControlInput1"
+            class="form-label"
+            style="float: left"
+            >Valor</label
+          >
+          <select
+            class="form-select form-select-sm"
+            @change="idCampo(valor_comparar2)"
+            v-model="valor_comparar2"
+            aria-label="Default select example"
+          >
             <option v-for="(item, index) in listaItem" :key="index">
               {{ item.nombre }}
             </option>
           </select>
         </div>
         <div v-if="calculado == 'false'" class="mb-3">
-          <label for="exampleInputEmail1" style="float: left" class="form-label">{{ operador != "Entre" ? "Valor" :
-            "Valor inicial" }}</label>
-          <input type="text" class="form-control form-control-sm" autocomplete="off" id="exampleInputEmail2"
-            aria-describedby="emailHelp" v-model="valor_comparar" />
+          <label
+            for="exampleInputEmail1"
+            style="float: left"
+            class="form-label"
+            >{{ operador != "Entre" ? "Valor" : "Valor inicial" }}</label
+          >
+          <input
+            type="text"
+            class="form-control form-control-sm"
+            autocomplete="off"
+            id="exampleInputEmail2"
+            aria-describedby="emailHelp"
+            v-model="valor_comparar"
+          />
         </div>
       </div>
-      <div v-if="tipo_de_campo == 'fecha' && operador == 'Entre'" class="col-xs-3 col-md-3">
+      <div
+        v-if="tipo_de_campo == 'fecha' && operador == 'Entre'"
+        class="col-xs-3 col-md-3"
+      >
         <div class="mb-3">
-          <label for="exampleInputEmail1" style="float: left" class="form-label">Fecha final</label>
-          <input type="date" class="form-control form-control-sm" id="exampleInputEmail2" aria-describedby="emailHelp"
-            v-model="valor_comparar2" />
+          <label for="exampleInputEmail1" style="float: left" class="form-label"
+            >Fecha final</label
+          >
+          <input
+            type="date"
+            class="form-control form-control-sm"
+            id="exampleInputEmail2"
+            aria-describedby="emailHelp"
+            v-model="valor_comparar2"
+          />
         </div>
       </div>
-      <div v-if="tipo_de_campo == 'numero' && operador == 'Entre'" class="col-xs-3 col-md-3">
+      <div
+        v-if="tipo_de_campo == 'numero' && operador == 'Entre'"
+        class="col-xs-3 col-md-3"
+      >
         <div class="mb-3">
-          <label for="exampleInputEmail1" style="float: left" class="form-label">Valor final</label>
-          <input type="text" class="form-control form-control-sm" id="exampleInputEmail2" aria-describedby="emailHelp"
-            v-model="valor_comparar2" />
+          <label for="exampleInputEmail1" style="float: left" class="form-label"
+            >Valor final</label
+          >
+          <input
+            type="text"
+            class="form-control form-control-sm"
+            id="exampleInputEmail2"
+            aria-describedby="emailHelp"
+            v-model="valor_comparar2"
+          />
         </div>
       </div>
       <div class="row">
         <div class="col-xs-3 col-md-3">
-          <button @click="filtrar()" type="button" style="margin-top: 30px" class="btn btn-success btn-sm">
+          <button
+            @click="filtrar()"
+            type="button"
+            style="margin-top: 30px"
+            class="btn btn-success btn-sm"
+          >
             Realizar búsqueda
           </button>
         </div>
-        <div v-if="
-          (ruta == '/navbar/debida-diligencia/clientes' &&
-            this.campo != '' &&
-            this.operador &&
-            this.valor_comparar) ||
-          this.valor_comparar2 ||
-          (ruta == '/navbar/lista-riesgos' &&
-            this.campo != '' &&
-            this.operador &&
-            this.valor_comparar) ||
-          this.valor_comparar2
-        " class="col-xs-3 col-md-3">
-          <button id="exportar" @click="exportar()" type="button" class="btn btn-success btn-sm">
-            <a :href="URL_API + 'api/v1/' + endpointexport + '/' + base64consulta
-              " rel="noopener noreferrer">Exportar excel</a>
+        <div
+          v-if="
+            (ruta == '/navbar/debida-diligencia/clientes' &&
+              this.campo != '' &&
+              this.operador &&
+              this.valor_comparar) ||
+            this.valor_comparar2 ||
+            (ruta == '/navbar/lista-riesgos' &&
+              this.campo != '' &&
+              this.operador &&
+              this.valor_comparar) ||
+            this.valor_comparar2
+          "
+          class="col-xs-3 col-md-3"
+        >
+          <button
+            id="exportar"
+            @click="exportar()"
+            type="button"
+            class="btn btn-success btn-sm"
+          >
+            <a
+              :href="
+                URL_API + 'api/v1/' + endpointexport + '/' + base64consulta
+              "
+              rel="noopener noreferrer"
+              >Exportar excel</a
+            >
           </button>
         </div>
         <div class="col-xs-3 col-md-3">
-          <button @click="getRegistros()" type="button" style="margin-top: 30px" class="btn btn-success btn-sm">
+          <button
+            @click="getRegistros()"
+            type="button"
+            style="margin-top: 30px"
+            class="btn btn-success btn-sm"
+          >
             Borrar búsqueda
           </button>
         </div>
       </div>
     </div>
-    <div class="row" v-if="
-      (!sin_registros &&
-        items_tabla2.length > 0 &&
-        ruta == '/navbar/gestion-ingresosl') ||
-      (!sin_registros &&
-        items_tabla2.length > 0 &&
-        ruta == '/navbar/lista-riesgos')
-    " style="clear: both">
+    <div
+      class="row"
+      v-if="
+        (!sin_registros &&
+          items_tabla2.length > 0 &&
+          ruta == '/navbar/gestion-ingresosl') ||
+        (!sin_registros &&
+          items_tabla2.length > 0 &&
+          ruta == '/navbar/lista-riesgos') ||
+        (!sin_registros &&
+          items_tabla2.length > 0 &&
+          ruta == '/navbar/formularioinfocandidatoTabla')
+      "
+      style="clear: both"
+    >
       <div class="col-3 mb-3">
         <label for="exampleInputEmail1" style="float: left" class="form-label">
-          {{ label_busqueda_rapida }}</label>
-        <input type="text" class="form-control form-control-sm" autocomplete="off" id="exampleInputEmail2"
-          aria-describedby="emailHelp" v-model="numero_documento_candidato" />
+          {{ label_busqueda_rapida }}</label
+        >
+        <input
+          type="text"
+          class="form-control form-control-sm"
+          autocomplete="off"
+          id="exampleInputEmail2"
+          aria-describedby="emailHelp"
+          v-model="numero_documento_candidato"
+        />
       </div>
-      <div v-if="
-        (!sin_registros &&
-          items_tabla2.length > 0 &&
-          ruta == '/navbar/gestion-ingresosl' &&
-          numero_documento_candidato != '') ||
-        (!sin_registros &&
-          items_tabla2.length > 0 &&
-          ruta == '/navbar/lista-riesgos' &&
-          numero_documento_candidato != '')
-      " class="col-xs-3 col-md-3">
-        <button type="button" style="margin-top: 35px" @click="buscarDocumentoLista()" class="btn btn-success btn-sm">
+      <div
+        v-if="
+          (!sin_registros &&
+            items_tabla2.length > 0 &&
+            ruta == '/navbar/gestion-ingresosl' &&
+            numero_documento_candidato != '') ||
+          (!sin_registros &&
+            items_tabla2.length > 0 &&
+            ruta == '/navbar/lista-riesgos' &&
+            numero_documento_candidato != '') ||
+          (!sin_registros &&
+            items_tabla2.length > 0 &&
+            ruta == '/navbar/formularioinfocandidatoTabla' &&
+            numero_documento_candidato != '')
+        "
+        class="col-xs-3 col-md-3"
+      >
+        <button
+          type="button"
+          style="margin-top: 35px"
+          @click="buscarDocumentoLista()"
+          class="btn btn-success btn-sm"
+        >
           Buscar
         </button>
       </div>
-      <div v-if="
-        (!sin_registros &&
-          items_tabla2.length > 0 &&
-          ruta == '/navbar/gestion-ingresosl' &&
-          busqueda_por_documento == true) ||
-        (!sin_registros &&
-          items_tabla2.length > 0 &&
-          ruta == '/navbar/lista-riesgos' &&
-          busqueda_por_documento == true)
-      " class="col-xs-3 col-md-3">
-        <button type="button" style="margin-top: 35px" @click="getRegistros(), (busqueda_por_documento = false)"
-          class="btn btn-success btn-sm">
+      <div
+        v-if="
+          (!sin_registros &&
+            items_tabla2.length > 0 &&
+            ruta == '/navbar/gestion-ingresosl' &&
+            busqueda_por_documento == true) ||
+          (!sin_registros &&
+            items_tabla2.length > 0 &&
+            ruta == '/navbar/lista-riesgos' &&
+            busqueda_por_documento == true)
+        "
+        class="col-xs-3 col-md-3"
+      >
+        <button
+          type="button"
+          style="margin-top: 35px"
+          @click="getRegistros(), (busqueda_por_documento = false)"
+          class="btn btn-success btn-sm"
+        >
           Borrar búsqueda
         </button>
       </div>
     </div>
     <div class="row" style="clear: both">
-      <div v-if="ruta != '/navbar/procesosespeciales'" class="col-xs-3 col-md-3">
-        <label for="exampleFormControlInput1" class="form-label" style="float: left">Cantidad de registros a
-          listar</label>
-        <select class="form-select form-select-sm" @change="verificarConsultaFiltro()" v-model="cantidad"
-          aria-label="Default select example">
+      <div
+        v-if="ruta != '/navbar/procesosespeciales'"
+        class="col-xs-3 col-md-3"
+      >
+        <label
+          for="exampleFormControlInput1"
+          class="form-label"
+          style="float: left"
+          >Cantidad de registros a listar</label
+        >
+        <select
+          class="form-select form-select-sm"
+          @change="verificarConsultaFiltro()"
+          v-model="cantidad"
+          aria-label="Default select example"
+        >
           <option>10</option>
           <option v-if="links.total > 10">20</option>
           <option v-if="links.total > 50">50</option>
@@ -300,135 +553,226 @@
           <option v-if="links.total > 1000">500</option>
         </select>
       </div>
-      <div v-if="
-        ruta != '/navbar/reporteitems' &&
-        !empleados() &&
-        ruta != '/navbar/reportes' &&
-        ruta != '/navbar/procesosespeciales' &&
-        ruta != '/navbar/debida-diligencia/clientes' &&
-        ruta != '/navbar/correo-novedades-nomina' &&
-        ruta != '/navbar/cliente-supervision' &&
-        ruta != '/navbar/solicitudes-os'
-      " class="col-xs-3 col-md-3">
-        <button type="button" style="margin-top: 35px" @click="selectAll((select_all = !select_all))"
-          class="btn btn-success btn-sm">
+      <div
+        v-if="
+          ruta != '/navbar/reporteitems' &&
+          !empleados() &&
+          ruta != '/navbar/reportes' &&
+          ruta != '/navbar/procesosespeciales' &&
+          ruta != '/navbar/debida-diligencia/clientes' &&
+          ruta != '/navbar/correo-novedades-nomina' &&
+          ruta != '/navbar/cliente-supervision' &&
+          ruta != '/navbar/solicitudes-os'
+        "
+        class="col-xs-3 col-md-3"
+      >
+        <button
+          type="button"
+          style="margin-top: 35px"
+          @click="selectAll((select_all = !select_all))"
+          class="btn btn-success btn-sm"
+        >
           Seleccionar todo
         </button>
       </div>
-      <div v-if="
-        check.length > 0 &&
-        ruta != '/navbar/gestion-ingresosl' &&
-        ruta != '/navbar/crm-seguimiento' &&
-        ruta != '/navbar/lista-riesgos'
-      " class="col-xs-3 col-md-3">
-        <button type="button" style="margin-top: 35px; background-color: #e74c3c; color: white"
-          @click="masiveDeleteMessage()" class="btn btn-sm">
+      <div
+        v-if="
+          check.length > 0 &&
+          ruta != '/navbar/gestion-ingresosl' &&
+          ruta != '/navbar/crm-seguimiento' &&
+          ruta != '/navbar/lista-riesgos'
+        "
+        class="col-xs-3 col-md-3"
+      >
+        <button
+          type="button"
+          style="margin-top: 35px; background-color: #e74c3c; color: white"
+          @click="masiveDeleteMessage()"
+          class="btn btn-sm"
+        >
           Eliminar seleccionados
         </button>
       </div>
-      <div v-else-if="
-        (ruta == '/navbar/gestion-ingresosl' && check.length > 0) ||
-        (ruta == '/navbar/crm-seguimiento' && check.length > 0)
-      " class="col-xs-3 col-md-3">
-        <button type="button" style="margin-top: 35px; background-color: #d4ac0d; color: white"
-          @click="agregarPendientes()" class="btn btn-sm">
+      <div
+        v-else-if="
+          (ruta == '/navbar/gestion-ingresosl' && check.length > 0) ||
+          (ruta == '/navbar/crm-seguimiento' && check.length > 0)
+        "
+        class="col-xs-3 col-md-3"
+      >
+        <button
+          type="button"
+          style="margin-top: 35px; background-color: #d4ac0d; color: white"
+          @click="agregarPendientes()"
+          class="btn btn-sm"
+        >
           Añadir a tareas pendientes
         </button>
       </div>
-      <div class="col" style="margin-top: 35px" v-if="
-        ruta == '/navbar/gestion-ingresosl' &&
-        check.length > 0 &&
-        permisos[30].autorizado
-      ">
-        <select class="form-select form-select-sm" aria-label="Ejemplo de .form-select-sm"
-          @change="getEncargados(estado_ingreso2.id), (lista_encargados = [])" v-model="estado_ingreso2">
+      <div
+        class="col"
+        style="margin-top: 35px"
+        v-if="
+          ruta == '/navbar/gestion-ingresosl' &&
+          check.length > 0 &&
+          permisos[30].autorizado
+        "
+      >
+        <select
+          class="form-select form-select-sm"
+          aria-label="Ejemplo de .form-select-sm"
+          @change="getEncargados(estado_ingreso2.id), (lista_encargados = [])"
+          v-model="estado_ingreso2"
+        >
           <option :value="item" v-for="item in estados_ingreso" :key="item.id">
             {{ item.nombre }}
           </option>
         </select>
       </div>
-      <div class="col" style="margin-top: 35px" v-if="
-        ruta == '/navbar/gestion-ingresosl' &&
-        check.length > 0 &&
-        permisos[30].autorizado
-      ">
-        <select class="form-select form-select-sm" aria-label="Ejemplo de .form-select-sm" v-model="encargado2"
-          @change="confirmationMessage()">
+      <div
+        class="col"
+        style="margin-top: 35px"
+        v-if="
+          ruta == '/navbar/gestion-ingresosl' &&
+          check.length > 0 &&
+          permisos[30].autorizado
+        "
+      >
+        <select
+          class="form-select form-select-sm"
+          aria-label="Ejemplo de .form-select-sm"
+          v-model="encargado2"
+          @change="confirmationMessage()"
+        >
           <option :value="item" v-for="item in lista_encargados" :key="item.id">
             {{ item.nombre }}
           </option>
         </select>
       </div>
-      <div v-if="ruta == '/navbar/gestion-ingresosl'" class="col-2" style="margin-top: 35px">
+      <div
+        v-if="ruta == '/navbar/gestion-ingresosl'"
+        class="col-2"
+        style="margin-top: 35px"
+      >
         <div class="form-check form-switch">
-          <label for="flexSwitchCheckDefault" class="form-check-label">Ordenar por prioridad fecha ingreso</label>
-          <input :checked="filtro.ordenar_prioridad" @change="filtrarFechaIngreso" class="form-check-input"
-            type="checkbox" id="flexSwitchCheckDefault" />
+          <label for="flexSwitchCheckDefault" class="form-check-label"
+            >Ordenar por prioridad fecha ingreso</label
+          >
+          <input
+            :checked="filtro.ordenar_prioridad"
+            @change="filtrarFechaIngreso"
+            class="form-check-input"
+            type="checkbox"
+            id="flexSwitchCheckDefault"
+          />
         </div>
       </div>
-      <div v-if="ruta == '/navbar/gestion-ingresosl'" class="col-1" style="margin-top: 35px">
+      <div
+        v-if="ruta == '/navbar/gestion-ingresosl'"
+        class="col-1"
+        style="margin-top: 35px"
+      >
         <div class="form-check form-switch">
           <label for="filtromios" class="form-check-label">Filtrar mios</label>
-          <input :checked="filtro.filtro_mios" @change="filtrarMios" class="form-check-input" type="checkbox"
-            id="filtromios" />
+          <input
+            :checked="filtro.filtro_mios"
+            @change="filtrarMios"
+            class="form-check-input"
+            type="checkbox"
+            id="filtromios"
+          />
         </div>
       </div>
       <div v-if="cantidad >= 20" class="col-xs-3 col-md-3">
-        <button type="submit" style="margin: 15px" @click="goScroll('down')" id="scroll" class="btn">
+        <button
+          type="submit"
+          style="margin: 15px"
+          @click="goScroll('down')"
+          id="scroll"
+          class="btn"
+        >
           <i class="bi bi-chevron-double-down"></i>
         </button>
       </div>
     </div>
     <div v-if="!sin_registros" class="table-responsive">
-      <table class="table align-middle table-bordered table-striped table-hover">
+      <table
+        class="table align-middle table-bordered table-striped table-hover"
+      >
         <thead>
           <tr>
-            <th v-if="
-              checked
-            " scope="col">
+            <th v-if="checked" scope="col">
               <i class="bi bi-check-square"></i>
             </th>
-            <th v-if="
-              ruta == '/navbar/gestion-ingresosl' ||
-              ruta == '/navbar/lista-riesgos'
-            ">
+            <th
+              v-if="
+                ruta == '/navbar/gestion-ingresosl' ||
+                ruta == '/navbar/lista-riesgos'
+              "
+            >
               Ver registro
             </th>
-            <th @click="sort(item, index + 1, (sorted = !sorted))" scope="col" v-for="(item, index) in tabla2"
-              :key="index" :class="{ 'd-none': item.nombre === 'Estado contrato' }">
+            <th
+              @click="sort(item, index + 1, (sorted = !sorted))"
+              scope="col"
+              v-for="(item, index) in tabla2"
+              :key="index"
+              :class="{ 'd-none': item.nombre === 'Estado contrato' }"
+            >
               {{ item.nombre }}
             </th>
-            <th v-if="
-              editar || eliminar || acciones.length > 0 || label_accion
-            " colspan="4">
+            <th
+              v-if="editar || eliminar || acciones.length > 0 || label_accion"
+              colspan="4"
+            >
               Acciones
             </th>
           </tr>
         </thead>
         <tbody>
           <tr v-for="(item, index) in items_tabla2" :key="item.id">
-            <td v-if="
-              checked
-            ">
-              <div class="form-check form-check-inline" style="margin: 0px; padding: 0px">
-                <input class="form-check-input" style="margin: 0px; padding: 0px"
-                  @change="(item.checked = !item.checked), clear()" v-model="check" type="checkbox" :value="item.id" />
+            <td v-if="checked">
+              <div
+                class="form-check form-check-inline"
+                style="margin: 0px; padding: 0px"
+              >
+                <input
+                  class="form-check-input"
+                  style="margin: 0px; padding: 0px"
+                  @change="(item.checked = !item.checked), clear()"
+                  v-model="check"
+                  type="checkbox"
+                  :value="item.id"
+                />
               </div>
             </td>
             <td v-if="ruta == '/navbar/gestion-ingresosl'">
               <div class="dropdown">
-                <button class="btn btn-success dropdown-toggle" type="button" data-bs-toggle="dropdown"
-                  aria-expanded="false">
+                <button
+                  class="btn btn-success dropdown-toggle"
+                  type="button"
+                  data-bs-toggle="dropdown"
+                  aria-expanded="false"
+                >
                   <i class="bi bi-eye"> </i>
                 </button>
                 <ul class="dropdown-menu">
                   <li>
-                    <a style="color: black; cursor: pointer" class="dropdown-item"
-                      @click="verOrdenIngreso(item)">Formulario</a>
+                    <a
+                      style="color: black; cursor: pointer"
+                      class="dropdown-item"
+                      @click="verOrdenIngreso(item)"
+                      >Formulario</a
+                    >
                   </li>
                   <li>
-                    <a style="color: black; cursor: pointer" class="dropdown-item" data-bs-toggle="modal"
-                      data-bs-target="#formulario_ingreso" @click="id_flotante = item.id">
+                    <a
+                      style="color: black; cursor: pointer"
+                      class="dropdown-item"
+                      data-bs-toggle="modal"
+                      data-bs-target="#formulario_ingreso"
+                      @click="id_flotante = item.id"
+                    >
                       Flotante
                     </a>
                   </li>
@@ -437,18 +781,31 @@
             </td>
             <td v-if="ruta == '/navbar/lista-riesgos'">
               <div class="dropdown">
-                <button class="btn btn-success dropdown-toggle" type="button" data-bs-toggle="dropdown"
-                  aria-expanded="false">
+                <button
+                  class="btn btn-success dropdown-toggle"
+                  type="button"
+                  data-bs-toggle="dropdown"
+                  aria-expanded="false"
+                >
                   <i class="bi bi-eye"> </i>
                 </button>
                 <ul class="dropdown-menu">
                   <li>
-                    <a style="color: black; cursor: pointer" class="dropdown-item"
-                      @click="verRegistroRiesgo(item)">Formulario</a>
+                    <a
+                      style="color: black; cursor: pointer"
+                      class="dropdown-item"
+                      @click="verRegistroRiesgo(item)"
+                      >Formulario</a
+                    >
                   </li>
                   <li>
-                    <a style="color: black; cursor: pointer" class="dropdown-item" data-bs-toggle="modal"
-                      data-bs-target="#formulario_riesgos" @click="id_flotante = item.id">
+                    <a
+                      style="color: black; cursor: pointer"
+                      class="dropdown-item"
+                      data-bs-toggle="modal"
+                      data-bs-target="#formulario_riesgos"
+                      @click="id_flotante = item.id"
+                    >
                       Flotante
                     </a>
                   </li>
@@ -456,117 +813,196 @@
               </div>
             </td>
             <!-- {display: shouldDisplayColumn(item2) ? 'table-cell' : 'none'}, -->
-            <td v-for="item2 in campos2" :key="item2.id" :style="getCombinedStyles(item2, index)"
-              style="text-align: justify">
+            <td
+              v-for="item2 in campos2"
+              :key="item2.id"
+              :style="getCombinedStyles(item2, index)"
+              style="text-align: justify"
+            >
               {{
                 item2 == "id"
                   ? index + 1
                   : item[item2] == null
-                    ? "Sin datos"
-                    : item2.includes("sal_bas")
-                      ? formatCurrency(item[item2])
-                      : item[item2].includes("000000Z")
-                        ? fecha(item[item2])
-                        : item[item2]
+                  ? "Sin datos"
+                  : item2.includes("sal_bas")
+                  ? formatCurrency(item[item2])
+                  : item[item2].includes("000000Z")
+                  ? fecha(item[item2])
+                  : item[item2]
               }}
             </td>
             <!-- <td @click="getAnalista(item['analista'].split('-')[1])" style="color:rgb(9, 107, 22);text-decoration: underline; cursor: pointer;">{{ item['analista'].split('-')[0] }}</td> -->
             <td v-if="empleados() && !isNaN(search)">
-              <Modal :datos="analista" :texto="item['analista'] != undefined
-                ? item['analista'].split('-')[0]
-                : ''
-                " titulo="Analista" eventoCampo="getAnalista"
+              <Modal
+                :datos="analista"
+                :texto="
+                  item['analista'] != undefined
+                    ? item['analista'].split('-')[0]
+                    : ''
+                "
+                titulo="Analista"
+                eventoCampo="getAnalista"
                 @getAnalista="getAnalista(item['analista'].split('-')[1])"
-                style="text-decoration: underline; cursor: pointer" />
+                style="text-decoration: underline; cursor: pointer"
+              />
             </td>
 
             <!-- v-if="ruta != '/navbar/reporteitems' && !empleados() && ruta != '/navbar/reportes' && ruta != '/navbar/trump' && ruta != '/navbar/procesosespeciales' && ruta != '/navbar/debida-diligencia/clientes' && ruta != '/navbar/correo-novedades-nomina' && ruta != '/navbar/cliente-supervision' && ruta != '/navbar/solicitudes-os' && ruta != '/navbar/permiso-usuario' && ruta != '/navbar/menuroles' && ruta != '/navbar/permisoroles' && ruta != '/navbar/menu-usuarios'"> -->
             <td v-if="editar">
-              <button type="button" class="btn btn-warning btn-sm" @click="update(item), goScroll('edit')"
-                v-if="item.nombre != 'S. Administrador'">
+              <button
+                type="button"
+                class="btn btn-warning btn-sm"
+                @click="update(item), goScroll('edit')"
+                v-if="item.nombre != 'S. Administrador'"
+              >
                 <i class="bi bi-pencil-square"></i>
               </button>
             </td>
             <!-- v-if="ruta != '/navbar/reporteitems' && !empleados() && ruta != '/navbar/reportes' && ruta != '/navbar/trump' && ruta != '/navbar/procesosespeciales' && ruta != '/navbar/debida-diligencia/clientes' && ruta != '/navbar/correo-novedades-nomina' && ruta != '/navbar/cliente-supervision' && ruta != '/navbar/solicitudes-os' && ruta != '/navbar/menus'"> -->
             <td v-if="eliminar">
-              <button type="button" class="btn btn-danger btn-sm" @click="messageDelete(item.id)"
-                v-if="item.nombre != 'S. Administrador'">
+              <button
+                type="button"
+                class="btn btn-danger btn-sm"
+                @click="messageDelete(item.id)"
+                v-if="item.nombre != 'S. Administrador'"
+              >
                 <i class="bi bi-trash"></i>
               </button>
             </td>
             <td v-if="acciones.length > 0">
-              <div style="display: flex; gap:1em; align-content: center;">
-                <button type="button" class="btn btn-success btn-sm" v-for="opcion in acciones" :key="opcion"
-                  @click="accion(item,opcion)">{{ opcion.nombre }}</button>
+              <div style="display: flex; gap: 1em; align-content: center">
+                <button
+                  type="button"
+                  class="btn btn-success btn-sm"
+                  v-for="opcion in acciones"
+                  :key="opcion"
+                  @click="accion(item, opcion)"
+                >
+                  {{ opcion.nombre }}
+                </button>
               </div>
             </td>
             <td v-if="empleados()">
-              <button type="button" class="btn btn-success btn-sm" @click="VerRegistro(item)"
-                v-if="item.nombre != 'S. Administrador'">
+              <button
+                type="button"
+                class="btn btn-success btn-sm"
+                @click="VerRegistro(item)"
+                v-if="item.nombre != 'S. Administrador'"
+              >
                 Ver registro
               </button>
             </td>
-            <td v-if="
-              ruta == '/navbar/debida-diligencia/clientes' &&
-              permisos[0].autorizado
-            ">
+            <td
+              v-if="
+                ruta == '/navbar/debida-diligencia/clientes' &&
+                permisos[0].autorizado
+              "
+            >
               <ConsultaContrato :item_id="item.id" :item="item" />
             </td>
             <td v-if="ruta == '/navbar/debida-diligencia/clientes'">
-              <DropDownEstadoFirma :item="item" :permisos="permisos" :estadosFirma="estados_firma"
-                :actualizaEstadoDD="actualizaEstadoDD" :maxCaracteres="maxCaracteres" />
+              <DropDownEstadoFirma
+                :item="item"
+                :permisos="permisos"
+                :estadosFirma="estados_firma"
+                :actualizaEstadoDD="actualizaEstadoDD"
+                :maxCaracteres="maxCaracteres"
+              />
             </td>
             <td v-if="ruta == '/navbar/debida-diligencia/clientes'">
-              <DropDownResponsableDD :item="item" :permisos="permisos" :colorFondo="item.color_estado_firma"
-                :listaEncargados="lista_encargados_debida_diligencia" :getEncargados="getEncargadosDebidaDiligencia"
-                :actualizaResponsable="actualizaResponsableDD" :maxCaracteres="maxCaracteres" />
+              <DropDownResponsableDD
+                :item="item"
+                :permisos="permisos"
+                :colorFondo="item.color_estado_firma"
+                :listaEncargados="lista_encargados_debida_diligencia"
+                :getEncargados="getEncargadosDebidaDiligencia"
+                :actualizaResponsable="actualizaResponsableDD"
+                :maxCaracteres="maxCaracteres"
+              />
             </td>
             <td v-if="ruta == '/navbar/gestion-ingresosl'">
-              <DropDownEstado :item="item" :estados="estados_ingreso" :permisos="permisos"
-                :actualizarEstado="actualizaEstado" />
+              <DropDownEstado
+                :item="item"
+                :estados="estados_ingreso"
+                :permisos="permisos"
+                :actualizarEstado="actualizaEstado"
+              />
             </td>
             <td v-if="ruta == '/navbar/gestion-ingresosl'">
-              <DropDownResponsable :item="item" :permisos="permisos" :getEncargados="getEncargados"
-                :actualizaResponsable="actualizaResponsable" />
+              <DropDownResponsable
+                :item="item"
+                :permisos="permisos"
+                :getEncargados="getEncargados"
+                :actualizaResponsable="actualizaResponsable"
+              />
             </td>
             <td v-if="ruta == '/navbar/reportes'">
-              <button type="button" class="btn btn-success btn-sm" v-if="item.nombre != 'S. Administrador'">
-                <a :href="'http://srv-saitemp03:81/ReportServer/Pages/ReportViewer.aspx?%2fSaitemp_V3/ReportesWeb/' +
-                  item.cod_rep.substring(0, 3) +
-                  '/' +
-                  item.cod_rep +
-                  '&rs:Command=Render'
-                  " target="_blank">Ver reporte</a>
+              <button
+                type="button"
+                class="btn btn-success btn-sm"
+                v-if="item.nombre != 'S. Administrador'"
+              >
+                <a
+                  :href="
+                    'http://srv-saitemp03:81/ReportServer/Pages/ReportViewer.aspx?%2fSaitemp_V3/ReportesWeb/' +
+                    item.cod_rep.substring(0, 3) +
+                    '/' +
+                    item.cod_rep +
+                    '&rs:Command=Render'
+                  "
+                  target="_blank"
+                  >Ver reporte</a
+                >
               </button>
             </td>
           </tr>
         </tbody>
       </table>
-      <button type="submit" style="margin: 15px" @click="goScroll('up')" id="scroll" class="btn">
+      <button
+        type="submit"
+        style="margin: 15px"
+        @click="goScroll('up')"
+        id="scroll"
+        class="btn"
+      >
         <i class="bi bi-chevron-double-up"></i>
       </button>
       <div class="content">
         <nav class="pagin" aria-label="Page navigation example">
           <ul class="pagination">
             <li class="page-item">
-              <a :style="item.active == true
-                ? 'background-color:#d06519'
-                : 'background-color:#21618C'
-                " class="page-link" v-for="(item, index) in links.links" :key="index" @click="
+              <a
+                :style="
+                  item.active == true
+                    ? 'background-color:#d06519'
+                    : 'background-color:#21618C'
+                "
+                class="page-link"
+                v-for="(item, index) in links.links"
+                :key="index"
+                @click="
                   pagination(item.url), (currentUrl = item.url), goScroll('up')
-                  ">{{
-                    index == 0
-                      ? "Anterior"
-                      : index == siguiente - 1
-                        ? "siguiente"
-                        : item.label
-                  }}</a>
+                "
+                >{{
+                  index == 0
+                    ? "Anterior"
+                    : index == siguiente - 1
+                    ? "siguiente"
+                    : item.label
+                }}</a
+              >
             </li>
           </ul>
         </nav>
       </div>
-      <FlotanteFormularioIngreso v-if="$route.path.includes('gestion-ingresosl')" :id_flotante="id_flotante" />
-      <FlotanteFormularioRiesgos v-if="$route.path.includes('lista-riesgos')" :id_flotante="id_flotante" />
+      <FlotanteFormularioIngreso
+        v-if="$route.path.includes('gestion-ingresosl')"
+        :id_flotante="id_flotante"
+      />
+      <FlotanteFormularioRiesgos
+        v-if="$route.path.includes('lista-riesgos')"
+        :id_flotante="id_flotante"
+      />
     </div>
     <div v-else>
       <div v-if="spinner">
@@ -610,7 +1046,7 @@ export default {
     DropDownResponsableDD,
     DropDownEstadoFirma,
     DropDownEstado,
-    DropDownResponsable
+    DropDownResponsable,
   },
   mixins: [Token, Alerts, Permisos, Scroll],
   props: {
@@ -622,7 +1058,7 @@ export default {
     datos: {
       type: Object,
       required: false, // Cambia a true si es obligatorio
-      default: () => { }, // Arreglo vacío como valor predeterminado
+      default: () => {}, // Arreglo vacío como valor predeterminado
     },
     endpoint: {
       type: String,
@@ -709,7 +1145,6 @@ export default {
       required: false,
       default: true, // Valor predeterminado
     },
-
   },
   data() {
     return {
@@ -837,6 +1272,9 @@ export default {
     } else if (this.ruta == "/navbar/lista-riesgos") {
       this.label_busqueda_rapida = "Búsqueda por radicado";
       this.endpoint_busqueda_rapida = "buscarradicado";
+    } else if (this.ruta == "/navbar/formularioinfocandidatoTabla") {
+      this.label_busqueda_rapida = "Búsqueda por documento";
+      this.endpoint_busqueda_rapida = "buscardocumentolistacandidatos";
     }
     this.filtro.ordenar_prioridad = JSON.parse(
       localStorage.getItem("ordenar_prioridad")
@@ -856,7 +1294,7 @@ export default {
   },
   methods: {
     accion(item, opcion) {
-      this.$emit('accion', item, opcion)
+      this.$emit("accion", item, opcion);
     },
     asignacionMasiva() {
       console.log(this.estado_ingreso2);
@@ -865,10 +1303,10 @@ export default {
       axios
         .post(
           self.URL_API +
-          "api/v1/asignacionmasivaformularioingreso/" +
-          this.estado_ingreso2.id +
-          "/" +
-          this.encargado2.usuario_id,
+            "api/v1/asignacionmasivaformularioingreso/" +
+            this.estado_ingreso2.id +
+            "/" +
+            this.encargado2.usuario_id,
           this.check,
           config
         )
@@ -1045,7 +1483,7 @@ export default {
           self.analista = result.data;
         });
     },
-    validaColumnasTabla() { },
+    validaColumnasTabla() {},
     exportar() {
       let self = this;
       let cadena =
@@ -1138,12 +1576,12 @@ export default {
         axios
           .get(
             self.URL_API +
-            "api/v1/" +
-            self.endpoint +
-            "filtro/" +
-            base64 +
-            "/" +
-            this.cantidad,
+              "api/v1/" +
+              self.endpoint +
+              "filtro/" +
+              base64 +
+              "/" +
+              this.cantidad,
             config
           )
           .then(function (result) {
@@ -1509,7 +1947,7 @@ export default {
         if (pag.includes("filtrofechaingreso")) {
           axios.post(pag, this.filtro, config).then(function (result) {
             self.links = result.data;
-            // self.llenarTabla(result)
+            self.llenarTabla(result);
             self.items_tabla2 = Object.values(result.data.data); // se está llenando la tabla con los datos cuando se pagina
             // desde acá porque en la función llenartabla() está dando error al llenar la tabla
             self.loading = false;
@@ -1608,10 +2046,10 @@ export default {
       axios
         .get(
           self.URL_API +
-          "api/v1/" +
-          self.endpoint_busqueda_rapida +
-          "/" +
-          self.numero_documento_candidato,
+            "api/v1/" +
+            self.endpoint_busqueda_rapida +
+            "/" +
+            self.numero_documento_candidato,
           config
         )
         .then(function (result) {

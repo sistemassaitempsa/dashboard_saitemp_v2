@@ -1550,6 +1550,7 @@ export default {
       }
     },
     agregarCorreosSeleccionados(correo, observacion, compromiso, index) {
+      console.log(index);
       if (correo == "null" || correo == "" || correo == null) {
         this.showAlert(
           "Este usuario no tiene correo electrónico configurado.",
@@ -1570,14 +1571,16 @@ export default {
         });
       } else {
         this.correosSeleccionados.correos.splice(correoIndex, 1);
-        this.compromisos[index].checked = false;
-        this.$refs["checkbox_" + index][0].checked = false;
+        index != undefined ? (this.compromisos[index].checked = false) : null;
+        index != undefined
+          ? (this.$refs["checkbox_" + index][0].checked = false)
+          : null;
       }
     },
     reenviarCorreosSeleccionados() {
       this.enviarCorreos(this.id_registro, 1, this.correosSeleccionados);
-      this.correosSeleccionados = [];
-      this.reenvioPdf = false;
+      /* this.correosSeleccionados = []; */
+      this.reenvioPdf = true;
     },
     async validaLocalizacion() {
       try {

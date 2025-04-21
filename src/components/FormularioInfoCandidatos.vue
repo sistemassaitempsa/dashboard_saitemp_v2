@@ -1,11 +1,12 @@
 <template>
   <div class="container">
     <Loading :loading="loading" />
-
+    <ModalAgregarCandidatoServicio
+      v-if="toogleModalAddServicio"
+      :candidato_id="candidato_id"
+      @closeModalAgregaraServicio="toogleModalAddServicioHandle"
+    />
     <h2 ref="informacionPersonalRef" id="tab">Registro de datos personales</h2>
-    <!-- barra para el pocrcentaje de llenado -->
-
-    <!-- --------------------------- -->
     <div class="todoProgressContainer">
       <div class="textProgressContainer">
         <div
@@ -230,27 +231,23 @@
     <div class="flexRow">
       <div id="seccion">
         <form @submit.prevent="" class="row g-3">
-          <p>
-            Ingrese la información requerida en cada sección, para desplegar una
-            seccion debe hacer clic en ella.
-          </p>
-          <!-- <div class="row">
-            <div class="col">
-              <h5
-                @click="informacion_personal = !informacion_personal"
-                style="cursor: pointer"
-                ref="informacionPersonalRef"
+          <div class="row">
+            <div class="col-9 mt-4">
+              <p>
+                Ingrese la información requerida en cada sección, para desplegar
+                una seccion debe hacer clic en ella.
+              </p>
+            </div>
+            <div class="col" v-if="userlogued.tipo_usuario_id == 1">
+              <button
+                class="btn btn-success btn-addServicio"
+                type="button"
+                @click="toogleModalAddServicioHandle"
               >
-                1. Información personal
-                <i
-                  v-if="informacion_personal"
-                  class="bi bi-chevron-compact-up"
-                ></i
-                ><i v-if="!informacion_personal" class="bi bi-chevron-down"></i>
-              </h5>
+                Agregar a orden de servicio
+              </button>
             </div>
           </div>
- -->
           <div class="info_container" v-if="informacion_personal">
             <!-- Primer Nombre y Segundo Nombre -->
             <div class="row mb-4">
@@ -297,6 +294,7 @@
                   type="text"
                   v-model="form.ap2_emp"
                   id="apellido2"
+                  required
                 />
               </div>
             </div>
@@ -733,11 +731,21 @@
               </div>
               <div class="row">
                 <div class="col">
-                  <label for="" class="form-label"> Cargo:* </label>
-                  <input
+                  <!-- <label for="" class="form-label"> Cargo:* </label> -->
+                  <!--       <input
                     type="text"
                     class="form-control"
                     v-model="experiencia.cargo"
+                  /> -->
+                  <SearchList
+                    nombreCampo="Cargo:*"
+                    @getCargos="getCargos"
+                    eventoCampo="getCargos"
+                    nombreItem="nombre"
+                    :index="index"
+                    :consulta="form.experiencias_laborales[index].cargo"
+                    :registros="lista_cargos"
+                    placeholder="Seleccione una opción"
                   />
                 </div>
                 <div class="col">
@@ -863,6 +871,161 @@
                   placeholder="Seleccione una opción"
                 />
               </div>
+            </div>
+            <div class="row mb-5">
+              <div class="row">
+                <h5>Cursos y certificaciones:</h5>
+              </div>
+              <div class="row">
+                <div class="col">
+                  <SearchList
+                    nombreCampo=""
+                    :valida_campo="false"
+                    nombreItem="nombre"
+                    @getCertificados="getCertificados"
+                    eventoCampo="getCertificados"
+                    :consulta="certificado"
+                    :registros="certificados"
+                    placeholder="Seleccione una opción"
+                  />
+                </div>
+                <div class="col">
+                  <div
+                    class="mb-3"
+                    style="
+                      padding: 10px;
+                      border: solid #d5dbdb 0.5px;
+                      border-radius: 10px;
+                    "
+                  >
+                    <button
+                      type="button"
+                      style="margin: 10px 10px 5px 10px"
+                      id="btnMenu"
+                      class="btn btn-sm"
+                      data-bs-toggle="button"
+                      v-for="(usuario, index) in form.requisitos_asignados"
+                      :key="index"
+                    >
+                      <div class="cardRequisito">
+                        <i
+                          class="bi bi-x"
+                          @click="deleteRequisitoHandler(index)"
+                        ></i>
+                        {{ usuario.nombre }}
+                      </div>
+                    </button>
+                  </div>
+                </div>
+              </div>
+              <!--   <div class="col flex">
+                <label for="" class="form-label">Curso de alturas:</label>
+                <div>
+                  <div class="form-check form-check-inline">
+                    <input  
+                      class="form-check-input"
+                      type="radio"
+                      name="cursoAlturasOptions"
+                      id="cursoAlturasOptions1"
+                      v-model="form.curso_alturas"
+                      value="1"
+                    />
+                    <label class="form-check-label" for="cursoAlturasOptions1"
+                      >Si</label
+                    >
+                  </div>
+                  <div class="form-check form-check-inline">
+                    <input
+                      class="form-check-input"
+                      type="radio"
+                      name="cursoAlturasOptions"
+                      id="cursoAlturasOptions2"
+                      v-model="form.curso_alturas"
+                      value="0"
+                    />
+                    <label class="form-check-label" for="cursoAlturasOptions2"
+                      >No</label
+                    >
+                  </div>
+                </div>
+              </div> -->
+              <!--     <div class="col flex">
+                <label for="" class="form-label"
+                  >Curso de manipulación de alimentos:</label
+                >
+                <div>
+                  <div class="form-check form-check-inline">
+                    <input
+                      class="form-check-input"
+                      type="radio"
+                      name="manipulacionAlimentosOptions"
+                      id="manipulacionAlimentosOptions1"
+                      v-model="form.manipulacion_alimentos"
+                      value="1"
+                    />
+                    <label
+                      class="form-check-label"
+                      for="manipulacionAlimentosOptions1"
+                      >Si</label
+                    >
+                  </div>
+                  <div class="form-check form-check-inline">
+                    <input
+                      class="form-check-input"
+                      type="radio"
+                      name="manipulacionAlimentosOptions"
+                      id="manipulacionAlimentosOptions2"
+                      v-model="form.manipulacion_alimentos"
+                      value="0"
+                    />
+                    <label
+                      class="form-check-label"
+                      for="manipulacionAlimentosOptions2"
+                      >No</label
+                    >
+                  </div>
+                </div>
+              </div> -->
+              <!--      <div class="col flex">
+                <label for="" class="form-label"
+                  >Curso de espacios confinados:</label
+                >
+                <div>
+                  <div class="form-check form-check-inline">
+                    <input
+                      class="form-check-input"
+                      type="radio"
+                      name="cursoConfinadosOptions"
+                      id="cursoConfinadosOptions1"
+                      v-model="form.curso_confinados"
+                      value="1"
+                    />
+                    <label
+                      class="form-check-label"
+                      for="cursoConfinadosOptions1"
+                      >Si</label
+                    >
+                  </div>
+                  <div class="form-check form-check-inline">
+                    <input
+                      class="form-check-input"
+                      type="radio"
+                      name="cursoConfinadosOptions"
+                      id="cursoConfinadosOptions2"
+                      v-model="form.curso_confinados"
+                      value="0"
+                    />
+                    <label
+                      class="form-check-label"
+                      for="cursoConfinadosOptions2"
+                      >No</label
+                    >
+                  </div>
+                </div>
+              </div> -->
+            </div>
+            <div class="row">
+              <h5>Idiomas:</h5>
             </div>
             <div
               v-for="(idioma, index) in form.idiomas"
@@ -1744,7 +1907,7 @@
                 style="cursor: pointer"
                 ref="conceptoRef"
               >
-                7. Concepto
+                Concepto
                 <i v-if="concepto" class="bi bi-chevron-compact-up"></i
                 ><i v-if="!concepto" class="bi bi-chevron-down"></i>
               </h5>
@@ -1765,6 +1928,116 @@
                 >{{ remainingCharsConcepto() }}/4000</small
               >
             </div>
+          </div>
+          <div class="row" v-if="userlogued.tipo_usuario_id == 1">
+            <div class="col">
+              <h5
+                @click="
+                  historico_conceptos_servicios = !historico_conceptos_servicios
+                "
+                style="cursor: pointer"
+                ref="conceptoRef"
+              >
+                Historico de conceptos en servicios
+                <i
+                  v-if="historico_conceptos_servicios"
+                  class="bi bi-chevron-compact-up"
+                ></i
+                ><i
+                  v-if="!historico_conceptos_servicios"
+                  class="bi bi-chevron-down"
+                ></i>
+              </h5>
+            </div>
+          </div>
+          <div class="table-responsive" v-if="historico_conceptos_servicios">
+            <table
+              class="table table-striped table-hover table-bordered align-middle"
+            >
+              <thead>
+                <tr>
+                  <th scope="col">#</th>
+                  <th scope="col">Servicio</th>
+                  <th scope="col">Razon social</th>
+                  <th scope="col">Cargo</th>
+                  <th scope="col">Concepto</th>
+                  <th scope="col">Fecha de creación</th>
+                  <th scope="col">Acciones</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr
+                  v-for="(item, index) in lista_historico_servicios"
+                  :key="index"
+                >
+                  <th scope="row">{{ index }}</th>
+                  <td>{{ item.numero_radicado }}</td>
+                  <td>{{ item.razon_social }}</td>
+                  <td>{{ item.cargo }}</td>
+                  <td>{{ item.concepto }}</td>
+                  <td>{{ reformatearFecha(item.created_at) }}</td>
+                  <td scope="col">
+                    <button
+                      class="btn btn-success btn-addServicio"
+                      type="button"
+                      @click="verRegistroSeiya(item)"
+                    >
+                      Ver registro
+                    </button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="row" v-if="userlogued.tipo_usuario_id == 1">
+            <div class="col">
+              <h5
+                @click="
+                  historico_conceptos_servicios_generales =
+                    !historico_conceptos_servicios_generales
+                "
+                style="cursor: pointer"
+                ref="conceptoRef"
+              >
+                Historico de conceptos generales
+                <i
+                  v-if="historico_conceptos_servicios_generales"
+                  class="bi bi-chevron-compact-up"
+                ></i
+                ><i
+                  v-if="!historico_conceptos_servicios_generales"
+                  class="bi bi-chevron-down"
+                ></i>
+              </h5>
+            </div>
+          </div>
+          <div
+            class="table-responsive"
+            v-if="historico_conceptos_servicios_generales"
+          >
+            <table
+              class="table table-striped table-hover table-bordered align-middle"
+            >
+              <thead>
+                <tr>
+                  <th scope="col">#</th>
+                  <th scope="col">Concepto</th>
+                  <th scope="col">Usuario que generó</th>
+                  <th scope="col">Fecha de creación</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr
+                  v-for="(item, index) in lista_historico_servicios_generales"
+                  :key="index"
+                >
+                  <th scope="row">{{ index }}</th>
+                  <td>{{ item.concepto }}</td>
+                  <td>{{ item.usuario_guarda }}</td>
+                  <td>{{ reformatearFecha(item.created_at) }}</td>
+                </tr>
+              </tbody>
+            </table>
           </div>
           <div class="row">
             <div class="col">
@@ -1795,11 +2068,17 @@ import {
 } from "vue";
 import axios from "axios";
 import { useAlerts } from "@/composables/useAlerts";
-import { useRoute } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
+import ModalAgregarCandidatoServicio from "./ModalAgregarCandidatoServicio.vue";
 
 const { userlogued } = defineProps(["userlogued"]); //props
 
 // Variables reactivas
+const router = useRouter();
+const lista_historico_servicios_generales = ref([]);
+const historico_conceptos_servicios_generales = ref(false);
+const lista_historico_servicios = ref([]);
+const toogleModalAddServicio = ref(false);
 const activeSeccion = ref(0);
 const route = useRoute();
 const { showAlert } = useAlerts();
@@ -1828,6 +2107,7 @@ const hijos_info = ref(false);
 const info_academica = ref(false);
 const experiencia_laboral = ref(false);
 const concepto = ref(false);
+const historico_conceptos_servicios = ref(false);
 const informacionPersonalRef = ref(null);
 /* const hijosRef = ref(null); */
 // Formulario reactivo
@@ -1841,7 +2121,13 @@ const requieredExperienceFields = [
   "fecha_fin",
 ];
 const requieredFieldsReferencias = ["tip_ref", "parent", "cel_ref", "nom_ref"];
-const requieredFieldsInfoAcademi = ["sector_academico_id", "Niv_aca"];
+const requieredFieldsInfoAcademi = [
+  "sector_academico_id",
+  "Niv_aca",
+  "manipulacion_alimentos",
+  "curso_alturas",
+  "curso_confinados",
+];
 const requieredFieldsMedioTrans = ["tipo_transporte", "licencia_conduccion"];
 const requieredFieldsSalud = [
   "lentes",
@@ -1890,7 +2176,11 @@ const requiredFieldsInfoPersonal = [
   "sex_emp",
   "cod_grupo",
 ];
+const candidato_id = ref("");
+const certificado = ref("");
+const certificados = ref([]);
 const paises = ref([]);
+const lista_cargos = ref([]);
 const lista_sectores_economicos = ref([]);
 const lista_bancos = ref([]);
 const lista_etnia = ref([]);
@@ -1908,6 +2198,10 @@ const consulta_afp = ref("");
 const consulta_eps = ref("");
 const progress = ref(0);
 const form = reactive({
+  requisitos_asignados: [],
+  curso_confinados: "",
+  manipulacion_alimentos: "",
+  curso_alturas: "",
   otro_transporte: "",
   concepto: "",
   tipo_transporte: "",
@@ -2079,9 +2373,27 @@ const remainingCharsExperiencia = (index) => {
   return 0 + (form.experiencias_laborales[index]?.funciones.length || 0);
 };
 
+const verRegistroSeiya = (item) => {
+  router.push({
+    path: `/navbar/gestion-ingresos/${item.formulario_ingreso_id}`,
+  });
+};
+
+const reformatearFecha = (fechaOriginal) => {
+  const fechaHora = new Date(fechaOriginal);
+  const año = fechaHora.getFullYear();
+  const mes = (fechaHora.getMonth() + 1).toString().padStart(2, "0"); // Los meses son indexados desde 0
+  const dia = fechaHora.getDate().toString().padStart(2, "0");
+  const horas = fechaHora.getHours().toString().padStart(2, "0");
+  const minutos = fechaHora.getMinutes().toString().padStart(2, "0");
+  const segundos = fechaHora.getSeconds().toString().padStart(2, "0");
+  const fechaFormateada = `${dia}/${mes}/${año}  `;
+  const horaFormateada = `${horas}:${minutos}:${segundos}`;
+  return fechaFormateada + " " + horaFormateada;
+};
+
 const llenarFormulario = async () => {
   loading.value = true;
-  console.log(route.params.id);
   const id =
     userlogued.tipo_usuario_id == 3
       ? userlogued.id
@@ -2092,7 +2404,14 @@ const llenarFormulario = async () => {
     `${URL_API}api/v1/formulariocandidato/${id}`,
     configHeader()
   );
-
+  lista_historico_servicios_generales.value =
+    response.data.historico_conceptos_servicios_generales;
+  lista_historico_servicios.value = response.data.historico_conceptos_servicios;
+  candidato_id.value = response.data.id;
+  form.requisitos_asignados = response.data.cumple_requisitos;
+  form.curso_alturas = response.data.curso_alturas;
+  form.curso_confinados = response.data.curso_confinados;
+  form.manipulacion_alimentos = response.data.manipulacion_alimentos;
   form.licencia_conduccion = response.data.licencia_conduccion;
   form.descripcion_salud = response.data.descripcion_salud;
   form.afp_id = response.data.afp_id;
@@ -2145,7 +2464,7 @@ const llenarFormulario = async () => {
       ? userlogued.email
       : response.data.novasoft
       ? response.data.novasoft.e_mail
-      : "";
+      : response.data.email;
   form.pai_res = response.data.novasoft ? response.data.novasoft.pai_res : "";
   form.dpt_res = response.data.novasoft ? response.data.novasoft.dpt_res : "";
   form.ciu_res = response.data.novasoft ? response.data.novasoft.ciu_res : "";
@@ -2273,7 +2592,16 @@ const llenarFormulario = async () => {
       : "";
   loading.value = false;
 };
-
+const deleteRequisitoHandler = async (index) => {
+  if (form.requisitos_asignados[index].id) {
+    loading.value = true;
+    await axios.delete(
+      `${URL_API}api/v1/cumplerequisitocandidato/${form.requisitos_asignados[index].id}`
+    );
+    loading.value = false;
+  }
+  form.requisitos_asignados.splice(index, 1);
+};
 const formattedDate = (date) => {
   return date.split(" ")[0];
 };
@@ -2313,7 +2641,7 @@ const submitForm = async () => {
       configHeader()
     );
     showAlert(response.data.message, response.data.status);
-    console.log("Formulario enviado con éxito:", response.data);
+
     if (activeSeccion.value != 5) {
       const arraySecciones = [
         "informacion_personal",
@@ -2513,7 +2841,28 @@ const getSectorAcademico = async (item = null) => {
   );
   lista_sector_academico.value = response.data;
 };
+const getCertificados = async (item = null) => {
+  if (item != null) {
+    console.log(item);
+    // Verificar si el requisito ya existe
+    const existe = form.requisitos_asignados.some(
+      (element) => element.requisito_id === item.id
+    );
 
+    // Agregar si no existe
+    if (!existe) {
+      form.requisitos_asignados.push({
+        requisito_id: item.id,
+        nombre: item.nombre,
+      });
+    }
+  }
+  const response = await axios.get(
+    URL_API + "api/v1/requisitosCandidatos",
+    configHeader()
+  );
+  certificados.value = response.data;
+};
 const getIdioma = async (item = null, index) => {
   if (item != null) {
     form.idiomas[index].nombre = item.nombre;
@@ -2521,6 +2870,16 @@ const getIdioma = async (item = null, index) => {
   }
   const response = await axios.get(URL_API + "api/v1/idiomas", configHeader());
   lista_idiomas.value = response.data;
+};
+const getCargos = async (item = null, index) => {
+  if (item != null) {
+    form.experiencias_laborales[index].cargo = item.nombre;
+  }
+  const response = await axios.get(
+    URL_API + "api/v1/cargosCandidato",
+    configHeader()
+  );
+  lista_cargos.value = response.data;
 };
 
 const getSectorEconomico = async (item = null, index) => {
@@ -2599,7 +2958,9 @@ const selectDepartamento = (item = null, index = null) => {
     }
   }
 };
-
+const toogleModalAddServicioHandle = () => {
+  toogleModalAddServicio.value = !toogleModalAddServicio.value;
+};
 const getCiudades = (item, index) => {
   axios
     .get(
@@ -2832,7 +3193,7 @@ button:hover {
 }
 
 h5 {
-  color: #237db0;
+  color: #3d3d3d;
   text-align: left;
 }
 
@@ -2892,6 +3253,18 @@ h5 {
   gap: 2em;
 }
 .textAreaRow {
+  width: 100%;
+}
+#btnMenu {
+  background-color: rgb(28, 146, 77);
+  color: white;
+  width: 40%;
+}
+.cardRequisito {
+  display: flex;
+  gap: 0.5em;
+}
+.btn-addServicio {
   width: 100%;
 }
 </style>

@@ -2,11 +2,17 @@
   <div class="container">
     <Loading :loading="loading" />
     <h2>Solicitud de servicio</h2>
-    <div @click="toggleDiv" :class="{
-      expandido: divExpandido,
-      pestaña: !divExpandido,
-      pestaña3: divExpandido,
-    }" class="pestaña" style="overflow-y: auto" v-if="seguimiento.length > 0">
+    <div
+      @click="toggleDiv"
+      :class="{
+        expandido: divExpandido,
+        pestaña: !divExpandido,
+        pestaña3: divExpandido,
+      }"
+      class="pestaña"
+      style="overflow-y: auto"
+      v-if="seguimiento.length > 0"
+    >
       <div v-if="!divExpandido">Seguimiento guardado</div>
       <div v-for="(item, index) in seguimiento" :key="index">
         <div v-if="divExpandido" style="text-align: left">
@@ -21,11 +27,17 @@
         <hr v-if="divExpandido" />
       </div>
     </div>
-    <div @click="toggleDiv2" :class="{
-      expandido2: divExpandido2,
-      pestaña: !divExpandido2,
-      pestaña2: divExpandido2,
-    }" class="pestaña2" style="overflow-y: auto" v-if="seguimiento_estados.length > 0">
+    <div
+      @click="toggleDiv2"
+      :class="{
+        expandido2: divExpandido2,
+        pestaña: !divExpandido2,
+        pestaña2: divExpandido2,
+      }"
+      class="pestaña2"
+      style="overflow-y: auto"
+      v-if="seguimiento_estados.length > 0"
+    >
       <div v-if="!divExpandido2">Seguimiento estados</div>
       <div v-for="(item, index) in seguimiento_estados" :key="index">
         <div v-if="divExpandido2" style="text-align: left">
@@ -52,83 +64,172 @@
       <div id="seccion">
         <div class="row" v-if="$route.path != '/navbar/gestion-ingresosl'">
           <div class="col-3 mb-3">
-            <label for="exampleInputEmail1" style="float: left" class="form-label">
-              Búsqueda por documento</label>
-            <input type="text" class="form-control form-control-sm" autocomplete="off" id="exampleInputEmail2"
-              aria-describedby="emailHelp" v-model="numero_documento_candidato" />
+            <label
+              for="exampleInputEmail1"
+              style="float: left"
+              class="form-label"
+            >
+              Búsqueda por documento</label
+            >
+            <input
+              type="text"
+              class="form-control form-control-sm"
+              autocomplete="off"
+              id="exampleInputEmail2"
+              aria-describedby="emailHelp"
+              v-model="numero_documento_candidato"
+            />
           </div>
           <div class="col-xs-3 col-md-3 mt-3">
-            <button type="button" style="margin-top: 35px" @click="buscarDocumentoFormulario()"
-              class="btn btn-success btn-sm">
+            <button
+              type="button"
+              style="margin-top: 35px"
+              @click="buscarDocumentoFormulario()"
+              class="btn btn-success btn-sm"
+            >
               Buscar
             </button>
           </div>
         </div>
         <div class="row">
           <div class="col-3 mb-3">
-            <label for="exampleInputEmail1" style="float: left" class="form-label">
-              N° servicio</label>
-            <input type="text" class="form-control form-control-sm" autocomplete="off" id="exampleInputEmail2"
-              aria-describedby="emailHelp" v-model="n_servicio" placeholder="Radicado del servcio"
-              :disabled="inhabilita_campo" />
+            <label
+              for="exampleInputEmail1"
+              style="float: left"
+              class="form-label"
+            >
+              N° servicio</label
+            >
+            <input
+              type="text"
+              class="form-control form-control-sm"
+              autocomplete="off"
+              id="exampleInputEmail2"
+              aria-describedby="emailHelp"
+              v-model="n_servicio"
+              placeholder="Radicado del servcio"
+              :disabled="inhabilita_campo"
+            />
           </div>
-          <div class="col-3 mb-3" v-if="$route.path == '/navbar/gestion-ingresos'">
-            <label for="exampleInputEmail1" style="float: left" class="form-label">
-              Replicar formulario</label>
-            <input type="text" class="form-control form-control-sm" autocomplete="off" id="exampleInputEmail2"
-              aria-describedby="emailHelp" v-model="replica" @input="replica = validarNumero(replica)"
-              placeholder="Número de veces a replicar" maxlength="2"
-              :disabled="inhabilita_campo_contratacion || inhabilita_campo" />
+          <div
+            class="col-3 mb-3"
+            v-if="$route.path == '/navbar/gestion-ingresos'"
+          >
+            <label
+              for="exampleInputEmail1"
+              style="float: left"
+              class="form-label"
+            >
+              Replicar formulario</label
+            >
+            <input
+              type="text"
+              class="form-control form-control-sm"
+              autocomplete="off"
+              id="exampleInputEmail2"
+              aria-describedby="emailHelp"
+              v-model="replica"
+              @input="replica = validarNumero(replica)"
+              placeholder="Número de veces a replicar"
+              maxlength="2"
+              :disabled="inhabilita_campo_contratacion || inhabilita_campo"
+            />
           </div>
         </div>
-        <div class="row" v-if="
-          $route.params.id != '' || $route.path == '/navbar/gestion-ingresosl'
-        ">
+        <div
+          class="row"
+          v-if="
+            $route.params.id != '' || $route.path == '/navbar/gestion-ingresosl'
+          "
+        >
           <h6 style="text-align: left">Radicado: {{ radicado }}</h6>
         </div>
         <div class="row">
           <div class="col" v-if="$route.params.id != ''">
             <label class="form-label">Fecha radicado</label>
-            <input type="datetime-local" class="form-control" autocomplete="off" id="fecha_expedicion"
-              aria-describedby="emailHelp" v-model="fecha_radicado" disabled />
+            <input
+              type="datetime-local"
+              class="form-control"
+              autocomplete="off"
+              id="fecha_expedicion"
+              aria-describedby="emailHelp"
+              v-model="fecha_radicado"
+              disabled
+            />
             <div class="invalid-feedback">
               {{ mensaje_error }}
             </div>
           </div>
           <div class="col">
-            <SearchList nombreCampo="Estado: *" @getEstadosIngreso="getEstadosIngreso" eventoCampo="getEstadosIngreso"
-              nombreItem="nombre" :consulta="consulta_estado_ingreso" :registros="estados_ingreso"
-              placeholder="Seleccione una opción" />
+            <SearchList
+              nombreCampo="Estado: *"
+              @getEstadosIngreso="getEstadosIngreso"
+              eventoCampo="getEstadosIngreso"
+              nombreItem="nombre"
+              :consulta="consulta_estado_ingreso"
+              :registros="estados_ingreso"
+              placeholder="Seleccione una opción"
+            />
           </div>
           <div class="col">
-            <SearchList nombreCampo="Responsable: " @getEncargados="getEncargados" eventoCampo="getEncargados"
-              nombreItem="nombre" :consulta="consulta_responsable_ingreso" :registros="lista_encargados"
-              placeholder="Seleccione una opción" :valida_campo="replica > 1" />
+            <SearchList
+              nombreCampo="Responsable: "
+              @getEncargados="getEncargados"
+              eventoCampo="getEncargados"
+              nombreItem="nombre"
+              :consulta="consulta_responsable_ingreso"
+              :registros="lista_encargados"
+              placeholder="Seleccione una opción"
+              :valida_campo="replica > 1"
+            />
           </div>
         </div>
         <div class="row">
           <div class="col">
-            <SearchList nombreCampo="Empresa usuaria: *" @getEmpresasCliente="getEmpresasCliente"
-              eventoCampo="getEmpresasCliente" nombreItem="nombre" :consulta="consulta_empresa_cliente"
-              :registros="empresas_cliente" placeholder="Seleccione una opción" :disabled="(bloquea_campos &&
-                consulta_empresa_cliente != null &&
-                !permisos[25].autorizado) || inhabilita_campo
-                " />
+            <SearchList
+              nombreCampo="Empresa usuaria: *"
+              @getEmpresasCliente="getEmpresasCliente"
+              eventoCampo="getEmpresasCliente"
+              nombreItem="nombre"
+              :consulta="consulta_empresa_cliente"
+              :registros="empresas_cliente"
+              placeholder="Seleccione una opción"
+              :disabled="
+                (bloquea_campos &&
+                  consulta_empresa_cliente != null &&
+                  !permisos[25].autorizado) ||
+                inhabilita_campo
+              "
+            />
           </div>
           <div class="col">
             <label class="form-label">Dirección de presentación</label>
-            <input type="text" class="form-control" autocomplete="off" id="direccion_empresa"
-              aria-describedby="emailHelp" v-model="direccion_empresa" @input="
+            <input
+              type="text"
+              class="form-control"
+              autocomplete="off"
+              id="direccion_empresa"
+              aria-describedby="emailHelp"
+              v-model="direccion_empresa"
+              @input="
                 direccion_empresa = formatInputUpperCase($event.target.value)
-                " />
+              "
+            />
             <div class="invalid-feedback">
               {{ mensaje_error }}
             </div>
           </div>
           <div class="col">
-            <SearchList nombreCampo="Tipo de servicio: *" @getTipoServicio="getTipoServicio"
-              eventoCampo="getTipoServicio" nombreItem="nombre" :consulta="consulta_tipo_servicio"
-              :registros="tipos_servicio" placeholder="Seleccione una opción" :disabled="inhabilita_campo" />
+            <SearchList
+              nombreCampo="Tipo de servicio: *"
+              @getTipoServicio="getTipoServicio"
+              eventoCampo="getTipoServicio"
+              nombreItem="nombre"
+              :consulta="consulta_tipo_servicio"
+              :registros="tipos_servicio"
+              placeholder="Seleccione una opción"
+              :disabled="inhabilita_campo"
+            />
           </div>
         </div>
         <div class="row">
@@ -150,59 +251,124 @@
                           {{ mensaje_error }}
                       </div>
                   </div> -->
-          <div class="col mb-3" v-if="tipo_servicio_id == 3 || tipo_servicio_id == 4">
+          <div
+            class="col mb-3"
+            v-if="tipo_servicio_id == 3 || tipo_servicio_id == 4"
+          >
             <label class="form-label">Citación entrevista: * </label>
-            <input type="datetime-local" class="form-control" autocomplete="off" id="exampleInputEmail1"
-              aria-describedby="emailHelp" v-model="citacion_entrevista" />
+            <input
+              type="datetime-local"
+              class="form-control"
+              autocomplete="off"
+              id="exampleInputEmail1"
+              aria-describedby="emailHelp"
+              v-model="citacion_entrevista"
+            />
             <div class="invalid-feedback">
               {{ mensaje_error }}
             </div>
           </div>
-          <div class="col" v-if="tipo_servicio_id == 3 || tipo_servicio_id == 4">
-            <SearchList nombreCampo="Profesional: *" @getUsuarios="getUsuarios" eventoCampo="getUsuarios"
-              nombreItem="nombre" :consulta="consulta_usuario" :registros="usuarios"
-              placeholder="Seleccione una opción" />
+          <div
+            class="col"
+            v-if="tipo_servicio_id == 3 || tipo_servicio_id == 4"
+          >
+            <SearchList
+              nombreCampo="Profesional: *"
+              @getUsuarios="getUsuarios"
+              eventoCampo="getUsuarios"
+              nombreItem="nombre"
+              :consulta="consulta_usuario"
+              :registros="usuarios"
+              placeholder="Seleccione una opción"
+            />
           </div>
-          <div class="col" v-if="tipo_servicio_id == 3 || tipo_servicio_id == 4">
-            <SearchList nombreCampo="Estado vacante: " @getVacante="getVacante" eventoCampo="getVacante"
-              @setVacante="setVacante" nombreItem="nombre" :consulta="consulta_vacante"
-              :registros="afirmacionNegacion_vacante" :ordenCampo="1" :valida_campo="false"
-              placeholder="Seleccione una opción" />
+          <div
+            class="col"
+            v-if="tipo_servicio_id == 3 || tipo_servicio_id == 4"
+          >
+            <SearchList
+              nombreCampo="Estado vacante: "
+              @getVacante="getVacante"
+              eventoCampo="getVacante"
+              @setVacante="setVacante"
+              nombreItem="nombre"
+              :consulta="consulta_vacante"
+              :registros="afirmacionNegacion_vacante"
+              :ordenCampo="1"
+              :valida_campo="false"
+              placeholder="Seleccione una opción"
+            />
           </div>
         </div>
         <div class="row">
-          <div class="col mb-3" v-if="tipo_servicio_id == 3 || tipo_servicio_id == 4">
+          <div
+            class="col mb-3"
+            v-if="tipo_servicio_id == 3 || tipo_servicio_id == 4"
+          >
             <label class="form-label">Informe selección: * </label>
-            <textarea name="" id="novedades" class="form-control" rows="1" v-model="informe_seleccion"></textarea>
+            <textarea
+              name=""
+              id="novedades"
+              class="form-control"
+              rows="1"
+              v-model="informe_seleccion"
+            ></textarea>
           </div>
         </div>
         <div class="row">
           <div class="col">
             <label class="form-label">Fecha de ingreso: </label>
-            <input type="date" class="form-control" autocomplete="off" id="fecha_expedicion"
-              aria-describedby="emailHelp" v-model="fecha_ingreso" />
+            <input
+              type="date"
+              class="form-control"
+              autocomplete="off"
+              id="fecha_expedicion"
+              aria-describedby="emailHelp"
+              v-model="fecha_ingreso"
+            />
             <div class="invalid-feedback">
               {{ mensaje_error }}
             </div>
           </div>
           <div class="col">
-            <SearchList nombreCampo="Tipo de Identificación: *" @getTipoIdentificacion="getTipoIdentificacion"
-              eventoCampo="getTipoIdentificacion" :ordenCampo="1" nombreItem="des_tip"
-              @setTipoIdentificacion="setTipoIdentificacion" :registros="tiposIdentificacion"
-              :consulta="consulta_tipo_identificacion" placeholder="Seleccione una opción" :valida_campo="false"
-              :disabled="inhabilita_campo_contratacion" />
+            <SearchList
+              nombreCampo="Tipo de Identificación: *"
+              @getTipoIdentificacion="getTipoIdentificacion"
+              eventoCampo="getTipoIdentificacion"
+              :ordenCampo="1"
+              nombreItem="des_tip"
+              @setTipoIdentificacion="setTipoIdentificacion"
+              :registros="tiposIdentificacion"
+              :consulta="consulta_tipo_identificacion"
+              placeholder="Seleccione una opción"
+              :valida_campo="false"
+              :disabled="inhabilita_campo_contratacion"
+            />
           </div>
           <div class="col mb-3">
             <label class="form-label">Número de identificación: </label>
-            <input type="text" class="form-control" autocomplete="off" id="numero_identificacion"
-              aria-describedby="emailHelp" v-model="numero_identificacion" @input="
+            <input
+              type="text"
+              class="form-control"
+              autocomplete="off"
+              id="numero_identificacion"
+              aria-describedby="emailHelp"
+              v-model="numero_identificacion"
+              @input="
                 (numero_identificacion = validarNumero(numero_identificacion)),
-                (userInput_numero_documento = true)
-                " @blur="getIdentificacion(numero_identificacion), confirmaDocumento()" :disabled="(bloquea_campos &&
+                  (userInput_numero_documento = true)
+              "
+              @blur="
+                getIdentificacion(numero_identificacion), confirmaDocumento()
+              "
+              :disabled="
+                (bloquea_campos &&
                   numero_identificacion != null &&
                   !permisos[25].autorizado &&
-                  !userInput_numero_documento) || inhabilita_campo_contratacion
-                  " />
+                  !userInput_numero_documento) ||
+                inhabilita_campo_contratacion
+              "
+            />
             <div class="invalid-feedback">
               {{ mensaje_error }}
             </div>
@@ -211,34 +377,57 @@
         <div class="row">
           <div class="col mb-3">
             <label class="form-label">Apellidos y nombres: </label>
-            <input type="text" class="form-control" autocomplete="off" id="exampleInputEmail1"
-              aria-describedby="emailHelp" v-model="nombres" @input="
+            <input
+              type="text"
+              class="form-control"
+              autocomplete="off"
+              id="exampleInputEmail1"
+              aria-describedby="emailHelp"
+              v-model="nombres"
+              @input="
                 (nombres = formatInputUpperCase($event.target.value)),
-                (userInput_nombres = true)
-                " :disabled="(bloquea_campos &&
+                  (userInput_nombres = true)
+              "
+              :disabled="
+                (bloquea_campos &&
                   nombres != null &&
                   !permisos[25].autorizado &&
-                  !userInput_nombres) || inhabilita_campo_contratacion
-                  " />
+                  !userInput_nombres) ||
+                inhabilita_campo_contratacion
+              "
+            />
             <div class="invalid-feedback">
               {{ mensaje_error }}
             </div>
           </div>
           <div class="col mb-3">
             <label class="form-label">Número contacto: </label>
-            <input type="text" class="form-control" autocomplete="off" id="exampleInputEmail1"
-              aria-describedby="emailHelp" v-model="celular_candidato"
+            <input
+              type="text"
+              class="form-control"
+              autocomplete="off"
+              id="exampleInputEmail1"
+              aria-describedby="emailHelp"
+              v-model="celular_candidato"
               @input="celular_candidato = validarNumero2(celular_candidato)"
-              :disabled="inhabilita_campo_contratacion" />
+              :disabled="inhabilita_campo_contratacion"
+            />
             <div class="invalid-feedback">
               {{ mensaje_error }}
             </div>
           </div>
           <div class="col mb-3">
             <label class="form-label">Correo candidato: </label>
-            <input type="email" class="form-control" autocomplete="off" id="exampleInputEmail1"
-              aria-describedby="emailHelp" v-model="correo_candidato" :disabled="inhabilita_campo_contratacion"
-              pattern="^[^\s@]+@[^\s@]+\..+$" />
+            <input
+              type="email"
+              class="form-control"
+              autocomplete="off"
+              id="exampleInputEmail1"
+              aria-describedby="emailHelp"
+              v-model="correo_candidato"
+              :disabled="inhabilita_campo_contratacion"
+              pattern="^[^\s@]+@[^\s@]+\..+$"
+            />
             <div class="invalid-feedback">
               ¡Este campo debe ser diligenciado y con un formato válido!
             </div>
@@ -247,44 +436,88 @@
         <div class="row">
           <div class="col mb-3">
             <label class="form-label">Cargo: </label>
-            <input type="text" class="form-control" autocomplete="off" id="exampleInputEmail1"
-              aria-describedby="emailHelp" v-model="cargo" @input="cargo = formatInputUpperCase($event.target.value)"
-              :disabled="inhabilita_campo" />
+            <input
+              type="text"
+              class="form-control"
+              autocomplete="off"
+              id="exampleInputEmail1"
+              aria-describedby="emailHelp"
+              v-model="cargo"
+              @input="cargo = formatInputUpperCase($event.target.value)"
+              :disabled="inhabilita_campo"
+            />
             <div class="invalid-feedback">
               {{ mensaje_error }}
             </div>
           </div>
           <div class="col mb-3">
             <label class="form-label">Salario: </label>
-            <input type="text" class="form-control" autocomplete="off" id="exampleInputEmail1"
-              aria-describedby="emailHelp" v-model="salario" @input="salario = validarNumero(salario)"
-              :disabled="inhabilita_campo" />
+            <input
+              type="text"
+              class="form-control"
+              autocomplete="off"
+              id="exampleInputEmail1"
+              aria-describedby="emailHelp"
+              v-model="salario"
+              @input="salario = validarNumero(salario)"
+              :disabled="inhabilita_campo"
+            />
             <div class="invalid-feedback">
               {{ mensaje_error }}
             </div>
           </div>
           <div class="col">
-            <SearchList nombreCampo="¿Subsidio de transporte:? " @getSubsidio="getSubsidio" eventoCampo="getSubsidio"
-              @setSubsidio="setSubsidio" nombreItem="nombre" :consulta="consulta_subsidio"
-              :registros="afirmacionNegacion_bonos" :ordenCampo="1" :valida_campo="false"
-              placeholder="Seleccione una opción" />
+            <SearchList
+              nombreCampo="¿Subsidio de transporte:? "
+              @getSubsidio="getSubsidio"
+              eventoCampo="getSubsidio"
+              @setSubsidio="setSubsidio"
+              nombreItem="nombre"
+              :consulta="consulta_subsidio"
+              :registros="afirmacionNegacion_bonos"
+              :ordenCampo="1"
+              :valida_campo="false"
+              placeholder="Seleccione una opción"
+            />
           </div>
         </div>
         <div class="row">
           <div class="col">
-            <SearchList nombreCampo="Departamento de prestación del servicio: *" nombreItem="nombre"
-              eventoCampo="getDepartamentos" :consulta="consulta_departamento" :registros="departamentos"
-              @getMunicipios="getMunicipios" placeholder="Seleccione una opción" :disabled="inhabilita_campo" />
+            <SearchList
+              nombreCampo="Departamento de prestación del servicio: *"
+              nombreItem="nombre"
+              eventoCampo="getDepartamentos"
+              :consulta="consulta_departamento"
+              :registros="departamentos"
+              @getMunicipios="getMunicipios"
+              placeholder="Seleccione una opción"
+              :disabled="inhabilita_campo"
+            />
           </div>
           <div class="col">
-            <SearchList nombreCampo="Ciudad de prestación del servicio: *" nombreItem="nombre" :registros="municipios"
-              :ordenCampo="1" :consulta="consulta_municipio" @setMunicipios="setMunicipios" eventoCampo="setMunicipios"
-              :disabled="inhabilita_campo" placeholder="Seleccione una opción" />
+            <SearchList
+              nombreCampo="Ciudad de prestación del servicio: *"
+              nombreItem="nombre"
+              :registros="municipios"
+              :ordenCampo="1"
+              :consulta="consulta_municipio"
+              @setMunicipios="setMunicipios"
+              eventoCampo="setMunicipios"
+              :disabled="inhabilita_campo"
+              placeholder="Seleccione una opción"
+            />
           </div>
           <div class="col mb-3">
             <label class="form-label">EPS: </label>
-            <input type="text" class="form-control" autocomplete="off" id="exampleInputEmail1"
-              aria-describedby="emailHelp" v-model="eps" @input="eps = formatInputUpperCase($event.target.value)" />
+            <input
+              type="text"
+              class="form-control"
+              autocomplete="off"
+              id="exampleInputEmail1"
+              aria-describedby="emailHelp"
+              v-model="eps"
+              @input="eps = formatInputUpperCase($event.target.value)"
+            />
             <div class="invalid-feedback">
               {{ mensaje_error }}
             </div>
@@ -292,117 +525,227 @@
         </div>
         <div class="row">
           <div class="col">
-            <SearchList nombreCampo="AFP: *" @getAFP="getAFP" eventoCampo="getAFP" nombreItem="nombre"
-              :consulta="consulta_afp" :registros="lista_afp" :ordenCampo="1" :valida_campo="false"
-              placeholder="Seleccione una opción" />
+            <SearchList
+              nombreCampo="AFP: *"
+              @getAFP="getAFP"
+              eventoCampo="getAFP"
+              nombreItem="nombre"
+              :consulta="consulta_afp"
+              :registros="lista_afp"
+              :ordenCampo="1"
+              :valida_campo="false"
+              placeholder="Seleccione una opción"
+            />
           </div>
           <div class="col">
-            <SearchList nombreCampo="¿Stradata verificado:? " @getAfirmacionNegacion="getAfirmacionNegacion"
-              eventoCampo="getAfirmacionNegacion" @setAfirmacionNegacion="setAfirmacionNegacion" nombreItem="nombre"
-              :consulta="consulta_stradata" :registros="afirmacionNegacion" :ordenCampo="1" :valida_campo="false"
-              placeholder="Seleccione una opción" />
+            <SearchList
+              nombreCampo="¿Stradata verificado:? "
+              @getAfirmacionNegacion="getAfirmacionNegacion"
+              eventoCampo="getAfirmacionNegacion"
+              @setAfirmacionNegacion="setAfirmacionNegacion"
+              nombreItem="nombre"
+              :consulta="consulta_stradata"
+              :registros="afirmacionNegacion"
+              :ordenCampo="1"
+              :valida_campo="false"
+              placeholder="Seleccione una opción"
+            />
           </div>
           <div class="col mb-3">
             <label class="form-label">Novedades stradata: </label>
-            <textarea name="" id="novedades_stradata" class="form-control" rows="1" v-model="novedades_stradata" @input="
-              novedades_stradata = formatInputUpperCase($event.target.value)
-              "></textarea>
+            <textarea
+              name=""
+              id="novedades_stradata"
+              class="form-control"
+              rows="1"
+              v-model="novedades_stradata"
+              @input="
+                novedades_stradata = formatInputUpperCase($event.target.value)
+              "
+            ></textarea>
           </div>
         </div>
         <div class="row">
           <div class="col mb-3">
-            <SearchList nombreCampo="Departamento ubicación laboratorio médico: *" nombreItem="nombre"
-              eventoCampo="getDepartamentos" :registros="departamentos" @getMunicipios="getMunicipios" :ordenCampo="2"
-              placeholder="Seleccione una opción" :consulta="consulta_departamento_laboratorio" :valida_campo="false" />
+            <SearchList
+              nombreCampo="Departamento ubicación laboratorio médico: *"
+              nombreItem="nombre"
+              eventoCampo="getDepartamentos"
+              :registros="departamentos"
+              @getMunicipios="getMunicipios"
+              :ordenCampo="2"
+              placeholder="Seleccione una opción"
+              :consulta="consulta_departamento_laboratorio"
+              :valida_campo="false"
+            />
           </div>
           <div class="col">
-            <SearchList nombreCampo="Ciudad ubicación laboratorio médico: *" nombreItem="nombre" :registros="municipios"
-              @setMunicipios="setMunicipios" eventoCampo="setMunicipios" :ordenCampo="2"
-              placeholder="Seleccione una opción" :consulta="consulta_municipio_laboratorio" :valida_campo="false" />
+            <SearchList
+              nombreCampo="Ciudad ubicación laboratorio médico: *"
+              nombreItem="nombre"
+              :registros="municipios"
+              @setMunicipios="setMunicipios"
+              eventoCampo="setMunicipios"
+              :ordenCampo="2"
+              placeholder="Seleccione una opción"
+              :consulta="consulta_municipio_laboratorio"
+              :valida_campo="false"
+            />
           </div>
           <div class="col">
-            <SearchList nombreCampo="Laboratorio médico: *" nombreItem="nombre" :registros="laboratorios_medicos"
-              @getLaboratorios="getLaboratorios" eventoCampo="getLaboratorios" placeholder="Seleccione una opción"
-              :consulta="consulta_laboratorio" :valida_campo="false" />
+            <SearchList
+              nombreCampo="Laboratorio médico: *"
+              nombreItem="nombre"
+              :registros="laboratorios_medicos"
+              @getLaboratorios="getLaboratorios"
+              eventoCampo="getLaboratorios"
+              placeholder="Seleccione una opción"
+              :consulta="consulta_laboratorio"
+              :valida_campo="false"
+            />
           </div>
         </div>
         <div class="row">
           <div class="col mb-3">
             <label class="form-label">Otro laboratorio: </label>
-            <input type="text" class="form-control" autocomplete="off" id="exampleInputEmail1"
-              aria-describedby="emailHelp" v-model="laboratorio"
-              @input="laboratorio = formatInputUpperCase($event.target.value)" />
+            <input
+              type="text"
+              class="form-control"
+              autocomplete="off"
+              id="exampleInputEmail1"
+              aria-describedby="emailHelp"
+              v-model="laboratorio"
+              @input="laboratorio = formatInputUpperCase($event.target.value)"
+            />
             <div class="invalid-feedback">
               {{ mensaje_error }}
             </div>
           </div>
           <div class="col mb-3">
             <label class="form-label">Dirección laboratorio: </label>
-            <input type="text" class="form-control" autocomplete="off" id="exampleInputEmail1"
-              aria-describedby="emailHelp" v-model="direccion_laboratorio" @input="
+            <input
+              type="text"
+              class="form-control"
+              autocomplete="off"
+              id="exampleInputEmail1"
+              aria-describedby="emailHelp"
+              v-model="direccion_laboratorio"
+              @input="
                 direccion_laboratorio = formatInputUpperCase(
                   $event.target.value
                 )
-                " />
+              "
+            />
             <div class="invalid-feedback">
               {{ mensaje_error }}
             </div>
           </div>
           <div class="col mb-3">
             <label class="form-label">Correo laboratorio: </label>
-            <textarea name="" type="email" id="examenes" class="form-control" rows="1" v-model="correo_laboratorio"></textarea>
+            <textarea
+              name=""
+              type="email"
+              id="examenes"
+              class="form-control"
+              rows="1"
+              v-model="correo_laboratorio"
+            ></textarea>
           </div>
         </div>
         <div class="row">
           <div class="col mb-3">
             <label class="form-label">Exámenes: </label>
-            <textarea name="" id="examenes" class="form-control" rows="1" v-model="examenes"
-              @input="examenes = formatInputUpperCase($event.target.value)"></textarea>
+            <textarea
+              name=""
+              id="examenes"
+              class="form-control"
+              rows="1"
+              v-model="examenes"
+              @input="examenes = formatInputUpperCase($event.target.value)"
+            ></textarea>
           </div>
           <div class="col mb-3">
             <label class="form-label">Fecha examen: </label>
-            <input type="date" class="form-control" autocomplete="off" id="exampleInputEmail1"
-              aria-describedby="emailHelp" v-model="fecha_examen" />
+            <input
+              type="date"
+              class="form-control"
+              autocomplete="off"
+              id="exampleInputEmail1"
+              aria-describedby="emailHelp"
+              v-model="fecha_examen"
+            />
             <div class="invalid-feedback">
               {{ mensaje_error }}
             </div>
           </div>
           <div class="col mb-3">
             <label class="form-label">Recomendaciones exámenes: </label>
-            <textarea name="" id="recomendaciones_examen" class="form-control" rows="1" v-model="recomendaciones_examen"
+            <textarea
+              name=""
+              id="recomendaciones_examen"
+              class="form-control"
+              rows="1"
+              v-model="recomendaciones_examen"
               @input="
                 recomendaciones_examen = formatInputUpperCase(
                   $event.target.value
                 )
-                "></textarea>
+              "
+            ></textarea>
           </div>
         </div>
         <div class="row">
           <div class="col mb-3">
             <label class="form-label">Novedades exámenes médicos: </label>
-            <textarea name="" id="novedades_examenes" class="form-control" rows="1" v-model="novedades_examenes" @input="
-              novedades_examenes = formatInputUpperCase($event.target.value)
-              "></textarea>
+            <textarea
+              name=""
+              id="novedades_examenes"
+              class="form-control"
+              rows="1"
+              v-model="novedades_examenes"
+              @input="
+                novedades_examenes = formatInputUpperCase($event.target.value)
+              "
+            ></textarea>
           </div>
           <div class="col mb-3">
             <label class="form-label">Observaciones al servicio: </label>
-            <textarea name="" id="novedades" class="form-control" rows="1" v-model="novedades"
-              @input="novedades = formatInputUpperCase($event.target.value)"></textarea>
+            <textarea
+              name=""
+              id="novedades"
+              class="form-control"
+              rows="1"
+              v-model="novedades"
+              @input="novedades = formatInputUpperCase($event.target.value)"
+            ></textarea>
           </div>
         </div>
         <div class="row">
           <div class="col mb-3">
             <label class="form-label">Correo empresa: </label>
-            <input type="email" class="form-control" autocomplete="off" id="exampleInputEmail1"
-              aria-describedby="emailHelp" v-model="correo_empresa" pattern="^[^\s@]+@[^\s@]+\..+$" />
+            <input
+              type="email"
+              class="form-control"
+              autocomplete="off"
+              id="exampleInputEmail1"
+              aria-describedby="emailHelp"
+              v-model="correo_empresa"
+              pattern="^[^\s@]+@[^\s@]+\..+$"
+            />
             <div class="invalid-feedback">
               ¡Este campo debe ser diligenciado y con un formato válido!
             </div>
           </div>
           <div class="col mb-3">
             <label class="form-label">Contacto empresa: </label>
-            <input type="text" class="form-control" autocomplete="off" id="exampleInputEmail1"
-              aria-describedby="emailHelp" v-model="contacto_empresa" />
+            <input
+              type="text"
+              class="form-control"
+              autocomplete="off"
+              id="exampleInputEmail1"
+              aria-describedby="emailHelp"
+              v-model="contacto_empresa"
+            />
             <div class="invalid-feedback">
               {{ mensaje_error }}
             </div>
@@ -410,35 +753,80 @@
         </div>
         <div class="row">
           <div class="col-6">
-            <SearchList nombreCampo="Novedad en servicio: *" nombreItem="nombre" :registros="observaciones_estado"
-              @getObservacionesEstado="getObservacionesEstado" eventoCampo="getObservacionesEstado" :ordenCampo="2"
-              placeholder="Seleccione una opción" :consulta="consulta_observacion_estado" :valida_campo="false"
-              :disabled="bloquea_campos && !permisos[26].autorizado" />
+            <SearchList
+              nombreCampo="Novedad en servicio: *"
+              nombreItem="nombre"
+              :registros="observaciones_estado"
+              @getObservacionesEstado="getObservacionesEstado"
+              eventoCampo="getObservacionesEstado"
+              :ordenCampo="2"
+              placeholder="Seleccione una opción"
+              :consulta="consulta_observacion_estado"
+              :valida_campo="false"
+              :disabled="bloquea_campos && !permisos[26].autorizado"
+            />
           </div>
-          <div class="col mb-6" v-if="consulta_observacion_estado == 'Servicio no conforme'">
+          <div
+            class="col mb-6"
+            v-if="consulta_observacion_estado == 'Servicio no conforme'"
+          >
             <label class="form-label">Afectaciones al servicio: </label>
-            <textarea name="" id="afectacion_servicio" class="form-control" rows="1" v-model="afectacion_servicio"
-              placeholder="Solo para no conformidades" @input="
+            <textarea
+              name=""
+              id="afectacion_servicio"
+              class="form-control"
+              rows="1"
+              v-model="afectacion_servicio"
+              placeholder="Solo para no conformidades"
+              @input="
                 afectacion_servicio = formatInputUpperCase($event.target.value)
-                " :disabled="bloquea_campos && !permisos[26].autorizado"></textarea>
+              "
+              :disabled="bloquea_campos && !permisos[26].autorizado"
+            ></textarea>
           </div>
         </div>
         <div class="row">
-          <div class="col-6" v-if="consulta_observacion_estado == 'Servicio no conforme'">
-            <SearchList nombreCampo="Corregir por: " @getEncargadosCorregir="getEncargadosCorregir"
-              eventoCampo="getEncargadosCorregir" nombreItem="nombre" :consulta="consulta_encargado_corregir"
-              :registros="lista_encargados_corregir" placeholder="Seleccione una opción" :valida_campo="false"
-              :disabled="bloquea_campos && !permisos[26].autorizado" />
+          <div
+            class="col-6"
+            v-if="consulta_observacion_estado == 'Servicio no conforme'"
+          >
+            <SearchList
+              nombreCampo="Corregir por: "
+              @getEncargadosCorregir="getEncargadosCorregir"
+              eventoCampo="getEncargadosCorregir"
+              nombreItem="nombre"
+              :consulta="consulta_encargado_corregir"
+              :registros="lista_encargados_corregir"
+              placeholder="Seleccione una opción"
+              :valida_campo="false"
+              :disabled="bloquea_campos && !permisos[26].autorizado"
+            />
           </div>
-          <div class="col-6" v-if="no_conformidad != null && no_conformidad != ''">
+          <div
+            class="col-6"
+            v-if="no_conformidad != null && no_conformidad != ''"
+          >
             <label class="form-label">No conformidad hora limite:</label>
             <div class="input-group">
-              <input type="text" class="form-control" autocomplete="off" id="exampleInputEmail1"
-                aria-describedby="emailHelp" v-model="no_conformidad" :disabled="bloquea_campos &&
+              <input
+                type="text"
+                class="form-control"
+                autocomplete="off"
+                id="exampleInputEmail1"
+                aria-describedby="emailHelp"
+                v-model="no_conformidad"
+                :disabled="
+                  bloquea_campos &&
                   no_conformidad != null &&
                   no_conformidad != ''
-                  " />
-              <button v-if="permisos[27].autorizado" class="btn btn-success" type="button" @click="actualizarNc()">
+                "
+              />
+              <button
+                v-if="permisos[27].autorizado"
+                class="btn btn-success"
+                type="button"
+                @click="actualizarNc()"
+              >
                 Limpiar campo
               </button>
             </div>
@@ -446,25 +834,36 @@
         </div>
         <div class="row">
           <div class="col" style="margin: 30px" v-if="permisos[23].autorizado">
-            <div v-if="$route.params.id != ''" class="btn-group" role="group"
-              aria-label="Button group with nested dropdown">
+            <div
+              v-if="$route.params.id != ''"
+              class="btn-group"
+              role="group"
+              aria-label="Button group with nested dropdown"
+            >
               <div class="btn-group" role="group">
-                <button type="button" class="btn btn-md btn-success dropdown-toggle dropdown-toggle-split"
-                  data-bs-toggle="dropdown" aria-expanded="false">
+                <button
+                  type="button"
+                  class="btn btn-md btn-success dropdown-toggle dropdown-toggle-split"
+                  data-bs-toggle="dropdown"
+                  aria-expanded="false"
+                >
                   Enviar
                 </button>
                 <ul class="dropdown-menu">
                   <li>
                     <a class="dropdown-item" @click.prevent="envioCorreo(1)">
-                      Enviar solicitud cliente</a>
+                      Enviar solicitud cliente</a
+                    >
                   </li>
                   <li>
                     <a class="dropdown-item" @click.prevent="envioCorreo(2)">
-                      Enviar informe de seleccion</a>
+                      Enviar informe de seleccion</a
+                    >
                   </li>
                   <li>
                     <a class="dropdown-item" @click.prevent="envioCorreo(3)">
-                      Enviar citación laboratorio</a>
+                      Enviar citación laboratorio</a
+                    >
                   </li>
                 </ul>
               </div>
@@ -472,33 +871,61 @@
           </div>
           <div class="col" style="margin: 30px" v-if="permisos[33].autorizado">
             <div v-if="$route.params.id != ''" class="btn">
-              <button type="button" class="btn btn-md btn-success" aria-expanded="false"
-                @click.prevent="exportarDocumentos">
+              <button
+                type="button"
+                class="btn btn-md btn-success"
+                aria-expanded="false"
+                @click.prevent="exportarDocumentos"
+              >
                 Exportar documentos
               </button>
             </div>
           </div>
 
           <div class="col" style="margin: 30px" v-if="permisos[23].autorizado">
-            <div v-if="$route.params.id != ''" class="btn-group" role="group"
-              aria-label="Button group with nested dropdown">
+            <div
+              v-if="$route.params.id != ''"
+              class="btn-group"
+              role="group"
+              aria-label="Button group with nested dropdown"
+            >
               <div class="btn-group" role="group">
-                <button type="button" class="btn btn-md btn-success dropdown-toggle dropdown-toggle-split"
-                  data-bs-toggle="dropdown" aria-expanded="false">
+                <button
+                  type="button"
+                  class="btn btn-md btn-success dropdown-toggle dropdown-toggle-split"
+                  data-bs-toggle="dropdown"
+                  aria-expanded="false"
+                >
                   Descargar
                 </button>
                 <ul class="dropdown-menu">
                   <li>
-                    <a class="dropdown-item" @click.prevent="descargarInforme(1)">Descargar orden de servicio</a>
+                    <a
+                      class="dropdown-item"
+                      @click.prevent="descargarInforme(1)"
+                      >Descargar orden de servicio</a
+                    >
                   </li>
                   <li>
-                    <a class="dropdown-item" @click.prevent="descargarInforme(2)">Descargar informe de seleccion</a>
+                    <a
+                      class="dropdown-item"
+                      @click.prevent="descargarInforme(2)"
+                      >Descargar informe de seleccion</a
+                    >
                   </li>
                   <li>
-                    <a class="dropdown-item" @click.prevent="descargarInforme(3)">Descargar citación laboratorio</a>
+                    <a
+                      class="dropdown-item"
+                      @click.prevent="descargarInforme(3)"
+                      >Descargar citación laboratorio</a
+                    >
                   </li>
                   <li>
-                    <a class="dropdown-item" @click.prevent="descargarInforme(4)">Descargar citación candidato</a>
+                    <a
+                      class="dropdown-item"
+                      @click.prevent="descargarInforme(4)"
+                      >Descargar citación candidato</a
+                    >
                   </li>
                 </ul>
               </div>
@@ -506,8 +933,13 @@
           </div>
 
           <div class="col">
-            <button type="button" v-if="$route.params.id != ''" style="background-color: #d4ac0d; color: white"
-              @click="agregarPendientes()" class="btn m-4">
+            <button
+              type="button"
+              v-if="$route.params.id != ''"
+              style="background-color: #d4ac0d; color: white"
+              @click="agregarPendientes()"
+              class="btn m-4"
+            >
               Añadir a tareas pendientes
             </button>
           </div>
@@ -515,45 +947,86 @@
       </div>
       <div class="row" style="text-align: left; clear: both; margin-top: 40px">
         <h5 @click="adjuntos = !adjuntos" style="cursor: pointer">
-          Archivos adjuntos <i v-if="adjuntos" class="bi bi-chevron-down"></i><i v-if="!adjuntos"
-            class="bi bi-chevron-compact-up"></i>
+          Archivos adjuntos <i v-if="adjuntos" class="bi bi-chevron-down"></i
+          ><i v-if="!adjuntos" class="bi bi-chevron-compact-up"></i>
         </h5>
       </div>
       <h6 class="tituloseccion" v-if="adjuntos">Carga de archivos</h6>
       <div id="seccion" v-if="adjuntos">
-        <div class="row upload" v-for="(item, index) in fileInputsCount" :key="index">
-          <div class="form-check col-1 m-0" v-if="$route.params.id != '' && permisos[24].autorizado">
-            <input class="form-check-input m-0" type="checkbox" value="" @click="
-              enviarArchivos(!carga_archivo[index], item.ruta, item.nombre)
-              " v-model="carga_archivo[index]" :disabled="item.ruta == undefined" id="flexCheckDefault" />
+        <div
+          class="row upload"
+          v-for="(item, index) in fileInputsCount"
+          :key="index"
+        >
+          <div
+            class="form-check col-1 m-0"
+            v-if="$route.params.id != '' && permisos[24].autorizado"
+          >
+            <input
+              class="form-check-input m-0"
+              type="checkbox"
+              value=""
+              @click="
+                enviarArchivos(!carga_archivo[index], item.ruta, item.nombre)
+              "
+              v-model="carga_archivo[index]"
+              :disabled="item.ruta == undefined"
+              id="flexCheckDefault"
+            />
           </div>
 
-          <div class="col" v-if="
-            $route.params.id != '' ||
-            $route.path == '/navbar/gestion-ingresosl'
-          ">
-            <a :href="item.ruta != undefined ? URL_API + item.ruta : null" target="_blank"
-              rel="noopener noreferrer"><button type="button" :class="item.ruta != undefined
-                ? 'btn btn-sm ver'
-                : 'btn btn-sm btn-secondary'
-                ">
+          <div
+            class="col"
+            v-if="
+              $route.params.id != '' ||
+              $route.path == '/navbar/gestion-ingresosl'
+            "
+          >
+            <a
+              :href="item.ruta != undefined ? URL_API + item.ruta : null"
+              target="_blank"
+              rel="noopener noreferrer"
+              ><button
+                type="button"
+                :class="
+                  item.ruta != undefined
+                    ? 'btn btn-sm ver'
+                    : 'btn btn-sm btn-secondary'
+                "
+              >
                 <i class="bi bi-eye"> ver</i>
-              </button></a>
+              </button></a
+            >
           </div>
           <div class="col-3">
             <div class="mb-3">
-              <textarea class="form-control" id="exampleFormControlTextarea1" rows="1" :disabled="true"
-                v-model="item.nombre"></textarea>
+              <textarea
+                class="form-control"
+                id="exampleFormControlTextarea1"
+                rows="1"
+                :disabled="true"
+                v-model="item.nombre"
+              ></textarea>
             </div>
           </div>
           <div class="col-3">
             <div class="input-group">
-              <input type="file" class="form-control" :id="'seleccionArchivos' + index"
-                :accept="fileInputsCount[index].tipo_archivo" @change="cargarArchivo($event, index)"
-                aria-describedby="inputGroupFileAddon04" aria-label="Upload"
-                :="item.nombre.includes('*') && item.ruta == undefined" />
-              <button class="btn btn-outline-secondary" type="button" @click="deleteFile(index)"
-                id="inputGroupFileAddon04">
+              <input
+                type="file"
+                class="form-control"
+                :id="'seleccionArchivos' + index"
+                :accept="fileInputsCount[index].tipo_archivo"
+                @change="cargarArchivo($event, index)"
+                aria-describedby="inputGroupFileAddon04"
+                aria-label="Upload"
+                :="item.nombre.includes('*') && item.ruta == undefined"
+              />
+              <button
+                class="btn btn-outline-secondary"
+                type="button"
+                @click="deleteFile(index)"
+                id="inputGroupFileAddon04"
+              >
                 Quitar archivo
               </button>
               <div class="invalid-feedback">
@@ -563,46 +1036,75 @@
           </div>
           <div class="col-3">
             <div class="mb-3">
-              <textarea class="form-control" id="exampleFormControlTextarea1"
-                v-model="observacion_archivo[index]"></textarea>
+              <textarea
+                class="form-control"
+                id="exampleFormControlTextarea1"
+                v-model="observacion_archivo[index]"
+              ></textarea>
             </div>
           </div>
           <div class="col" v-if="$route.path != '/navbar/gestion-ingresosl'">
-            <button type="button" @click="messageDelete(item)" :class="item.ruta != undefined
-              ? 'btn btn-sm eliminar'
-              : 'btn btn-sm btn-secondary d-none'
-              ">
+            <button
+              type="button"
+              @click="messageDelete(item)"
+              :class="
+                item.ruta != undefined
+                  ? 'btn btn-sm eliminar'
+                  : 'btn btn-sm btn-secondary d-none'
+              "
+            >
               <i class="bi bi-trash"></i>
             </button>
           </div>
         </div>
       </div>
-      <button v-if="
-        permisos[23].autorizado && $route.path != '/navbar/gestion-ingresosl'
-      " class="btn btn-success m-4" :disabled="deshabilitar_boton" type="submit">
+      <button
+        v-if="
+          permisos[23].autorizado && $route.path != '/navbar/gestion-ingresosl'
+        "
+        class="btn btn-success m-4"
+        :disabled="deshabilitar_boton"
+        type="submit"
+      >
         Guardar formulario
       </button>
-      <div class="row" v-if="$route.params.id != ''" style="text-align: left; clear: both; margin-bottom: 40px">
+      <div
+        class="row"
+        v-if="$route.params.id != ''"
+        style="text-align: left; clear: both; margin-bottom: 40px"
+      >
         <h5 @click="envio_correo = !envio_correo" style="cursor: pointer">
-          Envío correo <i v-if="envio_correo" class="bi bi-chevron-down"></i><i v-if="!envio_correo"
-            class="bi bi-chevron-compact-up"></i>
+          Envío correo <i v-if="envio_correo" class="bi bi-chevron-down"></i
+          ><i v-if="!envio_correo" class="bi bi-chevron-compact-up"></i>
         </h5>
       </div>
-      <SolicitudNovedadesNomina v-if="$route.params.id != '' && envio_correo" :menu="menu"
-        :reenvio_correo="reenvio_correo" :adjuntos_candidato_string="adjuntos_candidato_string"
-        @lanzarLoading="lanzarLoading" />
+      <SolicitudNovedadesNomina
+        v-if="$route.params.id != '' && envio_correo"
+        :menu="menu"
+        :reenvio_correo="reenvio_correo"
+        :adjuntos_candidato_string="adjuntos_candidato_string"
+        @lanzarLoading="lanzarLoading"
+      />
 
-      <div class="row" v-if="gestioningresocorreos.length > 0"
-        style="text-align: left; clear: both; margin-bottom: 40px">
-        <h5 @click="historico_correos = !historico_correos" style="cursor: pointer">
+      <div
+        class="row"
+        v-if="gestioningresocorreos.length > 0"
+        style="text-align: left; clear: both; margin-bottom: 40px"
+      >
+        <h5
+          @click="historico_correos = !historico_correos"
+          style="cursor: pointer"
+        >
           Historico correos enviados
-          <i v-if="historico_correos" class="bi bi-chevron-down"></i><i v-if="!historico_correos"
-            class="bi bi-chevron-compact-up"></i>
+          <i v-if="historico_correos" class="bi bi-chevron-down"></i
+          ><i v-if="!historico_correos" class="bi bi-chevron-compact-up"></i>
         </h5>
       </div>
       <div id="seccion" v-if="historico_correos">
         <div class="table-responsive">
-          <table class="table table-striped table-hover table-bordered align-middle">
+          <table
+            class="table table-striped table-hover table-bordered align-middle"
+          >
             <thead>
               <tr>
                 <th scope="col">#</th>
@@ -629,7 +1131,11 @@
                 <td>{{ item.adjunto }}</td>
                 <td>{{ reformatearFecha(item.created_at) }}</td>
                 <td scope="col">
-                  <button class="btn btn-success" type="button" @click="reenviar(item)">
+                  <button
+                    class="btn btn-success"
+                    type="button"
+                    @click="reenviar(item)"
+                  >
                     Reenviar
                   </button>
                 </td>
@@ -673,6 +1179,7 @@ export default {
   },
   data() {
     return {
+      historico_concepto_candidatos_id: "",
       URL_API: process.env.VUE_APP_URL_API,
       ingresos_responsables: [],
       consulta_responsable_ingreso: "",
@@ -795,7 +1302,7 @@ export default {
       n_servicio: "",
       state: {},
       datos_state: false,
-      servicio_id: '',
+      servicio_id: "",
       inhabilita_campo: false,
       inhabilita_campo_contratacion: false,
     };
@@ -830,13 +1337,23 @@ export default {
     this.consultahora();
     this.datos_state = this.verificaState();
     if (this.datos_state) {
-      this.getServicioSeiya()
+      this.getServicioSeiya();
     }
   },
   methods: {
     verificaState() {
       const state = history.state;
-      const tieneDatos = Object.keys(state).some(key => !['back', 'current', 'forward', 'position', 'replaced', 'scroll'].includes(key));
+      const tieneDatos = Object.keys(state).some(
+        (key) =>
+          ![
+            "back",
+            "current",
+            "forward",
+            "position",
+            "replaced",
+            "scroll",
+          ].includes(key)
+      );
       if (tieneDatos) {
         this.state = state;
         return true;
@@ -847,34 +1364,36 @@ export default {
       let self = this;
       let config = this.configHeader();
       axios
-        .get(self.URL_API + "api/v1/ordenservicioseiya/" + this.state.id, config)
+        .get(
+          self.URL_API + "api/v1/ordenservicioseiya/" + this.state.id,
+          config
+        )
         .then(function (result) {
-          self.llenarServicio(result.data)
+          self.llenarServicio(result.data);
         });
     },
     llenarServicio(item) {
-      this.servicio_id = item.id
-      this.n_servicio = item.numero_radicado
-      this.consulta_tipo_servicio = item.linea_servicio
-      this.tipo_servicio_id = item.linea_servicio_id
+      this.servicio_id = item.id;
+      this.n_servicio = item.numero_radicado;
+      this.consulta_tipo_servicio = item.linea_servicio;
+      this.tipo_servicio_id = item.linea_servicio_id;
       this.municipio_id = item.ciudad_prestacion_servicio_id;
       this.consulta_municipio = item.ciudad_prestacion_servicio;
-      this.consulta_departamento = item.departamento_prestacion_servicio
-      this.departamento_id = item.departamento_prestacion_servicio_id
-      this.consulta_empresa_cliente = item.razon_social
-      this.empresa_cliente_id = item.cliente_id
-      this.salario = item.salario
-      this.cargo = item.cargo_solicitado
-      this.inhabilita_campo = true
-      this.replica = item.cantidad_contrataciones
+      this.consulta_departamento = item.departamento_prestacion_servicio;
+      this.departamento_id = item.departamento_prestacion_servicio_id;
+      this.consulta_empresa_cliente = item.razon_social;
+      this.empresa_cliente_id = item.cliente_id;
+      this.salario = item.salario;
+      this.cargo = item.cargo_solicitado;
+      this.inhabilita_campo = true;
+      this.replica = item.cantidad_contrataciones;
 
-      let tipo_servicio = item.linea_servicio_id
+      let tipo_servicio = item.linea_servicio_id;
       if (tipo_servicio == 3 || tipo_servicio == 4) {
-        this.consulta_usuario = item.responsable
-        this.usuario_id = item.responsable_id
-      }
-      else if (tipo_servicio == 2) {
-        this.setTipoServicio(tipo_servicio)
+        this.consulta_usuario = item.responsable;
+        this.usuario_id = item.responsable_id;
+      } else if (tipo_servicio == 2) {
+        this.setTipoServicio(tipo_servicio);
       }
     },
     messageDelete(item) {
@@ -902,10 +1421,10 @@ export default {
       axios
         .delete(
           self.URL_API +
-          "api/v1/eliminararchivosingreso/" +
-          this.$route.params.id +
-          "/" +
-          item.id,
+            "api/v1/eliminararchivosingreso/" +
+            this.$route.params.id +
+            "/" +
+            item.id,
           config
         )
         .then(function (result) {
@@ -1077,12 +1596,12 @@ export default {
       axios
         .get(
           self.URL_API +
-          "api/v1/gestioningresospdf/" +
-          self.menu_id +
-          "/" +
-          self.$route.params.id +
-          "/" +
-          this.idSeleccionado,
+            "api/v1/gestioningresospdf/" +
+            self.menu_id +
+            "/" +
+            self.$route.params.id +
+            "/" +
+            this.idSeleccionado,
           config
         )
         .then(function (result) {
@@ -1092,7 +1611,7 @@ export default {
         });
     },
     getIdentificacion(id_cliente) {
-      console.log(id_cliente)
+      console.log(id_cliente);
       // let self = this;
       // if (id_cliente) {
       //   let config = this.configHeader();
@@ -1119,34 +1638,45 @@ export default {
     },
 
     confirmaDocumento() {
-      if (this.numero_identificacion != '' && this.tipo_identificacion != '') {
-        this.validaCandidato(this.numero_identificacion, this.tipo_identificacion);
+      if (this.numero_identificacion != "" && this.tipo_identificacion != "") {
+        this.validaCandidato(
+          this.numero_identificacion,
+          this.tipo_identificacion
+        );
       }
     },
 
     validaCandidato(numero_identificacion, tipo_identificacion) {
-      let self = this
+      let self = this;
       axios
-        .get(this.URL_API + "api/v1/validacandidato/" + numero_identificacion + '/0/' + tipo_identificacion, this.configHeader())
+        .get(
+          this.URL_API +
+            "api/v1/validacandidato/" +
+            numero_identificacion +
+            "/0/" +
+            tipo_identificacion,
+          this.configHeader()
+        )
         .then(function (result) {
-          self.candidatoValidado(result.data)
+          self.candidatoValidado(result.data);
         });
     },
 
     candidatoValidado(data) {
-      if (data.status == 'error') {
-        this.showAlertConfirm(data.titulo, data.status, data.message)
-      } if (data.status == 'success') {
-        if (data.motivo == '1') {
-          console.log('motivo 1')
+      if (data.status == "error") {
+        this.showAlertConfirm(data.titulo, data.status, data.message);
+      }
+      if (data.status == "success") {
+        if (data.motivo == "1") {
+          console.log("motivo 1");
           // candidatos.value[data.usuario.index].nombre_candidato = data.usuario.nombres
           // candidatos.value[data.usuario.index].apellido_candidato = data.usuario.apellidos
           // candidatos.value[data.usuario.index].celular_candidato = data.usuario.celular
           // candidatos.value[data.usuario.index].correo_candidato = data.usuario.correo
           // candidatos.value[data.usuario.index].usuario_id = data.usuario.usuario_id
           // candidatos.value[data.usuario.index].registrado = 1
-        } else if (data.motivo == '2') {
-          console.log('motivo 2')
+        } else if (data.motivo == "2") {
+          console.log("motivo 2");
           // candidatos.value[data.index].nombre_candidato = ''
           // candidatos.value[data.index].apellido_candidato = ''
           // candidatos.value[data.index].celular_candidato = ''
@@ -1277,7 +1807,7 @@ export default {
       axios
         .get(self.URL_API + "api/v1/archivosingreso", config)
         .then(function (result) {
-          if (self.$route.params.id == '') {
+          if (self.$route.params.id == "") {
             self.loading = false;
           }
           self.fileInputsCount = result.data;
@@ -1538,6 +2068,7 @@ export default {
     },
     crearRegistroIngreso() {
       this.registroIngreso = {
+        historico_concepto_candidatos_id: this.historico_concepto_candidatos_id,
         fecha_ingreo: this.fecha_ingreso,
         numero_identificacion: this.numero_identificacion,
         nombre_completo: this.nombres,
@@ -1583,7 +2114,7 @@ export default {
         variableX: this.variableX,
         replica: this.replica,
         n_servicio: this.n_servicio,
-        servicio_id: this.servicio_id
+        servicio_id: this.servicio_id,
       };
     },
     cargarArchivo(event, index) {
@@ -1603,8 +2134,8 @@ export default {
         if (item.size > self.limite) {
           self.showAlert(
             "El archivo" +
-            item.name +
-            "es demasiado pesado, el limite es de 3MB",
+              item.name +
+              "es demasiado pesado, el limite es de 3MB",
             "error"
           );
           bandera++;
@@ -1692,7 +2223,7 @@ export default {
       if (item != null) {
         this.consulta_tipo_servicio = item.nombre;
         this.tipo_servicio_id = item.id;
-        this.setTipoServicio(item.id)
+        this.setTipoServicio(item.id);
       }
       let self = this;
       let config = this.configHeader();
@@ -1705,7 +2236,7 @@ export default {
     setTipoServicio(id) {
       if (id == 2) {
         this.numero_vacantes = "";
-        this.inhabilita_campo_contratacion = true
+        this.inhabilita_campo_contratacion = true;
       } else if (id == 3 || id == 4) {
         this.numero_contrataciones = "";
         this.citacion_entrevista = "";
@@ -1730,6 +2261,9 @@ export default {
     },
     llenarFormulario(item) {
       var self = this;
+      this.historico_concepto_candidatos_id = item.historico_candidatos_id
+        ? item.historico_candidatos_id
+        : "";
       self.bloquea_campos = true;
       this.fecha_ingreso = item.fecha_ingreso;
       this.numero_identificacion = item.numero_identificacion;
@@ -1825,6 +2359,7 @@ export default {
     },
     limpiarFormulario() {
       this.bloquea_campos = false;
+      this.historico_concepto_candidatos_id = "";
       this.fecha_ingreso = "";
       this.numero_identificacion = "";
       this.nombres = "";
@@ -1876,10 +2411,10 @@ export default {
       axios
         .get(
           self.URL_API +
-          "api/v1/consultacorreo/" +
-          self.menu_id +
-          "/" +
-          self.$route.params.id,
+            "api/v1/consultacorreo/" +
+            self.menu_id +
+            "/" +
+            self.$route.params.id,
           config
         )
         .then(function (result) {
@@ -1892,8 +2427,8 @@ export default {
       axios
         .get(
           self.URL_API +
-          "api/v1/buscardocumentoformularioi/" +
-          self.numero_documento_candidato,
+            "api/v1/buscardocumentoformularioi/" +
+            self.numero_documento_candidato,
           config
         )
         .then(function (result) {
@@ -1997,12 +2532,14 @@ h2 {
   z-index: 1000;
   background: rgb(0, 107, 63);
   color: white;
-  background: linear-gradient(95deg,
-      rgba(0, 107, 63, 1) 4%,
-      rgba(26, 150, 56, 1) 19%,
-      rgba(48, 159, 128, 1) 45%,
-      rgba(22, 119, 115, 1) 63%,
-      rgba(4, 66, 105, 1) 88%);
+  background: linear-gradient(
+    95deg,
+    rgba(0, 107, 63, 1) 4%,
+    rgba(26, 150, 56, 1) 19%,
+    rgba(48, 159, 128, 1) 45%,
+    rgba(22, 119, 115, 1) 63%,
+    rgba(4, 66, 105, 1) 88%
+  );
 }
 
 .pestaña2 {
@@ -2017,12 +2554,14 @@ h2 {
   z-index: 1000;
   background: rgb(0, 107, 63);
   color: white;
-  background: linear-gradient(95deg,
-      rgba(0, 107, 63, 1) 4%,
-      rgba(26, 150, 56, 1) 19%,
-      rgba(48, 159, 128, 1) 45%,
-      rgba(22, 119, 115, 1) 63%,
-      rgba(4, 66, 105, 1) 88%);
+  background: linear-gradient(
+    95deg,
+    rgba(0, 107, 63, 1) 4%,
+    rgba(26, 150, 56, 1) 19%,
+    rgba(48, 159, 128, 1) 45%,
+    rgba(22, 119, 115, 1) 63%,
+    rgba(4, 66, 105, 1) 88%
+  );
 }
 
 .pestaña3 {
@@ -2037,12 +2576,14 @@ h2 {
   z-index: 1000;
   background: rgb(0, 107, 63);
   color: white;
-  background: linear-gradient(95deg,
-      rgba(0, 107, 63, 1) 4%,
-      rgba(26, 150, 56, 1) 19%,
-      rgba(48, 159, 128, 1) 45%,
-      rgba(22, 119, 115, 1) 63%,
-      rgba(4, 66, 105, 1) 88%);
+  background: linear-gradient(
+    95deg,
+    rgba(0, 107, 63, 1) 4%,
+    rgba(26, 150, 56, 1) 19%,
+    rgba(48, 159, 128, 1) 45%,
+    rgba(22, 119, 115, 1) 63%,
+    rgba(4, 66, 105, 1) 88%
+  );
 }
 
 /* Animación para expandir */

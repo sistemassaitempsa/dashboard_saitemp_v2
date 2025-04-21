@@ -10,6 +10,9 @@
       :endpoint="endpoint"
       :listas="listas"
       :endpointexport="endpointexport"
+      :acciones="acciones"
+      @accion="accion"
+      :filtro_visible="true"
     />
   </div>
 </template>
@@ -90,6 +93,11 @@ export default {
           calculado: "false",
         },
       ],
+      acciones: [
+        {
+          nombre: "ver registro",
+        },
+      ],
       listas: [],
       first_page_url: "",
     };
@@ -110,6 +118,13 @@ export default {
         }
       });
       this.listas.push([]);
+    },
+    accion(item) {
+      console.log(item);
+      this.$router.push({
+        name: "formularioinfocandidato",
+        params: { id: item.usuario_id },
+      });
     },
     getItems() {
       let self = this;

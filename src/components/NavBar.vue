@@ -30,22 +30,39 @@
         >
           <span class="navbar-toggler-icon"></span>
         </button>
-        <div :class="collapse
-          ? 'collapse navbar-collapse show'
-          : 'collapse navbar-collapse'
-          " id="navbarNav">
+        <div
+          :class="
+            collapse
+              ? 'collapse navbar-collapse show'
+              : 'collapse navbar-collapse'
+          "
+          id="navbarNav"
+        >
           <ul class="navbar-nav">
-            <li class="nav-item" @click="collapese" :style="actualizacion ? 'padding-top: 15px' : ''">
-              <router-link class="nav-link active" to="">{{ saludo }} {{ nombre }}</router-link>
+            <li
+              class="nav-item"
+              @click="collapese"
+              :style="actualizacion ? 'padding-top: 15px' : ''"
+            >
+              <router-link class="nav-link active" to=""
+                >{{ saludo }} {{ nombre }}</router-link
+              >
             </li>
             <li>
               <CuentaRegresiva @timeElapsed="actualizacion = false" />
             </li>
-            <li class="nav-item contrasena" id="menu-lateral" @click="ocultarMenu(), collapese()">
-              <i :class="menu_lateral
-                ? 'bi bi-text-indent-right'
-                : 'bi bi-text-indent-left'
-                "></i>
+            <li
+              class="nav-item contrasena"
+              id="menu-lateral"
+              @click="ocultarMenu(), collapese()"
+            >
+              <i
+                :class="
+                  menu_lateral
+                    ? 'bi bi-text-indent-right'
+                    : 'bi bi-text-indent-left'
+                "
+              ></i>
 
               {{
                 menu_lateral ? "Ocultar menú lateral" : "Mostrar menú lateral"
@@ -85,16 +102,31 @@
             <i :class="item.icon"></i><span>{{ item.categoria }}</span>
           </button>
         </h2>
-        <div :id="'flush-collapse' + option[index]" class="accordion-collapse collapse"
-          :aria-labelledby="'flush-heading' + option[index]" data-bs-parent="#accordionFlushExample">
-          <div v-for="(item, index) in menu[index].opciones" :key="index" class="accordion-body">
-            <router-link v-if="item.urlExterna == '0'" class="nav-link active" :to="item.powerbi != ''
-              ? '/' + item.url + '/' + item.nombre
-              : item.url != ''
-                ? '/' + item.url
-                : '/navbar'
-              " :style="{ 'pointer-events': item.disabled ? 'none' : 'auto' }">
-              <i :class="item.icon"></i><span>{{
+        <div
+          :id="'flush-collapse' + option[index]"
+          class="accordion-collapse collapse"
+          :aria-labelledby="'flush-heading' + option[index]"
+          data-bs-parent="#accordionFlushExample"
+        >
+          <div
+            v-for="(item, index) in menu[index].opciones"
+            :key="index"
+            class="accordion-body"
+          >
+            <router-link
+              v-if="item.urlExterna == '0'"
+              class="nav-link active"
+              :to="
+                item.powerbi != ''
+                  ? '/' + item.url + '/' + item.nombre
+                  : item.url != ''
+                  ? '/' + item.url
+                  : '/navbar'
+              "
+              :style="{ 'pointer-events': item.disabled ? 'none' : 'auto' }"
+            >
+              <i :class="item.icon"></i
+              ><span>{{
                 item.nombre == "rol" ? "Rol: " + userlogued.rol : item.nombre
               }}</span>
             </router-link>
@@ -180,8 +212,7 @@ export default {
       this.validaAnchoTabla();
     },
   },
-  mounted() {
-  },
+  mounted() {},
   created() {
     this.urlExterna();
     this.userLogued();
@@ -264,24 +295,9 @@ export default {
 
     actualizar() {
       this.$router.push({
-        name: 'editarUsuario',
+        name: "editarUsuario",
         params: { tipo: this.user_type, id: this.user_id },
       });
-    },
-    configuraUsuario(data) {
-      let self = this;
-      self.userlogued = data;
-      if (data.tipo_usuario_id == "3") {
-        self.nombre = data.primer_nombre + " " + data.primer_apellido;
-      } else if (data.tipo_usuario_id == "1") {
-        self.nombre = data.nombres + " " + data.apellidos;
-      } else {
-        self.nombre = data.nombres;
-      }
-      self.user_type = data.tipo_usuario_id;
-      self.user_id = data.usuario_id;
-      self.autoriced = true;
-      self.getMenu();
     },
     async userLogued() {
       let self = this;
@@ -292,9 +308,8 @@ export default {
           config
         );
         if (response.data) {
-          self.configuraUsuario(response.data)
-        }
-        else {
+          self.configuraUsuario(response.data);
+        } else {
           self.$router.push("/");
         }
       } catch (error) {
@@ -303,7 +318,14 @@ export default {
       }
     },
     configuraUsuario(data) {
-      let self = this
+      let self = this;
+      if (data.tipo_usuario_id == "3") {
+        self.nombre = data.primer_nombre + " " + data.primer_apellido;
+      } else if (data.tipo_usuario_id == "1") {
+        self.nombre = data.nombres + " " + data.apellidos;
+      } else {
+        self.nombre = data.nombres;
+      }
       self.userlogued = data;
       self.user_type = data.tipo_usuario_id;
       self.user_id = data.usuario_id;

@@ -7001,6 +7001,7 @@ export default {
               if (result.data.message == "ok") {
                 self.guardarArchivos(result.data.client);
                 self.cliente_existe = true;
+
                 self.enviarCorreos(
                   result.data.client,
                   self.menu_id,
@@ -7022,6 +7023,7 @@ export default {
             .then(function (result) {
               if (result.data.message == "ok") {
                 self.guardarArchivos(result.data.client);
+
                 self.enviarCorreos(
                   result.data.client,
                   self.menu_id,
