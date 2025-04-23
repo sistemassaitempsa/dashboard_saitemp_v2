@@ -32,7 +32,6 @@ video {
   width: 100%;
   height: calc(100vh - 85px);
   overflow: hidden;
-
   background-position: center;
   margin: 0;
   padding: 0;
