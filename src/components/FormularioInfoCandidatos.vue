@@ -2607,10 +2607,14 @@ const formattedDate = (date) => {
 };
 
 const abrirCalendario = (event) => {
-  event.target.showPicker(); // Abre el selector de fecha
+  event.target.showPicker();
 };
 //funcion para  guardar el formulario
 const submitForm = async () => {
+  const nuevoObjeto = { ...form };
+  if (activeSeccion.value != 5) {
+    delete nuevoObjeto.concepto;
+  }
   loading.value = true;
   const id =
     userlogued.tipo_usuario_id == 3
@@ -2637,7 +2641,7 @@ const submitForm = async () => {
     }
     const response = await axios.put(
       `${URL_API}api/v1/recepcionEmpleadoseiya/${id}`,
-      form,
+      nuevoObjeto,
       configHeader()
     );
     showAlert(response.data.message, response.data.status);
