@@ -13,6 +13,9 @@
   color: #2c3e50;
 }
 
+.btn-success {
+  background-color: #42b983 !important;
+}
 nav {
   padding: 30px;
 }

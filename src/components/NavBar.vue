@@ -362,7 +362,7 @@ export default {
 .aside {
   width: 50px;
   height: 100vh;
-  background-color: #006b3f;
+  background-color: rgba(22, 119, 115, 1);
   position: fixed;
   top: 0;
   bottom: 0;
@@ -539,18 +539,18 @@ export default {
 } */
 
 .accordion {
-  background-color: #006b3f;
+  background-color: rgba(22, 119, 115, 1);
   outline: none;
 }
 
 .accordion-button {
-  background-color: #006b3f;
+  background-color: rgba(22, 119, 115, 1);
   color: rgb(255, 255, 255);
   outline: none;
 }
 
 .accordion-item {
-  background-color: #006b3f;
+  background-color: rgba(22, 119, 115, 1);
   color: rgb(255, 255, 255);
   outline: none;
 }
@@ -569,13 +569,12 @@ export default {
   /* background: rgb(0, 107, 63);
   background: linear-gradient(90deg, rgba(0, 107, 63, 1) 6%, rgba(26, 150, 56, 1) 16%, rgba(22, 119, 115, 1) 47%, rgba(117, 165, 176, 1) 56%, rgba(4, 66, 105, 1) 66%); */
   background: rgb(0, 107, 63);
+  background: rgba(22, 119, 115, 0.01);
   background: linear-gradient(
-    95deg,
-    rgba(0, 107, 63, 1) 4%,
-    rgba(26, 150, 56, 1) 19%,
-    rgba(48, 159, 128, 1) 45%,
-    rgba(22, 119, 115, 1) 63%,
-    rgba(4, 66, 105, 1) 88%
+    90deg,
+    rgba(22, 119, 115, 1) 0%,
+    rgba(48, 159, 128, 1) 50%,
+    rgba(4, 66, 105, 1) 100%
   );
   /* Para navegadores que no admiten degradados */
   /* background-image: url('ruta/a/una/imagen-de-fondo.jpg'); */
