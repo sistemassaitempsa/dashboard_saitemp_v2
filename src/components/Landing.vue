@@ -1,6 +1,7 @@
 <template>
   <div>
     <div class="fondo">
+      <video src="@/assets/LandingSEIYA1.mp4" loop autoplay></video>
       <h2 class="texto"></h2>
     </div>
   </div>
@@ -20,13 +21,21 @@ export default {
 };
 </script>
 <style scoped>
+video {
+  object-fit: fill;
+  filter: brightness(1.3);
+  filter: contrast(-1);
+  filter: opacity(0.8);
+  width: 100%;
+}
 .fondo {
   width: 100%;
-  height: 100vh;
-  background-image: url("@/assets/fondo.png");
-  background-size: cover;
-  background-repeat: no-repeat;
+  height: calc(100vh - 85px);
+  overflow: hidden;
+
   background-position: center;
+  margin: 0;
+  padding: 0;
   margin: 0;
   padding: 0;
   position: relative; /* Asegúrate de que el contenedor sea relativo para que el texto se alinee correctamente */
