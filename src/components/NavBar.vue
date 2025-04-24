@@ -395,19 +395,19 @@ export default {
 
 /* Track */
 ::-webkit-scrollbar-track {
-  box-shadow: inset 0 0 5px rgb(37, 113, 163);
+  box-shadow: inset 0 0 5px rgba(22, 119, 115, 1);
   border-radius: 10px;
 }
 
 /* Handle */
 ::-webkit-scrollbar-thumb {
-  background: rgb(37, 113, 163);
+  background: rgba(22, 119, 115, 1);
   border-radius: 10px;
 }
 
 /* Handle on hover */
 ::-webkit-scrollbar-thumb:hover {
-  background: rgb(37, 113, 163);
+  background: rgba(22, 119, 115, 1);
 }
 
 ::-webkit-scrollbar-thumb {

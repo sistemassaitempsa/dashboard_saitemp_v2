@@ -3081,7 +3081,7 @@ onMounted(() => {
   gap: 0.8em;
   border-radius: 10px;
   padding-left: 0.5em;
-  border: #1a9438 1px solid;
+  border: rgba(22, 119, 115, 1) 1px solid;
   transition: 0.5s;
 }
 .textIconContainer:hover {
@@ -3104,7 +3104,7 @@ onMounted(() => {
   width: 100%;
   height: 0.5em; /* Altura del contenedor */
   background-color: #ffffff;
-  border: #006b3f solid 1px;
+  border: rgba(22, 119, 115, 1) solid 1px;
   border-radius: 10px;
   margin: 20px auto;
   position: absolute;
@@ -3151,7 +3151,7 @@ onMounted(() => {
 .activeLink {
   color: #ffffff;
   /*   border: #006b3f 1px solid; */
-  background-color: #1a9765;
+  background-color: rgba(22, 119, 115, 1);
 }
 
 h2 {
@@ -3178,7 +3178,7 @@ h2 {
 button {
   width: 20%;
   padding: 10px;
-  background-color: #006b3f;
+  background-color: rgba(22, 119, 115, 1);
   color: white;
   border: none;
   border-radius: 5px;
@@ -3187,7 +3187,7 @@ button {
 }
 
 button:hover {
-  background-color: #015734;
+  background-color: rgb(28, 134, 131);
 }
 
 .info_container {
@@ -3207,7 +3207,7 @@ h5 {
 
 .btn_outline {
   background-color: #ffffff;
-  border: #006b3f solid 2px;
+  border: rgba(22, 119, 115, 1) solid 2px;
   transition: all 0.5s ease-out;
 }
 
@@ -3226,7 +3226,7 @@ h5 {
   top: 50%;
   transform: translateY(-60%);
   white-space: nowrap;
-  background-color: #006b3f;
+  background-color: rgba(22, 119, 115, 1);
   padding: 5px;
   border: 1px solid #ddd;
   opacity: 0;
@@ -3237,7 +3237,7 @@ h5 {
   transform: scaleX(0%) translateY(-50%);
 }
 .form-check-input:checked {
-  background-color: #006b3f;
+  background-color: rgba(22, 119, 115, 1);
 }
 .btn_outline:hover::after {
   opacity: 1;
@@ -3260,7 +3260,7 @@ h5 {
   width: 100%;
 }
 #btnMenu {
-  background-color: rgb(28, 146, 77);
+  background-color: rgba(22, 119, 115, 1);
   color: white;
   width: 40%;
 }

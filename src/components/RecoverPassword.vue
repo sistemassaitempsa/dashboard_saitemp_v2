@@ -129,9 +129,9 @@ label {
 .btn-success {
   background: linear-gradient(
     90deg,
-    rgba(0, 107, 63, 1) 0%,
-    rgba(19, 114, 148, 1) 51%,
-    rgba(26, 148, 56, 1) 100%
+    rgba(22, 119, 115, 1) 0%,
+    rgba(48, 159, 128, 1) 50%,
+    rgba(4, 66, 105, 1) 100%
   );
   transition: all 0.5s ease-out; /* Cambiado a 0.5s */
   border: none;

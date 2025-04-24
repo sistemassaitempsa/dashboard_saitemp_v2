@@ -24,9 +24,8 @@ export default {
 video {
   object-fit: fill;
   /*   filter: brightness(1.3);
-  filter: contrast(-1);
-  filter: opacity(0.8); */
-  filter: saturate(0.9);
+  filter: contrast(-1); */
+
   width: 100%;
 }
 .fondo {

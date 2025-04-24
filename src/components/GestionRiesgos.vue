@@ -227,7 +227,7 @@
             <a
               :class="['nav-link', { active: tab_amenaza }]"
               :style="{
-                backgroundColor: tab_amenaza ? '#339c66' : '',
+                backgroundColor: tab_amenaza ? 'rgba(22, 119, 115, 1)' : '',
                 color: tab_amenaza ? 'white' : 'black',
               }"
               @click="
@@ -240,7 +240,7 @@
             <a
               :class="['nav-link', { active: tab_oportunidad }]"
               :style="{
-                backgroundColor: tab_oportunidad ? '#339c66' : '',
+                backgroundColor: tab_oportunidad ? 'rgba(22, 119, 115, 1)' : '',
                 color: tab_oportunidad ? 'white' : 'black',
               }"
               @click="
@@ -926,7 +926,7 @@
             <a
               :class="['nav-link', { active: tab_amenaza }]"
               :style="{
-                backgroundColor: tab_amenaza ? '#339c66' : '',
+                backgroundColor: tab_amenaza ? 'rgba(22, 119, 115, 1)' : '',
                 color: tab_amenaza ? 'white' : 'black',
               }"
               @click="
@@ -942,7 +942,7 @@
             <a
               :class="['nav-link', { active: tab_oportunidad }]"
               :style="{
-                backgroundColor: tab_oportunidad ? '#339c66' : '',
+                backgroundColor: tab_oportunidad ? 'rgba(22, 119, 115, 1)' : '',
                 color: tab_oportunidad ? 'white' : 'black',
               }"
               @click="
@@ -1936,8 +1936,6 @@ label {
   color: white;
   background: linear-gradient(
     95deg,
-    rgba(0, 107, 63, 1) 4%,
-    rgba(26, 150, 56, 1) 19%,
     rgba(48, 159, 128, 1) 45%,
     rgba(22, 119, 115, 1) 63%,
     rgba(4, 66, 105, 1) 88%

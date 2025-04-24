@@ -245,9 +245,9 @@ export default {
 .btn-success {
   background: linear-gradient(
     90deg,
-    rgba(0, 107, 63, 1) 0%,
-    rgba(19, 114, 148, 1) 51%,
-    rgba(26, 148, 56, 1) 100%
+    rgba(22, 119, 115, 1) 0%,
+    rgba(48, 159, 128, 1) 50%,
+    rgba(4, 66, 105, 1) 100%
   );
   transition: all 0.5s ease-out;
   border: none;
@@ -460,9 +460,9 @@ button {
     border-radius: 0%;
     background: linear-gradient(
       90deg,
-      rgba(0, 107, 62, 0.712) 10%,
-      rgba(19, 114, 148, 0.616) 20%,
-      rgba(26, 148, 56, 0.562) 100%
+      rgba(22, 119, 115, 0.7) 0%,
+      rgba(48, 159, 128, 0.6) 50%,
+      rgba(4, 66, 105, 0.7) 100%
     );
   }
 }

@@ -840,7 +840,6 @@
               @input="
                 contratacion_cargo = formatInputUpperCase($event.target.value)
               "
-              aria-describedby="emailHelp"
               v-model="contratacion_cargo"
             />
             <div class="invalid-feedback">
@@ -8207,7 +8206,7 @@ export default {
 </script>
 <style scoped>
 .filled {
-  border-color: green;
+  border-color: rgba(22, 119, 115, 1);
 }
 
 .row:first-child {
@@ -8285,12 +8284,12 @@ section span {
 }
 
 .ver {
-  background-color: #006b3f;
+  background-color: rgba(22, 119, 115, 1);
   color: white;
 }
 
 .ver:hover {
-  background-color: #05a562;
+  background-color: rgb(30, 151, 147);
 }
 
 .trash {
@@ -8339,19 +8338,19 @@ ul li {
 }
 
 .registro_cambio {
-  background-color: #198754;
+  background-color: rgba(22, 119, 115, 1);
   color: white;
-  border: 1px solid #198754;
+  border: 1px solid rgba(22, 119, 115, 1);
   padding: 0px 10px 0px 10px;
 }
 
 .registro_cambio:hover {
-  background-color: #146c43;
-  border: 1px solid #146c43;
+  background-color: #124e86;
+  border: 1px solid #124e86;
 }
 
 #registro_cambio {
-  background-color: #198754;
+  background-color: rgba(22, 119, 115, 1);
   color: white;
   border-top-right-radius: 5px;
   border-bottom-right-radius: 5px;
@@ -8360,22 +8359,22 @@ ul li {
 }
 
 .registro_cambio2 {
-  background-color: #198754;
+  background-color: rgba(22, 119, 115, 1);
   color: white;
   border-top-left-radius: 5px;
   border-bottom-left-radius: 5px;
-  border: 1px solid #198754;
+  border: 1px solid rgba(22, 119, 115, 1);
   padding: 0px 10px 0px 10px;
 }
 
 .registro_cambio2:hover {
-  background-color: #146c43;
-  border: 1px solid #146c43;
+  background-color: #124e86;
+  border: 1px solid #124e86;
 }
 
 #registro_cambio:hover {
-  background-color: #146c43;
-  border: 1px solid #146c43;
+  background-color: #124e86;
+  border: 1px solid #124e86;
 }
 
 .lista-menu li:nth-child(odd) {
@@ -8383,7 +8382,7 @@ ul li {
 }
 
 .lista-menu li:nth-child(odd):hover {
-  background-color: #146c43;
+  background-color: #124e86;
   color: white;
   cursor: pointer;
 }
@@ -8393,7 +8392,7 @@ ul li {
 }
 
 #btnMenu {
-  background-color: rgb(28, 146, 77);
+  background-color: rgba(22, 119, 115, 1);
   color: white;
 }
 
@@ -8418,9 +8417,9 @@ ul li {
   color: white;
   background: linear-gradient(
     95deg,
-    rgba(0, 107, 63, 1) 4%,
-    rgba(26, 150, 56, 1) 19%,
-    rgba(48, 159, 128, 1) 45%,
+    /*  rgba(0, 107, 63, 1) 4%,
+    rgba(26, 150, 56, 1) 19%, */
+      rgba(48, 159, 128, 1) 45%,
     rgba(22, 119, 115, 1) 63%,
     rgba(4, 66, 105, 1) 88%
   );
@@ -8440,9 +8439,9 @@ ul li {
   color: white;
   background: linear-gradient(
     95deg,
-    rgba(0, 107, 63, 1) 4%,
-    rgba(26, 150, 56, 1) 19%,
-    rgba(48, 159, 128, 1) 45%,
+    /*     rgba(0, 107, 63, 1) 4%,
+    rgba(26, 150, 56, 1) 19%, */
+      rgba(48, 159, 128, 1) 45%,
     rgba(22, 119, 115, 1) 63%,
     rgba(4, 66, 105, 1) 88%
   );
@@ -8462,9 +8461,9 @@ ul li {
   color: white;
   background: linear-gradient(
     95deg,
-    rgba(0, 107, 63, 1) 4%,
-    rgba(26, 150, 56, 1) 19%,
-    rgba(48, 159, 128, 1) 45%,
+    /*     rgba(0, 107, 63, 1) 4%,
+    rgba(26, 150, 56, 1) 19%, */
+      rgba(48, 159, 128, 1) 45%,
     rgba(22, 119, 115, 1) 63%,
     rgba(4, 66, 105, 1) 88%
   );
