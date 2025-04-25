@@ -2585,8 +2585,8 @@ const llenarFormulario = async () => {
     form.tipo_transporte = 2;
   }
   if (
-    response.data.vehiculo_propio == 0 &&
-    response.data.transporte_publico == 0
+    response.data.vehiculo_propio == null &&
+    response.data.transporte_publico == null
   ) {
     form.tipo_transporte = 3;
   }
