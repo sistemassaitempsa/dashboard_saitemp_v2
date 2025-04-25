@@ -2,6 +2,7 @@
   <transition name="fadeInUpBig" appear>
     <div class="cardRegister">
       <div class="principalContainerRegister">
+        <Loading :loading="loading" />
         <div class="logosContainer">
           <div class="logo saitemp">
             <img src="@/assets/logo1.png" alt="" />
@@ -338,9 +339,10 @@ import { useAlerts } from "@/composables/useAlerts";
 import { useValidation } from "../composables/useValidations";
 import Recaptcha from "./Recaptcha.vue";
 import ModalTratamientoDatos from "./ModalTratamientoDatos.vue";
+import Loading from "./Loading.vue";
 
 //variables
-
+const loading = ref(false);
 const captchaValid = ref(false);
 const {
   emailError,
@@ -496,8 +498,10 @@ const limpiarFormulario = () => {
   validateNumeroDocConfimation();
 };
 const saveForm = async () => {
+  loading.value = true;
   if (captchaValid.value == false) {
     console.log("No es valido el captcha");
+    loading.value = false;
     return;
   }
   if (autorizacion.value) {
@@ -530,6 +534,7 @@ const saveForm = async () => {
   } else {
     showAlert("Debe aceptar la politica de tratamiento de datos", "error");
   }
+  loading.value = false;
 };
 
 //ciclo de vida
