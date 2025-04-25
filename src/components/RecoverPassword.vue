@@ -106,6 +106,7 @@ const recuperarContrasenaHandle = async () => {
     loading.value = false;
     return;
   }
+  loading.value = false;
   showAlert(
     "Error al intentar recuperar esta cuenta, verifique los datos",
     "error"
