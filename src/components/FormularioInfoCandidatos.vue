@@ -240,12 +240,20 @@
             </div>
             <div class="col" v-if="userlogued.tipo_usuario_id == 1">
               <button
+                v-if="validacionCandidato == true"
                 class="btn btn-success btn-addServicio"
                 type="button"
                 @click="toogleModalAddServicioHandle"
               >
                 Agregar a orden de servicio
               </button>
+              <div v-else class="candidato_bloqueado_container">
+                <p class="candidato_bloqueado_text">
+                  El candidato presenta bloqueos
+                </p>
+                <i class="bi bi-exclamation-circle"></i>
+                <span class="tooltip-text">{{ motivoBloqueo }}</span>
+              </div>
             </div>
           </div>
           <div class="info_container" v-if="informacion_personal">
@@ -300,7 +308,7 @@
             </div>
             <!-- Tipo de Documento y Número de Documento -->
             <div class="row">
-              <div class="col-12 col-lg-6">
+              <div class="col-12 col-lg-6 mt-2">
                 <SearchList
                   nombreCampo="Tipo de documento:*"
                   @selectTipoId="selectTipoId"
@@ -312,7 +320,7 @@
                   disabled
                 />
               </div>
-              <div class="col-12 mt-2 was-validated p-2 col-lg-6">
+              <div class="col-12 was-validated p-2 col-lg-6">
                 <div>
                   <label class="form-label" for="documento"
                     >Número de documento:*</label
@@ -600,7 +608,7 @@
                   {{ "" }}
                 </div>
               </div>
-              <div class="col-12 col-lg-6">
+              <div class="col-12 col-lg-6 mt-3">
                 <SearchList
                   nombreCampo="Estado civil:*"
                   @selectEstadoCivil="selectEstadoCivil"
@@ -2109,6 +2117,8 @@ const experiencia_laboral = ref(false);
 const concepto = ref(false);
 const historico_conceptos_servicios = ref(false);
 const informacionPersonalRef = ref(null);
+const validacionCandidato = ref("");
+const motivoBloqueo = ref("");
 /* const hijosRef = ref(null); */
 // Formulario reactivo
 const requieredExperienceFields = [
@@ -2404,6 +2414,9 @@ const llenarFormulario = async () => {
     `${URL_API}api/v1/formulariocandidato/${id}`,
     configHeader()
   );
+  if (userlogued.tipo_usuario_id == 1) {
+    validarCandidato(response.data.num_doc, response.data.tip_doc_id);
+  }
   lista_historico_servicios_generales.value =
     response.data.historico_conceptos_servicios_generales;
   lista_historico_servicios.value = response.data.historico_conceptos_servicios;
@@ -2962,6 +2975,17 @@ const selectDepartamento = (item = null, index = null) => {
     }
   }
 };
+const validarCandidato = async (num_doc, tip_doc_id) => {
+  const response = await axios.get(
+    `${URL_API}api/v1/validacandidato/${num_doc}/1/${tip_doc_id}`
+  );
+  if (response.data.status == "success") {
+    validacionCandidato.value = true;
+  } else {
+    validacionCandidato.value = false;
+    motivoBloqueo.value = response.data.message ? response.data.message : "";
+  }
+};
 const toogleModalAddServicioHandle = () => {
   toogleModalAddServicio.value = !toogleModalAddServicio.value;
 };
@@ -3270,5 +3294,60 @@ h5 {
 }
 .btn-addServicio {
   width: 100%;
+}
+.candidato_bloqueado_container {
+  display: flex;
+  position: relative;
+  border: rgb(206, 58, 58) solid 1px;
+  border-radius: 10px;
+  justify-content: space-around;
+  align-items: center;
+  cursor: pointer;
+}
+.bi-exclamation-circle {
+  color: rgb(206, 58, 58);
+}
+.candidato_bloqueado_text {
+  color: rgb(206, 58, 58);
+  text-align: center;
+  margin-top: 1em;
+}
+.tooltip-text {
+  visibility: hidden;
+  font-size: 0.8em;
+  width: 250px;
+  background-color: #ffffff;
+  color: #444343;
+  text-align: center;
+  border-radius: 10px;
+  padding: 5px;
+  position: absolute;
+  z-index: 9999;
+  bottom: 110%;
+  left: 105%;
+  transform: translateX(-50%);
+  opacity: 0;
+  transition: opacity 0.3s;
+  /*   box-shadow: 0 0 12px #111; */
+  border: rgb(177, 75, 75) solid 1px;
+}
+.tooltip-text::before {
+  content: "";
+  width: 1em;
+  height: 1em;
+  background-color: #ffffff;
+  z-index: 9998;
+  border: rgb(177, 75, 75) solid 1px;
+  border-left: none;
+  border-top: none;
+  position: absolute;
+  bottom: -6.5px;
+  left: 40%;
+  transform: translate(-50%, 0%) rotate(45deg);
+}
+
+.candidato_bloqueado_container:hover .tooltip-text {
+  visibility: visible;
+  opacity: 1;
 }
 </style>
