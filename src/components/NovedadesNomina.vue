@@ -460,12 +460,12 @@ section span {
 }
 
 .ver {
-  background-color: #006b3f;
+  background-color: rgba(22, 119, 115, 1);
   color: white;
 }
 
 .ver:hover {
-  background-color: #05a562;
+  background-color: rgba(48, 159, 128, 1);
 }
 
 .trash {

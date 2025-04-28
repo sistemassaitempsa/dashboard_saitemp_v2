@@ -88,7 +88,7 @@
         </div>
       </div>
     </nav>
-    <div class="aside">
+    <div class="aside" :style="{ top: this.scrolled ? '0px' : '85px' }">
       <div class="accordion-item" v-for="(item, index) in menu" :key="index">
         <h2 class="accordion-header" :id="'flush-heading' + option[index]">
           <button
@@ -179,6 +179,7 @@ export default {
   mixins: [Token, Alerts, Permisos],
   data() {
     return {
+      scrolled: false,
       user_type: "",
       username: "",
       collapse: false,
@@ -212,7 +213,9 @@ export default {
       this.validaAnchoTabla();
     },
   },
-  mounted() {},
+  mounted() {
+    window.addEventListener("scroll", this.handleScroll);
+  },
   created() {
     this.urlExterna();
     this.userLogued();
@@ -292,7 +295,9 @@ export default {
       this.menu_lateral = !this.menu_lateral;
       localStorage.setItem("menu_lateral", this.menu_lateral);
     },
-
+    handleScroll() {
+      this.scrolled = window.scrollY > 85;
+    },
     actualizar() {
       this.$router.push({
         name: "editarUsuario",
@@ -369,7 +374,7 @@ export default {
   left: 0;
   z-index: 2000;
   color: white;
-  transition: width 1s;
+  transition: width 1s, top 0.3s ease;
   overflow-x: hidden;
   font-size: 1rem;
   padding: 10px;

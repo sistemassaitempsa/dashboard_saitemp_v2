@@ -17,6 +17,11 @@
   background-color: rgba(22, 119, 115, 1) !important;
   border: rgba(22, 119, 115, 1) solid 1px !important;
 }
+
+.btn-success:hover {
+  background-color: rgb(26, 100, 98) !important;
+}
+
 nav {
   padding: 30px;
 }

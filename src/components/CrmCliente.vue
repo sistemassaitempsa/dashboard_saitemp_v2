@@ -3103,8 +3103,8 @@ label {
 }
 
 .ver {
-  background-color: #006b3f;
-  color: white;
+  background-color: rgba(22, 119, 115, 1);
+  color: rgb(255, 255, 255);
 }
 
 .fontSize-5 {
