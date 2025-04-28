@@ -30,7 +30,7 @@ video {
 }
 .fondo {
   width: 100%;
-  height: calc(100vh - 85px);
+  height: calc(100vh - 86px);
   overflow: hidden;
   background-position: center;
   margin: 0;
