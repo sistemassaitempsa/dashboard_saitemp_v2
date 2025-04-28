@@ -602,7 +602,7 @@
                 >
                   <option value="1">Mujer</option>
                   <option value="2">Hombre</option>
-                  <option value="0">Otro</option>
+                  <option value="3">Otro</option>
                 </select>
                 <div class="invalid-feedback errorCheck">
                   {{ "" }}
@@ -1946,7 +1946,7 @@
                 style="cursor: pointer"
                 ref="conceptoRef"
               >
-                Historico de conceptos en servicios
+                Historico de cancelaciones en servicios
                 <i
                   v-if="historico_conceptos_servicios"
                   class="bi bi-chevron-compact-up"
@@ -1968,8 +1968,8 @@
                   <th scope="col">Servicio</th>
                   <th scope="col">Razon social</th>
                   <th scope="col">Cargo</th>
-                  <th scope="col">Concepto</th>
-                  <th scope="col">Fecha de creación</th>
+                  <th scope="col">Motivo</th>
+                  <th scope="col">Fecha de cancelacion</th>
                   <th scope="col">Acciones</th>
                 </tr>
               </thead>
@@ -1982,8 +1982,8 @@
                   <td>{{ item.numero_radicado }}</td>
                   <td>{{ item.razon_social }}</td>
                   <td>{{ item.cargo }}</td>
-                  <td>{{ item.concepto }}</td>
-                  <td>{{ reformatearFecha(item.created_at) }}</td>
+                  <td>{{ item.motivo }}</td>
+                  <td>{{ reformatearFecha(item.fecha_cancelacion) }}</td>
                   <td scope="col">
                     <button
                       class="btn btn-success btn-addServicio"
@@ -2161,7 +2161,6 @@ const requiredFieldsInfoPersonal = [
   "cod_ban",
   "barrio",
   "cta_ban",
-  "per_car",
   "gru_san",
   "fac_rhh",
   "est_soc",
@@ -2385,7 +2384,7 @@ const remainingCharsExperiencia = (index) => {
 
 const verRegistroSeiya = (item) => {
   router.push({
-    path: `/navbar/gestion-ingresos/${item.formulario_ingreso_id}`,
+    path: `/navbar/orden-servicio/${item.servicio_id}`,
   });
 };
 
@@ -2658,7 +2657,7 @@ const submitForm = async () => {
       configHeader()
     );
     showAlert(response.data.message, response.data.status);
-
+    llenarFormulario();
     if (activeSeccion.value != 5) {
       const arraySecciones = [
         "informacion_personal",
@@ -2765,7 +2764,17 @@ const addExperienciaLaboral = () => {
   });
 }; */
 
-const deleteReferencia = (index) => {
+const deleteReferencia = async (index) => {
+  if (form.referencias[index].num_ref && form.referencias[index].cod_emp) {
+    loading.value = true;
+    const cod_emp = form.referencias[index].cod_emp;
+    const num_ref = form.referencias[index].num_ref;
+    const response = await axios.delete(
+      `${URL_API}api/v1/eliminarrefenciapersonal/${cod_emp}/${num_ref}`
+    );
+    showAlert(response.data.message, response.data.status);
+    loading.value = false;
+  }
   form.referencias.splice(index, 1);
 };
 
@@ -3120,6 +3129,7 @@ onMounted(() => {
   flex-direction: row;
   justify-content: space-around;
   align-items: baseline;
+  flex-wrap: wrap;
   height: 100%;
   width: 100%;
 }
