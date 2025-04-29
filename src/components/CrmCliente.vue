@@ -3180,7 +3180,7 @@ label {
 .flexButtons {
   display: flex;
   justify-content: flex-start;
-  align-items: center;
+  align-items: stretch;
 }
 .buttonleft {
   border-top-left-radius: 0;

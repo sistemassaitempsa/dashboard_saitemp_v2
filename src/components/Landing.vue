@@ -38,6 +38,12 @@ video {
   margin: 0;
   padding: 0;
   position: relative; /* Asegúrate de que el contenedor sea relativo para que el texto se alinee correctamente */
+  background: linear-gradient(
+    90deg,
+    rgba(22, 119, 115, 0.5) 0%,
+    rgba(48, 159, 128, 0.5) 50%,
+    rgba(4, 66, 105, 0.5) 100%
+  );
 }
 
 h2.texto {
