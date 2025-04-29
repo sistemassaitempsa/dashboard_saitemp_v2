@@ -1168,7 +1168,7 @@
               </button>
 
               <button
-                class="btn btn-danger dropdown-toggle dropdown-toggle-split buttonleft"
+                class="btn btn-danger buttonleft"
                 data-bs-toggle="dropdown"
                 aria-expanded="false"
                 type="button"
@@ -3185,10 +3185,12 @@ label {
 .buttonleft {
   border-top-left-radius: 0;
   border-bottom-left-radius: 0;
+  height: 100% !important;
 }
 .buttonRigth {
   border-top-right-radius: 0;
   border-bottom-right-radius: 0;
+  height: 100% !important;
 }
 /* Oculta el menú si no está visible */
 </style>

@@ -296,7 +296,7 @@ export default {
       localStorage.setItem("menu_lateral", this.menu_lateral);
     },
     handleScroll() {
-      this.scrolled = window.scrollY > 85;
+      this.scrolled = window.scrollY > 70;
     },
     actualizar() {
       this.$router.push({
