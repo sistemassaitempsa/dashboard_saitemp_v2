@@ -68,9 +68,15 @@ import SectorECiiu from "@/components/SectorECiiu.vue";
 import ProfesionalSector from "@/components/ProfesionalSector.vue";
 import AsignacionServicio from "@/components/AsignacionServicio.vue";
 import CargosCliente from "@/components/CargosCliente.vue";
+import LovePdf from "@/components/LovePdf.vue";
 
 // Configuración de rutas
 const routes = [
+  {
+    path: "/lovePDFSeiya",
+    name: "lovePdfSeiya",
+    component: LovePdf,
+  },
   {
     path: "/",
     name: "login",
