@@ -47,7 +47,7 @@
             <div class="page-item" :class="{ dragging: dragging }">
               <div class="page-number">{{ index + 1 }}</div>
               <div class="optionsContainer">
-                <div class="page-rotate">
+                <div class="page-rotate" @click="rotatePageHandle(index)">
                   <i class="bi bi-arrow-clockwise"></i>
                 </div>
                 <div class="page-delete">X</div>
@@ -83,6 +83,15 @@ const originalPdf = ref(null);
 const files = ref([]);
 const multipleFiles = reactive([]);
 
+const rotatePageHandle = async (index) => {
+  console.log(pages.value[index].rotate);
+  if (pages.value[index].rotate < 270) {
+    pages.value[index].rotate = pages.value[index].rotate + 90;
+  } else {
+    pages.value[index].rotate = 0;
+  }
+};
+
 const handleFileUpload = async (event) => {
   /* const file = event.target.files[0]; */
   files.value = event.target.files;
@@ -115,12 +124,12 @@ const handleFileUpload = async (event) => {
         thumbnails.push({
           thumbnail: canvas.toDataURL(),
           pageNumber: pageControl,
+          rotate: 0,
         });
       }
     }
 
     pages.value = thumbnails;
-    console.log(pages.value);
   } catch (error) {
     console.error("Error al procesar PDF:", error);
   } finally {
@@ -302,16 +311,17 @@ input[type="file"]::file-selector-button:hover {
   align-items: center;
 }
 .page-delete {
-  background: rgb(184, 67, 67) 0%;
+  background: rgb(204, 95, 95) 0%;
   color: white;
   padding: 3px;
   border-radius: 3px;
   font-size: 12px;
   width: 1.5em;
   cursor: pointer;
+  transition: 0.5s;
 }
 .page-delete:hover {
-  background: rgb(221, 159, 159) 0%;
+  background: rgb(150, 59, 59) 0%;
 }
 .page-rotate {
   background: rgba(22, 119, 115, 1) 0%;
@@ -324,7 +334,7 @@ input[type="file"]::file-selector-button:hover {
   cursor: pointer;
 }
 .page-rotate:hover {
-  background: rgba(48, 159, 128, 1) 50%;
+  background-color: rgb(26, 100, 98);
 }
 .loading {
   padding: 20px;
@@ -345,10 +355,11 @@ button {
   border-radius: 4px;
   cursor: pointer;
   transition: background 0.3s;
+  transition: 0.5s;
 }
 
 button:hover {
-  background: #0056b3;
+  background-color: rgb(26, 100, 98);
 }
 .pdfs-container {
   display: flex;
