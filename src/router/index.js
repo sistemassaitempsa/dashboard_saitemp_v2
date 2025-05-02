@@ -73,11 +73,6 @@ import LovePdf from "@/components/LovePdf.vue";
 // Configuración de rutas
 const routes = [
   {
-    path: "/lovePDFSeiya",
-    name: "lovePdfSeiya",
-    component: LovePdf,
-  },
-  {
     path: "/",
     name: "login",
     component: InicioSesionCandidatos,
@@ -117,6 +112,11 @@ const routes = [
         path: "editarUsuario/:tipo?/:id",
         name: "editarUsuario",
         component: EditarUsuario,
+      },
+      {
+        path: "lovePDFSeiya",
+        name: "lovePdfSeiya",
+        component: LovePdf,
       },
       {
         path: "ingresarUsuario",

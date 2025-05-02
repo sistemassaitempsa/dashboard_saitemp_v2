@@ -1,43 +1,74 @@
 <template>
   <div class="pdf-reorder-container">
-    <input
-      type="file"
-      @change="handleFileUpload"
-      accept="application/pdf"
-      multiple
-    />
-
-    <div v-if="loading" class="loading">Cargando PDF...</div>
-
-    <div v-if="pages.length" class="controls">
-      <button @click="saveOrder">Guardar nuevo orden</button>
-    </div>
-
-    <div class="pages-container">
-      <draggable
-        v-model="pages"
-        item-key="index"
-        @start="dragging = true"
-        @end="dragging = false"
-        class="drag-container"
-      >
-        <template #item="{ element, index }">
-          <div class="page-item" :class="{ dragging: dragging }">
-            <div class="page-number">{{ index + 1 }}</div>
-            <img
-              :src="element.thumbnail"
-              :alt="`Página ${index + 1}`"
-              class="page-thumbnail"
+    <div class="pdfs-container">
+      <div class="view-files">
+        <div class="title-container">
+          <h3>Ordenar PDF</h3>
+        </div>
+        <div class="input-container">
+          <input
+            type="file"
+            @change="handleFileUpload"
+            accept="application/pdf"
+            multiple
+            class="input-files"
+          />
+        </div>
+        <div class="files-container">
+          <div
+            class="file-name-container"
+            v-for="(item, index) in multipleFiles"
+            :key="index"
+          >
+            <input
+              type="text"
+              name=""
+              id=""
+              :value="item.name"
+              disabled
+              class="input-name"
             />
           </div>
-        </template>
-      </draggable>
+        </div>
+        <div v-if="pages.length" class="controls">
+          <button @click="saveOrder">Guardar nuevo orden</button>
+        </div>
+      </div>
+      <div class="pages-container">
+        <div v-if="loading" class="loading">Cargando PDF...</div>
+        <draggable
+          v-model="pages"
+          item-key="index"
+          @start="dragging = true"
+          @end="dragging = false"
+          class="drag-container"
+        >
+          <template #item="{ element, index }">
+            <div class="page-item" :class="{ dragging: dragging }">
+              <div class="page-number">{{ index + 1 }}</div>
+              <div class="optionsContainer">
+                <div class="page-rotate">
+                  <i class="bi bi-arrow-clockwise"></i>
+                </div>
+                <div class="page-delete">X</div>
+              </div>
+              <div class="img-container">
+                <img
+                  :src="element.thumbnail"
+                  :alt="`Página ${index + 1}`"
+                  class="page-thumbnail"
+                />
+              </div>
+            </div>
+          </template>
+        </draggable>
+      </div>
     </div>
   </div>
 </template>
 
 <script setup>
-import { ref } from "vue";
+import { ref, reactive } from "vue";
 import { PDFDocument } from "pdf-lib";
 import draggable from "vuedraggable";
 import * as pdfjs from "pdfjs-dist/build/pdf";
@@ -50,6 +81,7 @@ const pages = ref([]);
 const dragging = ref(false);
 const originalPdf = ref(null);
 const files = ref([]);
+const multipleFiles = reactive([]);
 
 const handleFileUpload = async (event) => {
   /* const file = event.target.files[0]; */
@@ -62,7 +94,10 @@ const handleFileUpload = async (event) => {
     let pageControl = 0;
     for (let j = 1; j <= files.value.length; j++) {
       const file = files.value[j - 1];
-      const arrayBuffer = await file.arrayBuffer();
+      multipleFiles.push(file);
+    }
+    for (let j = 1; j <= multipleFiles.length; j++) {
+      const arrayBuffer = await multipleFiles[j - 1].arrayBuffer();
       const pdf = await pdfjs.getDocument(arrayBuffer).promise;
       originalPdf.value = arrayBuffer;
       for (let i = 1; i <= pdf.numPages; i++) {
@@ -128,32 +163,90 @@ const saveOrder = async () => {
 
 <style scoped>
 .pdf-reorder-container {
-  max-width: 1200px;
+  max-width: 1500px;
   margin: 0 auto;
   padding: 20px;
 }
 
 input[type="file"] {
-  margin-bottom: 20px;
+  margin: auto;
   padding: 10px;
-  border: 1px solid #ccc;
+  border: 0px solid #ccc;
   border-radius: 4px;
+  width: 100%;
+}
+
+input[type="file"]::file-selector-button {
+  border-radius: 4px;
+  padding: 0 16px;
+  height: 40px;
+  cursor: pointer;
+  background-color: rgb(255, 255, 255);
+  border: 1px solid rgba(0, 0, 0, 0.16);
+  box-shadow: 0px 1px 0px rgba(0, 0, 0, 0.05);
+  margin-right: 16px;
+  transition: background-color 200ms;
+}
+input[type="file"]::file-selector-button:hover {
+  background-color: #f3f4f6;
 }
 .drag-container {
   display: flex;
   flex-wrap: wrap;
   justify-content: space-evenly;
+  align-items: flex-start;
   gap: 1em;
 }
 .pages-container {
-  gap: 3em;
   margin-top: 20px;
   justify-content: space-evenly;
   flex-wrap: wrap;
   display: flex;
   width: 100%;
+  height: 80vh;
+  align-items: flex-start;
+  overflow-y: scroll;
 }
 
+.pages-container:hover::-webkit-scrollbar-thumb {
+  visibility: visible;
+  transition: width 1s;
+}
+
+/* width */
+.pages-container::-webkit-scrollbar {
+  width: 5px;
+}
+
+/* Track */
+.pages-container::-webkit-scrollbar-track {
+  box-shadow: inset 0 0 5px rgb(119, 119, 119);
+  border-radius: 10px;
+}
+
+/* Handle */
+.pages-container::-webkit-scrollbar-thumb {
+  background: rgba(22, 119, 115, 0.5);
+  border-radius: 10px;
+}
+
+/* Handle on hover */
+.pages-container::-webkit-scrollbar-thumb:hover {
+  background: rgba(22, 119, 115, 1);
+}
+
+.pages-container::-webkit-scrollbar-thumb {
+  visibility: hidden;
+}
+
+.img-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 168px;
+  width: 168px;
+  margin: auto;
+}
 .page-item {
   position: relative;
   /*   border: 2px solid #a3a3a3; */
@@ -163,9 +256,9 @@ input[type="file"] {
   cursor: move;
   margin: 0;
   width: 200px;
+  height: 200px;
   min-width: 200px;
   display: inline-block;
-
   padding: 1em;
 }
 
@@ -173,14 +266,18 @@ input[type="file"] {
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   transform: translateY(-2px);
 }
+/* .files-container :hover::-webkit-scrollbar-thumb {
+  visibility: visible;
+  transition: width 1s;
+} */
 
 .page-item.dragging {
   opacity: 0.5;
 }
 
 .page-thumbnail {
+  margin: auto;
   max-width: 200px;
-  height: auto;
   box-shadow: 0 4px 8px rgba(192, 192, 192, 0.5);
   border-radius: 5px;
 }
@@ -189,13 +286,46 @@ input[type="file"] {
   position: absolute;
   top: 5px;
   left: 5px;
-  background: rgba(0, 0, 0, 0.7);
-  color: white;
+  background: rgb(255, 255, 255) 0%;
+  color: rgb(53, 53, 53) 0%;
   padding: 3px 6px;
   border-radius: 3px;
   font-size: 12px;
 }
+.optionsContainer {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  z-index: 900;
+  display: flex;
+  gap: 0.5em;
+  align-items: center;
+}
+.page-delete {
+  background: rgb(184, 67, 67) 0%;
+  color: white;
+  padding: 3px;
+  border-radius: 3px;
+  font-size: 12px;
+  width: 1.5em;
+  cursor: pointer;
+}
+.page-delete:hover {
+  background: rgb(221, 159, 159) 0%;
+}
+.page-rotate {
+  background: rgba(22, 119, 115, 1) 0%;
+  color: white;
+  padding: 3px;
+  border-radius: 3px;
+  font-size: 12px;
+  width: 1.5em;
 
+  cursor: pointer;
+}
+.page-rotate:hover {
+  background: rgba(48, 159, 128, 1) 50%;
+}
 .loading {
   padding: 20px;
   text-align: center;
@@ -208,7 +338,7 @@ input[type="file"] {
 }
 
 button {
-  background: #007bff;
+  background: rgba(22, 119, 115, 1) 0%;
   color: white;
   border: none;
   padding: 10px 20px;
@@ -219,5 +349,73 @@ button {
 
 button:hover {
   background: #0056b3;
+}
+.pdfs-container {
+  display: flex;
+  flex-direction: row-reverse;
+}
+.view-files {
+  width: 40%;
+  border: #d3d3d3 solid 1px;
+  box-shadow: 0 4px 8px rgba(192, 192, 192, 0.5);
+  border-radius: 5px;
+  height: 80vh;
+  display: flex;
+  flex-direction: column;
+  overflow-x: hidden;
+}
+.input-container {
+  border-top: #d3d3d3 solid 1px;
+  border-bottom: #d3d3d3 solid 1px;
+}
+.title-container {
+  padding: 1em;
+}
+
+.input-name {
+  font-size: 16px;
+  border: none;
+  width: 98%;
+  color: #000000;
+  background-color: transparent;
+}
+.files-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 1em;
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+}
+
+.file-name-container {
+  background-color: rgba(177, 223, 220, 0.349);
+  width: 95%;
+  min-height: 3.5em; /* Altura mínima */
+  height: auto; /* Altura flexible */
+  overflow: hidden;
+  border: rgb(53, 138, 132) solid 1px;
+  border-radius: 5px;
+  margin-bottom: 5px;
+  padding: 1em;
+  flex-shrink: 0; /* Evita que se encojan los items */
+}
+.files-container::-webkit-scrollbar {
+  width: 8px;
+}
+
+.files-container::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 4px;
+}
+
+.files-container::-webkit-scrollbar-thumb {
+  background: rgba(22, 119, 115, 0.5);
+  border-radius: 4px;
+}
+
+.files-container::-webkit-scrollbar-thumb:hover {
+  background: rgba(22, 119, 115, 0.8);
 }
 </style>
