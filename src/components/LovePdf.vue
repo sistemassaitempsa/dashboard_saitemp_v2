@@ -50,13 +50,16 @@
                 <div class="page-rotate" @click="rotatePageHandle(index)">
                   <i class="bi bi-arrow-clockwise"></i>
                 </div>
-                <div class="page-delete">X</div>
+                <div class="page-delete" @click="deletePageHandle(index)">
+                  X
+                </div>
               </div>
               <div class="img-container">
                 <img
                   :src="element.thumbnail"
                   :alt="`Página ${index + 1}`"
                   class="page-thumbnail"
+                  :class="`rotate${element.rotate}`"
                 />
               </div>
             </div>
@@ -82,9 +85,20 @@ const dragging = ref(false);
 const originalPdf = ref(null);
 const files = ref([]);
 const multipleFiles = reactive([]);
+const numberPagesByFiles = ref([]);
+
+const deletePageHandle = (index) => {
+  const fileIndex = pages.value[index].documentFileIndex;
+  console.log(fileIndex);
+  numberPagesByFiles.value[fileIndex] = numberPagesByFiles.value[fileIndex] - 1;
+  pages.value.splice(index, 1);
+  if (numberPagesByFiles.value[fileIndex] == 0) {
+    multipleFiles.splice(fileIndex, 1);
+    numberPagesByFiles.value.splice(fileIndex, 1);
+  }
+};
 
 const rotatePageHandle = async (index) => {
-  console.log(pages.value[index].rotate);
   if (pages.value[index].rotate < 270) {
     pages.value[index].rotate = pages.value[index].rotate + 90;
   } else {
@@ -99,6 +113,7 @@ const handleFileUpload = async (event) => {
   loading.value = true;
   pages.value = [];
   const thumbnails = [];
+  numberPagesByFiles.value = [];
   try {
     let pageControl = 0;
     for (let j = 1; j <= files.value.length; j++) {
@@ -109,6 +124,7 @@ const handleFileUpload = async (event) => {
       const arrayBuffer = await multipleFiles[j - 1].arrayBuffer();
       const pdf = await pdfjs.getDocument(arrayBuffer).promise;
       originalPdf.value = arrayBuffer;
+      numberPagesByFiles.value.push(pdf.numPages);
       for (let i = 1; i <= pdf.numPages; i++) {
         pageControl++;
         const page = await pdf.getPage(i);
@@ -125,6 +141,7 @@ const handleFileUpload = async (event) => {
           thumbnail: canvas.toDataURL(),
           pageNumber: pageControl,
           rotate: 0,
+          documentFileIndex: j - 1,
         });
       }
     }
@@ -428,5 +445,18 @@ button:hover {
 
 .files-container::-webkit-scrollbar-thumb:hover {
   background: rgba(22, 119, 115, 0.8);
+}
+.rotate90 {
+  transform: rotate(90deg);
+}
+.rotate180 {
+  transform: rotate(180deg);
+}
+
+.rotate270 {
+  transform: rotate(270deg);
+}
+.rotate0 {
+  transform: rotate(0deg);
 }
 </style>
