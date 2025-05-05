@@ -15,7 +15,36 @@
           />
         </div>
         <div class="files-container">
-          <div
+          <!--  -->
+          <draggable
+            v-model="multipleFiles"
+            item-key="index"
+            @start="draggingFiles = true"
+            @end="reOrderFilesHandle"
+            class="drag-container-list"
+          >
+            <template #item="{ element, index }">
+              <div class="file-name-container">
+                <input
+                  type="text"
+                  name=""
+                  id=""
+                  :value="element.name"
+                  disabled
+                  class="input-name"
+                />
+                <button
+                  @click="deleteDocumentHandle(index)"
+                  class="page-delete"
+                >
+                  X
+                </button>
+              </div>
+            </template>
+          </draggable>
+          <!--  -->
+
+          <!--       <div
             class="file-name-container"
             v-for="(item, index) in multipleFiles"
             :key="index"
@@ -28,7 +57,10 @@
               disabled
               class="input-name"
             />
-          </div>
+            <button @click="deleteDocumentHandle(index)" class="page-delete">
+              X
+            </button>
+          </div> -->
         </div>
         <div v-if="pages.length" class="controls">
           <button @click="saveOrder">Guardar nuevo orden</button>
@@ -71,7 +103,7 @@
 </template>
 
 <script setup>
-import { ref, reactive } from "vue";
+import { ref } from "vue";
 import { PDFDocument } from "pdf-lib";
 import draggable from "vuedraggable";
 import * as pdfjs from "pdfjs-dist/build/pdf";
@@ -82,9 +114,10 @@ pdfjs.GlobalWorkerOptions.workerSrc = pdfjsWorker;
 const loading = ref(false);
 const pages = ref([]);
 const dragging = ref(false);
+const draggingFiles = ref(false);
 const originalPdf = ref(null);
 const files = ref([]);
-const multipleFiles = reactive([]);
+const multipleFiles = ref([]);
 const numberPagesByFiles = ref([]);
 
 const deletePageHandle = (index) => {
@@ -93,7 +126,7 @@ const deletePageHandle = (index) => {
   numberPagesByFiles.value[fileIndex] = numberPagesByFiles.value[fileIndex] - 1;
   pages.value.splice(index, 1);
   if (numberPagesByFiles.value[fileIndex] == 0) {
-    multipleFiles.splice(fileIndex, 1);
+    multipleFiles.value.splice(fileIndex, 1);
     numberPagesByFiles.value.splice(fileIndex, 1);
     pages.value.forEach((element) => {
       if (element.documentFileIndex >= fileIndex) {
@@ -101,6 +134,59 @@ const deletePageHandle = (index) => {
       }
     });
   }
+};
+
+const reOrderFilesHandle = async () => {
+  pages.value = [];
+  loading.value = true;
+  let pageControl = 0;
+  const thumbnails = [];
+  for (let j = 1; j <= multipleFiles.value.length; j++) {
+    const arrayBuffer = await multipleFiles.value[j - 1].arrayBuffer();
+    const pdf = await pdfjs.getDocument(arrayBuffer).promise;
+    originalPdf.value = arrayBuffer;
+    numberPagesByFiles.value.push(pdf.numPages);
+    for (let i = 1; i <= pdf.numPages; i++) {
+      pageControl++;
+      const page = await pdf.getPage(i);
+      const viewport = page.getViewport({ scale: 0.2 });
+      const canvas = document.createElement("canvas");
+      const context = canvas.getContext("2d");
+      canvas.height = viewport.height;
+      canvas.width = viewport.width;
+      await page.render({
+        canvasContext: context,
+        viewport: viewport,
+      }).promise;
+      thumbnails.push({
+        thumbnail: canvas.toDataURL(),
+        pageNumber: pageControl,
+        rotate: 0,
+        documentFileIndex: j - 1,
+      });
+    }
+  }
+
+  pages.value = thumbnails;
+  loading.value = false;
+};
+
+const deleteDocumentHandle = (indexFile) => {
+  pages.value = pages.value.filter(
+    (page) => page.documentFileIndex !== indexFile
+  );
+  pages.value = pages.value.map((page) => {
+    if (page.documentFileIndex > indexFile) {
+      return {
+        ...page,
+        documentFileIndex: page.documentFileIndex - 1,
+      };
+    }
+    return page;
+  });
+
+  multipleFiles.value.splice(indexFile, 1);
+  numberPagesByFiles.value.splice(indexFile, 1);
 };
 
 const rotatePageHandle = async (index) => {
@@ -123,10 +209,10 @@ const handleFileUpload = async (event) => {
     let pageControl = 0;
     for (let j = 1; j <= files.value.length; j++) {
       const file = files.value[j - 1];
-      multipleFiles.push(file);
+      multipleFiles.value.push(file);
     }
-    for (let j = 1; j <= multipleFiles.length; j++) {
-      const arrayBuffer = await multipleFiles[j - 1].arrayBuffer();
+    for (let j = 1; j <= multipleFiles.value.length; j++) {
+      const arrayBuffer = await multipleFiles.value[j - 1].arrayBuffer();
       const pdf = await pdfjs.getDocument(arrayBuffer).promise;
       originalPdf.value = arrayBuffer;
       numberPagesByFiles.value.push(pdf.numPages);
@@ -170,8 +256,6 @@ const saveOrder = async () => {
     copiedPages.forEach((page) => newPdfDoc.addPage(page));
 
     const modifiedPdf = await newPdfDoc.save();
-
-    // Enviar al backend (ejemplo con fetch)
     const formData = new FormData();
     const blob = new Blob([modifiedPdf], { type: "application/pdf" });
     formData.append("pdf", blob, "reordered.pdf");
@@ -227,6 +311,15 @@ input[type="file"]::file-selector-button:hover {
   justify-content: space-evenly;
   align-items: flex-start;
   gap: 1em;
+}
+
+.drag-container-list {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5em;
+  width: 100%;
 }
 .pages-container {
   margin-top: 20px;
@@ -423,6 +516,7 @@ button:hover {
 }
 
 .file-name-container {
+  display: flex;
   background-color: rgba(177, 223, 220, 0.349);
   width: 95%;
   min-height: 3.5em; /* Altura mínima */
