@@ -95,6 +95,11 @@ const deletePageHandle = (index) => {
   if (numberPagesByFiles.value[fileIndex] == 0) {
     multipleFiles.splice(fileIndex, 1);
     numberPagesByFiles.value.splice(fileIndex, 1);
+    pages.value.forEach((element) => {
+      if (element.documentFileIndex >= fileIndex) {
+        element.documentFileIndex = element.documentFileIndex - 1;
+      }
+    });
   }
 };
 
