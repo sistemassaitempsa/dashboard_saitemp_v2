@@ -42,25 +42,6 @@
               </div>
             </template>
           </draggable>
-          <!--  -->
-
-          <!--       <div
-            class="file-name-container"
-            v-for="(item, index) in multipleFiles"
-            :key="index"
-          >
-            <input
-              type="text"
-              name=""
-              id=""
-              :value="item.name"
-              disabled
-              class="input-name"
-            />
-            <button @click="deleteDocumentHandle(index)" class="page-delete">
-              X
-            </button>
-          </div> -->
         </div>
         <div v-if="pages.length" class="controls">
           <button @click="saveOrder">Guardar nuevo orden</button>
@@ -104,7 +85,7 @@
 
 <script setup>
 import { ref } from "vue";
-import { PDFDocument } from "pdf-lib";
+import { PDFDocument, degrees } from "pdf-lib";
 import draggable from "vuedraggable";
 import * as pdfjs from "pdfjs-dist/build/pdf";
 import pdfjsWorker from "pdfjs-dist/build/pdf.worker.entry";
@@ -141,6 +122,7 @@ const reOrderFilesHandle = async () => {
   loading.value = true;
   let pageControl = 0;
   const thumbnails = [];
+  numberPagesByFiles.value = [];
   for (let j = 1; j <= multipleFiles.value.length; j++) {
     const arrayBuffer = await multipleFiles.value[j - 1].arrayBuffer();
     const pdf = await pdfjs.getDocument(arrayBuffer).promise;
@@ -244,34 +226,37 @@ const handleFileUpload = async (event) => {
     loading.value = false;
   }
 };
-
 const saveOrder = async () => {
   try {
-    const pdfDoc = await PDFDocument.load(originalPdf.value);
     const newPdfDoc = await PDFDocument.create();
+    const combinedPdfDoc = await PDFDocument.create();
+    for (const file of multipleFiles.value) {
+      const arrayBuffer = await file.arrayBuffer();
+      const pdfDoc = await PDFDocument.load(arrayBuffer);
+      const pages = await combinedPdfDoc.copyPages(
+        pdfDoc,
+        pdfDoc.getPageIndices()
+      );
+      pages.forEach((page) => combinedPdfDoc.addPage(page));
+    }
+    const pageIndices = pages.value.map((page) => page.pageNumber - 1);
+    const copiedPages = await newPdfDoc.copyPages(combinedPdfDoc, pageIndices);
 
-    // Reordenar páginas según el orden actual
-    const newOrder = pages.value.map((_, index) => index);
-    const copiedPages = await newPdfDoc.copyPages(pdfDoc, newOrder);
-    copiedPages.forEach((page) => newPdfDoc.addPage(page));
-
-    const modifiedPdf = await newPdfDoc.save();
-    const formData = new FormData();
-    const blob = new Blob([modifiedPdf], { type: "application/pdf" });
-    formData.append("pdf", blob, "reordered.pdf");
-    formData.append("pageOrder", JSON.stringify(newOrder));
-
-    const response = await fetch("/api/reorder-pdf", {
-      method: "POST",
-      body: formData,
+    copiedPages.forEach((page, index) => {
+      const newPage = newPdfDoc.addPage(page);
+      newPage.setRotation(degrees(pages.value[index].rotate));
     });
-
-    if (!response.ok) throw new Error("Error al guardar");
-
-    alert("Orden guardado exitosamente!");
+    const pdfBytes = await newPdfDoc.save();
+    const blob = new Blob([pdfBytes], { type: "application/pdf" });
+    const link = document.createElement("a");
+    link.href = URL.createObjectURL(blob);
+    link.download = `documento_reordenado_${Date.now()}.pdf`;
+    link.click();
+    URL.revokeObjectURL(link.href);
+    link.remove();
   } catch (error) {
-    console.error("Error al guardar el orden:", error);
-    alert("Error al guardar el orden");
+    console.error("Error al generar el PDF:", error);
+    alert("Error al generar el PDF");
   }
 };
 </script>
@@ -402,8 +387,10 @@ input[type="file"]::file-selector-button:hover {
 .page-thumbnail {
   margin: auto;
   max-width: 200px;
+  max-height: 168px;
   box-shadow: 0 4px 8px rgba(192, 192, 192, 0.5);
   border-radius: 5px;
+  object-fit: cover;
 }
 
 .page-number {
