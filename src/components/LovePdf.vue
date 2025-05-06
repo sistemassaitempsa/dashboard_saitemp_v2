@@ -29,14 +29,25 @@
             class="input-files"
           />
         </div>
-        <div class="optionsContainerOrientation">
-          <div class="orientation_option">
+        <div
+          class="optionsContainerOrientation"
+          v-if="routePath == '/navbar/lovePDFSeiyaJPG'"
+        >
+          <div
+            @click="orientationPage = 'horizontal'"
+            class="orientation_option"
+            :class="orientationPage == 'horizontal' ? 'active' : null"
+          >
             <div class="horizontal">
               <i class="bi bi-aspect-ratio"></i>
             </div>
             <label for="">Horizontal</label>
           </div>
-          <div class="orientation_option">
+          <div
+            @click="orientationPage = 'vertical'"
+            class="orientation_option"
+            :class="orientationPage == 'vertical' ? 'active' : null"
+          >
             <div class="vertical">
               <i class="bi bi-aspect-ratio"></i>
             </div>
@@ -143,20 +154,18 @@ const multipleFiles = ref([]);
 const numberPagesByFiles = ref([]);
 const routePath = route.path;
 const thumbnails = ref([]);
+const orientationPage = ref("horizontal");
 
 const downloadImagesAsPdf = async () => {
   if (!multipleFiles.value?.length) return;
 
   const pdfDoc = await PDFDocument.create();
-  // A4 portrait y landscape en puntos
   const A4_PORTRAIT = [595.28, 841.89];
   const A4_LANDSCAPE = [841.89, 595.28];
 
   for (let i = 0; i < multipleFiles.value.length; i++) {
     const file = multipleFiles.value[i];
     const bytes = await file.arrayBuffer();
-
-    // Embed de la imagen
     let image;
     if (file.type.startsWith("image/jpeg")) {
       image = await pdfDoc.embedJpg(bytes);
@@ -166,40 +175,29 @@ const downloadImagesAsPdf = async () => {
       console.warn(`Tipo no soportado: ${file.type}`);
       continue;
     }
-
-    // Tamaño original
     const { width: w0, height: h0 } = image.size();
-
-    // Rotación solicitada (0,90,180,270)
-    const thumbnail = thumbnails.value.find((t) => t.documentFileIndex === i);
-    const rot = thumbnail?.rotate ?? 0;
-
-    // Elegir orientación de página según rotación
-    const pageSize = rot === 90 || rot === 270 ? A4_LANDSCAPE : A4_PORTRAIT;
-
-    // Escalar imagen para caber
+    const pageSize =
+      orientationPage.value === "horizontal" ? A4_LANDSCAPE : A4_PORTRAIT;
     const [PW, PH] = pageSize;
-    const scale = Math.min(PW / w0, PH / h0);
-    const w = w0 * scale,
-      h = h0 * scale;
-    const x = (PW - w) / 2,
-      y = (PH - h) / 2;
 
-    // Crear página A4 con la orientación correcta
+    const scale = Math.min(PW / w0, PH / h0);
+    const w = w0 * scale;
+    const h = h0 * scale;
+    const x = (PW - w) / 2;
+    const y = (PH - h) / 2;
     const page = pdfDoc.addPage(pageSize);
 
-    // Dibujar imagen sin rotación
     page.drawImage(image, { x, y, width: w, height: h });
 
-    // Rotar la página (centra automáticamente el sistema de coordenadas)
+    const thumbnail = thumbnails.value.find((t) => t.documentFileIndex === i);
+    const rot = thumbnail?.rotate || 0;
     if (rot !== 0) {
       page.setRotation(degrees(rot));
     }
   }
 
-  // Generar y descargar
-  const out = await pdfDoc.save();
-  const blob = new Blob([out], { type: "application/pdf" });
+  const pdfBytes = await pdfDoc.save();
+  const blob = new Blob([pdfBytes], { type: "application/pdf" });
   const url = URL.createObjectURL(blob);
   const a = document.createElement("a");
   a.href = url;
@@ -230,27 +228,60 @@ const reOrderFilesHandle = async () => {
   const thumbnails = [];
   numberPagesByFiles.value = [];
   for (let j = 1; j <= multipleFiles.value.length; j++) {
-    const arrayBuffer = await multipleFiles.value[j - 1].arrayBuffer();
-    const pdf = await pdfjs.getDocument(arrayBuffer).promise;
-    originalPdf.value = arrayBuffer;
-    numberPagesByFiles.value.push(pdf.numPages);
-    for (let i = 1; i <= pdf.numPages; i++) {
-      pageControl++;
-      const page = await pdf.getPage(i);
-      const viewport = page.getViewport({ scale: 0.2 });
-      const canvas = document.createElement("canvas");
-      const context = canvas.getContext("2d");
-      canvas.height = viewport.height;
-      canvas.width = viewport.width;
-      await page.render({
-        canvasContext: context,
-        viewport: viewport,
-      }).promise;
-      thumbnails.push({
-        thumbnail: canvas.toDataURL(),
-        pageNumber: pageControl,
-        rotate: 0,
-        documentFileIndex: j - 1,
+    if (routePath == "/navbar/lovePDFSeiya") {
+      const arrayBuffer = await multipleFiles.value[j - 1].arrayBuffer();
+      const pdf = await pdfjs.getDocument(arrayBuffer).promise;
+      originalPdf.value = arrayBuffer;
+      numberPagesByFiles.value.push(pdf.numPages);
+      for (let i = 1; i <= pdf.numPages; i++) {
+        pageControl++;
+        const page = await pdf.getPage(i);
+        const viewport = page.getViewport({ scale: 0.2 });
+        const canvas = document.createElement("canvas");
+        const context = canvas.getContext("2d");
+        canvas.height = viewport.height;
+        canvas.width = viewport.width;
+        await page.render({
+          canvasContext: context,
+          viewport: viewport,
+        }).promise;
+        thumbnails.push({
+          thumbnail: canvas.toDataURL(),
+          pageNumber: pageControl,
+          rotate: 0,
+          documentFileIndex: j - 1,
+        });
+      }
+    } else if (routePath == "/navbar/lovePDFSeiyaJPG") {
+      const file = multipleFiles.value[j - 1];
+      numberPagesByFiles.value.push(1);
+      if (!file.type.startsWith("image/")) continue;
+
+      const imageUrl = URL.createObjectURL(file);
+      const img = new Image();
+      img.src = imageUrl;
+
+      await new Promise((resolve) => {
+        img.onload = () => {
+          const canvas = document.createElement("canvas");
+          const context = canvas.getContext("2d");
+
+          const scale = 0.5;
+          canvas.width = img.width * scale;
+          canvas.height = img.height * scale;
+
+          context?.drawImage(img, 0, 0, canvas.width, canvas.height);
+
+          thumbnails.push({
+            thumbnail: canvas.toDataURL(),
+            pageNumber: thumbnails.length + 1,
+            rotate: 0,
+            documentFileIndex: j - 1,
+          });
+
+          URL.revokeObjectURL(imageUrl);
+          resolve(true);
+        };
       });
     }
   }
@@ -341,13 +372,17 @@ const handleImageUpload = async (event) => {
   thumbnails.value = [];
   loading.value = true;
   numberPagesByFiles.value = [];
+  files.value = event.target.files;
   try {
-    for (let i = 0; i < input.files.length; i++) {
-      const file = input.files[i];
+    for (let j = 1; j <= files.value.length; j++) {
+      const file = files.value[j - 1];
+      multipleFiles.value.push(file);
+    }
+    for (let i = 0; i < multipleFiles.value.length; i++) {
+      const file = multipleFiles.value[i];
       numberPagesByFiles.value.push(1);
       if (!file.type.startsWith("image/")) continue;
 
-      multipleFiles.value.push(file);
       const imageUrl = URL.createObjectURL(file);
       const img = new Image();
       img.src = imageUrl;
@@ -385,10 +420,9 @@ const handleImageUpload = async (event) => {
 
 const saveOrder = async () => {
   try {
-    const A4_PORTRAIT = [595.28, 841.89]; // 210×297 mm
+    const A4_PORTRAIT = [595.28, 841.89];
     /*    const A4_LANDSCAPE = [841.89, 595.28]; // 297×210 mm */
 
-    // 1) Combinar todos los PDFs originales
     const combinedPdfDoc = await PDFDocument.create();
     for (const file of multipleFiles.value) {
       const buf = await file.arrayBuffer();
@@ -398,7 +432,6 @@ const saveOrder = async () => {
     }
     const combinedBytes = await combinedPdfDoc.save();
 
-    // 2) Nuevo documento donde montamos A4
     const newPdfDoc = await PDFDocument.create();
     const order = pages.value.map((p) => p.pageNumber - 1);
 
@@ -412,41 +445,23 @@ const saveOrder = async () => {
       } else if (pages.value[i].viewport.rotation == 270) {
         rotateDeg = rotateDeg + 180;
       }
-
-      // Decidir orientación A4 según la rotación
       const pageSize = A4_PORTRAIT;
-
-      // Embed de la página original
       const [embedded] = await newPdfDoc.embedPdf(combinedBytes, [origIdx]);
-
-      // Creamos la página A4 con la orientación adecuada
       const page = newPdfDoc.addPage(pageSize);
-
-      // Medidas del contenido original
       const { width: w0, height: h0 } = embedded.size();
-
-      // Factor de escala para que quepa en la A4 correspondiente
       const scale = Math.min(pageSize[0] / w0, pageSize[1] / h0);
-
-      // Centrar el contenido dentro de A4
       const x = (pageSize[0] - w0 * scale) / 2;
       const y = (pageSize[1] - h0 * scale) / 2;
-
-      // Dibujamos SIN usar 'rotate', porque la página ya está orientada
       page.drawPage(embedded, {
         x,
         y,
         xScale: scale,
         yScale: scale,
       });
-
-      // Finalmente aplicamos la rotación de la página
       if (rotateDeg !== 0) {
         page.setRotation(degrees(rotateDeg));
       }
     }
-
-    // 3) Guardar y forzar la descarga
     const outBytes = await newPdfDoc.save();
     const blob = new Blob([outBytes], { type: "application/pdf" });
     const url = URL.createObjectURL(blob);
@@ -763,6 +778,11 @@ button:hover {
   width: 8em;
 }
 .orientation_option:hover {
+  color: #2c7081;
+  border: #2c7081 solid 1px;
+  border-radius: 5px;
+}
+.active {
   color: #2c7081;
   border: #2c7081 solid 1px;
   border-radius: 5px;
