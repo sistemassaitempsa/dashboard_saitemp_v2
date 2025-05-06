@@ -551,7 +551,7 @@ input[type="file"]::file-selector-button:hover {
 }
 
 .pages-container::-webkit-scrollbar-track {
-  box-shadow: inset 0 0 5px rgb(119, 119, 119);
+  box-shadow: inset 0 0 5px rgb(255, 255, 255);
   border-radius: 10px;
 }
 
