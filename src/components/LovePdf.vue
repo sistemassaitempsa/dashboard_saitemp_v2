@@ -724,7 +724,6 @@ button:hover {
   min-height: 3.5em; /* Altura mínima */
   height: auto; /* Altura flexible */
   overflow: hidden;
-  border: rgb(53, 138, 132) solid 1px;
   border-radius: 5px;
   margin-bottom: 5px;
   padding: 1em;
@@ -732,10 +731,8 @@ button:hover {
   cursor: pointer;
 }
 .file-name-container:hover {
-  box-shadow: rgba(50, 50, 93, 0.25) 0px 50px 100px -20px,
-    rgba(0, 0, 0, 0.3) 0px 30px 60px -30px,
-    rgba(10, 37, 64, 0.35) 0px -2px 6px 0px inset;
-
+  box-shadow: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px,
+    rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;
   transform: translateY(-2px);
 }
 
