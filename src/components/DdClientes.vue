@@ -5,7 +5,7 @@
     <h2>Debida diligencia clientes</h2>
     <Tabla :datos="datos" :tabla="tabla" :userlogued="userlogued" :endpoint="endpoint" :listas="listas"
       :endpointexport="endpointexport" :estados_firma="estados_firma" @actualizaResponsableDD="actualizaResponsableDD"
-      @actualizaEstadoPadre="actualizaEstado" :filtro_visible="true" :acciones="acciones" @accion="accion" :checked="false" :label_accion="true"/>
+      @actualizaEstadoPadre="actualizaEstado" :filtro_sencillo="true" :acciones="acciones" @accion="accion" :checked="false" :label_accion="true"/>
   </div>
 </template>
 <script>

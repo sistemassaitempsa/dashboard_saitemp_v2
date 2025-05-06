@@ -34,7 +34,7 @@
             </form>
         </div>
         <Tabla :datos="datos" :tabla="tabla" :endpoint="endpoint" :endpointexport="endpointexport"
-            :filtro_visible="false" :checked="false" :editar="true" :eliminar="true" @response="response" />
+            :filtro_sencillo="false" :checked="false" :editar="true" :eliminar="true" @response="response" />
     </div>
 </template>
 <script setup>

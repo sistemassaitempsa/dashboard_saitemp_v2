@@ -2,7 +2,7 @@
     <div class="container">
         <h2>Lista servicios</h2>
         <Tabla :datos="datos" :tabla="tabla" :endpoint="endpoint" :endpointexport="endpointexport" :acciones="acciones"
-            @accion="accion" :filtro_visible="true" :checked="false" :label_accion="true" />
+            @accion="accion" :filtro_sencillo="true" :checked="false" :label_accion="true" />
     </div>
 </template>
 

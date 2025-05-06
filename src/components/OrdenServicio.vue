@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <h2>Orden de servicio</h2>
+    <h2>Solicitud de servicio</h2>
     <div class="card p-3">
       <form class="was-validated" @submit.prevent="save()">
         <div class="row">
@@ -510,10 +510,7 @@
                     :registros="estados_candidato"
                     placeholder="Seleccione una opción"
                     :consulta="candidatos[index].estado_candidato"
-                    :disabled="
-                      item.deshabilita_campo &&
-                      props.userlogued.tipo_usuario_id != 1
-                    "
+                    :disabled="true"
                   />
                 </div>
               </div>

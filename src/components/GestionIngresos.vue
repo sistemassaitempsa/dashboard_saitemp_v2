@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <Loading :loading="loading" />
-    <h2>Solicitud de servicio</h2>
+    <h2>Orden de servicio</h2>
     <div
       @click="toggleDiv"
       :class="{
@@ -757,19 +757,32 @@
               nombreCampo="Novedad en servicio: *"
               nombreItem="nombre"
               :registros="observaciones_estado"
-              @getObservacionesEstado="getObservacionesEstado"
-              eventoCampo="getObservacionesEstado"
+              @getCategoriasSNC="getCategoriasSNC"
+              eventoCampo="getCategoriasSNC"
               :ordenCampo="2"
               placeholder="Seleccione una opción"
-              :consulta="consulta_observacion_estado"
+              :consulta="consulta_categoria_snc"
               :valida_campo="false"
               :disabled="bloquea_campos && !permisos[26].autorizado"
             />
           </div>
-          <div
-            class="col mb-6"
-            v-if="consulta_observacion_estado == 'Servicio no conforme'"
-          >
+          <div class="col-6">
+            <SearchList
+              nombreCampo="Proceso: *"
+              nombreItem="nombre"
+              :registros="procesos_snc"
+              @getProcesosSNC="getProcesosSNC"
+              eventoCampo="getProcesosSNC"
+              :ordenCampo="2"
+              placeholder="Seleccione una opción"
+              :consulta="consulta_proceso_snc"
+              :valida_campo="false"
+              :disabled="bloquea_campos && !permisos[26].autorizado"
+            />
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-6 mb-6" v-if="consulta_categoria_snc != ''">
             <label class="form-label">Afectaciones al servicio: </label>
             <textarea
               name=""
@@ -784,12 +797,7 @@
               :disabled="bloquea_campos && !permisos[26].autorizado"
             ></textarea>
           </div>
-        </div>
-        <div class="row">
-          <div
-            class="col-6"
-            v-if="consulta_observacion_estado == 'Servicio no conforme'"
-          >
+          <div class="col-6">
             <SearchList
               nombreCampo="Corregir por: "
               @getEncargadosCorregir="getEncargadosCorregir"
@@ -802,10 +810,7 @@
               :disabled="bloquea_campos && !permisos[26].autorizado"
             />
           </div>
-          <div
-            class="col-6"
-            v-if="no_conformidad != null && no_conformidad != ''"
-          >
+          <div class="col-6" v-if="no_conformidad != null && no_conformidad != ''">
             <label class="form-label">No conformidad hora limite:</label>
             <div class="input-group">
               <input
@@ -832,7 +837,20 @@
             </div>
           </div>
         </div>
-        <div class="row">
+        <div class="row" style="margin: 30px">
+          <ModalSlot
+            class="col"
+            style="margin: 30px"
+            titulo_encabezado="Historico salidas no conforme"
+            titulo_boton="Historico SNC"
+            modal_id="mi-modal"
+            v-if="salidas_no_conforme.length >= 1"
+          >
+            <ModalSalidasNoConformeSeiya
+              :salidas_no_conforme="salidas_no_conforme"
+              @getRegistroIngreso="getRegistroIngreso"
+            />
+          </ModalSlot>
           <div class="col" style="margin: 30px" v-if="permisos[23].autorizado">
             <div
               v-if="$route.params.id != ''"
@@ -846,6 +864,7 @@
                   class="btn btn-md btn-success dropdown-toggle dropdown-toggle-split"
                   data-bs-toggle="dropdown"
                   aria-expanded="false"
+                  style="border-radius: 5px"
                 >
                   Enviar
                 </button>
@@ -895,6 +914,7 @@
                   class="btn btn-md btn-success dropdown-toggle dropdown-toggle-split"
                   data-bs-toggle="dropdown"
                   aria-expanded="false"
+                  style="border-radius: 5px"
                 >
                   Descargar
                 </button>
@@ -1157,12 +1177,16 @@ import SolicitudNovedadesNomina from "./SolicitudNovedadesNomina.vue";
 import { Alerts } from "../Mixins/Alerts.js";
 import { Scroll } from "../Mixins/Scroll.js";
 import { Permisos } from "../Mixins/Permisos.js";
+import ModalSlot from "./ModalSlot.vue";
+import ModalSalidasNoConformeSeiya from "./ModalSalidasNoConformeSeiya.vue";
 
 export default {
   components: {
     SearchList,
     Loading,
     SolicitudNovedadesNomina,
+    ModalSlot,
+    ModalSalidasNoConformeSeiya,
   },
   mixins: [Token, Alerts, Scroll, Permisos],
   props: {
@@ -1284,8 +1308,12 @@ export default {
       consulta_tipo_identificacion: "",
       tipo_identificacion: "",
       idSeleccionado: "",
-      consulta_observacion_estado: "",
+      consulta_categoria_snc: "",
+      categoria_snc_id: "",
       observaciones_estado: [],
+      procesos_snc: [],
+      consulta_proceso_snc: "",
+      proceso_snc_id: "",
       afectacion_servicio: "",
       correo_laboratorio: "",
       contacto_empresa: "",
@@ -1305,6 +1333,8 @@ export default {
       servicio_id: "",
       inhabilita_campo: false,
       inhabilita_campo_contratacion: false,
+      salidas_no_conforme: [],
+    
     };
   },
   computed: {},
@@ -1431,9 +1461,10 @@ export default {
           self.showAlert(result.data.message, result.data.status);
         });
     },
-    getObservacionesEstado(item = null) {
+    getCategoriasSNC(item = null) {
       if (item != null) {
-        this.consulta_observacion_estado = item.nombre;
+        this.categoria_snc_id = item.id;
+        this.consulta_categoria_snc = item.nombre;
       }
       let self = this;
       let config = this.configHeader();
@@ -1441,6 +1472,19 @@ export default {
         .get(self.URL_API + "api/v1/observacionestado", config)
         .then(function (result) {
           self.observaciones_estado = result.data;
+        });
+    },
+    getProcesosSNC(item = null) {
+      if (item != null) {
+        this.proceso_snc_id = item.id;
+        this.consulta_proceso_snc = item.nombre;
+      }
+      let self = this;
+      let config = this.configHeader();
+      axios
+        .get(self.URL_API + "api/v1/procesos_snc", config)
+        .then(function (result) {
+          self.procesos_snc = result.data;
         });
     },
     descargarInforme(id) {
@@ -2105,7 +2149,7 @@ export default {
         consulta_vacante: this.consulta_vacante,
         tipo_identificacion: this.tipo_identificacion,
         afectacion_servicio: this.afectacion_servicio,
-        consulta_observacion_estado: this.consulta_observacion_estado,
+        consulta_categoria_snc: this.consulta_categoria_snc,
         correo_laboratorio: this.correo_laboratorio,
         contacto_empresa: this.contacto_empresa,
         encargado_id: this.encargado_id,
@@ -2115,6 +2159,8 @@ export default {
         replica: this.replica,
         n_servicio: this.n_servicio,
         servicio_id: this.servicio_id,
+        proceso_snc_id: this.proceso_snc_id,
+        categoria_snc_id: this.categoria_snc_id,
       };
     },
     cargarArchivo(event, index) {
@@ -2316,7 +2362,6 @@ export default {
       this.consulta_encargado = item.responsable_ingreso;
       this.tipo_identificacion = item.tipo_identificacion_id;
       this.afectacion_servicio = item.afectacion_servicio;
-      this.consulta_observacion_estado = item.observacion_estado;
       this.correo_laboratorio = item.correo_laboratorio;
       this.contacto_empresa = item.contacto_empresa;
       this.encargado_id = item.responsable_id;
@@ -2356,6 +2401,7 @@ export default {
       this.seguimiento = item.seguimiento;
       this.seguimiento_estados = item.seguimiento_estados;
       this.loading = false;
+      this.salidas_no_conforme = item.salidas_no_conforme;
     },
     limpiarFormulario() {
       this.bloquea_campos = false;
@@ -2394,7 +2440,7 @@ export default {
       this.recomendaciones_examen = "";
       this.novedades_examenes = "";
       this.afectacion_servicio = "";
-      this.consulta_observacion_estado = "";
+      this.consulta_categoria_snc = "";
       this.correo_laboratorio = "";
       this.contacto_empresa = "";
       this.consulta_subsidio = "";
@@ -2658,5 +2704,9 @@ h2 {
   /* Animación para contraer */
   overflow: hidden;
   /* Ocultar el contenido al contraer */
+}
+
+li a {
+  cursor: pointer;
 }
 </style>

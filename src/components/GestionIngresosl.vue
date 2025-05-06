@@ -4,7 +4,7 @@
     <h2>Registro de ingresos</h2>
     <Tabla
       :datos="datos"
-      :filtro_visible="true"
+      :filtro_multiple="true"
       :tabla="tabla"
       :userlogued="userlogued"
       :endpoint="endpoint"
@@ -16,6 +16,7 @@
       @filtrando="filtrando"
       @filtrarFechaIngreso="filtroFechaIngreso"
       :label_accion="true"
+      :columnas_adicionales="columnas_adicionales"
     />
   </div>
 </template>
@@ -166,6 +167,20 @@ export default {
       first_page_url: "",
       filtro_gestion_ingresos: false,
       pagina_filtro: "",
+      columnas_adicionales: [ 
+        {
+          calculado: "false",
+          nombre: "Estado",
+          orden: "DESC",
+          tipo: "texto",
+        },
+        {
+          calculado: "false",
+          nombre: "Responsable",
+          orden: "DESC",
+          tipo: "texto",
+        },
+      ],
     };
   },
   computed: {},

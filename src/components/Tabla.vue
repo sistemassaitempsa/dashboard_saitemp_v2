@@ -24,7 +24,7 @@
       </div>
     </div>
     <div
-      v-if="items_tabla2.length > 0 && filtro_visible"
+      v-if="items_tabla2.length > 0 && (filtro_sencillo || filtro_multiple)"
       class="row"
       style="text-align: left; clear: both"
     >
@@ -36,7 +36,7 @@
     </div>
     <div
       class="row"
-      v-if="filtros && ruta == '/navbar/gestion-ingresosl'"
+      v-if="filtros && filtro_multiple"
       style="
         clear: both;
         padding: 30px;
@@ -254,7 +254,7 @@
       </div>
     </div>
     <div
-      v-if="filtros && ruta != '/navbar/gestion-ingresosl'"
+      v-if="filtros && filtro_sencillo"
       class="row"
       style="
         clear: both;
@@ -571,6 +571,7 @@
           style="margin-top: 35px"
           @click="selectAll((select_all = !select_all))"
           class="btn btn-success btn-sm"
+          v-if="checked"
         >
           Seleccionar todo
         </button>
@@ -1055,6 +1056,11 @@ export default {
       required: true, // Cambia a true si es obligatorio
       default: () => [], // Arreglo vacío como valor predeterminado
     },
+    columnas_adicionales: {
+      type: Array,
+      required: false, // Cambia a true si es obligatorio
+      default: () => [], // Arreglo vacío como valor predeterminado
+    },
     datos: {
       type: Object,
       required: false, // Cambia a true si es obligatorio
@@ -1130,7 +1136,12 @@ export default {
       required: false, // Cambia a true si es obligatorio
       default: () => [], // Valor predeterminado como arreglo vacío
     },
-    filtro_visible: {
+    filtro_sencillo: {
+      type: Boolean, // Tipo booleano
+      required: false,
+      default: false, // Valor predeterminado
+    },
+    filtro_multiple: {
       type: Boolean, // Tipo booleano
       required: false,
       default: false, // Valor predeterminado
@@ -1358,6 +1369,11 @@ export default {
             this.items_tabla2[index].o_color_resultado === "yellow"
               ? "black"
               : "white",
+        };
+      }
+      if (item == "color") {
+        return {
+          backgroundColor: this.items_tabla2[index].color,
         };
       }
     },
@@ -1646,17 +1662,8 @@ export default {
       }
       this.tabla2 = this.tabla; // Encabezados de la tabla
       this.tabla3 = [...this.tabla2];
-      this.tabla3.push({
-        calculado: "false",
-        nombre: "Estado",
-        orden: "DESC",
-        tipo: "texto",
-      });
-      this.tabla3.push({
-        calculado: "false",
-        nombre: "Responsable",
-        orden: "DESC",
-        tipo: "texto",
+      this.columnas_adicionales.forEach(element => {
+        this.tabla3.push(element);
       });
       this.items_tabla2 = Object.values(datos.data.data); // lista de registros
       self.links = datos.data;

@@ -68,6 +68,11 @@ import SectorECiiu from "@/components/SectorECiiu.vue";
 import ProfesionalSector from "@/components/ProfesionalSector.vue";
 import AsignacionServicio from "@/components/AsignacionServicio.vue";
 import CargosCliente from "@/components/CargosCliente.vue";
+import ExportaSNCSeiya from "@/components/ExportaSNCSeiya.vue";
+import EstadosCandidatoServicio from "@/components/EstadosCandidatoServicio.vue";
+import EstadosSeiya from "@/components/EstadosSeiya.vue";
+import EstadosResponsable from "@/components/EstadosResponsable.vue";
+import EstadosSeiyaSolicitudServicio from "@/components/EstadosSeiyaSolicitudServicio.vue";
 
 // Configuración de rutas
 const routes = [
@@ -416,6 +421,31 @@ const routes = [
         path: "cargos-cliente",
         name: "cargos-cliente",
         component: CargosCliente,
+      },
+      {
+        path: "exportasnc",
+        name: "exportasnc",
+        component: ExportaSNCSeiya,
+      },
+      {
+        path: "estadoscs",
+        name: "estadoscs",
+        component: EstadosCandidatoServicio,
+      },
+      {
+        path: "estadoseiya",
+        name: "estadoseiya",
+        component: EstadosSeiya,
+      },
+      {
+        path: "estadoresponsable",
+        name: "estadoresponsable",
+        component: EstadosResponsable,
+      },
+      {
+        path: "estadosseiyaservicio",
+        name: "estadosseiyaservicio",
+        component: EstadosSeiyaSolicitudServicio,
       },
     ],
   },

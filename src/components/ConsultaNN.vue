@@ -1,7 +1,7 @@
 <template>
     <div class="container">
         <h2>Consulta correos novedades nómina</h2>
-        <Tabla :datos="datos" :tabla="tabla" :userlogued="userlogued" :endpoint="endpoint" :filtro_visible="true" :checked="false"/>
+        <Tabla :datos="datos" :tabla="tabla" :userlogued="userlogued" :endpoint="endpoint" :filtro_sencillo="true" :checked="false"/>
     </div>
 </template>
 <script>

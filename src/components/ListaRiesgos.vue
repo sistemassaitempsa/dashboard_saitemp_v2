@@ -8,7 +8,7 @@
         :tabla="tabla"
         :endpoint="endpoint"
         :endpointexport="endpointexport"
-        :filtro_visible="true"
+        :filtro_sencillo="true"
         :checked="false"
       />
       <!-- @filtrando="filtrando" -->
