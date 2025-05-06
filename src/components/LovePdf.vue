@@ -708,6 +708,7 @@ button:hover {
   flex: 1;
   min-height: 0;
   overflow-y: auto;
+  padding: 0.5em;
 }
 
 .file-name-container {
@@ -721,8 +722,17 @@ button:hover {
   border-radius: 5px;
   margin-bottom: 5px;
   padding: 1em;
-  flex-shrink: 0; /* Evita que se encojan los items */
+  flex-shrink: 0;
+  cursor: pointer;
 }
+.file-name-container:hover {
+  box-shadow: rgba(50, 50, 93, 0.25) 0px 50px 100px -20px,
+    rgba(0, 0, 0, 0.3) 0px 30px 60px -30px,
+    rgba(10, 37, 64, 0.35) 0px -2px 6px 0px inset;
+
+  transform: translateY(-2px);
+}
+
 .files-container::-webkit-scrollbar {
   width: 8px;
 }
@@ -777,11 +787,15 @@ button:hover {
   padding: 0.5em;
   border: transparent solid 1px;
   width: 8em;
+  transition: 0.3s;
 }
 .orientation_option:hover {
   color: #2c7081;
   border: #2c7081 solid 1px;
   border-radius: 5px;
+  box-shadow: rgba(50, 50, 93, 0.25) 0px 50px 100px -20px,
+    rgba(0, 0, 0, 0.3) 0px 30px 60px -30px,
+    rgba(10, 37, 64, 0.35) 0px -2px 6px 0px inset;
 }
 .active {
   color: #2c7081;
