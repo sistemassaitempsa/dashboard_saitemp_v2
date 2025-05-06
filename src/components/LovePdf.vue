@@ -157,14 +157,18 @@ const thumbnails = ref([]);
 const orientationPage = ref("horizontal");
 
 const downloadImagesAsPdf = async () => {
-  if (!multipleFiles.value?.length) return;
+  if (!pages.value?.length) return;
 
   const pdfDoc = await PDFDocument.create();
   const A4_PORTRAIT = [595.28, 841.89];
   const A4_LANDSCAPE = [841.89, 595.28];
 
-  for (let i = 0; i < multipleFiles.value.length; i++) {
-    const file = multipleFiles.value[i];
+  for (let i = 0; i < pages.value.length; i++) {
+    const pageInfo = pages.value[i];
+    const fileIndex = pageInfo.documentFileIndex;
+    const file = multipleFiles.value[fileIndex];
+    if (!file) continue;
+
     const bytes = await file.arrayBuffer();
     let image;
     if (file.type.startsWith("image/jpeg")) {
@@ -179,18 +183,15 @@ const downloadImagesAsPdf = async () => {
     const pageSize =
       orientationPage.value === "horizontal" ? A4_LANDSCAPE : A4_PORTRAIT;
     const [PW, PH] = pageSize;
-
     const scale = Math.min(PW / w0, PH / h0);
     const w = w0 * scale;
     const h = h0 * scale;
     const x = (PW - w) / 2;
     const y = (PH - h) / 2;
     const page = pdfDoc.addPage(pageSize);
-
     page.drawImage(image, { x, y, width: w, height: h });
 
-    const thumbnail = thumbnails.value.find((t) => t.documentFileIndex === i);
-    const rot = thumbnail?.rotate || 0;
+    const rot = pageInfo.rotate || 0;
     if (rot !== 0) {
       page.setRotation(degrees(rot));
     }
@@ -201,7 +202,7 @@ const downloadImagesAsPdf = async () => {
   const url = URL.createObjectURL(blob);
   const a = document.createElement("a");
   a.href = url;
-  a.download = `imagenes_a4_${Date.now()}.pdf`;
+  a.download = `imagenes_ordenadas_${Date.now()}.pdf`;
   a.click();
   URL.revokeObjectURL(url);
 };
