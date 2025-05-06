@@ -139,11 +139,13 @@ import draggable from "vuedraggable";
 import * as pdfjs from "pdfjs-dist/build/pdf";
 import pdfjsWorker from "pdfjs-dist/build/pdf.worker.entry";
 import { useRoute } from "vue-router";
+import { useAlerts } from "@/composables/useAlerts";
 
 const route = useRoute();
 
 pdfjs.GlobalWorkerOptions.workerSrc = pdfjsWorker;
 
+const { showAlert } = useAlerts();
 const loading = ref(false);
 const pages = ref([]);
 const dragging = ref(false);
@@ -251,6 +253,7 @@ const reOrderFilesHandle = async () => {
           pageNumber: pageControl,
           rotate: 0,
           documentFileIndex: j - 1,
+          viewport: viewport,
         });
       }
     } else if (routePath == "/navbar/lovePDFSeiyaJPG") {
@@ -474,7 +477,10 @@ const saveOrder = async () => {
     a.remove();
   } catch (err) {
     console.error("Error al generar el PDF A4:", err);
-    alert("Error al generar el PDF");
+    showAlert(
+      "Error al generar el PDF, intente cargar nuevamente los documentos",
+      "error"
+    );
   }
 };
 </script>
