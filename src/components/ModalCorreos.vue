@@ -218,7 +218,7 @@ export default {
         .then(function (result) {
           if (result.data) {
             self.saitemp.Nombre = result.data.nombres;
-            self.saitemp.Email = result.data.usuario;
+            self.saitemp.Email = result.data.correo;
             self.loading = false;
           }
         });

@@ -240,12 +240,20 @@
             </div>
             <div class="col" v-if="userlogued.tipo_usuario_id == 1">
               <button
+                v-if="validacionCandidato == true"
                 class="btn btn-success btn-addServicio"
                 type="button"
                 @click="toogleModalAddServicioHandle"
               >
                 Agregar a orden de servicio
               </button>
+              <div v-else class="candidato_bloqueado_container">
+                <p class="candidato_bloqueado_text">
+                  El candidato presenta bloqueos
+                </p>
+                <i class="bi bi-exclamation-circle"></i>
+                <span class="tooltip-text">{{ motivoBloqueo }}</span>
+              </div>
             </div>
           </div>
           <div class="info_container" v-if="informacion_personal">
@@ -300,7 +308,7 @@
             </div>
             <!-- Tipo de Documento y Número de Documento -->
             <div class="row">
-              <div class="col-12 col-lg-6">
+              <div class="col-12 col-lg-6 mt-2">
                 <SearchList
                   nombreCampo="Tipo de documento:*"
                   @selectTipoId="selectTipoId"
@@ -312,7 +320,7 @@
                   disabled
                 />
               </div>
-              <div class="col-12 mt-2 was-validated p-2 col-lg-6">
+              <div class="col-12 was-validated p-2 col-lg-6">
                 <div>
                   <label class="form-label" for="documento"
                     >Número de documento:*</label
@@ -594,13 +602,13 @@
                 >
                   <option value="1">Mujer</option>
                   <option value="2">Hombre</option>
-                  <option value="0">Otro</option>
+                  <option value="3">Otro</option>
                 </select>
                 <div class="invalid-feedback errorCheck">
                   {{ "" }}
                 </div>
               </div>
-              <div class="col-12 col-lg-6">
+              <div class="col-12 col-lg-6 mt-3">
                 <SearchList
                   nombreCampo="Estado civil:*"
                   @selectEstadoCivil="selectEstadoCivil"
@@ -1938,7 +1946,7 @@
                 style="cursor: pointer"
                 ref="conceptoRef"
               >
-                Historico de conceptos en servicios
+                Historico de cancelaciones en servicios
                 <i
                   v-if="historico_conceptos_servicios"
                   class="bi bi-chevron-compact-up"
@@ -1960,8 +1968,8 @@
                   <th scope="col">Servicio</th>
                   <th scope="col">Razon social</th>
                   <th scope="col">Cargo</th>
-                  <th scope="col">Concepto</th>
-                  <th scope="col">Fecha de creación</th>
+                  <th scope="col">Motivo</th>
+                  <th scope="col">Fecha de cancelacion</th>
                   <th scope="col">Acciones</th>
                 </tr>
               </thead>
@@ -1974,8 +1982,8 @@
                   <td>{{ item.numero_radicado }}</td>
                   <td>{{ item.razon_social }}</td>
                   <td>{{ item.cargo }}</td>
-                  <td>{{ item.concepto }}</td>
-                  <td>{{ reformatearFecha(item.created_at) }}</td>
+                  <td>{{ item.motivo }}</td>
+                  <td>{{ reformatearFecha(item.fecha_cancelacion) }}</td>
                   <td scope="col">
                     <button
                       class="btn btn-success btn-addServicio"
@@ -2109,6 +2117,8 @@ const experiencia_laboral = ref(false);
 const concepto = ref(false);
 const historico_conceptos_servicios = ref(false);
 const informacionPersonalRef = ref(null);
+const validacionCandidato = ref("");
+const motivoBloqueo = ref("");
 /* const hijosRef = ref(null); */
 // Formulario reactivo
 const requieredExperienceFields = [
@@ -2151,7 +2161,6 @@ const requiredFieldsInfoPersonal = [
   "cod_ban",
   "barrio",
   "cta_ban",
-  "per_car",
   "gru_san",
   "fac_rhh",
   "est_soc",
@@ -2375,7 +2384,7 @@ const remainingCharsExperiencia = (index) => {
 
 const verRegistroSeiya = (item) => {
   router.push({
-    path: `/navbar/gestion-ingresos/${item.formulario_ingreso_id}`,
+    path: `/navbar/orden-servicio/${item.servicio_id}`,
   });
 };
 
@@ -2404,6 +2413,9 @@ const llenarFormulario = async () => {
     `${URL_API}api/v1/formulariocandidato/${id}`,
     configHeader()
   );
+  if (userlogued.tipo_usuario_id == 1) {
+    validarCandidato(response.data.num_doc, response.data.tip_doc_id);
+  }
   lista_historico_servicios_generales.value =
     response.data.historico_conceptos_servicios_generales;
   lista_historico_servicios.value = response.data.historico_conceptos_servicios;
@@ -2572,8 +2584,8 @@ const llenarFormulario = async () => {
     form.tipo_transporte = 2;
   }
   if (
-    response.data.vehiculo_propio == 0 &&
-    response.data.transporte_publico == 0
+    response.data.vehiculo_propio == null &&
+    response.data.transporte_publico == null
   ) {
     form.tipo_transporte = 3;
   }
@@ -2607,10 +2619,14 @@ const formattedDate = (date) => {
 };
 
 const abrirCalendario = (event) => {
-  event.target.showPicker(); // Abre el selector de fecha
+  event.target.showPicker();
 };
 //funcion para  guardar el formulario
 const submitForm = async () => {
+  const nuevoObjeto = { ...form };
+  if (activeSeccion.value != 5) {
+    delete nuevoObjeto.concepto;
+  }
   loading.value = true;
   const id =
     userlogued.tipo_usuario_id == 3
@@ -2637,11 +2653,11 @@ const submitForm = async () => {
     }
     const response = await axios.put(
       `${URL_API}api/v1/recepcionEmpleadoseiya/${id}`,
-      form,
+      nuevoObjeto,
       configHeader()
     );
     showAlert(response.data.message, response.data.status);
-
+    llenarFormulario();
     if (activeSeccion.value != 5) {
       const arraySecciones = [
         "informacion_personal",
@@ -2748,7 +2764,17 @@ const addExperienciaLaboral = () => {
   });
 }; */
 
-const deleteReferencia = (index) => {
+const deleteReferencia = async (index) => {
+  if (form.referencias[index].num_ref && form.referencias[index].cod_emp) {
+    loading.value = true;
+    const cod_emp = form.referencias[index].cod_emp;
+    const num_ref = form.referencias[index].num_ref;
+    const response = await axios.delete(
+      `${URL_API}api/v1/eliminarrefenciapersonal/${cod_emp}/${num_ref}`
+    );
+    showAlert(response.data.message, response.data.status);
+    loading.value = false;
+  }
   form.referencias.splice(index, 1);
 };
 
@@ -2958,6 +2984,17 @@ const selectDepartamento = (item = null, index = null) => {
     }
   }
 };
+const validarCandidato = async (num_doc, tip_doc_id) => {
+  const response = await axios.get(
+    `${URL_API}api/v1/validacandidato/${num_doc}/1/${tip_doc_id}`
+  );
+  if (response.data.status == "success") {
+    validacionCandidato.value = true;
+  } else {
+    validacionCandidato.value = false;
+    motivoBloqueo.value = response.data.message ? response.data.message : "";
+  }
+};
 const toogleModalAddServicioHandle = () => {
   toogleModalAddServicio.value = !toogleModalAddServicio.value;
 };
@@ -3077,7 +3114,7 @@ onMounted(() => {
   gap: 0.8em;
   border-radius: 10px;
   padding-left: 0.5em;
-  border: #1a9438 1px solid;
+  border: rgba(22, 119, 115, 1) 1px solid;
   transition: 0.5s;
 }
 .textIconContainer:hover {
@@ -3092,6 +3129,7 @@ onMounted(() => {
   flex-direction: row;
   justify-content: space-around;
   align-items: baseline;
+  flex-wrap: wrap;
   height: 100%;
   width: 100%;
 }
@@ -3100,7 +3138,7 @@ onMounted(() => {
   width: 100%;
   height: 0.5em; /* Altura del contenedor */
   background-color: #ffffff;
-  border: #006b3f solid 1px;
+  border: rgba(22, 119, 115, 1) solid 1px;
   border-radius: 10px;
   margin: 20px auto;
   position: absolute;
@@ -3147,7 +3185,7 @@ onMounted(() => {
 .activeLink {
   color: #ffffff;
   /*   border: #006b3f 1px solid; */
-  background-color: #1a9765;
+  background-color: rgba(22, 119, 115, 1);
 }
 
 h2 {
@@ -3174,7 +3212,7 @@ h2 {
 button {
   width: 20%;
   padding: 10px;
-  background-color: #006b3f;
+  background-color: rgba(22, 119, 115, 1);
   color: white;
   border: none;
   border-radius: 5px;
@@ -3183,7 +3221,7 @@ button {
 }
 
 button:hover {
-  background-color: #015734;
+  background-color: rgb(28, 134, 131);
 }
 
 .info_container {
@@ -3203,7 +3241,7 @@ h5 {
 
 .btn_outline {
   background-color: #ffffff;
-  border: #006b3f solid 2px;
+  border: rgba(22, 119, 115, 1) solid 2px;
   transition: all 0.5s ease-out;
 }
 
@@ -3222,7 +3260,7 @@ h5 {
   top: 50%;
   transform: translateY(-60%);
   white-space: nowrap;
-  background-color: #006b3f;
+  background-color: rgba(22, 119, 115, 1);
   padding: 5px;
   border: 1px solid #ddd;
   opacity: 0;
@@ -3233,7 +3271,7 @@ h5 {
   transform: scaleX(0%) translateY(-50%);
 }
 .form-check-input:checked {
-  background-color: #006b3f;
+  background-color: rgba(22, 119, 115, 1);
 }
 .btn_outline:hover::after {
   opacity: 1;
@@ -3256,7 +3294,7 @@ h5 {
   width: 100%;
 }
 #btnMenu {
-  background-color: rgb(28, 146, 77);
+  background-color: rgba(22, 119, 115, 1);
   color: white;
   width: 40%;
 }
@@ -3266,5 +3304,60 @@ h5 {
 }
 .btn-addServicio {
   width: 100%;
+}
+.candidato_bloqueado_container {
+  display: flex;
+  position: relative;
+  border: rgb(206, 58, 58) solid 1px;
+  border-radius: 10px;
+  justify-content: space-around;
+  align-items: center;
+  cursor: pointer;
+}
+.bi-exclamation-circle {
+  color: rgb(206, 58, 58);
+}
+.candidato_bloqueado_text {
+  color: rgb(206, 58, 58);
+  text-align: center;
+  margin-top: 1em;
+}
+.tooltip-text {
+  visibility: hidden;
+  font-size: 0.8em;
+  width: 250px;
+  background-color: #ffffff;
+  color: #444343;
+  text-align: center;
+  border-radius: 10px;
+  padding: 5px;
+  position: absolute;
+  z-index: 9999;
+  bottom: 110%;
+  left: 105%;
+  transform: translateX(-50%);
+  opacity: 0;
+  transition: opacity 0.3s;
+  /*   box-shadow: 0 0 12px #111; */
+  border: rgb(177, 75, 75) solid 1px;
+}
+.tooltip-text::before {
+  content: "";
+  width: 1em;
+  height: 1em;
+  background-color: #ffffff;
+  z-index: 9998;
+  border: rgb(177, 75, 75) solid 1px;
+  border-left: none;
+  border-top: none;
+  position: absolute;
+  bottom: -6.5px;
+  left: 40%;
+  transform: translate(-50%, 0%) rotate(45deg);
+}
+
+.candidato_bloqueado_container:hover .tooltip-text {
+  visibility: visible;
+  opacity: 1;
 }
 </style>

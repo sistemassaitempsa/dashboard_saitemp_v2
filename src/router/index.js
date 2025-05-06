@@ -73,6 +73,7 @@ import EstadosCandidatoServicio from "@/components/EstadosCandidatoServicio.vue"
 import EstadosSeiya from "@/components/EstadosSeiya.vue";
 import EstadosResponsable from "@/components/EstadosResponsable.vue";
 import EstadosSeiyaSolicitudServicio from "@/components/EstadosSeiyaSolicitudServicio.vue";
+import LovePdf from "@/components/LovePdf.vue";
 
 // Configuración de rutas
 const routes = [
@@ -116,6 +117,16 @@ const routes = [
         path: "editarUsuario/:tipo?/:id",
         name: "editarUsuario",
         component: EditarUsuario,
+      },
+      {
+        path: "lovePDFSeiya",
+        name: "lovePdfSeiya",
+        component: LovePdf,
+      },
+      {
+        path: "lovePDFSeiyaJPG",
+        name: "lovePDFSeiyaJPG",
+        component: LovePdf,
       },
       {
         path: "ingresarUsuario",

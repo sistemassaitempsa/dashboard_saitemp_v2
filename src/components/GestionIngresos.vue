@@ -2580,8 +2580,6 @@ h2 {
   color: white;
   background: linear-gradient(
     95deg,
-    rgba(0, 107, 63, 1) 4%,
-    rgba(26, 150, 56, 1) 19%,
     rgba(48, 159, 128, 1) 45%,
     rgba(22, 119, 115, 1) 63%,
     rgba(4, 66, 105, 1) 88%
@@ -2602,8 +2600,6 @@ h2 {
   color: white;
   background: linear-gradient(
     95deg,
-    rgba(0, 107, 63, 1) 4%,
-    rgba(26, 150, 56, 1) 19%,
     rgba(48, 159, 128, 1) 45%,
     rgba(22, 119, 115, 1) 63%,
     rgba(4, 66, 105, 1) 88%
@@ -2624,8 +2620,6 @@ h2 {
   color: white;
   background: linear-gradient(
     95deg,
-    rgba(0, 107, 63, 1) 4%,
-    rgba(26, 150, 56, 1) 19%,
     rgba(48, 159, 128, 1) 45%,
     rgba(22, 119, 115, 1) 63%,
     rgba(4, 66, 105, 1) 88%

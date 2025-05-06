@@ -13,6 +13,15 @@
   color: #2c3e50;
 }
 
+.btn-success {
+  background-color: rgba(22, 119, 115, 1) !important;
+  border: rgba(22, 119, 115, 1) solid 1px !important;
+}
+
+.btn-success:hover {
+  background-color: rgb(26, 100, 98) !important;
+}
+
 nav {
   padding: 30px;
 }
@@ -23,6 +32,6 @@ nav a {
 }
 
 nav a.router-link-exact-active {
-  color: #42b983;
+  color: rgba(22, 119, 115, 1);
 }
 </style>

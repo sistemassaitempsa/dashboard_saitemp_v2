@@ -1168,7 +1168,7 @@
               </button>
 
               <button
-                class="btn btn-danger dropdown-toggle dropdown-toggle-split buttonleft"
+                class="btn btn-danger buttonleft"
                 data-bs-toggle="dropdown"
                 aria-expanded="false"
                 type="button"
@@ -3103,8 +3103,8 @@ label {
 }
 
 .ver {
-  background-color: #006b3f;
-  color: white;
+  background-color: rgba(22, 119, 115, 1);
+  color: rgb(255, 255, 255);
 }
 
 .fontSize-5 {
@@ -3180,15 +3180,17 @@ label {
 .flexButtons {
   display: flex;
   justify-content: flex-start;
-  align-items: center;
+  align-items: stretch;
 }
 .buttonleft {
   border-top-left-radius: 0;
   border-bottom-left-radius: 0;
+  height: 100% !important;
 }
 .buttonRigth {
   border-top-right-radius: 0;
   border-bottom-right-radius: 0;
+  height: 100% !important;
 }
 /* Oculta el menú si no está visible */
 </style>
