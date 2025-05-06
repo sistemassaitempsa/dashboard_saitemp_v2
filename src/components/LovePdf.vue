@@ -3,16 +3,46 @@
     <div class="pdfs-container">
       <div class="view-files">
         <div class="title-container">
-          <h3>Ordenar PDF</h3>
+          <h3>
+            {{
+              routePath == "/navbar/lovePDFSeiya"
+                ? "Ordenar PDF"
+                : "Imágenes a PDF"
+            }}
+          </h3>
         </div>
         <div class="input-container">
           <input
+            v-if="routePath == '/navbar/lovePDFSeiya'"
             type="file"
             @change="handleFileUpload"
             accept="application/pdf"
             multiple
             class="input-files"
           />
+          <input
+            v-if="routePath == '/navbar/lovePDFSeiyaJPG'"
+            type="file"
+            @change="handleImageUpload"
+            accept="image/*"
+            multiple
+            class="input-files"
+          />
+        </div>
+        <div class="optionsContainerOrientation">
+          <div class="orientation_option">
+            <div class="horizontal">
+              <i class="bi bi-aspect-ratio"></i>
+            </div>
+            <label for="">Horizontal</label>
+          </div>
+          <div class="orientation_option">
+            <div class="vertical">
+              <i class="bi bi-aspect-ratio"></i>
+            </div>
+
+            <label for="">Vertical</label>
+          </div>
         </div>
         <div class="files-container">
           <!--  -->
@@ -44,7 +74,15 @@
           </draggable>
         </div>
         <div v-if="pages.length" class="controls">
-          <button @click="saveOrder">Guardar nuevo orden</button>
+          <button v-if="routePath == '/navbar/lovePDFSeiya'" @click="saveOrder">
+            Guardar nuevo orden
+          </button>
+          <button
+            v-if="routePath == '/navbar/lovePDFSeiyaJPG'"
+            @click="downloadImagesAsPdf"
+          >
+            Guardar nuevo orden
+          </button>
         </div>
       </div>
       <div class="pages-container">
@@ -89,6 +127,9 @@ import { PDFDocument, degrees } from "pdf-lib";
 import draggable from "vuedraggable";
 import * as pdfjs from "pdfjs-dist/build/pdf";
 import pdfjsWorker from "pdfjs-dist/build/pdf.worker.entry";
+import { useRoute } from "vue-router";
+
+const route = useRoute();
 
 pdfjs.GlobalWorkerOptions.workerSrc = pdfjsWorker;
 
@@ -100,10 +141,75 @@ const originalPdf = ref(null);
 const files = ref([]);
 const multipleFiles = ref([]);
 const numberPagesByFiles = ref([]);
+const routePath = route.path;
+const thumbnails = ref([]);
+
+const downloadImagesAsPdf = async () => {
+  if (!multipleFiles.value?.length) return;
+
+  const pdfDoc = await PDFDocument.create();
+  // A4 portrait y landscape en puntos
+  const A4_PORTRAIT = [595.28, 841.89];
+  const A4_LANDSCAPE = [841.89, 595.28];
+
+  for (let i = 0; i < multipleFiles.value.length; i++) {
+    const file = multipleFiles.value[i];
+    const bytes = await file.arrayBuffer();
+
+    // Embed de la imagen
+    let image;
+    if (file.type.startsWith("image/jpeg")) {
+      image = await pdfDoc.embedJpg(bytes);
+    } else if (file.type.startsWith("image/png")) {
+      image = await pdfDoc.embedPng(bytes);
+    } else {
+      console.warn(`Tipo no soportado: ${file.type}`);
+      continue;
+    }
+
+    // Tamaño original
+    const { width: w0, height: h0 } = image.size();
+
+    // Rotación solicitada (0,90,180,270)
+    const thumbnail = thumbnails.value.find((t) => t.documentFileIndex === i);
+    const rot = thumbnail?.rotate ?? 0;
+
+    // Elegir orientación de página según rotación
+    const pageSize = rot === 90 || rot === 270 ? A4_LANDSCAPE : A4_PORTRAIT;
+
+    // Escalar imagen para caber
+    const [PW, PH] = pageSize;
+    const scale = Math.min(PW / w0, PH / h0);
+    const w = w0 * scale,
+      h = h0 * scale;
+    const x = (PW - w) / 2,
+      y = (PH - h) / 2;
+
+    // Crear página A4 con la orientación correcta
+    const page = pdfDoc.addPage(pageSize);
+
+    // Dibujar imagen sin rotación
+    page.drawImage(image, { x, y, width: w, height: h });
+
+    // Rotar la página (centra automáticamente el sistema de coordenadas)
+    if (rot !== 0) {
+      page.setRotation(degrees(rot));
+    }
+  }
+
+  // Generar y descargar
+  const out = await pdfDoc.save();
+  const blob = new Blob([out], { type: "application/pdf" });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = `imagenes_a4_${Date.now()}.pdf`;
+  a.click();
+  URL.revokeObjectURL(url);
+};
 
 const deletePageHandle = (index) => {
   const fileIndex = pages.value[index].documentFileIndex;
-  console.log(fileIndex);
   numberPagesByFiles.value[fileIndex] = numberPagesByFiles.value[fileIndex] - 1;
   pages.value.splice(index, 1);
   if (numberPagesByFiles.value[fileIndex] == 0) {
@@ -215,6 +321,7 @@ const handleFileUpload = async (event) => {
           pageNumber: pageControl,
           rotate: 0,
           documentFileIndex: j - 1,
+          viewport: viewport,
         });
       }
     }
@@ -226,36 +333,131 @@ const handleFileUpload = async (event) => {
     loading.value = false;
   }
 };
+
+const handleImageUpload = async (event) => {
+  const input = event.target;
+  if (!input.files || input.files.length === 0) return;
+  pages.value = [];
+  thumbnails.value = [];
+  loading.value = true;
+  numberPagesByFiles.value = [];
+  try {
+    for (let i = 0; i < input.files.length; i++) {
+      const file = input.files[i];
+      numberPagesByFiles.value.push(1);
+      if (!file.type.startsWith("image/")) continue;
+
+      multipleFiles.value.push(file);
+      const imageUrl = URL.createObjectURL(file);
+      const img = new Image();
+      img.src = imageUrl;
+
+      await new Promise((resolve) => {
+        img.onload = () => {
+          const canvas = document.createElement("canvas");
+          const context = canvas.getContext("2d");
+
+          const scale = 0.5;
+          canvas.width = img.width * scale;
+          canvas.height = img.height * scale;
+
+          context?.drawImage(img, 0, 0, canvas.width, canvas.height);
+
+          thumbnails.value.push({
+            thumbnail: canvas.toDataURL(),
+            pageNumber: thumbnails.value.length + 1,
+            rotate: 0,
+            documentFileIndex: i,
+          });
+
+          URL.revokeObjectURL(imageUrl);
+          resolve(true);
+        };
+      });
+    }
+    pages.value = thumbnails.value;
+  } catch (error) {
+    console.error("Error al procesar imágenes:", error);
+  } finally {
+    loading.value = false;
+  }
+};
+
 const saveOrder = async () => {
   try {
-    const newPdfDoc = await PDFDocument.create();
+    const A4_PORTRAIT = [595.28, 841.89]; // 210×297 mm
+    /*    const A4_LANDSCAPE = [841.89, 595.28]; // 297×210 mm */
+
+    // 1) Combinar todos los PDFs originales
     const combinedPdfDoc = await PDFDocument.create();
     for (const file of multipleFiles.value) {
-      const arrayBuffer = await file.arrayBuffer();
-      const pdfDoc = await PDFDocument.load(arrayBuffer);
-      const pages = await combinedPdfDoc.copyPages(
-        pdfDoc,
-        pdfDoc.getPageIndices()
-      );
-      pages.forEach((page) => combinedPdfDoc.addPage(page));
+      const buf = await file.arrayBuffer();
+      const src = await PDFDocument.load(buf);
+      const copied = await combinedPdfDoc.copyPages(src, src.getPageIndices());
+      copied.forEach((p) => combinedPdfDoc.addPage(p));
     }
-    const pageIndices = pages.value.map((page) => page.pageNumber - 1);
-    const copiedPages = await newPdfDoc.copyPages(combinedPdfDoc, pageIndices);
+    const combinedBytes = await combinedPdfDoc.save();
 
-    copiedPages.forEach((page, index) => {
-      const newPage = newPdfDoc.addPage(page);
-      newPage.setRotation(degrees(pages.value[index].rotate));
-    });
-    const pdfBytes = await newPdfDoc.save();
-    const blob = new Blob([pdfBytes], { type: "application/pdf" });
-    const link = document.createElement("a");
-    link.href = URL.createObjectURL(blob);
-    link.download = `documento_reordenado_${Date.now()}.pdf`;
-    link.click();
-    URL.revokeObjectURL(link.href);
-    link.remove();
-  } catch (error) {
-    console.error("Error al generar el PDF:", error);
+    // 2) Nuevo documento donde montamos A4
+    const newPdfDoc = await PDFDocument.create();
+    const order = pages.value.map((p) => p.pageNumber - 1);
+
+    for (let i = 0; i < order.length; i++) {
+      const origIdx = order[i];
+      let rotateDeg = pages.value[i].rotate || 0;
+      if (pages.value[i].viewport.rotation == 90) {
+        rotateDeg = rotateDeg + 90;
+      } else if (pages.value[i].viewport.rotation == 180) {
+        rotateDeg = rotateDeg + 180;
+      } else if (pages.value[i].viewport.rotation == 270) {
+        rotateDeg = rotateDeg + 180;
+      }
+
+      // Decidir orientación A4 según la rotación
+      const pageSize = A4_PORTRAIT;
+
+      // Embed de la página original
+      const [embedded] = await newPdfDoc.embedPdf(combinedBytes, [origIdx]);
+
+      // Creamos la página A4 con la orientación adecuada
+      const page = newPdfDoc.addPage(pageSize);
+
+      // Medidas del contenido original
+      const { width: w0, height: h0 } = embedded.size();
+
+      // Factor de escala para que quepa en la A4 correspondiente
+      const scale = Math.min(pageSize[0] / w0, pageSize[1] / h0);
+
+      // Centrar el contenido dentro de A4
+      const x = (pageSize[0] - w0 * scale) / 2;
+      const y = (pageSize[1] - h0 * scale) / 2;
+
+      // Dibujamos SIN usar 'rotate', porque la página ya está orientada
+      page.drawPage(embedded, {
+        x,
+        y,
+        xScale: scale,
+        yScale: scale,
+      });
+
+      // Finalmente aplicamos la rotación de la página
+      if (rotateDeg !== 0) {
+        page.setRotation(degrees(rotateDeg));
+      }
+    }
+
+    // 3) Guardar y forzar la descarga
+    const outBytes = await newPdfDoc.save();
+    const blob = new Blob([outBytes], { type: "application/pdf" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `documento_A4_reordenado_${Date.now()}.pdf`;
+    a.click();
+    URL.revokeObjectURL(url);
+    a.remove();
+  } catch (err) {
+    console.error("Error al generar el PDF A4:", err);
     alert("Error al generar el PDF");
   }
 };
@@ -322,24 +524,20 @@ input[type="file"]::file-selector-button:hover {
   transition: width 1s;
 }
 
-/* width */
 .pages-container::-webkit-scrollbar {
   width: 5px;
 }
 
-/* Track */
 .pages-container::-webkit-scrollbar-track {
   box-shadow: inset 0 0 5px rgb(119, 119, 119);
   border-radius: 10px;
 }
 
-/* Handle */
 .pages-container::-webkit-scrollbar-thumb {
   background: rgba(22, 119, 115, 0.5);
   border-radius: 10px;
 }
 
-/* Handle on hover */
 .pages-container::-webkit-scrollbar-thumb:hover {
   background: rgba(22, 119, 115, 1);
 }
@@ -358,7 +556,6 @@ input[type="file"]::file-selector-button:hover {
 }
 .page-item {
   position: relative;
-  /*   border: 2px solid #a3a3a3; */
   box-shadow: 0 4px 8px rgba(192, 192, 192, 0.5);
   border-radius: 4px;
   transition: transform 0.2s, box-shadow 0.2s;
@@ -375,11 +572,6 @@ input[type="file"]::file-selector-button:hover {
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   transform: translateY(-2px);
 }
-/* .files-container :hover::-webkit-scrollbar-thumb {
-  visibility: visible;
-  transition: width 1s;
-} */
-
 .page-item.dragging {
   opacity: 0.5;
 }
@@ -544,5 +736,35 @@ button:hover {
 }
 .rotate0 {
   transform: rotate(0deg);
+}
+.optionsContainerOrientation {
+  display: flex;
+  height: auto;
+  border-bottom: #b8b8b8 solid 1px;
+  width: 100%;
+  justify-content: center;
+  align-items: center;
+  gap: 4em;
+  color: #666;
+  padding: 1em;
+}
+.vertical {
+  transform: rotate(90deg);
+  font-size: 2em;
+}
+.horizontal {
+  font-size: 2em;
+}
+.orientation_option {
+  flex-direction: column;
+  display: flex;
+  padding: 0.5em;
+  border: transparent solid 1px;
+  width: 8em;
+}
+.orientation_option:hover {
+  color: #2c7081;
+  border: #2c7081 solid 1px;
+  border-radius: 5px;
 }
 </style>

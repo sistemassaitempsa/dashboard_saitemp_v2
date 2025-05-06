@@ -119,6 +119,11 @@ const routes = [
         component: LovePdf,
       },
       {
+        path: "lovePDFSeiyaJPG",
+        name: "lovePDFSeiyaJPG",
+        component: LovePdf,
+      },
+      {
         path: "ingresarUsuario",
         name: "ingresarUsuario",
         component: IngresarUsuario,
