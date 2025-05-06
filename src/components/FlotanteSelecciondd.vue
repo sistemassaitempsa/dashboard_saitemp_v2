@@ -232,7 +232,7 @@
 
                 <div class="col mb-3">
                   <label class="form-label" style="color: black"
-                    >Unidades de negocio del grupo Crystal:
+                    >Unidades de negocio:
                   </label>
                   <input
                     type="text"

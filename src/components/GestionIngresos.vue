@@ -108,6 +108,7 @@
               aria-describedby="emailHelp"
               v-model="n_servicio"
               placeholder="Radicado del servcio"
+              :disabled="inhabilita_campo"
             />
           </div>
           <div
@@ -131,6 +132,7 @@
               @input="replica = validarNumero(replica)"
               placeholder="Número de veces a replicar"
               maxlength="2"
+              :disabled="inhabilita_campo_contratacion || inhabilita_campo"
             />
           </div>
         </div>
@@ -193,9 +195,10 @@
               :registros="empresas_cliente"
               placeholder="Seleccione una opción"
               :disabled="
-                bloquea_campos &&
-                consulta_empresa_cliente != null &&
-                !permisos[25].autorizado
+                (bloquea_campos &&
+                  consulta_empresa_cliente != null &&
+                  !permisos[25].autorizado) ||
+                inhabilita_campo
               "
             />
           </div>
@@ -225,6 +228,7 @@
               :consulta="consulta_tipo_servicio"
               :registros="tipos_servicio"
               placeholder="Seleccione una opción"
+              :disabled="inhabilita_campo"
             />
           </div>
         </div>
@@ -326,15 +330,6 @@
               {{ mensaje_error }}
             </div>
           </div>
-          <!-- <div class="col mb-3">
-                      <label class="form-label">Cambio fecha:
-                      </label>
-                      <input type="date" class="form-control" autocomplete="off" id="exampleInputEmail1"
-                          aria-describedby="emailHelp" v-model="cambio_fecha" disabled />
-                      <div class="invalid-feedback">
-                          {{ mensaje_error }}
-                      </div>
-                  </div> -->
           <div class="col">
             <SearchList
               nombreCampo="Tipo de Identificación: *"
@@ -347,6 +342,7 @@
               :consulta="consulta_tipo_identificacion"
               placeholder="Seleccione una opción"
               :valida_campo="false"
+              :disabled="inhabilita_campo_contratacion"
             />
           </div>
           <div class="col mb-3">
@@ -362,12 +358,15 @@
                 (numero_identificacion = validarNumero(numero_identificacion)),
                   (userInput_numero_documento = true)
               "
-              @blur="getIdentificacion(numero_identificacion)"
+              @blur="
+                getIdentificacion(numero_identificacion), confirmaDocumento()
+              "
               :disabled="
-                bloquea_campos &&
-                numero_identificacion != null &&
-                !permisos[25].autorizado &&
-                !userInput_numero_documento
+                (bloquea_campos &&
+                  numero_identificacion != null &&
+                  !permisos[25].autorizado &&
+                  !userInput_numero_documento) ||
+                inhabilita_campo_contratacion
               "
             />
             <div class="invalid-feedback">
@@ -390,10 +389,11 @@
                   (userInput_nombres = true)
               "
               :disabled="
-                bloquea_campos &&
-                nombres != null &&
-                !permisos[25].autorizado &&
-                !userInput_nombres
+                (bloquea_campos &&
+                  nombres != null &&
+                  !permisos[25].autorizado &&
+                  !userInput_nombres) ||
+                inhabilita_campo_contratacion
               "
             />
             <div class="invalid-feedback">
@@ -410,6 +410,7 @@
               aria-describedby="emailHelp"
               v-model="celular_candidato"
               @input="celular_candidato = validarNumero2(celular_candidato)"
+              :disabled="inhabilita_campo_contratacion"
             />
             <div class="invalid-feedback">
               {{ mensaje_error }}
@@ -418,15 +419,17 @@
           <div class="col mb-3">
             <label class="form-label">Correo candidato: </label>
             <input
-              type="text"
+              type="email"
               class="form-control"
               autocomplete="off"
               id="exampleInputEmail1"
               aria-describedby="emailHelp"
               v-model="correo_candidato"
+              :disabled="inhabilita_campo_contratacion"
+              pattern="^[^\s@]+@[^\s@]+\..+$"
             />
             <div class="invalid-feedback">
-              {{ mensaje_error }}
+              ¡Este campo debe ser diligenciado y con un formato válido!
             </div>
           </div>
         </div>
@@ -441,6 +444,7 @@
               aria-describedby="emailHelp"
               v-model="cargo"
               @input="cargo = formatInputUpperCase($event.target.value)"
+              :disabled="inhabilita_campo"
             />
             <div class="invalid-feedback">
               {{ mensaje_error }}
@@ -456,6 +460,7 @@
               aria-describedby="emailHelp"
               v-model="salario"
               @input="salario = validarNumero(salario)"
+              :disabled="inhabilita_campo"
             />
             <div class="invalid-feedback">
               {{ mensaje_error }}
@@ -486,6 +491,7 @@
               :registros="departamentos"
               @getMunicipios="getMunicipios"
               placeholder="Seleccione una opción"
+              :disabled="inhabilita_campo"
             />
           </div>
           <div class="col">
@@ -497,6 +503,7 @@
               :consulta="consulta_municipio"
               @setMunicipios="setMunicipios"
               eventoCampo="setMunicipios"
+              :disabled="inhabilita_campo"
               placeholder="Seleccione una opción"
             />
           </div>
@@ -637,6 +644,7 @@
             <label class="form-label">Correo laboratorio: </label>
             <textarea
               name=""
+              type="email"
               id="examenes"
               class="form-control"
               rows="1"
@@ -716,15 +724,16 @@
           <div class="col mb-3">
             <label class="form-label">Correo empresa: </label>
             <input
-              type="text"
+              type="email"
               class="form-control"
               autocomplete="off"
               id="exampleInputEmail1"
               aria-describedby="emailHelp"
               v-model="correo_empresa"
+              pattern="^[^\s@]+@[^\s@]+\..+$"
             />
             <div class="invalid-feedback">
-              {{ mensaje_error }}
+              ¡Este campo debe ser diligenciado y con un formato válido!
             </div>
           </div>
           <div class="col mb-3">
@@ -1092,48 +1101,6 @@
         </h5>
       </div>
       <div id="seccion" v-if="historico_correos">
-        <!-- <div class="correos" v-for="item, index in gestioningresocorreos" :key="index"
-                  style="margin-bottom: 20px; font-size: 1.05rem">
-
-                  <div class="row m-2">
-                      <b style="width: auto;">De: </b> {{ item.remitente }}
-                  </div>
-
-                  <div class="row m-2">
-                      <b style="width: auto;">Para: </b> {{ item.destinatario }}
-                  </div>
-
-                  <div class="row m-2">
-                      <b style="width: auto;">Con copia: </b> {{ item.con_copia == '' ? 'Sin datos' : item.con_copia
-                      }}
-                  </div>
-
-                  <div class="row m-2">
-                      <b style="width: auto;">Con copia oculta: </b> {{ item.con_copia_oculta == '' ? 'Sin datos' :
-          item.con_copia_oculta }}
-                  </div>
-
-                  <div class="row m-2">
-                      <b style="width: auto;">Asunto: </b> {{ item.asunto }}
-                  </div>
-
-                  <div class="row m-2" style="text-align: left; white-space: pre-line;">
-                      <b style="width: auto;">Mensaje: </b> {{ item.mensaje.replace(/&amp;nbsp;/g, '\n') }}
-                  </div>
-
-                  <div class="row m-2">
-                      <b style="width: auto;">Adjunto: </b> {{ item.adjunto }}
-                  </div>
-
-                  <div class="row m-2">
-                      <b style="width: auto;">Fecha envío: </b> {{ reformatearFecha(item.created_at) }}
-                  </div>
-                  <div class="row m-2">
-                      <button class="btn btn-sm btn-success" type="button" style="width: auto;"
-                          @click="reenviar(item)">Reenviar</button>
-                  </div>
-                  <hr>
-              </div> -->
         <div class="table-responsive">
           <table
             class="table table-striped table-hover table-bordered align-middle"
@@ -1212,6 +1179,7 @@ export default {
   },
   data() {
     return {
+      historico_concepto_candidatos_id: "",
       URL_API: process.env.VUE_APP_URL_API,
       ingresos_responsables: [],
       consulta_responsable_ingreso: "",
@@ -1311,7 +1279,7 @@ export default {
       consulta_subsidio: "",
       consulta_vacante: "",
       afirmacionNegacion_bonos: [],
-      afirmacionNegacion_vacante: "",
+      afirmacionNegacion_vacante: [],
       tiposIdentificacion: [],
       consulta_tipo_identificacion: "",
       tipo_identificacion: "",
@@ -1332,6 +1300,11 @@ export default {
       hora: "",
       replica: "",
       n_servicio: "",
+      state: {},
+      datos_state: false,
+      servicio_id: "",
+      inhabilita_campo: false,
+      inhabilita_campo_contratacion: false,
     };
   },
   computed: {},
@@ -1362,8 +1335,67 @@ export default {
     this.getModulo();
     this.getDepartamentos(43);
     this.consultahora();
+    this.datos_state = this.verificaState();
+    if (this.datos_state) {
+      this.getServicioSeiya();
+    }
   },
   methods: {
+    verificaState() {
+      const state = history.state;
+      const tieneDatos = Object.keys(state).some(
+        (key) =>
+          ![
+            "back",
+            "current",
+            "forward",
+            "position",
+            "replaced",
+            "scroll",
+          ].includes(key)
+      );
+      if (tieneDatos) {
+        this.state = state;
+        return true;
+      }
+      return false;
+    },
+    getServicioSeiya() {
+      let self = this;
+      let config = this.configHeader();
+      axios
+        .get(
+          self.URL_API + "api/v1/ordenservicioseiya/" + this.state.id,
+          config
+        )
+        .then(function (result) {
+          self.llenarServicio(result.data);
+        });
+    },
+    llenarServicio(item) {
+      this.servicio_id = item.id;
+      this.n_servicio = item.numero_radicado;
+      this.consulta_tipo_servicio = item.linea_servicio;
+      this.tipo_servicio_id = item.linea_servicio_id;
+      this.municipio_id = item.ciudad_prestacion_servicio_id;
+      this.consulta_municipio = item.ciudad_prestacion_servicio;
+      this.consulta_departamento = item.departamento_prestacion_servicio;
+      this.departamento_id = item.departamento_prestacion_servicio_id;
+      this.consulta_empresa_cliente = item.razon_social;
+      this.empresa_cliente_id = item.cliente_id;
+      this.salario = item.salario;
+      this.cargo = item.cargo_solicitado;
+      this.inhabilita_campo = true;
+      this.replica = item.cantidad_contrataciones;
+
+      let tipo_servicio = item.linea_servicio_id;
+      if (tipo_servicio == 3 || tipo_servicio == 4) {
+        this.consulta_usuario = item.responsable;
+        this.usuario_id = item.responsable_id;
+      } else if (tipo_servicio == 2) {
+        this.setTipoServicio(tipo_servicio);
+      }
+    },
     messageDelete(item) {
       let self = this;
       var title = "Estas seguro de elimiar el resgistro?";
@@ -1579,30 +1611,81 @@ export default {
         });
     },
     getIdentificacion(id_cliente) {
-      let self = this;
-      if (id_cliente) {
-        let config = this.configHeader();
-        axios
-          .get(self.URL_API + "api/v1/consulta_id_trump/" + id_cliente, config)
-          .then(function (result) {
-            if (result.data.bloqueado == "Si") {
-              document.getElementById("numero_identificacion").focus();
-              self.numero_identificacion = "";
-              self.showAlertmasBoton(result.data.message, result.data.status);
-            } else if (result.data.apto == 1) {
-              self.showAlertmasBoton(result.data.message, result.data.status);
-            } else if (
-              result.data.no_apto == 2 &&
-              self.$route.params.id == ""
-            ) {
-              document.getElementById("numero_identificacion").focus();
-              self.numero_identificacion = "";
-              self.showAlertmasBoton(result.data.message, result.data.status);
-            }
-            return;
-          });
+      console.log(id_cliente);
+      // let self = this;
+      // if (id_cliente) {
+      //   let config = this.configHeader();
+      //   axios
+      //     .get(self.URL_API + "api/v1/consulta_id_trump/" + id_cliente, config)
+      //     .then(function (result) {
+      //       if (result.data.bloqueado == "Si") {
+      //         document.getElementById("numero_identificacion").focus();
+      //         self.numero_identificacion = "";
+      //         self.showAlertmasBoton(result.data.message, result.data.status);
+      //       } else if (result.data.apto == 1) {
+      //         self.showAlertmasBoton(result.data.message, result.data.status);
+      //       } else if (
+      //         result.data.no_apto == 2 &&
+      //         self.$route.params.id == ""
+      //       ) {
+      //         document.getElementById("numero_identificacion").focus();
+      //         self.numero_identificacion = "";
+      //         self.showAlertmasBoton(result.data.message, result.data.status);
+      //       }
+      //       return;
+      //     });
+      // }
+    },
+
+    confirmaDocumento() {
+      if (this.numero_identificacion != "" && this.tipo_identificacion != "") {
+        this.validaCandidato(
+          this.numero_identificacion,
+          this.tipo_identificacion
+        );
       }
     },
+
+    validaCandidato(numero_identificacion, tipo_identificacion) {
+      let self = this;
+      axios
+        .get(
+          this.URL_API +
+            "api/v1/validacandidato/" +
+            numero_identificacion +
+            "/0/" +
+            tipo_identificacion,
+          this.configHeader()
+        )
+        .then(function (result) {
+          self.candidatoValidado(result.data);
+        });
+    },
+
+    candidatoValidado(data) {
+      if (data.status == "error") {
+        this.showAlertConfirm(data.titulo, data.status, data.message);
+      }
+      if (data.status == "success") {
+        if (data.motivo == "1") {
+          console.log("motivo 1");
+          // candidatos.value[data.usuario.index].nombre_candidato = data.usuario.nombres
+          // candidatos.value[data.usuario.index].apellido_candidato = data.usuario.apellidos
+          // candidatos.value[data.usuario.index].celular_candidato = data.usuario.celular
+          // candidatos.value[data.usuario.index].correo_candidato = data.usuario.correo
+          // candidatos.value[data.usuario.index].usuario_id = data.usuario.usuario_id
+          // candidatos.value[data.usuario.index].registrado = 1
+        } else if (data.motivo == "2") {
+          console.log("motivo 2");
+          // candidatos.value[data.index].nombre_candidato = ''
+          // candidatos.value[data.index].apellido_candidato = ''
+          // candidatos.value[data.index].celular_candidato = ''
+          // candidatos.value[data.index].correo_candidato = ''
+          // candidatos.value[data.index].registrado = 0
+        }
+      }
+    },
+
     valida_envioCorreo() {
       if (this.correo_empresa == null && this.correo_laboratorio == null) {
         this.showAlert(
@@ -1724,7 +1807,7 @@ export default {
       axios
         .get(self.URL_API + "api/v1/archivosingreso", config)
         .then(function (result) {
-          if (self.$route.params.id == '') {
+          if (self.$route.params.id == "") {
             self.loading = false;
           }
           self.fileInputsCount = result.data;
@@ -1862,6 +1945,8 @@ export default {
       if (this.$route.params.id != "") {
         url =
           self.URL_API + "api/v1/formularioingreso/" + this.$route.params.id;
+      } else if (this.datos_state) {
+        url = self.URL_API + "api/v1/formularioingresoservicio";
       } else {
         url = self.URL_API + "api/v1/formularioingreso";
       }
@@ -1983,6 +2068,7 @@ export default {
     },
     crearRegistroIngreso() {
       this.registroIngreso = {
+        historico_concepto_candidatos_id: this.historico_concepto_candidatos_id,
         fecha_ingreo: this.fecha_ingreso,
         numero_identificacion: this.numero_identificacion,
         nombre_completo: this.nombres,
@@ -2028,6 +2114,7 @@ export default {
         variableX: this.variableX,
         replica: this.replica,
         n_servicio: this.n_servicio,
+        servicio_id: this.servicio_id,
       };
     },
     cargarArchivo(event, index) {
@@ -2136,15 +2223,7 @@ export default {
       if (item != null) {
         this.consulta_tipo_servicio = item.nombre;
         this.tipo_servicio_id = item.id;
-        if (item.id == 2) {
-          this.numero_vacantes = "";
-        } else if (item.id == 3 || item.id == 4) {
-          this.numero_contrataciones = "";
-          this.citacion_entrevista = "";
-          this.consulta_usuario = "";
-          this.usuario_id = "";
-          this.informe_seleccion = "";
-        }
+        this.setTipoServicio(item.id);
       }
       let self = this;
       let config = this.configHeader();
@@ -2153,6 +2232,18 @@ export default {
         .then(function (result) {
           self.tipos_servicio = result.data;
         });
+    },
+    setTipoServicio(id) {
+      if (id == 2) {
+        this.numero_vacantes = "";
+        this.inhabilita_campo_contratacion = true;
+      } else if (id == 3 || id == 4) {
+        this.numero_contrataciones = "";
+        this.citacion_entrevista = "";
+        this.consulta_usuario = "";
+        this.usuario_id = "";
+        this.informe_seleccion = "";
+      }
     },
     getUsuarios(item = null) {
       if (item != null) {
@@ -2170,6 +2261,9 @@ export default {
     },
     llenarFormulario(item) {
       var self = this;
+      this.historico_concepto_candidatos_id = item.historico_candidatos_id
+        ? item.historico_candidatos_id
+        : "";
       self.bloquea_campos = true;
       this.fecha_ingreso = item.fecha_ingreso;
       this.numero_identificacion = item.numero_identificacion;
@@ -2265,6 +2359,7 @@ export default {
     },
     limpiarFormulario() {
       this.bloquea_campos = false;
+      this.historico_concepto_candidatos_id = "";
       this.fecha_ingreso = "";
       this.numero_identificacion = "";
       this.nombres = "";
@@ -2439,8 +2534,6 @@ h2 {
   color: white;
   background: linear-gradient(
     95deg,
-    rgba(0, 107, 63, 1) 4%,
-    rgba(26, 150, 56, 1) 19%,
     rgba(48, 159, 128, 1) 45%,
     rgba(22, 119, 115, 1) 63%,
     rgba(4, 66, 105, 1) 88%
@@ -2461,8 +2554,6 @@ h2 {
   color: white;
   background: linear-gradient(
     95deg,
-    rgba(0, 107, 63, 1) 4%,
-    rgba(26, 150, 56, 1) 19%,
     rgba(48, 159, 128, 1) 45%,
     rgba(22, 119, 115, 1) 63%,
     rgba(4, 66, 105, 1) 88%
@@ -2483,8 +2574,6 @@ h2 {
   color: white;
   background: linear-gradient(
     95deg,
-    rgba(0, 107, 63, 1) 4%,
-    rgba(26, 150, 56, 1) 19%,
     rgba(48, 159, 128, 1) 45%,
     rgba(22, 119, 115, 1) 63%,
     rgba(4, 66, 105, 1) 88%

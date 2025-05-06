@@ -50,118 +50,174 @@ export default {
 @-webkit-keyframes load4 {
   0%,
   100% {
-    box-shadow: 0em -3em 0em 0.2em #006b3f, 2em -2em 0 0em #006b3f,
-      3em 0em 0 -0.5em #006b3f, 2em 2em 0 -0.5em #006b3f,
-      0em 3em 0 -0.5em #006b3f, -2em 2em 0 -0.5em #006b3f,
-      -3em 0em 0 -0.5em #006b3f, -2em -2em 0 0em #006b3f;
+    box-shadow: 0em -3em 0em 0.2em rgba(22, 119, 115, 1),
+      2em -2em 0 0em rgba(22, 119, 115, 1),
+      3em 0em 0 -0.5em rgba(22, 119, 115, 1),
+      2em 2em 0 -0.5em rgba(22, 119, 115, 1),
+      0em 3em 0 -0.5em rgba(22, 119, 115, 1),
+      -2em 2em 0 -0.5em rgba(22, 119, 115, 1),
+      -3em 0em 0 -0.5em rgba(22, 119, 115, 1),
+      -2em -2em 0 0em rgba(22, 119, 115, 1);
   }
 
   12.5% {
-    box-shadow: 0em -3em 0em 0em #006b3f, 2em -2em 0 0.2em #006b3f,
-      3em 0em 0 0em #006b3f, 2em 2em 0 -0.5em #006b3f, 0em 3em 0 -0.5em #006b3f,
-      -2em 2em 0 -0.5em #006b3f, -3em 0em 0 -0.5em #006b3f,
-      -2em -2em 0 -0.5em #006b3f;
+    box-shadow: 0em -3em 0em 0em rgba(22, 119, 115, 1),
+      2em -2em 0 0.2em rgba(22, 119, 115, 1),
+      3em 0em 0 0em rgba(22, 119, 115, 1),
+      2em 2em 0 -0.5em rgba(22, 119, 115, 1),
+      0em 3em 0 -0.5em rgba(22, 119, 115, 1),
+      -2em 2em 0 -0.5em rgba(22, 119, 115, 1),
+      -3em 0em 0 -0.5em rgba(22, 119, 115, 1),
+      -2em -2em 0 -0.5em rgba(22, 119, 115, 1);
   }
 
   25% {
-    box-shadow: 0em -3em 0em -0.5em #006b3f, 2em -2em 0 0em #006b3f,
-      3em 0em 0 0.2em #006b3f, 2em 2em 0 0em #006b3f, 0em 3em 0 -0.5em #006b3f,
-      -2em 2em 0 -0.5em #006b3f, -3em 0em 0 -0.5em #006b3f,
-      -2em -2em 0 -0.5em #006b3f;
+    box-shadow: 0em -3em 0em -0.5em rgba(22, 119, 115, 1),
+      2em -2em 0 0em rgba(22, 119, 115, 1),
+      3em 0em 0 0.2em rgba(22, 119, 115, 1), 2em 2em 0 0em rgba(22, 119, 115, 1),
+      0em 3em 0 -0.5em rgba(22, 119, 115, 1),
+      -2em 2em 0 -0.5em rgba(22, 119, 115, 1),
+      -3em 0em 0 -0.5em rgba(22, 119, 115, 1),
+      -2em -2em 0 -0.5em rgba(22, 119, 115, 1);
   }
 
   37.5% {
-    box-shadow: 0em -3em 0em -0.5em #006b3f, 2em -2em 0 -0.5em #006b3f,
-      3em 0em 0 0em #006b3f, 2em 2em 0 0.2em #006b3f, 0em 3em 0 0em #006b3f,
-      -2em 2em 0 -0.5em #006b3f, -3em 0em 0 -0.5em #006b3f,
-      -2em -2em 0 -0.5em #006b3f;
+    box-shadow: 0em -3em 0em -0.5em rgba(22, 119, 115, 1),
+      2em -2em 0 -0.5em rgba(22, 119, 115, 1),
+      3em 0em 0 0em rgba(22, 119, 115, 1), 2em 2em 0 0.2em rgba(22, 119, 115, 1),
+      0em 3em 0 0em rgba(22, 119, 115, 1),
+      -2em 2em 0 -0.5em rgba(22, 119, 115, 1),
+      -3em 0em 0 -0.5em rgba(22, 119, 115, 1),
+      -2em -2em 0 -0.5em rgba(22, 119, 115, 1);
   }
 
   50% {
-    box-shadow: 0em -3em 0em -0.5em #006b3f, 2em -2em 0 -0.5em #006b3f,
-      3em 0em 0 -0.5em #006b3f, 2em 2em 0 0em #006b3f, 0em 3em 0 0.2em #006b3f,
-      -2em 2em 0 0em #006b3f, -3em 0em 0 -0.5em #006b3f,
-      -2em -2em 0 -0.5em #006b3f;
+    box-shadow: 0em -3em 0em -0.5em rgba(22, 119, 115, 1),
+      2em -2em 0 -0.5em rgba(22, 119, 115, 1),
+      3em 0em 0 -0.5em rgba(22, 119, 115, 1),
+      2em 2em 0 0em rgba(22, 119, 115, 1), 0em 3em 0 0.2em rgba(22, 119, 115, 1),
+      -2em 2em 0 0em rgba(22, 119, 115, 1),
+      -3em 0em 0 -0.5em rgba(22, 119, 115, 1),
+      -2em -2em 0 -0.5em rgba(22, 119, 115, 1);
   }
 
   62.5% {
-    box-shadow: 0em -3em 0em -0.5em #006b3f, 2em -2em 0 -0.5em #006b3f,
-      3em 0em 0 -0.5em #006b3f, 2em 2em 0 -0.5em #006b3f, 0em 3em 0 0em #006b3f,
-      -2em 2em 0 0.2em #006b3f, -3em 0em 0 0em #006b3f,
-      -2em -2em 0 -0.5em #006b3f;
+    box-shadow: 0em -3em 0em -0.5em rgba(22, 119, 115, 1),
+      2em -2em 0 -0.5em rgba(22, 119, 115, 1),
+      3em 0em 0 -0.5em rgba(22, 119, 115, 1),
+      2em 2em 0 -0.5em rgba(22, 119, 115, 1),
+      0em 3em 0 0em rgba(22, 119, 115, 1),
+      -2em 2em 0 0.2em rgba(22, 119, 115, 1),
+      -3em 0em 0 0em rgba(22, 119, 115, 1),
+      -2em -2em 0 -0.5em rgba(22, 119, 115, 1);
   }
 
   75% {
-    box-shadow: 0em -3em 0em -0.5em #006b3f, 2em -2em 0 -0.5em #006b3f,
-      3em 0em 0 -0.5em #006b3f, 2em 2em 0 -0.5em #006b3f,
-      0em 3em 0 -0.5em #006b3f, -2em 2em 0 0em #006b3f, -3em 0em 0 0.2em #006b3f,
-      -2em -2em 0 0em #006b3f;
+    box-shadow: 0em -3em 0em -0.5em rgba(22, 119, 115, 1),
+      2em -2em 0 -0.5em rgba(22, 119, 115, 1),
+      3em 0em 0 -0.5em rgba(22, 119, 115, 1),
+      2em 2em 0 -0.5em rgba(22, 119, 115, 1),
+      0em 3em 0 -0.5em rgba(22, 119, 115, 1),
+      -2em 2em 0 0em rgba(22, 119, 115, 1),
+      -3em 0em 0 0.2em rgba(22, 119, 115, 1),
+      -2em -2em 0 0em rgba(22, 119, 115, 1);
   }
 
   87.5% {
-    box-shadow: 0em -3em 0em 0em #006b3f, 2em -2em 0 -0.5em #006b3f,
-      3em 0em 0 -0.5em #006b3f, 2em 2em 0 -0.5em #006b3f,
-      0em 3em 0 -0.5em #006b3f, -2em 2em 0 0em #006b3f, -3em 0em 0 0em #006b3f,
-      -2em -2em 0 0.2em #006b3f;
+    box-shadow: 0em -3em 0em 0em rgba(22, 119, 115, 1),
+      2em -2em 0 -0.5em rgba(22, 119, 115, 1),
+      3em 0em 0 -0.5em rgba(22, 119, 115, 1),
+      2em 2em 0 -0.5em rgba(22, 119, 115, 1),
+      0em 3em 0 -0.5em rgba(22, 119, 115, 1),
+      -2em 2em 0 0em rgba(22, 119, 115, 1), -3em 0em 0 0em rgba(22, 119, 115, 1),
+      -2em -2em 0 0.2em rgba(22, 119, 115, 1);
   }
 }
 
 @keyframes load4 {
   0%,
   100% {
-    box-shadow: 0em -3em 0em 0.2em #006b3f, 2em -2em 0 0em #006b3f,
-      3em 0em 0 -0.5em #006b3f, 2em 2em 0 -0.5em #006b3f,
-      0em 3em 0 -0.5em #006b3f, -2em 2em 0 -0.5em #006b3f,
-      -3em 0em 0 -0.5em #006b3f, -2em -2em 0 0em #006b3f;
+    box-shadow: 0em -3em 0em 0.2em rgba(22, 119, 115, 1),
+      2em -2em 0 0em rgba(22, 119, 115, 1),
+      3em 0em 0 -0.5em rgba(22, 119, 115, 1),
+      2em 2em 0 -0.5em rgba(22, 119, 115, 1),
+      0em 3em 0 -0.5em rgba(22, 119, 115, 1),
+      -2em 2em 0 -0.5em rgba(22, 119, 115, 1),
+      -3em 0em 0 -0.5em rgba(22, 119, 115, 1),
+      -2em -2em 0 0em rgba(22, 119, 115, 1);
   }
 
   12.5% {
-    box-shadow: 0em -3em 0em 0em #006b3f, 2em -2em 0 0.2em #006b3f,
-      3em 0em 0 0em #006b3f, 2em 2em 0 -0.5em #006b3f, 0em 3em 0 -0.5em #006b3f,
-      -2em 2em 0 -0.5em #006b3f, -3em 0em 0 -0.5em #006b3f,
-      -2em -2em 0 -0.5em #006b3f;
+    box-shadow: 0em -3em 0em 0em rgba(22, 119, 115, 1),
+      2em -2em 0 0.2em rgba(22, 119, 115, 1),
+      3em 0em 0 0em rgba(22, 119, 115, 1),
+      2em 2em 0 -0.5em rgba(22, 119, 115, 1),
+      0em 3em 0 -0.5em rgba(22, 119, 115, 1),
+      -2em 2em 0 -0.5em rgba(22, 119, 115, 1),
+      -3em 0em 0 -0.5em rgba(22, 119, 115, 1),
+      -2em -2em 0 -0.5em rgba(22, 119, 115, 1);
   }
 
   25% {
-    box-shadow: 0em -3em 0em -0.5em #006b3f, 2em -2em 0 0em #006b3f,
-      3em 0em 0 0.2em #006b3f, 2em 2em 0 0em #006b3f, 0em 3em 0 -0.5em #006b3f,
-      -2em 2em 0 -0.5em #006b3f, -3em 0em 0 -0.5em #006b3f,
-      -2em -2em 0 -0.5em #006b3f;
+    box-shadow: 0em -3em 0em -0.5em rgba(22, 119, 115, 1),
+      2em -2em 0 0em rgba(22, 119, 115, 1),
+      3em 0em 0 0.2em rgba(22, 119, 115, 1), 2em 2em 0 0em rgba(22, 119, 115, 1),
+      0em 3em 0 -0.5em rgba(22, 119, 115, 1),
+      -2em 2em 0 -0.5em rgba(22, 119, 115, 1),
+      -3em 0em 0 -0.5em rgba(22, 119, 115, 1),
+      -2em -2em 0 -0.5em rgba(22, 119, 115, 1);
   }
 
   37.5% {
-    box-shadow: 0em -3em 0em -0.5em #006b3f, 2em -2em 0 -0.5em #006b3f,
-      3em 0em 0 0em #006b3f, 2em 2em 0 0.2em #006b3f, 0em 3em 0 0em #006b3f,
-      -2em 2em 0 -0.5em #006b3f, -3em 0em 0 -0.5em #006b3f,
-      -2em -2em 0 -0.5em #006b3f;
+    box-shadow: 0em -3em 0em -0.5em rgba(22, 119, 115, 1),
+      2em -2em 0 -0.5em rgba(22, 119, 115, 1),
+      3em 0em 0 0em rgba(22, 119, 115, 1), 2em 2em 0 0.2em rgba(22, 119, 115, 1),
+      0em 3em 0 0em rgba(22, 119, 115, 1),
+      -2em 2em 0 -0.5em rgba(22, 119, 115, 1),
+      -3em 0em 0 -0.5em rgba(22, 119, 115, 1),
+      -2em -2em 0 -0.5em rgba(22, 119, 115, 1);
   }
 
   50% {
-    box-shadow: 0em -3em 0em -0.5em #006b3f, 2em -2em 0 -0.5em #006b3f,
-      3em 0em 0 -0.5em #006b3f, 2em 2em 0 0em #006b3f, 0em 3em 0 0.2em #006b3f,
-      -2em 2em 0 0em #006b3f, -3em 0em 0 -0.5em #006b3f,
-      -2em -2em 0 -0.5em #006b3f;
+    box-shadow: 0em -3em 0em -0.5em rgba(22, 119, 115, 1),
+      2em -2em 0 -0.5em rgba(22, 119, 115, 1),
+      3em 0em 0 -0.5em rgba(22, 119, 115, 1),
+      2em 2em 0 0em rgba(22, 119, 115, 1), 0em 3em 0 0.2em rgba(22, 119, 115, 1),
+      -2em 2em 0 0em rgba(22, 119, 115, 1),
+      -3em 0em 0 -0.5em rgba(22, 119, 115, 1),
+      -2em -2em 0 -0.5em rgba(22, 119, 115, 1);
   }
 
   62.5% {
-    box-shadow: 0em -3em 0em -0.5em #006b3f, 2em -2em 0 -0.5em #006b3f,
-      3em 0em 0 -0.5em #006b3f, 2em 2em 0 -0.5em #006b3f, 0em 3em 0 0em #006b3f,
-      -2em 2em 0 0.2em #006b3f, -3em 0em 0 0em #006b3f,
-      -2em -2em 0 -0.5em #006b3f;
+    box-shadow: 0em -3em 0em -0.5em rgba(22, 119, 115, 1),
+      2em -2em 0 -0.5em rgba(22, 119, 115, 1),
+      3em 0em 0 -0.5em rgba(22, 119, 115, 1),
+      2em 2em 0 -0.5em rgba(22, 119, 115, 1),
+      0em 3em 0 0em rgba(22, 119, 115, 1),
+      -2em 2em 0 0.2em rgba(22, 119, 115, 1),
+      -3em 0em 0 0em rgba(22, 119, 115, 1),
+      -2em -2em 0 -0.5em rgba(22, 119, 115, 1);
   }
 
   75% {
-    box-shadow: 0em -3em 0em -0.5em #006b3f, 2em -2em 0 -0.5em #006b3f,
-      3em 0em 0 -0.5em #006b3f, 2em 2em 0 -0.5em #006b3f,
-      0em 3em 0 -0.5em #006b3f, -2em 2em 0 0em #006b3f, -3em 0em 0 0.2em #006b3f,
-      -2em -2em 0 0em #006b3f;
+    box-shadow: 0em -3em 0em -0.5em rgba(22, 119, 115, 1),
+      2em -2em 0 -0.5em rgba(22, 119, 115, 1),
+      3em 0em 0 -0.5em rgba(22, 119, 115, 1),
+      2em 2em 0 -0.5em rgba(22, 119, 115, 1),
+      0em 3em 0 -0.5em rgba(22, 119, 115, 1),
+      -2em 2em 0 0em rgba(22, 119, 115, 1),
+      -3em 0em 0 0.2em rgba(22, 119, 115, 1),
+      -2em -2em 0 0em rgba(22, 119, 115, 1);
   }
 
   87.5% {
-    box-shadow: 0em -3em 0em 0em #006b3f, 2em -2em 0 -0.5em #006b3f,
-      3em 0em 0 -0.5em #006b3f, 2em 2em 0 -0.5em #006b3f,
-      0em 3em 0 -0.5em #006b3f, -2em 2em 0 0em #006b3f, -3em 0em 0 0em #006b3f,
-      -2em -2em 0 0.2em #006b3f;
+    box-shadow: 0em -3em 0em 0em rgba(22, 119, 115, 1),
+      2em -2em 0 -0.5em rgba(22, 119, 115, 1),
+      3em 0em 0 -0.5em rgba(22, 119, 115, 1),
+      2em 2em 0 -0.5em rgba(22, 119, 115, 1),
+      0em 3em 0 -0.5em rgba(22, 119, 115, 1),
+      -2em 2em 0 0em rgba(22, 119, 115, 1), -3em 0em 0 0em rgba(22, 119, 115, 1),
+      -2em -2em 0 0.2em rgba(22, 119, 115, 1);
   }
 }
 </style>

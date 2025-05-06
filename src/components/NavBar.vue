@@ -1,10 +1,7 @@
 <template>
   <div v-if="autoriced">
     <NotificacionesSocket />
-    <nav
-      class="navbar navbar-expand-lg navbar-dark gradient-background"
-      style="heigth: 100px"
-    >
+    <nav class="navbar navbar-expand-lg navbar-dark gradient-background">
       <div class="container-fluid">
         <a class="navbar-brand" href="">
           <!-- <img
@@ -48,7 +45,7 @@
               :style="actualizacion ? 'padding-top: 15px' : ''"
             >
               <router-link class="nav-link active" to=""
-                >{{ saludo }} {{ userlogued.nombres }}</router-link
+                >{{ saludo }} {{ nombre }}</router-link
               >
             </li>
             <li>
@@ -66,6 +63,7 @@
                     : 'bi bi-text-indent-left'
                 "
               ></i>
+
               {{
                 menu_lateral ? "Ocultar menú lateral" : "Mostrar menú lateral"
               }}
@@ -90,7 +88,7 @@
         </div>
       </div>
     </nav>
-    <div class="aside">
+    <div class="aside" :style="{ top: this.scrolled ? '0px' : '85px' }">
       <div class="accordion-item" v-for="(item, index) in menu" :key="index">
         <h2 class="accordion-header" :id="'flush-heading' + option[index]">
           <button
@@ -156,6 +154,7 @@
       :class="{ ancho_componente: anchocomponente }"
       :userlogued="userlogued"
       :menu="menu"
+      :user_type="user_type"
       @getMenu="getMenu"
       :actualizacion="actualizacion"
     />
@@ -180,12 +179,15 @@ export default {
   mixins: [Token, Alerts, Permisos],
   data() {
     return {
+      scrolled: false,
+      user_type: "",
       username: "",
       collapse: false,
       expand: false,
       saludo: "Bienvenido",
       ruta: "",
       menu: [],
+      nombre: "",
       userlogued: { nombres: "", rol: "" },
       logo: [],
       user_id: "",
@@ -203,7 +205,7 @@ export default {
         seconds: "Segundos",
       },
       actualizacion: true,
-      documento_identidad:'',
+      documento_identidad: "",
     };
   },
   watch: {
@@ -212,9 +214,7 @@ export default {
     },
   },
   mounted() {
-    // window.Echo.channel("channel").listen("NotificacionSeiya", (e) => {
-    //   console.log(e.message);
-    // });
+    window.addEventListener("scroll", this.handleScroll);
   },
   created() {
     this.urlExterna();
@@ -259,7 +259,8 @@ export default {
                 newPath.includes("empleado") ||
                 newPath.includes("editarUsuario") ||
                 newPath.includes("timeLine") ||
-                newPath.includes("landing")
+                newPath.includes("landing") ||
+                newPath.includes("formularioinfocandidato")
               ) {
                 bandera = true;
               }
@@ -276,22 +277,12 @@ export default {
       this.collapse = !this.collapse;
     },
     logout() {
-      this.$router.push({ name: "login" });
+      if (this.userlogued.tipo_usuario_id == "3") {
+        this.$router.push({ name: "loginCandidatos" });
+      } else {
+        this.$router.push({ name: "login" });
+      }
       localStorage.removeItem("access_token");
-      // let config = this.configHeader();
-      // let self = this
-      // axios
-      //   .post(self.URL_API+"api/v1/logout", config)
-      //   .then(function (result) {
-      //     localStorage.removeItem("access_token");
-      //     self.$router.push({ name: "login"});
-      //       console.log('error',result);
-      //   }).catch(function (error) {
-      //     if (error.response.data == "Unauthorized"){
-      //     self.$router.push("login");
-      //     localStorage.removeItem("access_token");
-      //     }
-      //   });
     },
     ocultarMenu() {
       var menu = document.getElementsByClassName("aside")[0];
@@ -304,45 +295,47 @@ export default {
       this.menu_lateral = !this.menu_lateral;
       localStorage.setItem("menu_lateral", this.menu_lateral);
     },
+    handleScroll() {
+      this.scrolled = window.scrollY > 70;
+    },
     actualizar() {
-      // if( userlogued.rol != 'Cliente'){
-
-      // }else{
-
-      // }
-      let ruta = "";
-      let id = "";
-      if (this.permisos[34].autorizado) {
-        ruta = "editarUsuario";
-        id = this.user_id;
-      } else {
-        ruta = "cliente";
-        id = this.documento_identidad;
-      }
       this.$router.push({
-        name: ruta,
-        params: { id: id },
+        name: "editarUsuario",
+        params: { tipo: this.user_type, id: this.user_id },
       });
     },
-    userLogued() {
+    async userLogued() {
       let self = this;
       let config = this.configHeader();
-      axios
-        .get(self.URL_API + "api/v1/userlogued", config)
-        .then(function (result) {
-          if (result.data[0] != undefined) {
-            self.userlogued = result.data[0];
-            self.user_id = result.data[0].usuario_id;
-            self.documento_identidad = result.data[0].documento_identidad;
-            self.autoriced = true;
-            self.getMenu();
-          } else {
-            self.$router.push("/");
-          }
-        })
-        .catch(function () {
+      try {
+        const response = await axios.get(
+          self.URL_API + "api/v1/userlogued",
+          config
+        );
+        if (response.data) {
+          self.configuraUsuario(response.data);
+        } else {
           self.$router.push("/");
-        });
+        }
+      } catch (error) {
+        console.log(error);
+        self.$router.push("/");
+      }
+    },
+    configuraUsuario(data) {
+      let self = this;
+      if (data.tipo_usuario_id == "3") {
+        self.nombre = data.primer_nombre + " " + data.primer_apellido;
+      } else if (data.tipo_usuario_id == "1") {
+        self.nombre = data.nombres + " " + data.apellidos;
+      } else {
+        self.nombre = data.nombres;
+      }
+      self.userlogued = data;
+      self.user_type = data.tipo_usuario_id;
+      self.user_id = data.usuario_id;
+      self.autoriced = true;
+      self.getMenu();
     },
     getMenu() {
       let self = this;
@@ -374,14 +367,14 @@ export default {
 .aside {
   width: 50px;
   height: 100vh;
-  background-color: #006b3f;
+  background-color: rgba(22, 119, 115, 1);
   position: fixed;
   top: 0;
   bottom: 0;
   left: 0;
   z-index: 2000;
   color: white;
-  transition: width 1s;
+  transition: width 1s, top 0.3s ease;
   overflow-x: hidden;
   font-size: 1rem;
   padding: 10px;
@@ -407,19 +400,19 @@ export default {
 
 /* Track */
 ::-webkit-scrollbar-track {
-  box-shadow: inset 0 0 5px rgb(37, 113, 163);
+  box-shadow: inset 0 0 5px rgba(22, 119, 115, 1);
   border-radius: 10px;
 }
 
 /* Handle */
 ::-webkit-scrollbar-thumb {
-  background: rgb(37, 113, 163);
+  background: rgba(22, 119, 115, 1);
   border-radius: 10px;
 }
 
 /* Handle on hover */
 ::-webkit-scrollbar-thumb:hover {
-  background: rgb(37, 113, 163);
+  background: rgba(22, 119, 115, 1);
 }
 
 ::-webkit-scrollbar-thumb {
@@ -551,18 +544,18 @@ export default {
 } */
 
 .accordion {
-  background-color: #006b3f;
+  background-color: rgba(22, 119, 115, 1);
   outline: none;
 }
 
 .accordion-button {
-  background-color: #006b3f;
+  background-color: rgba(22, 119, 115, 1);
   color: rgb(255, 255, 255);
   outline: none;
 }
 
 .accordion-item {
-  background-color: #006b3f;
+  background-color: rgba(22, 119, 115, 1);
   color: rgb(255, 255, 255);
   outline: none;
 }
@@ -581,13 +574,12 @@ export default {
   /* background: rgb(0, 107, 63);
   background: linear-gradient(90deg, rgba(0, 107, 63, 1) 6%, rgba(26, 150, 56, 1) 16%, rgba(22, 119, 115, 1) 47%, rgba(117, 165, 176, 1) 56%, rgba(4, 66, 105, 1) 66%); */
   background: rgb(0, 107, 63);
+  background: rgba(22, 119, 115, 0.01);
   background: linear-gradient(
-    95deg,
-    rgba(0, 107, 63, 1) 4%,
-    rgba(26, 150, 56, 1) 19%,
-    rgba(48, 159, 128, 1) 45%,
-    rgba(22, 119, 115, 1) 63%,
-    rgba(4, 66, 105, 1) 88%
+    90deg,
+    rgba(22, 119, 115, 1) 0%,
+    rgba(48, 159, 128, 1) 50%,
+    rgba(4, 66, 105, 1) 100%
   );
   /* Para navegadores que no admiten degradados */
   /* background-image: url('ruta/a/una/imagen-de-fondo.jpg'); */

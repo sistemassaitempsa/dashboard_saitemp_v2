@@ -173,7 +173,7 @@ li i {
   top: 0;
   bottom: 0;
   width: 10px;
-  background: #059c5d;
+  background: rgba(22, 119, 115, 1);
   left: 20%;
   margin-left: -10px;
 }
@@ -212,7 +212,7 @@ li i {
 /* Right content */
 .cbp_tmtimeline > li .cbp_tmlabel {
   margin: 0 0 15px 25%;
-  background: #006b3f;
+  background: rgba(22, 119, 115, 1);
   color: #fff;
   padding: 2em;
   font-size: 1em;
@@ -224,7 +224,7 @@ li i {
 }
 
 .cbp_tmtimeline > li:nth-child(odd) .cbp_tmlabel {
-  background: #059c5d;
+  background: rgba(22, 119, 115, 1);
 }
 
 .cbp_tmtimeline > li .cbp_tmlabel h6 {
@@ -242,14 +242,14 @@ li i {
   width: 0;
   position: absolute;
   pointer-events: none;
-  border-right-color: #006b3f;
+  border-right-color: rgba(22, 119, 115, 1);
   border-width: 10px;
   top: 10px;
 }
 
 /********************************** */
 .cbp_tmtimeline > li:nth-child(odd) .cbp_tmlabel:after {
-  border-right-color: #059c5d;
+  border-right-color: rgba(22, 119, 115, 1);
 }
 
 /* The icons */
@@ -267,9 +267,9 @@ li i {
   -webkit-font-smoothing: antialiased;
   position: absolute;
   color: #fff;
-  background: #059c5d;
+  background: rgba(22, 119, 115, 1);
   border-radius: 50%;
-  box-shadow: 0 0 0 8px #006b3f;
+  box-shadow: 0 0 0 8px rgba(22, 119, 115, 1);
   text-align: center;
   left: 20%;
   top: 0;
@@ -325,13 +325,13 @@ li i {
     right: auto;
     left: 20px;
     border-right-color: transparent;
-    border-bottom-color: #3594cb;
+    border-bottom-color: rgba(22, 119, 115, 1);
     top: -20px;
   }
 
   .cbp_tmtimeline > li:nth-child(odd) .cbp_tmlabel:after {
     border-right-color: transparent;
-    border-bottom-color: #6cbfee;
+    border-bottom-color: rgba(22, 119, 115, 1);
   }
 
   .cbp_tmtimeline > li .cbp_tmicon {
@@ -346,7 +346,7 @@ li i {
   position: relative;
   width: 150px;
   padding: 10px;
-  background-color: #059c5d;
+  background-color: rgba(22, 119, 115, 1);
   border-radius: 10px;
   margin-bottom: 20px;
 }
@@ -360,7 +360,7 @@ li i {
   height: 0;
   border-left: 10px solid transparent;
   border-right: 10px solid transparent;
-  border-top: 10px solid #059c5d;
+  border-top: 10px solid rgba(22, 119, 115, 1);
 }
 
 .mensaje {

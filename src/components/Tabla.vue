@@ -24,7 +24,7 @@
       </div>
     </div>
     <div
-      v-if="items_tabla2.length > 0 && filtroComponente()"
+      v-if="items_tabla2.length > 0 && filtro_visible"
       class="row"
       style="text-align: left; clear: both"
     >
@@ -241,12 +241,6 @@
             >
           </button>
         </div>
-        <!-- <div class="form-check col-xs-3 col-md-3 d-flex mt-3">
-                    <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
-                    <label class="form-check-label" for="flexCheckDefault">
-                        Guardar filtro
-                    </label>
-                </div> -->
         <div class="col-xs-3 col-md-3">
           <button
             @click="getRegistros()"
@@ -464,7 +458,10 @@
           ruta == '/navbar/gestion-ingresosl') ||
         (!sin_registros &&
           items_tabla2.length > 0 &&
-          ruta == '/navbar/lista-riesgos')
+          ruta == '/navbar/lista-riesgos') ||
+        (!sin_registros &&
+          items_tabla2.length > 0 &&
+          ruta == '/navbar/formularioinfocandidatoTabla')
       "
       style="clear: both"
     >
@@ -490,6 +487,10 @@
           (!sin_registros &&
             items_tabla2.length > 0 &&
             ruta == '/navbar/lista-riesgos' &&
+            numero_documento_candidato != '') ||
+          (!sin_registros &&
+            items_tabla2.length > 0 &&
+            ruta == '/navbar/formularioinfocandidatoTabla' &&
             numero_documento_candidato != '')
         "
         class="col-xs-3 col-md-3"
@@ -574,13 +575,6 @@
           Seleccionar todo
         </button>
       </div>
-      <!-- <div v-if="ruta != '/navbar/reporteitems' && !empleados() && ruta != '/navbar/reportes' && ruta != '/navbar/procesosespeciales' && ruta != '/navbar/debida-diligencia/clientes' && ruta != '/navbar/correo-novedades-nomina' && ruta != '/navbar/cliente-supervision' && ruta != '/navbar/solicitudes-os'"
-                class="col-xs-3 col-md-3">
-                <button type="button" style="margin-top: 35px" @click="selectAll((select_all = !select_all))"
-                    class="btn btn-success btn-sm">
-                    Seleccionar todo
-                </button>
-            </div> -->
       <div
         v-if="
           check.length > 0 &&
@@ -707,20 +701,7 @@
       >
         <thead>
           <tr>
-            <th
-              v-if="
-                ruta != '/navbar/reporteitems' &&
-                !empleados() &&
-                ruta != '/navbar/reportes' &&
-                ruta != '/navbar/trump' &&
-                ruta != '/navbar/procesosespeciales' &&
-                ruta != '/navbar/debida-diligencia/clientes' &&
-                ruta != '/navbar/correo-novedades-nomina' &&
-                ruta != '/navbar/cliente-supervision' &&
-                ruta != '/navbar/solicitudes-os'
-              "
-              scope="col"
-            >
+            <th v-if="checked" scope="col">
               <i class="bi bi-check-square"></i>
             </th>
             <th
@@ -740,15 +721,8 @@
             >
               {{ item.nombre }}
             </th>
-            <!-- <th v-if="editar || eliminar" -->
             <th
-              v-if="
-                ruta != '/navbar/reporteitems' &&
-                ruta != '/navbar/trump' &&
-                ruta != '/navbar/procesosespeciales' &&
-                ruta != '/navbar/correo-novedades-nomina' &&
-                ruta != '/navbar/lista-riesgos'
-              "
+              v-if="editar || eliminar || acciones.length > 0 || label_accion"
               colspan="4"
             >
               Acciones
@@ -757,19 +731,7 @@
         </thead>
         <tbody>
           <tr v-for="(item, index) in items_tabla2" :key="item.id">
-            <td
-              v-if="
-                ruta != '/navbar/reporteitems' &&
-                !empleados() &&
-                ruta != '/navbar/reportes' &&
-                ruta != '/navbar/trump' &&
-                ruta != '/navbar/procesosespeciales' &&
-                ruta != '/navbar/debida-diligencia/clientes' &&
-                ruta != '/navbar/correo-novedades-nomina' &&
-                ruta != '/navbar/cliente-supervision' &&
-                ruta != '/navbar/solicitudes-os'
-              "
-            >
+            <td v-if="checked">
               <div
                 class="form-check form-check-inline"
                 style="margin: 0px; padding: 0px"
@@ -784,12 +746,6 @@
                 />
               </div>
             </td>
-            <!-- <td v-if="ruta == '/navbar/gestion-ingresosl'">
-                            <button type="button" class="btn btn-success btn-sm " @click="verOrdenIngreso(item)"
-                                v-if="item.nombre != 'S. Administrador'">
-                                <i class="bi bi-eye"></i>
-                            </button>
-                        </td> -->
             <td v-if="ruta == '/navbar/gestion-ingresosl'">
               <div class="dropdown">
                 <button
@@ -913,6 +869,19 @@
                 <i class="bi bi-trash"></i>
               </button>
             </td>
+            <td v-if="acciones.length > 0">
+              <div style="display: flex; gap: 1em; align-content: center">
+                <button
+                  type="button"
+                  class="btn btn-success btn-sm"
+                  v-for="opcion in acciones"
+                  :key="opcion"
+                  @click="accion(item, opcion)"
+                >
+                  {{ opcion.nombre }}
+                </button>
+              </div>
+            </td>
             <td v-if="empleados()">
               <button
                 type="button"
@@ -923,250 +892,49 @@
                 Ver registro
               </button>
             </td>
-            <td v-if="ruta == '/navbar/debida-diligencia/clientes'">
-              <button
-                type="button"
-                class="btn btn-success btn-sm"
-                @click="verContrato(item)"
-                v-if="item.nombre != 'S. Administrador'"
-              >
-                Ver registro
-              </button>
-            </td>
-            <td v-if="ruta == '/navbar/cliente-supervision'">
-              <button
-                type="button"
-                class="btn btn-success btn-sm"
-                @click="verFormularioSuper(item)"
-                v-if="item.nombre != 'S. Administrador'"
-              >
-                Ver registro
-              </button>
-            </td>
-            <td v-if="ruta == '/navbar/solicitudes-os'">
-              <button
-                type="button"
-                class="btn btn-success btn-sm"
-                @click="verOrdenServicio(item)"
-                v-if="item.nombre != 'S. Administrador'"
-              >
-                Ver registro
-              </button>
-            </td>
-            <td v-if="ruta == '/navbar/ingresos-pendientes'">
-              <button
-                type="button"
-                class="btn btn-success btn-sm"
-                @click="verOrdenIngreso(item)"
-                v-if="item.nombre != 'S. Administrador'"
-              >
-                Ver registro
-              </button>
-            </td>
-            <td
-              v-if="
-                ruta == '/navbar/crm-seguimiento' ||
-                ruta == '/navbar/crm-pendientes'
-              "
-            >
-              <button
-                type="button"
-                class="btn btn-success btn-sm"
-                @click="verRegistroCrm(item)"
-              >
-                Ver registro
-              </button>
-            </td>
             <td
               v-if="
                 ruta == '/navbar/debida-diligencia/clientes' &&
                 permisos[0].autorizado
               "
             >
-              <!-- <button type="button" class="btn btn-success btn-sm " @click="$refs.consultaContrato.consulta()"> -->
               <ConsultaContrato :item_id="item.id" :item="item" />
-              <!-- </button> -->
             </td>
             <td v-if="ruta == '/navbar/debida-diligencia/clientes'">
-              <div class="btn-group">
-                <button
-                  type="button"
-                  class="btn"
-                  :style="
-                    'color:black;background-color:' + item.color_estado_firma
-                  "
-                >
-                  {{
-                    truncateText(
-                      item.nombre_estado_firma ? item.nombre_estado_firma : "",
-                      maxCaracteres,
-                      item.id
-                    )
-                  }}
-                </button>
-                <button
-                  type="button"
-                  class="btn dropdown-toggle dropdown-toggle-split"
-                  v-if="permisos[20].autorizado"
-                  data-bs-toggle="dropdown"
-                  aria-expanded="false"
-                  :style="
-                    'color:black;background-color:' + item.color_estado_firma
-                  "
-                >
-                  <span class="visually-hidden">Toggle Dropdown</span>
-                </button>
-                <ul class="dropdown-menu">
-                  <li
-                    style="cursor: pointer"
-                    v-for="(item2, index) in estados_firma"
-                    :key="index"
-                  >
-                    <a
-                      class="dropdown-item"
-                      @click="
-                        actualizaEstadoDD(item.id, item2.id, item2.nombre)
-                      "
-                      >{{ item2.nombre }}</a
-                    >
-                  </li>
-                  <li>
-                    <hr class="dropdown-divider" />
-                  </li>
-                  <li>
-                    <a class="dropdown-item"
-                      ><router-link
-                        class="nav-link active"
-                        :to="'/navbar/timeLine/' + item.id"
-                        >Historial actualizaciones</router-link
-                      ></a
-                    >
-                  </li>
-                </ul>
-              </div>
+              <DropDownEstadoFirma
+                :item="item"
+                :permisos="permisos"
+                :estadosFirma="estados_firma"
+                :actualizaEstadoDD="actualizaEstadoDD"
+                :maxCaracteres="maxCaracteres"
+              />
             </td>
             <td v-if="ruta == '/navbar/debida-diligencia/clientes'">
-              <div class="btn-group">
-                <button
-                  type="button"
-                  class="btn"
-                  :style="
-                    'color:black;background-color:' + item.color_estado_firma
-                  "
-                >
-                  {{ truncateOwner(item.responsable, maxCaracteres) }}
-                </button>
-                <button
-                  type="button"
-                  class="btn dropdown-toggle dropdown-toggle-split"
-                  v-if="permisos[20].autorizado"
-                  data-bs-toggle="dropdown"
-                  aria-expanded="false"
-                  :style="
-                    'color:black;background-color:' + item.color_estado_firma
-                  "
-                  @click="
-                    getEncargadosDebidaDiligencia(item.estado_firma_id),
-                      (lista_encargados_debida_diligencia = [])
-                  "
-                >
-                  <span class="visually-hidden">Toggle Dropdown</span>
-                </button>
-                <ul class="dropdown-menu">
-                  <li
-                    style="cursor: pointer"
-                    v-for="(item2, index) in lista_encargados_debida_diligencia"
-                    :key="index"
-                  >
-                    <a
-                      class="dropdown-item"
-                      @click="actualizaResponsableDD(item.id, index)"
-                      >{{ item2.nombre }}</a
-                    >
-                  </li>
-                </ul>
-              </div>
+              <DropDownResponsableDD
+                :item="item"
+                :permisos="permisos"
+                :colorFondo="item.color_estado_firma"
+                :listaEncargados="lista_encargados_debida_diligencia"
+                :getEncargados="getEncargadosDebidaDiligencia"
+                :actualizaResponsable="actualizaResponsableDD"
+                :maxCaracteres="maxCaracteres"
+              />
             </td>
             <td v-if="ruta == '/navbar/gestion-ingresosl'">
-              <!-- <div style="position: absolute;">{{item.estado_ingreso}}</div> -->
-              <div class="btn-group">
-                <button
-                  type="button"
-                  class="btn"
-                  :style="'color:black;background-color:' + item.color_estado"
-                >
-                  {{
-                    truncateText(item.estado_ingreso, maxCaracteres, item.id)
-                  }}
-                </button>
-                <button
-                  type="button"
-                  class="btn dropdown-toggle dropdown-toggle-split"
-                  v-if="permisos[23].autorizado"
-                  data-bs-toggle="dropdown"
-                  aria-expanded="false"
-                  :style="'color:black;background-color:' + item.color_estado"
-                >
-                  <span class="visually-hidden">Toggle Dropdown</span>
-                </button>
-                <ul class="dropdown-menu">
-                  <li
-                    style="cursor: pointer"
-                    v-for="(item2, index) in estados_ingreso"
-                    :key="index"
-                  >
-                    <a
-                      class="dropdown-item"
-                      @click="actualizaEstado(item.id, item2.id)"
-                      >{{ item2.nombre }}</a
-                    >
-                  </li>
-                  <!-- <li>
-                                        <hr class="dropdown-divider">
-                                    </li>
-                                    <li><a class="dropdown-item"><router-link class="nav-link active"
-                                                :to="'/navbar/timeLine/' + item.id">Historial
-                                                actualizaciones</router-link></a></li> -->
-                </ul>
-              </div>
+              <DropDownEstado
+                :item="item"
+                :estados="estados_ingreso"
+                :permisos="permisos"
+                :actualizarEstado="actualizaEstado"
+              />
             </td>
             <td v-if="ruta == '/navbar/gestion-ingresosl'">
-              <div class="btn-group">
-                <button
-                  type="button"
-                  class="btn"
-                  :style="'color:black;background-color:' + item.color_estado"
-                >
-                  {{ truncateOwner(item.responsable, maxCaracteres) }}
-                </button>
-                <button
-                  type="button"
-                  class="btn dropdown-toggle dropdown-toggle-split"
-                  v-if="permisos[23].autorizado"
-                  data-bs-toggle="dropdown"
-                  aria-expanded="false"
-                  :style="'color:black;background-color:' + item.color_estado"
-                  @click="
-                    getEncargados(item.estado_ingreso_id),
-                      (lista_encargados = [])
-                  "
-                >
-                  <span class="visually-hidden">Toggle Dropdown</span>
-                </button>
-                <ul class="dropdown-menu">
-                  <li
-                    style="cursor: pointer"
-                    v-for="(item2, index) in lista_encargados"
-                    :key="index"
-                  >
-                    <a
-                      class="dropdown-item"
-                      @click="actualizaResponsable(item.id, index)"
-                      >{{ item2.nombre }}</a
-                    >
-                  </li>
-                </ul>
-              </div>
+              <DropDownResponsable
+                :item="item"
+                :permisos="permisos"
+                :getEncargados="getEncargados"
+                :actualizaResponsable="actualizaResponsable"
+              />
             </td>
             <td v-if="ruta == '/navbar/reportes'">
               <button
@@ -1235,25 +1003,6 @@
         v-if="$route.path.includes('lista-riesgos')"
         :id_flotante="id_flotante"
       />
-      <!-- Modal -->
-      <!-- <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel"
-                aria-hidden="true">
-                <div class="modal-dialog modal-xl">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h1 class="modal-title fs-5" id="exampleModalLabel">Modal title</h1>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                        </div>
-                        <div class="modal-body">
-                            ...
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                            <button type="button" class="btn btn-primary">Save changes</button>
-                        </div>
-                    </div>
-                </div>
-            </div> -->
     </div>
     <div v-else>
       <div v-if="spinner">
@@ -1282,6 +1031,10 @@ import { Token } from "../Mixins/Token.js";
 import { Permisos } from "../Mixins/Permisos.js";
 import Loading from "./Loading.vue";
 import { Scroll } from "@/Mixins/Scroll";
+import DropDownResponsableDD from "./DropDownResponsableDD.vue";
+import DropDownEstadoFirma from "./DropDownEstadoFirma.vue";
+import DropDownEstado from "./DropDownEstado.vue";
+import DropDownResponsable from "./DropDownResponsable.vue";
 export default {
   components: {
     Modal,
@@ -1290,6 +1043,10 @@ export default {
     FlotanteFormularioIngreso,
     FlotanteFormularioRiesgos,
     ModalResponsableDD,
+    DropDownResponsableDD,
+    DropDownEstadoFirma,
+    DropDownEstado,
+    DropDownResponsable,
   },
   mixins: [Token, Alerts, Permisos, Scroll],
   props: {
@@ -1358,6 +1115,11 @@ export default {
       required: false,
       default: false, // Valor predeterminado
     },
+    label_accion: {
+      type: Boolean, // Tipo booleano
+      required: false,
+      default: false, // Valor predeterminado
+    },
     estados_firma: {
       type: Array, // Define que debe ser un arreglo
       required: false,
@@ -1367,6 +1129,21 @@ export default {
       type: Array, // Define que debe ser un arreglo
       required: false, // Cambia a true si es obligatorio
       default: () => [], // Valor predeterminado como arreglo vacío
+    },
+    filtro_visible: {
+      type: Boolean, // Tipo booleano
+      required: false,
+      default: false, // Valor predeterminado
+    },
+    acciones: {
+      type: Array, // Define que debe ser un arreglo
+      required: false, // Cambia a true si es obligatorio
+      default: () => [], // Valor predeterminado como arreglo vacío
+    },
+    checked: {
+      type: Boolean, // Tipo booleano
+      required: false,
+      default: true, // Valor predeterminado
     },
   },
   data() {
@@ -1416,6 +1193,8 @@ export default {
       analista: [],
       loading: false,
       columnaOculta: [
+        "cliente_id",
+        "usuario_id",
         "color_estado_firma",
         "nombre_estado_firma",
         "responsable",
@@ -1429,6 +1208,7 @@ export default {
         "estado_firma_id",
         "hora_confirmacion",
         "responsable_id",
+        "sector_economico_id",
       ], // este array contiene los nombres de las columnas que no queremos que se muestren en la tabla
       maxCaracteres: 20,
       lista_estados_id: {},
@@ -1492,6 +1272,9 @@ export default {
     } else if (this.ruta == "/navbar/lista-riesgos") {
       this.label_busqueda_rapida = "Búsqueda por radicado";
       this.endpoint_busqueda_rapida = "buscarradicado";
+    } else if (this.ruta == "/navbar/formularioinfocandidatoTabla") {
+      this.label_busqueda_rapida = "Búsqueda por documento";
+      this.endpoint_busqueda_rapida = "buscardocumentolistacandidatos";
     }
     this.filtro.ordenar_prioridad = JSON.parse(
       localStorage.getItem("ordenar_prioridad")
@@ -1510,6 +1293,9 @@ export default {
     this.filtro.filtro_mios = JSON.parse(localStorage.getItem("filtro_mios"));
   },
   methods: {
+    accion(item, opcion) {
+      this.$emit("accion", item, opcion);
+    },
     asignacionMasiva() {
       console.log(this.estado_ingreso2);
       let self = this;
@@ -1698,25 +1484,6 @@ export default {
         });
     },
     validaColumnasTabla() {},
-    filtroComponente() {
-      if (this.ruta.includes("costos")) {
-        return true;
-      } else if (this.ruta.includes("reporteitems")) {
-        return true;
-      } else if (this.ruta.includes("correo-novedades-nomina")) {
-        return true;
-      } else if (this.ruta.includes("cliente-supervision")) {
-        return true;
-      } else if (this.ruta.includes("debida-diligencia")) {
-        return true;
-      } else if (this.ruta.includes("gestion-ingresosl")) {
-        return true;
-      } else if (this.ruta.includes("crm-seguimiento")) {
-        return true;
-      } else if (this.ruta.includes("lista-riesgos")) {
-        return true;
-      }
-    },
     exportar() {
       let self = this;
       let cadena =
@@ -2180,7 +1947,7 @@ export default {
         if (pag.includes("filtrofechaingreso")) {
           axios.post(pag, this.filtro, config).then(function (result) {
             self.links = result.data;
-            // self.llenarTabla(result)
+            self.llenarTabla(result);
             self.items_tabla2 = Object.values(result.data.data); // se está llenando la tabla con los datos cuando se pagina
             // desde acá porque en la función llenartabla() está dando error al llenar la tabla
             self.loading = false;
@@ -2238,27 +2005,27 @@ export default {
         this.$emit("getUser", item.ter_nit.trim());
       }
     },
-    verContrato(item) {
-      this.$router.push({
-        name: "debida-diligencia/formulario-clientes",
-        params: { id: item.id },
-      });
-    },
-    verFormularioSuper(item) {
-      this.$router.push({
-        name: "formulario-supervision",
-        params: { id: item.id },
-      });
-    },
-    verOrdenServicio(item) {
-      this.$router.push({ name: "orden-servicios", params: { id: item.id } });
-    },
+    // verContrato(item) {
+    //   this.$router.push({
+    //     name: "debida-diligencia/formulario-clientes",
+    //     params: { id: item.id },
+    //   });
+    // },
+    // verFormularioSuper(item) {
+    //   this.$router.push({
+    //     name: "formulario-supervision",
+    //     params: { id: item.id },
+    //   });
+    // },
+    // verOrdenServicio(item) {
+    //   this.$router.push({ name: "orden-servicios", params: { id: item.id } });
+    // },
     verOrdenIngreso(item) {
       this.$router.push({ name: "gestion-ingresos", params: { id: item.id } });
     },
-    verRegistroCrm(item) {
-      this.$router.push({ name: "crm-intreraccion", params: { id: item.id } });
-    },
+    // verRegistroCrm(item) {
+    //   this.$router.push({ name: "crm-intreraccion", params: { id: item.id } });
+    // },
     verRegistroRiesgo(item) {
       this.$router.push({ name: "gestionriesgos", params: { id: item.id } });
     },

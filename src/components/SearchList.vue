@@ -18,7 +18,6 @@
           class="form-control"
           @blur="validarSeleccion()"
           :placeholder="placeholder"
-          aria-describedby="emailHelp"
           v-model="registro"
           :disabled="disabled"
           :required="valida_campo"
@@ -30,33 +29,20 @@
             cursor: pointer;
             border-top-right-radius: 5px;
             border-bottom-right-radius: 5px;
-          "
-          @click="(registro = ''), listaEnCadena(registro)"
-          id="basic-addon3"
-          ><i class="bi bi-x"></i
-        ></span>
+          " @click="(registro = ''), listaEnCadena(registro)" id="basic-addon3"><i class="bi bi-x"></i></span>
         <div class="invalid-feedback">
           {{ mensaje_error }}
         </div>
       </div>
     </div>
-    <div
-      v-if="hover && registros.length > 0"
-      id="select1"
-      @mouseleave="hover = false"
-    >
-      <div
-        id="lista1"
-        v-for="(item, index) in registrosFilter"
-        :key="index"
-        @click="
-          (registro = nombreItems(item)),
-            retornoValorCampo(item),
-            (hover = !hover),
-            filterResults('', registros, 'registros'),
-            listaEnCadena(item)
-        "
-      >
+    <div v-if="hover && registros.length > 0" id="select1" @mouseleave="hover = false">
+      <div id="lista1" v-for="(item, index) in registrosFilter" :key="index" @click="
+        (registro = nombreItems(item)),
+        retornoValorCampo(item),
+        (hover = !hover),
+        filterResults('', registros, 'registros'),
+        listaEnCadena(item)
+        ">
         {{ nombreItems(item) ? nombreItems(item).replace("null", "") : "" }}
         <!-- {{ item.nom_pai != null ? item.nom_pai: item.nom_dep != null? item.nom_dep: item.nom_ciu != null ? item.nom_ciu: '' }} -->
       </div>
@@ -217,6 +203,7 @@ export default {
           break;
         case "getCodigosCiiu":
           this.$emit("getActividadesCiiu", item);
+          this.$emit("setCodigosCiiu", item, this.ordenCampo);
           break;
         case "getSubCategoryReports":
           this.$emit("getSubCategoryReports", item);
@@ -230,12 +217,7 @@ export default {
           );
           break;
         case "getAfirmacionNegacion":
-          this.$emit(
-            "setAfirmacionNegacion",
-            item,
-            this.ordenCampo,
-            this.index
-          );
+          this.$emit("setAfirmacionNegacion", item, this.ordenCampo, this.index );
           break;
         case "getBancos":
           this.$emit("setBanco", item, this.ordenCampo, this.index);
@@ -255,6 +237,13 @@ export default {
         case "getVacante":
           this.$emit("setVacante", item, this.ordenCampo, this.index);
           break;
+        case "getProfesionalsector":
+          this.$emit("setProfesionalSector", item, this.ordenCampo, this.index);
+          break;
+        case "getClienteServicio":
+          this.$emit("setClienteServicio", item);
+          break;
+
       }
     },
   },

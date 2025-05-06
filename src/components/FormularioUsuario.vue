@@ -151,50 +151,60 @@
                 </select>
               </div>
             </div>
-            <div class="row">
-              <label for="formFileMultiple" class="form-label"
-                >Adjuntar imagen firma correo</label
-              >
-              <div class="input-group mb-3">
-                <input
-                  class="form-control"
-                  type="file"
-                  @change="cargarArchivo($event)"
-                  id="formFileMultiple"
-                  multiple
-                />
-                <span
-                  style="cursor: pointer"
-                  class="input-group-text"
-                  @click="quitarAdjuntos()"
-                  id="basic-addon1"
-                  >Quitar archivos</span
-                >
-              </div>
+          </div>
+          <div class="row">
+            <div class="col-6">
+              <SearchList
+                nombreCampo="Rol interno"
+                :valida_campo="false"
+                nombreItem="nombre"
+                eventoCampo="getRolInterno"
+                :consulta="consulta_rol_interno"
+                :registros="roles_internos"
+                @getRolInterno="getRolInterno"
+                placeholder="Seleccione una opción"
+              />
             </div>
-            <div class="row">
-              <div
-                class="col botones"
-                v-for="(item, index) in file"
-                :key="index"
+          </div>
+          <div class="row">
+            <label for="formFileMultiple" class="form-label"
+              >Adjuntar imagen firma correo</label
+            >
+            <div class="input-group mb-3">
+              <input
+                class="form-control"
+                type="file"
+                @change="cargarArchivo($event)"
+                id="formFileMultiple"
+                multiple
+              />
+              <span
+                style="cursor: pointer"
+                class="input-group-text"
+                @click="quitarAdjuntos()"
+                id="basic-addon1"
+                >Quitar archivos</span
               >
-                <div
-                  class="btn-group btn-group"
-                  role="group"
-                  aria-label="Small button group"
+            </div>
+          </div>
+          <div class="row">
+            <div class="col botones" v-for="(item, index) in file" :key="index">
+              <div
+                class="btn-group btn-group"
+                role="group"
+                aria-label="Small button group"
+              >
+                <button type="button" class="btn btn-success btn adjunto">
+                  <i class="bi bi-file-earmark-check"></i> {{ item.name }}
+                  {{ "(" + formatearPesoArchivo(item.size) + ")" }}
+                </button>
+                <button
+                  type="button"
+                  @click="file.splice(index, 1)"
+                  class="btn btn-success"
                 >
-                  <button type="button" class="btn btn-success btn adjunto">
-                    <i class="bi bi-file-earmark-check"></i> {{ item.name }}
-                    {{ "(" + formatearPesoArchivo(item.size) + ")" }}
-                  </button>
-                  <button
-                    type="button"
-                    @click="file.splice(index, 1)"
-                    class="btn btn-success"
-                  >
-                    <i class="bi bi-x"></i>
-                  </button>
-                </div>
+                  <i class="bi bi-x"></i>
+                </button>
               </div>
             </div>
           </div>
@@ -211,6 +221,7 @@ import axios from "axios";
 import Loading from "./Loading.vue";
 import { Alerts } from "../Mixins/Alerts.js";
 import { Token } from "../Mixins/Token.js";
+import SearchList from "./SearchList.vue";
 export default {
   props: {
     titulo: {
@@ -221,6 +232,7 @@ export default {
   },
   components: {
     Loading,
+    SearchList,
   },
   mixins: [Alerts, Token],
   data() {
@@ -244,18 +256,24 @@ export default {
       usuario: "",
       contrasena_correo: "",
       loading: false,
+      rol_interno: "",
       file: [],
+      roles_internos: [],
+      consulta_rol_interno: "",
+      rol_interno_id: "",
     };
   },
 
   created() {
     this.urlExterna();
-    if (this.$route.params.id != '') {
-      this.getUser();
+    if (this.$route.params.id != undefined) {
+      if (this.$route.params.id != undefined) {
+        this.getUser();
+        this.userLogued();
+      }
+      this.getRoles();
+      this.getEstados();
     }
-    this.userLogued();
-    this.getRoles();
-    this.getEstados();
   },
   methods: {
     register() {
@@ -272,11 +290,12 @@ export default {
       form.append("password", this.password);
       form.append("rol_id", this.rolId_);
       form.append("documento_identidad", this.documento_identidad);
+      form.append("rol_interno_id", this.rol_interno_id);
 
       this.file.forEach(function (item, index) {
         form.append("archivo" + index, item);
       });
-      if (this.$route.params.id != '') {
+      if (this.$route.params.id != undefined) {
         form.append("estado_id", this.estadoId_);
         form.append("id_user", this.$route.params.id);
         accion = "user";
@@ -298,6 +317,19 @@ export default {
         })
         .catch(function (error) {
           console.log(error);
+        });
+    },
+    getRolInterno(item = null) {
+      if (item != null) {
+        this.rol_interno_id = item.id;
+        this.consulta_rol_interno = item.nombre;
+      }
+      let self = this;
+      let config = this.configHeader();
+      axios
+        .get(self.URL_API + "api/v1/rolusuariointerno", config)
+        .then(function (result) {
+          self.roles_internos = result.data;
         });
     },
     rolId(rol) {
@@ -334,24 +366,20 @@ export default {
         .get(self.URL_API + "api/v1/userbyid/" + self.$route.params.id, config)
         .then(function (result) {
           self.nombres =
-            result.data[0].nombres != "null" ? result.data[0].nombres : "";
+            result.data.nombres != "null" ? result.data.nombres : "";
           self.apellidos =
-            result.data[0].apellidos != "null" ? result.data[0].apellidos : "";
-          self.usuario = result.data[0].usuario;
-          self.email =
-            result.data[0].email != "null" ? result.data[0].email : "";
-          self.rol = result.data[0].rol;
-          self.estado = result.data[0].estado;
-          self.estadoId_ = result.data[0].id_estado;
-          self.rolId_ = result.data[0].id_rol;
+            result.data.apellidos != "null" ? result.data.apellidos : "";
+          self.usuario = result.data.correo;
+          self.email = result.data.email != "null" ? result.data.email : "";
+          self.rol = result.data.rol;
+          self.estado = result.data.estado;
+          self.estadoId_ = result.data.estado_id;
+          self.rolId_ = result.data.rol_id;
           self.documento_identidad =
-            result.data[0].documento_identidad != "null"
-              ? result.data[0].documento_identidad
+            result.data.documento_identidad != "null"
+              ? result.data.documento_identidad
               : "";
           self.loading = false;
-        })
-        .catch(function () {
-          // self.$router.push("/");
         });
     },
     userLogued() {
@@ -360,7 +388,7 @@ export default {
       axios
         .get(self.URL_API + "api/v1/userlogued", config)
         .then(function (result) {
-          self.roluserlogued = result.data[0].rol;
+          self.roluserlogued = result.data.rol;
         })
         .catch(function (error) {
           if (error.response.data == "Unauthorized.") {
@@ -376,9 +404,6 @@ export default {
         .get(self.URL_API + "api/v1/roleslista", config)
         .then(function (result) {
           self.roles = result.data;
-        })
-        .catch(function () {
-          // self.$router.push("/");
         });
     },
     getEstados() {
@@ -388,9 +413,6 @@ export default {
         .get(self.URL_API + "api/v1/estadousuarios", config)
         .then(function (result) {
           self.estados = result.data;
-        })
-        .catch(function () {
-          // self.$router.push("/");
         });
     },
     cargarArchivo(event) {

@@ -1168,7 +1168,7 @@
               </button>
 
               <button
-                class="btn btn-danger dropdown-toggle dropdown-toggle-split buttonleft"
+                class="btn btn-danger buttonleft"
                 data-bs-toggle="dropdown"
                 aria-expanded="false"
                 type="button"
@@ -1431,11 +1431,11 @@ export default {
       visitante: "",
       hora_cierre: "",
       hora_inicio: "",
-      reenvio_correo: "",
+      reenvio_correo: {},
       historico_correos: true,
       URL_API: process.env.VUE_APP_URL_API,
       envio_correo: false,
-      adjuntos_candidato_string: "",
+      adjuntos_candidato_string: [],
       gestioningresocorreos: [],
       menu_id: "",
       adjuntos: false,
@@ -1550,6 +1550,7 @@ export default {
       }
     },
     agregarCorreosSeleccionados(correo, observacion, compromiso, index) {
+      console.log(index);
       if (correo == "null" || correo == "" || correo == null) {
         this.showAlert(
           "Este usuario no tiene correo electrónico configurado.",
@@ -1570,14 +1571,16 @@ export default {
         });
       } else {
         this.correosSeleccionados.correos.splice(correoIndex, 1);
-        this.compromisos[index].checked = false;
-        this.$refs["checkbox_" + index][0].checked = false;
+        index != undefined ? (this.compromisos[index].checked = false) : null;
+        index != undefined
+          ? (this.$refs["checkbox_" + index][0].checked = false)
+          : null;
       }
     },
     reenviarCorreosSeleccionados() {
       this.enviarCorreos(this.id_registro, 1, this.correosSeleccionados);
-      this.correosSeleccionados = [];
-      this.reenvioPdf = false;
+      /* this.correosSeleccionados = []; */
+      this.reenvioPdf = true;
     },
     async validaLocalizacion() {
       try {
@@ -1739,7 +1742,6 @@ export default {
     },
     /* funcion para cambiar el estado de cada "pad" */
     signature(array, index) {
-      console.log(array);
       array.forEach((asistencia) => {
         asistencia.show_pad = false;
       });
@@ -2009,7 +2011,6 @@ export default {
       this.compromisos.forEach((item, index) => {
         // Usar Vue.set para garantizar reactividad
         const fechaFormateada = this.formateoFechaSinHora(item.fecha_cierre);
-        console.log(fechaFormateada);
         if (fechaFormateada) {
           this.compromisos[index] = {
             ...item,
@@ -2352,10 +2353,7 @@ export default {
       return correosResponsables;
     },
     crearFormulario() {
-      console.log(this.asistencias);
-
       const formulario = new FormData();
-
       // Creacion del formulario con los datos que no corresponden a visita
       formulario.append("nombre_contacto", this.nombre_contacto);
       formulario.append("latitud", this.latitud);
@@ -3105,8 +3103,8 @@ label {
 }
 
 .ver {
-  background-color: #006b3f;
-  color: white;
+  background-color: rgba(22, 119, 115, 1);
+  color: rgb(255, 255, 255);
 }
 
 .fontSize-5 {
@@ -3182,15 +3180,17 @@ label {
 .flexButtons {
   display: flex;
   justify-content: flex-start;
-  align-items: center;
+  align-items: stretch;
 }
 .buttonleft {
   border-top-left-radius: 0;
   border-bottom-left-radius: 0;
+  height: 100% !important;
 }
 .buttonRigth {
   border-top-right-radius: 0;
   border-bottom-right-radius: 0;
+  height: 100% !important;
 }
 /* Oculta el menú si no está visible */
 </style>

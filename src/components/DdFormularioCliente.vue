@@ -82,9 +82,7 @@
     <form class="was-validated" @submit.prevent="save()">
       <h6 class="tituloseccion">Información general</h6>
       <div id="seccion">
-        <p v-if="$route.params.id != undefined">
-          Radicado: {{ numero_radicado }}
-        </p>
+        <p v-if="$route.params.id != ''">Radicado: {{ numero_radicado }}</p>
         <div class="row">
           <div class="col">
             <SearchList
@@ -225,6 +223,8 @@
           <div class="col mb-3">
             <label class="form-label">Fecha de expedición: *</label>
             <input
+              @keydown.prevent
+              @click="abrirCalendario"
               type="date"
               class="form-control"
               id="fecha_expedicion"
@@ -298,6 +298,8 @@
           <div class="col mb-3">
             <label class="form-label">Fecha de constitución: * </label>
             <input
+              @keydown.prevent
+              @click="abrirCalendario"
               type="date"
               class="form-control"
               aria-describedby="emailHelp"
@@ -838,7 +840,6 @@
               @input="
                 contratacion_cargo = formatInputUpperCase($event.target.value)
               "
-              aria-describedby="emailHelp"
               v-model="contratacion_cargo"
             />
             <div class="invalid-feedback">
@@ -1775,7 +1776,7 @@
             <div class="row">
               <div class="col">
                 <label class="form-check-label" for="flexSwitchCheckChecked"
-                  >Por favor seleccione si el tipo de cargo:</label
+                  >Por favor seleccione el tipo de cargo:</label
                 >
               </div>
               <div style="display: flex">
@@ -1919,7 +1920,7 @@
           v-for="(item, index) in fileInputsCount"
           :key="index"
         >
-          <div class="col-2" v-if="$route.params.id != null">
+          <div class="col-2" v-if="$route.params.id != ''">
             <a
               :href="item.ruta != undefined ? URL_API + item.ruta : null"
               target="_blank"
@@ -2501,6 +2502,8 @@
           <div class="col">
             <label for="exampleInputEmail1" class="form-label">Fecha</label>
             <input
+              @keydown.prevent
+              @click="abrirCalendario"
               type="date"
               class="form-control"
               id="exampleInputEmail1"
@@ -3131,7 +3134,7 @@
                 name="radio"
                 id="radio1"
               />
-              Si acepto
+              Si
             </div>
             <div class="form-check m-2">
               <input
@@ -3143,7 +3146,7 @@
                 id="radio2"
                 checked
               />
-              No acepto
+              No
             </div>
           </div>
         </div>
@@ -3489,28 +3492,28 @@
             conformidad con lo establecido en la ley. El responsable del
             tratamiento de sus datos personales es SAITEMP S.A. sociedad
             legalmente existente de acuerdo con la leyes Colombianas,
-            domiciliado en la ciudad de MEDELLÍN, en la CALLE 51 # 49-11 PISO
-            10, quien recogerá dichos datos a través de sus diferentes canales y
-            serán usados para a) Ofrecer o informarle productos b) Para hacerle
-            llegar información publicitaria sobre promociones c) Atender o
-            formalizar cualquier solicitud relacionada con nuestro objeto social
-            e) Controles estadísticos sobre proveedores, clientes f) Establecer
-            rotación de los empleados. Usted podrá ejercer los derechos que la
-            ley prevé, siguiendo los procedimientos establecidos en nuestras
-            políticas y procedimientos de Protección de datos Personales
-            publicados en la página web de la empresa, http://www.saitempsa.com,
-            o solicitando la información que requiera a través de nuestro correo
-            misdatos@saitempsa.com o llamando al teléfono: (4) 4485744 Tenga en
-            cuenta que el ejercicio de sus derechos no es requisito previo ni
-            impide el ejercicio de otros derechos y que cualquier modificación
-            al presente aviso le será avisado a través de nuestra página Web.
-            Leído lo anterior, autorizo de manera previa, explicita e inequívoca
-            a la sociedad SAITEMP S.A., para el tratamiento de los datos
-            personales suministrados por mi persona para las finalidades aquí
-            establecidas. Declaro que soy el titular de la información reportada
-            en este formato para autorizar el tratamiento de datos personales y
-            que la he suministrado de forma voluntaria y es completa, veraz,
-            exacta y verídica.
+            domiciliado en la ciudad de MEDELLÍN, en la CALLE 51 # 49-11 oficina
+            1005 , quien recogerá dichos datos a través de sus diferentes
+            canales y serán usados para a) Ofrecer o informarle productos b)
+            Para hacerle llegar información publicitaria sobre promociones c)
+            Atender o formalizar cualquier solicitud relacionada con nuestro
+            objeto social e) Controles estadísticos sobre proveedores, clientes
+            f) Establecer rotación de los empleados. Usted podrá ejercer los
+            derechos que la ley prevé, siguiendo los procedimientos establecidos
+            en nuestras políticas y procedimientos de Protección de datos
+            Personales publicados en la página web de la empresa,
+            http://www.saitempsa.com, o solicitando la información que requiera
+            a través de nuestro correo misdatos@saitempsa.com o llamando al
+            teléfono: (4) 4485744 Tenga en cuenta que el ejercicio de sus
+            derechos no es requisito previo ni impide el ejercicio de otros
+            derechos y que cualquier modificación al presente aviso le será
+            avisado a través de nuestra página Web. Leído lo anterior, autorizo
+            de manera previa, explicita e inequívoca a la sociedad SAITEMP S.A.,
+            para el tratamiento de los datos personales suministrados por mi
+            persona para las finalidades aquí establecidas. Declaro que soy el
+            titular de la información reportada en este formato para autorizar
+            el tratamiento de datos personales y que la he suministrado de forma
+            voluntaria y es completa, veraz, exacta y verídica.
           </p>
           <div style="display: flex">
             <div class="form-check m-2">
@@ -3539,10 +3542,115 @@
           </div>
         </div>
       </div>
-      <h6 v-if="$route.params.id != undefined" class="tituloseccion">
+      <h6 v-if="$route.params.id != ''" class="tituloseccion">
+        Profesionales encargados.
+      </h6>
+      <div id="seccion" v-if="$route.params.id != ''">
+        <div class="row">
+          <div class="col">
+            <SearchList
+              nombreCampo="Profesional de nómina:"
+              nombreItem="nombre"
+              :consulta="consulta_profesional_nomina"
+              :registros="profesionales_nomina"
+              eventoCampo="getProfesionalNomina"
+              @getProfesionalNomina="getProfesionalNomina"
+              placeholder="Seleccione una opción"
+            />
+          </div>
+          <div class="col">
+            <label for="" class="form-label">Anotaciones de nomina</label>
+            <textarea
+              class="form-control"
+              id="exampleInputEmail1"
+              maxlength="400"
+              aria-describedby="emailHelp"
+              v-model="anotaciones_nomina"
+            />
+          </div>
+        </div>
+        <div class="row">
+          <div class="col">
+            <SearchList
+              nombreCampo="Profesional de cartera:"
+              nombreItem="nombre"
+              :consulta="consulta_profesional_cartera"
+              :registros="profesionales_cartera"
+              eventoCampo="getProfesionalCartera"
+              @getProfesionalCartera="getProfesionalCartera"
+              placeholder="Seleccione una opción"
+            />
+          </div>
+          <div class="col">
+            <label for="" class="form-label">Anotaciones de cartera</label>
+            <textarea
+              class="form-control"
+              id="exampleInputEmail1"
+              maxlength="400"
+              aria-describedby="emailHelp"
+              v-model="anotaciones_cartera"
+            />
+          </div>
+        </div>
+        <div class="row">
+          <div class="col">
+            <SearchList
+              nombreCampo="Profesional de SST:"
+              nombreItem="nombre"
+              :consulta="consulta_profesional_sst"
+              :registros="profesionales_sst"
+              eventoCampo="getProfesionalesSST"
+              @getProfesionalesSST="getProfesionalesSST"
+              placeholder="Seleccione una opción"
+            />
+          </div>
+          <div class="col">
+            <label for="" class="form-label">Anotaciones de SST</label>
+            <textarea
+              class="form-control"
+              id="exampleInputEmail1"
+              maxlength="400"
+              aria-describedby="emailHelp"
+              v-model="anotaciones_sst"
+            />
+          </div>
+        </div>
+      </div>
+      <h6 v-if="$route.params.id != ''" class="tituloseccion">
+        Centros de trabajo.
+      </h6>
+      <div id="seccion" v-if="$route.params.id != ''">
+        <div class="row">
+          <div class="col"></div>
+          <div class="col-md-4 offset-md-4">
+            <button
+              class="btn btn-success"
+              @click="toogleCentroTrabajoModal"
+              type="button"
+            >
+              Crear centro de trabajo
+            </button>
+            <ModalCreacionCentroTrabajo
+              v-if="toogleCentroTrabajoModalData"
+              @closeModalCentrosTrabajo="toogleCentroTrabajoModal"
+            ></ModalCreacionCentroTrabajo>
+          </div>
+        </div>
+        <div class="row" v-if="centros_de_trabajo.length > 0">
+          <div class="col">
+            <TablaHistoricoEstados
+              :columnasocultas="columnasocultas()"
+              :datosformateados="datosformateados()"
+              :total_registros="total_registros_pie"
+              :columnas="columnas"
+            ></TablaHistoricoEstados>
+          </div>
+        </div>
+      </div>
+      <h6 v-if="$route.params.id != ''" class="tituloseccion">
         Observaciones del responsable.
       </h6>
-      <div id="seccion" v-if="$route.params.id != undefined">
+      <div id="seccion" v-if="$route.params.id != ''">
         <div class="row">
           <div class="col-6">
             <SearchList
@@ -3816,6 +3924,7 @@
   </div>
 </template>
 <script>
+import TablaHistoricoEstados from "./TablaHistoricoEstados.vue";
 import axios from "axios";
 import ModalHistoricoActualizaciones from "./ModalHistoricoActualizaciones.vue";
 import ModalCorreos from "./ModalCorreos.vue";
@@ -3835,10 +3944,12 @@ import RegistroCambio from "./RegistroCambio.vue";
 import FlotanteInteraccionCliente from "./FlotanteInteraccionCliente.vue";
 import FlotanteSelecciondd from "./FlotanteSelecciondd.vue";
 import ModalEstadoContrato from "./ModalEstadoContrato.vue";
+import ModalCreacionCentroTrabajo from "./ModalCreacionCentroTrabajo.vue";
 
 export default {
   components: {
     ModalEstadoContrato,
+    TablaHistoricoEstados,
     ModalCorreos,
     SearchList,
     SearchTable,
@@ -3850,22 +3961,44 @@ export default {
     FlotanteInteraccionCliente,
     FlotanteSelecciondd,
     ModalHistoricoActualizaciones,
+    ModalCreacionCentroTrabajo,
   },
   mixins: [Scroll, Alerts, Token, Permisos],
+
   props: {
     menu: {
       type: Array,
-      required: true, // Cambia a true si es obligatorio
-      default: () => [], // Arreglo vacío como valor predeterminado
+      required: true,
     },
     userlogued: {
-      type: Object,
-      required: false, // Cambia a true si es obligatorio
-      default: () => {}, // Arreglo vacío como valor predeterminado
+      default: {},
     },
   },
   data() {
     return {
+      total_registros: 0,
+      total_registros_pie: 0,
+      columnas: [
+        "Codigo centro de trabajo",
+        "Nombre",
+        "Actividad ciiu",
+        "Descripción actividad ciiu",
+        "Riesgo",
+        "Fecha de creación",
+      ],
+      centros_de_trabajo: [],
+      profesionales_sst: [],
+      profesionales_cartera: [],
+      profesionales_nomina: [],
+      profesional_sst_id: "",
+      profesional_cartera_id: "",
+      profesional_nomina_id: "",
+      consulta_profesional_nomina: "",
+      consulta_profesional_cartera: "",
+      consulta_profesional_sst: "",
+      anotaciones_sst: "",
+      anotaciones_cartera: "",
+      anotaciones_nomina: "",
       novedadesToggle: true,
       novedades: [],
       tamano_texto_version: "",
@@ -4247,6 +4380,7 @@ export default {
       contratacion_pago_31_id: "",
       versiones: [],
       actividad_ciiu_disabled: true,
+      toogleCentroTrabajoModalData: false,
     };
   },
   computed: {
@@ -4293,6 +4427,7 @@ export default {
     window.addEventListener("keydown", this.convinacionGuardado);
     window.addEventListener("keydown", this.convinacionAutoRelleno);
     this.getModulo();
+    this.getCentrosDeTrabajo();
   },
   beforeDestroy() {
     window.removeEventListener("keydown", this.convinacionGuardado);
@@ -4313,7 +4448,7 @@ export default {
     this.scrollTop();
     this.validarVersionamiento();
     if (
-      this.$route.params.id != undefined &&
+      this.$route.params.id != "" &&
       this.$route.path != "/formularioregistro"
     ) {
       this.loading = true;
@@ -4376,6 +4511,31 @@ export default {
             break;
         }
       }
+    },
+    getCentrosDeTrabajo() {
+      let self = this;
+      let config = this.configHeader();
+      const id = self.$route.params.id;
+      if (id != "") {
+        axios
+          .get(self.URL_API + "api/v1/centrosdetarabajobycliente/" + id, config)
+          .then(function (result) {
+            self.centros_de_trabajo = result.data;
+          });
+      }
+    },
+    columnasocultas() {
+      return this.centros_de_trabajo.map((item) => ({
+        id: item.id,
+        cliente_id: item.cliente_id,
+      }));
+    },
+    abrirCalendario(event) {
+      event.target.showPicker(); // Abre el selector de fecha
+    },
+    toogleCentroTrabajoModal() {
+      this.toogleCentroTrabajoModalData = !this.toogleCentroTrabajoModalData;
+      this.getCentrosDeTrabajo();
     },
     setLabelDepartamento(item = null, campo = null, index = null) {
       if (item != null) {
@@ -4817,10 +4977,7 @@ export default {
             config
           )
           .then(function (result) {
-            if (
-              result.data.nit != undefined &&
-              self.$route.params.id == undefined
-            ) {
+            if (result.data.nit != undefined && self.$route.params.id == "") {
               self.showAlert(
                 "El nit ingresado ya se encuentra registrado en nuestra base de datos",
                 "error"
@@ -4829,7 +4986,7 @@ export default {
               return;
             } else if (
               result.data.numero_identificacion != undefined &&
-              self.$route.params.id == undefined
+              self.$route.params.id == ""
             ) {
               self.showAlert(
                 "El número de identificación ingresado ya se encuentra registrado en nuestra base de datos",
@@ -4889,7 +5046,7 @@ export default {
     },
     generarPDF() {
       /*  let config = this.configHeader(); */
-      if (this.$route.params.id !== undefined) {
+      if (this.$route.params.id !== "") {
         const urlDescarga =
           this.URL_API +
           "api/v1/formulariocliente/generarpdf/" +
@@ -5115,12 +5272,12 @@ export default {
     },
     getConvenioBanco(item = null) {
       if (item != null) {
-        item.id = item.id.toString().padStart(2, "0");
+        /* item.cod_ban = item.id.toString().padStart(2, "0") ; */
         var nombreExistente = this.bancos_agregados.some(function (objeto) {
           return objeto.nombre === item.nombre;
         });
         if (!nombreExistente) {
-          this.bancos_agregados.push({ id: item.id, nombre: item.nombre });
+          this.bancos_agregados.push({ id: item.cod_ban, nombre: item.nombre });
         }
       }
       let self = this;
@@ -6627,7 +6784,7 @@ export default {
         );
         return true;
       }
-      if (this.novedad_servicio == "" && this.$route.params.id != undefined) {
+      if (this.novedad_servicio == "" && this.$route.params.id != "") {
         this.showAlert(
           "Error, debe diligenciar el campo Novedad en servicio",
           "error"
@@ -6707,13 +6864,6 @@ export default {
       if (valida_campos_bancarias > 0) {
         self.showAlert(
           "Error, debe diligenciar los campos correspondientes para referencias bancarias",
-          "error"
-        );
-        return true;
-      }
-      if (this.declaraciones_autorizaciones == false) {
-        this.showAlert(
-          "Error, debe aceptar las declaraciones y autorizaciones.",
           "error"
         );
         return true;
@@ -6839,7 +6989,7 @@ export default {
         this.crearCliente();
         let config = this.configHeader();
         var id = this.$route.params.id;
-        if (id == undefined) {
+        if (id == "") {
           axios
             .post(
               self.URL_API + "api/v1/formulariocliente",
@@ -6850,6 +7000,7 @@ export default {
               if (result.data.message == "ok") {
                 self.guardarArchivos(result.data.client);
                 self.cliente_existe = true;
+
                 self.enviarCorreos(
                   result.data.client,
                   self.menu_id,
@@ -6871,6 +7022,7 @@ export default {
             .then(function (result) {
               if (result.data.message == "ok") {
                 self.guardarArchivos(result.data.client);
+
                 self.enviarCorreos(
                   result.data.client,
                   self.menu_id,
@@ -7016,6 +7168,17 @@ export default {
         laboratorios_medicos: this.laboratorios_medicos_agregados,
         contratacion_observacion: this.contratacion_observacion,
       };
+      this.registroCliente.profesional_sst_id = this.profesional_sst_id;
+      this.registroCliente.profesional_cartera_id = this.profesional_cartera_id;
+      this.registroCliente.profesional_nomina_id = this.profesional_nomina_id;
+      this.registroCliente.profesional_sst = this.consulta_profesional_sst;
+      this.registroCliente.profesional_cartera =
+        this.consulta_profesional_cartera;
+      this.registroCliente.profesional_nomina =
+        this.consulta_profesional_nomina;
+      this.registroCliente.anotacion_sst = this.anotaciones_sst;
+      this.registroCliente.anotacion_cartera = this.anotaciones_cartera;
+      this.registroCliente.anotacion_nomina = this.anotaciones_nomina;
       this.registroCliente.cargos = this.cargos;
       this.registroCliente.cargos2 = this.cargos2;
       this.registroCliente.accionistas = this.accionistas;
@@ -7086,6 +7249,48 @@ export default {
           });
           return archivo;
         });
+    },
+    datosformateados() {
+      return this.centros_de_trabajo.map((item) => ({
+        codigo_centro_trabajo: item.codigo_centro_trabajo,
+        nombre: item.nombre,
+        codigo_actividad: item.codigo_actividad,
+        actividad_ciiu_descripcion: item.actividad_ciiu_descripcion,
+        riesgo: item.codigo_actividad.split("")[0],
+        created_at: item.created_at
+          ? this.formatearFecha(item.created_at)
+          : this.formatearFecha(item.estado_created_at),
+      }));
+    },
+    formatearFecha(fechaISO) {
+      try {
+        // Intenta crear una fecha a partir del formato original
+        let fecha = new Date(fechaISO);
+
+        // Si la fecha es inválida, intenta reemplazar ciertos formatos problemáticos
+        if (isNaN(fecha)) {
+          // Corrige fechas con espacios o con un formato incorrecto
+          fechaISO = fechaISO.replace(" ", "T"); // Reemplaza espacio por "T" en caso de que falte
+          fecha = new Date(fechaISO);
+        }
+
+        // Si sigue siendo inválida, lanza un error
+        if (isNaN(fecha)) {
+          throw new Error("Formato de fecha no válido");
+        }
+
+        // Retorna la fecha formateada
+        return fecha.toLocaleDateString("es-ES", {
+          year: "numeric",
+          month: "short",
+          day: "numeric",
+          hour: "numeric",
+          minute: "numeric",
+        });
+      } catch (error) {
+        console.error("Error al formatear la fecha:", error.message);
+        return "Fecha no válida"; // Valor por defecto en caso de error
+      }
     },
     getEstadosIngreso(item = null) {
       if (item != null) {
@@ -7478,8 +7683,6 @@ export default {
       if (item != null) {
         this.encargado_id = item.usuario_id;
         this.consulta_encargado_corregir = item.nombre;
-        console.log(this.encargado_id);
-        console.log(this.encargado_id_copia);
         if (this.encargado_id != this.encargado_id_copia) {
           this.encargado_corregir_correo = item.email;
         }
@@ -7520,8 +7723,26 @@ export default {
             }
           });
         });
+        if (item.historico_profesionales) {
+          this.consulta_profesional_nomina =
+            item.historico_profesionales.profesional_nomina;
+          this.profesional_nomina_id =
+            item.historico_profesionales.usuario_nomina_id;
+          this.anotaciones_nomina =
+            item.historico_profesionales.anotacion_nomina;
+          this.consulta_profesional_cartera =
+            item.historico_profesionales.profesional_cartera;
+          this.consulta_profesional_sst =
+            item.historico_profesionales.profesional_sst;
+          this.profesional_cartera_id =
+            item.historico_profesionales.usuario_cartera_id;
+          this.profesional_sst_id = item.historico_profesionales.usuario_sst_id;
+          this.anotaciones_cartera =
+            item.historico_profesionales.anotacion_cartera;
+          this.anotaciones_sst = item.historico_profesionales.anotacion_sst;
+          this.novedades = item.novedades;
+        }
 
-        this.novedades = item.novedades;
         /* this.consulta_observacion_estado = item.nombre_novedad_servicio;
         this.novedad_servicio = item.novedad_servicio; */
         this.contrato = item.contrato;
@@ -7607,7 +7828,7 @@ export default {
         this.consulta_sucursal_facturacion = item.sucursal_facturacion;
         this.sucursal = item.sucursal_facturacion_id;
         this.declaraciones_autorizaciones =
-          item.declaraciones_autorizaciones == "1" ? true : false;
+          item.declaraciones_autorizaciones == "0" ? true : false;
         this.tratamiento_datos_personales =
           item.tratamiento_datos_personales == "1" ? true : false;
         this.tipo_operacion_internacional =
@@ -7750,19 +7971,19 @@ export default {
         }
 
         item.convenios_banco.forEach((element) => {
-          if (element.id >= 1 && element.id <= 9) {
+          /*  if (element.id >= 1 && element.id <= 9) {
             element.id = "0" + element.id;
-          }
+          } */
           this.bancos_agregados.push({
-            id: element.id,
+            id: element.cod_ban,
             nombre: element.nombre,
           });
         });
 
         item.tipos_contrato.forEach((element) => {
-          if (element.tip_con >= 1 && element.tip_con <= 9) {
+          /*      if (element.tip_con >= 1 && element.tip_con <= 9) {
             element.tip_con = "0" + element.tip_con;
-          }
+          } */
           this.tipos_contratos_agregados.push({
             id: element.tip_con,
             nombre: element.nombre,
@@ -7941,12 +8162,51 @@ export default {
       this.divExpandido2 = !this.divExpandido2;
       this.divExpandido = false;
     },
+    getProfesionalesSST(item = null) {
+      if (item != null) {
+        this.consulta_profesional_sst = item.nombre;
+        this.profesional_sst_id = item.id;
+      }
+      let self = this;
+      let config = this.configHeader();
+      axios
+        .get(self.URL_API + "api/v1/usersbyrolinterno/5", config)
+        .then((result) => {
+          self.profesionales_sst = result.data;
+        });
+    },
+    getProfesionalNomina(item = null) {
+      if (item != null) {
+        this.consulta_profesional_nomina = item.nombre;
+        this.profesional_nomina_id = item.id;
+      }
+      let self = this;
+      let config = this.configHeader();
+      axios
+        .get(self.URL_API + "api/v1/usersbyrolinterno/8", config)
+        .then((result) => {
+          self.profesionales_nomina = result.data;
+        });
+    },
+    getProfesionalCartera(item = null) {
+      if (item != null) {
+        this.consulta_profesional_cartera = item.nombre;
+        this.profesional_cartera_id = item.id;
+      }
+      let self = this;
+      let config = this.configHeader();
+      axios
+        .get(self.URL_API + "api/v1/usersbyrolinterno/6", config)
+        .then((result) => {
+          self.profesionales_cartera = result.data;
+        });
+    },
   },
 };
 </script>
 <style scoped>
 .filled {
-  border-color: green;
+  border-color: rgba(22, 119, 115, 1);
 }
 
 .row:first-child {
@@ -8024,12 +8284,12 @@ section span {
 }
 
 .ver {
-  background-color: #006b3f;
+  background-color: rgba(22, 119, 115, 1);
   color: white;
 }
 
 .ver:hover {
-  background-color: #05a562;
+  background-color: rgb(30, 151, 147);
 }
 
 .trash {
@@ -8078,19 +8338,19 @@ ul li {
 }
 
 .registro_cambio {
-  background-color: #198754;
+  background-color: rgba(22, 119, 115, 1);
   color: white;
-  border: 1px solid #198754;
+  border: 1px solid rgba(22, 119, 115, 1);
   padding: 0px 10px 0px 10px;
 }
 
 .registro_cambio:hover {
-  background-color: #146c43;
-  border: 1px solid #146c43;
+  background-color: #124e86;
+  border: 1px solid #124e86;
 }
 
 #registro_cambio {
-  background-color: #198754;
+  background-color: rgba(22, 119, 115, 1);
   color: white;
   border-top-right-radius: 5px;
   border-bottom-right-radius: 5px;
@@ -8099,22 +8359,22 @@ ul li {
 }
 
 .registro_cambio2 {
-  background-color: #198754;
+  background-color: rgba(22, 119, 115, 1);
   color: white;
   border-top-left-radius: 5px;
   border-bottom-left-radius: 5px;
-  border: 1px solid #198754;
+  border: 1px solid rgba(22, 119, 115, 1);
   padding: 0px 10px 0px 10px;
 }
 
 .registro_cambio2:hover {
-  background-color: #146c43;
-  border: 1px solid #146c43;
+  background-color: #124e86;
+  border: 1px solid #124e86;
 }
 
 #registro_cambio:hover {
-  background-color: #146c43;
-  border: 1px solid #146c43;
+  background-color: #124e86;
+  border: 1px solid #124e86;
 }
 
 .lista-menu li:nth-child(odd) {
@@ -8122,7 +8382,7 @@ ul li {
 }
 
 .lista-menu li:nth-child(odd):hover {
-  background-color: #146c43;
+  background-color: #124e86;
   color: white;
   cursor: pointer;
 }
@@ -8132,7 +8392,7 @@ ul li {
 }
 
 #btnMenu {
-  background-color: rgb(28, 146, 77);
+  background-color: rgba(22, 119, 115, 1);
   color: white;
 }
 
@@ -8157,9 +8417,9 @@ ul li {
   color: white;
   background: linear-gradient(
     95deg,
-    rgba(0, 107, 63, 1) 4%,
-    rgba(26, 150, 56, 1) 19%,
-    rgba(48, 159, 128, 1) 45%,
+    /*  rgba(0, 107, 63, 1) 4%,
+    rgba(26, 150, 56, 1) 19%, */
+      rgba(48, 159, 128, 1) 45%,
     rgba(22, 119, 115, 1) 63%,
     rgba(4, 66, 105, 1) 88%
   );
@@ -8179,9 +8439,9 @@ ul li {
   color: white;
   background: linear-gradient(
     95deg,
-    rgba(0, 107, 63, 1) 4%,
-    rgba(26, 150, 56, 1) 19%,
-    rgba(48, 159, 128, 1) 45%,
+    /*     rgba(0, 107, 63, 1) 4%,
+    rgba(26, 150, 56, 1) 19%, */
+      rgba(48, 159, 128, 1) 45%,
     rgba(22, 119, 115, 1) 63%,
     rgba(4, 66, 105, 1) 88%
   );
@@ -8201,9 +8461,9 @@ ul li {
   color: white;
   background: linear-gradient(
     95deg,
-    rgba(0, 107, 63, 1) 4%,
-    rgba(26, 150, 56, 1) 19%,
-    rgba(48, 159, 128, 1) 45%,
+    /*     rgba(0, 107, 63, 1) 4%,
+    rgba(26, 150, 56, 1) 19%, */
+      rgba(48, 159, 128, 1) 45%,
     rgba(22, 119, 115, 1) 63%,
     rgba(4, 66, 105, 1) 88%
   );

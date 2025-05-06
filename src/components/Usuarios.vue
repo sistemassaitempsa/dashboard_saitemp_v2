@@ -4,37 +4,74 @@
       <h2>Administrar Usuarios</h2>
       <div class="row" style="width: 80%; margin-bottom: 30px">
         <div class="col-xs-4 col-md-6">
-          <label endpointEmpleadosfor="exampleInputEmail1" class="form-label">Buscar usuario</label>
-          <input type="text" class="form-control" autocomplete="off" id="exampleInputEmail1"
-            placeholder="Escriba nombre o usuario" aria-describedby="emailHelp" v-model="usuario" />
+          <label endpointEmpleadosfor="exampleInputEmail1" class="form-label"
+            >Buscar usuario</label
+          >
+          <input
+            type="text"
+            class="form-control"
+            autocomplete="off"
+            id="exampleInputEmail1"
+            placeholder="Escriba nombre o usuario"
+            aria-describedby="emailHelp"
+            v-model="usuario"
+          />
         </div>
         <div class="col-xs-4 col-md-3">
-          <button v-if="usuario != ''" type="button" style="margin-top: 35px" @click="getUser(usuario)"
-            class="btn btn-success btn-sm">
+          <button
+            v-if="usuario != ''"
+            type="button"
+            style="margin-top: 35px"
+            @click="getUser(usuario)"
+            class="btn btn-success btn-sm"
+          >
             Buscar
           </button>
         </div>
         <div class="col-xs-4 col-md-3">
-          <button v-if="usuario != ''" type="button" style="margin-top: 35px" @click="getUsers(), (usuario = '')"
-            class="btn btn-success btn-sm">
+          <button
+            v-if="usuario != ''"
+            type="button"
+            style="margin-top: 35px"
+            @click="getUsers(), (usuario = '')"
+            class="btn btn-success btn-sm"
+          >
             Borrar búsqueda
           </button>
         </div>
       </div>
       <div class="row">
-        <button type="button" id="newUser" class="col-xs-12 col-md-2 btn btn-success" @click="nuevoUsuario()">
+        <button
+          type="button"
+          id="newUser"
+          class="col-xs-12 col-md-2 btn btn-success"
+          @click="nuevoUsuario()"
+        >
           <i class="bi bi-file-earmark-plus"></i> Insertar usuario
         </button>
       </div>
       <div class="row" style="clear: both; margin-bottom: 20px">
         <div class="col-xs-3 col-md-4" v-if="users.length > 0">
-          <label for="exampleFormControlInput1" class="form-label">Cantidad de registros a listar</label>
-          <select class="form-select form-select-sm" @change="getUsers()" v-model="cantidad"
-            aria-label="Default select example">
+          <label for="exampleFormControlInput1" class="form-label"
+            >Cantidad de registros a listar</label
+          >
+          <select
+            class="form-select form-select-sm"
+            @change="getUsers()"
+            v-model="cantidad"
+            aria-label="Default select example"
+          >
             <option>5</option>
             <option>10</option>
             <option>20</option>
             <option>30</option>
+          </select>
+        </div>
+        <div class="col-xs-3 col-md-4">
+          <label for="exampleFormControlInput1" class="form-label">Tipo de usuario a listar</label>
+          <select class="form-select form-select-sm" @change="getUsers(tipo_usuario_id)" v-model="tipo_usuario_id"
+            aria-label="Usuario">
+            <option v-for="item in tipos_usuarios" :key="item" :value ="item.id">{{ item.nombre }}</option>
           </select>
         </div>
       </div>
@@ -48,7 +85,9 @@
         <h5>Cargando por favor espere un momento.</h5>
       </div>
       <div v-else class="table-responsive">
-        <table class="table align-middle table-bordered table-striped table-hover">
+        <table
+          class="table align-middle table-bordered table-striped table-hover"
+        >
           <thead>
             <tr>
               <th scope="col">#</th>
@@ -64,31 +103,31 @@
             <tr v-for="(item, index) in users" :key="item.id">
               <th scope="row">{{ index + 1 }}</th>
               <td>{{ item.nombres }} {{ item.apellidos }}</td>
-              <td>{{ item.usuario }}</td>
+              <td>{{ item.correo }}</td>
               <td>{{ item.email }}</td>
               <td>{{ item.estado }}</td>
               <td>{{ item.rol }}</td>
               <td>
                 <button type="button" v-if="item.rol != 'S. Administrador'" class="btn btn-warning btn-sm"
-                  @click="actualizar(item.id_user)">
+                  @click="actualizar(item.usuario_id, item.tipo_usuario_id)">
                   <i class="bi bi-pencil-square"></i>
                 </button>
                 <button v-if="
                   item.rol == 'S. Administrador' &&
                   roluserlogued == 'S. Administrador'
-                " type="button" class="btn btn-warning btn-sm" @click="actualizar(item.id_user)">
+                " type="button" class="btn btn-warning btn-sm" @click="actualizar(item.usuario_id, item.tipo_usuario_id)">
                   <i class="bi bi-pencil-square"></i>
                 </button>
               </td>
               <td>
                 <button v-if="item.rol != 'S. Administrador'" type="button" class="btn btn-danger btn-sm"
-                  @click="messageDelete(item.id_user)">
+                  @click="messageDelete(item.usuario_id)">
                   <i class="bi bi-trash"></i>
                 </button>
                 <button v-if="
                   item.rol == 'S. Administrador' &&
                   roluserlogued == 'S. Administrador'
-                " type="button" class="btn btn-danger btn-sm" @click="messageDelete(item.id_user)">
+                " type="button" class="btn btn-danger btn-sm" @click="messageDelete(item.usuario_id)">
                   <i class="bi bi-trash"></i>
                 </button>
               </td>
@@ -96,7 +135,12 @@
           </tbody>
         </table>
       </div>
-      <PiePagina @response="response" :actualiced="actualiced" :cantidad="cantidad" :result="result" />
+      <PiePagina
+        @response="response"
+        :actualiced="actualiced"
+        :cantidad="cantidad"
+        :result="result"
+      />
     </div>
   </div>
 </template>
@@ -136,6 +180,8 @@ export default {
       loading: false,
       tipo_usuario: false,
       mensaje_tipo_usuario: "Usuarios cliente",
+      tipo_usuario_id:"",
+      tipos_usuarios:[],
     };
   },
   mounted() {
@@ -145,10 +191,12 @@ export default {
     // ruta() {
     //   this.autorizado(this.menu)
     // }
+   
   },
   created() {
     this.getUsers();
     this.userLogued();
+    this.tipoUsuarios();
   },
   methods: {
     response(response) {
@@ -167,11 +215,11 @@ export default {
       });
       return rolasignado;
     },
-    getUsers() {
+    getUsers(tipo_usuario_id = 1) {
       let self = this;
       let config = this.configHeader();
       axios
-        .get(self.URL_API + "api/v1/users/" + self.cantidad, config) //se anexa un 0 a la consulta para el tipo de usuario
+        .get(self.URL_API + "api/v1/users/" + self.cantidad+'/'+tipo_usuario_id, config) //se anexa un 0 a la consulta para el tipo de usuario
         .then(function (result) {
           self.users = result.data.data;
           self.result = result;
@@ -183,13 +231,22 @@ export default {
       let config = this.configHeader();
       axios
         .get(
-          self.URL_API + "api/v1/users/" + self.usuario + "/" + self.cantidad,
+          self.URL_API + "api/v1/usersfiltro/" + self.usuario + "/" + self.cantidad,
           config
         )
         .then(function (result) {
           self.users = result.data.data;
           self.result = result;
           self.spinner = false;
+        });
+    },
+    tipoUsuarios() {
+      let self = this;
+      let config = this.configHeader();
+      axios
+        .get(self.URL_API + "api/v1/tipousuariologin", config) //se anexa un 0 a la consulta para el tipo de usuario
+        .then(function (result) {
+          self.tipos_usuarios = result.data;
         });
     },
     nuevoUsuario() {
@@ -223,8 +280,8 @@ export default {
           self.getUsers();
         });
     },
-    actualizar(id) {
-      this.$router.push({ name: "editarUsuario", params: { id: id } });
+    actualizar(id, tipo_usuario_id) {
+      this.$router.push({ name: "editarUsuario", params: { tipo:tipo_usuario_id, id: id } });
     },
     userLogued() {
       let self = this;
@@ -232,7 +289,7 @@ export default {
       axios
         .get(self.URL_API + "api/v1/userlogued", config)
         .then(function (result) {
-          self.roluserlogued = result.data[0].rol;
+          self.roluserlogued = result.data.rol;
         })
         .catch(function (error) {
           if (error.response.data == "Unauthorized.") {

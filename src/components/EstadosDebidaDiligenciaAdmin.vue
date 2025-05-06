@@ -458,7 +458,7 @@ export default {
   text-align: left;
 }
 #btnMenu {
-  background-color: rgb(28, 146, 77);
+  background-color: rgba(22, 119, 115, 1);
   color: white;
 }
 #seccion {

@@ -75,46 +75,58 @@
           </button>
         </div>
       </div>
-      <div class="row" style="clear: both; text-align: left; width: 50%">
-        <div class="col-xs-4 col-md-4">
-          <button
-            type="button"
-            style="margin-top: 31px"
-            @click="selectAll((select_all = !select_all))"
-            class="btn btn-success btn-sm"
+      <form class="was-validated" @submit.prevent="save()">
+        <div class="row" style="clear: both; text-align: left; width: 70%">
+          <div class="col-xs-3 col-md-3 mt-2">
+            <button
+              type="button"
+              style="margin-top: 31px"
+              @click="selectAll((select_all = !select_all))"
+              class="btn btn-success"
+            >
+              Seleccionar todo
+            </button>
+          </div>
+          <div v-if="check.length > 0" class="col-xs-3 col-md-3">
+            <SearchList
+              nombreCampo="Asignar rol: *"
+              nombreItem="nombre"
+              eventoCampo="getRoles"
+              :consulta="consulta_rol"
+              :registros="roles"
+              @getRoles="getRoles"
+              placeholder="Seleccione una opción"
+            />
+          </div>
+          <div v-if="check.length > 0" class="col-xs-3 col-md-3">
+            <SearchList
+              nombreCampo="Asignar rol interno: *"
+              nombreItem="nombre"
+              eventoCampo="getRolesInternos"
+              :consulta="consulta_rol_interno"
+              :registros="roles_internos"
+              @getRolesInternos="getRolesInternos"
+              placeholder="Seleccione una opción"
+            />
+          </div>
+          <div
+            v-if="
+              check.length > 0 &&
+              consulta_rol != '' &&
+              consulta_rol_interno != ''
+            "
+            class="col-xs-3 col-md-3 mt-2"
           >
-            Seleccionar todo
-          </button>
+            <button
+              type="submit"
+              style="margin-top: 31px"
+              class="btn btn-success"
+            >
+              Guardar usuarios
+            </button>
+          </div>
         </div>
-        <div v-if="check.length > 0" class="col-xs-4 col-md-4">
-          <label for="exampleFormControlInput1" class="form-label"
-            >Asignar rol:</label
-          >
-          <select
-            class="form-select form-select-sm"
-            @change="rolId(rol_select)"
-            v-model="rol_select"
-            aria-label="Default select example"
-          >
-            <option v-for="(item, index) in roles" :key="index">
-              {{ item.nombre }}
-            </option>
-          </select>
-        </div>
-        <div
-          v-if="check.length > 0 && rol_select != ''"
-          class="col-xs-4 col-md-4"
-        >
-          <button
-            type="button"
-            style="margin-top: 31px"
-            @click="save()"
-            class="btn btn-success btn-sm"
-          >
-            Guardar usuarios
-          </button>
-        </div>
-      </div>
+      </form>
       <div v-if="spinner">
         <div class="lds-ring">
           <div></div>
@@ -175,11 +187,6 @@
                       : "Usuario registrado"
                   }}
                 </button>
-                <!-- <button v-if="item.rol == 'S. Administrador' && roluserlogued == 'S. Administrador'" type="button"
-                  :class="item.registrado == true ? 'btn btn-warning btn-sm' : 'btn btn-success btn-sm'">
-                  <i :class="item.registrado == true ? 'bi bi-person-plus' : 'bi bi-person'"></i> {{ boton(item.usuario,
-                    index) == true ? 'Usuario registrado' : 'Usuario sin registrar' }}
-                </button> -->
               </td>
             </tr>
           </tbody>
@@ -199,9 +206,11 @@ import axios from "axios";
 import PiePagina from "./PiePagina.vue";
 import { Alerts } from "../Mixins/Alerts.js";
 import { Token } from "../Mixins/Token.js";
+import SearchList from "./SearchList.vue";
 export default {
   components: {
     PiePagina,
+    SearchList,
   },
   props: {
     menu: {
@@ -221,6 +230,7 @@ export default {
       check: [],
       select_all: false,
       roles: [],
+      roles_internos: [],
       rol_select: "",
       rolId_: "",
       totalRegistros: "",
@@ -232,30 +242,22 @@ export default {
       usersSystem: [],
       exist: false,
       spinner: true,
+      rol_id: "",
+      consulta_rol: "",
+      rol_interno_id: "",
+      consulta_rol_interno: "",
     };
   },
   mounted() {
     this.ruta = this.$route.path.substring(1);
   },
-  // watch: {
-  //   ruta() {
-  //     this.autorizado(this.menu)
-  //   }
-  // },
   created() {
     this.getUsers();
     this.getUsersDA();
     this.getRoles();
+    this.getRolesInternos();
   },
   methods: {
-    // autorizado(menu) {
-    //   let autoriced = ''
-    //   this.ruta = this.$route.path.substring(1)
-    //   autoriced = menu.filter(menus => menus.url === this.ruta);
-    //   if (autoriced.length == 0) {
-    //     this.$router.go(-1);
-    //   }
-    // },
     boton(item) {
       let self = this;
       self.spinner = false;
@@ -281,6 +283,15 @@ export default {
           self.boton(result);
         });
     },
+    getUser(user) {
+      let self = this;
+      let config = this.configHeader();
+      axios
+        .get(self.URL_API + "api/v1/ldapuserfilter/" + user, config)
+        .then(function (result) {
+          self.boton(result);
+        });
+    },
     getUsers() {
       let self = this;
       let config = this.configHeader();
@@ -290,13 +301,30 @@ export default {
           self.usersSystem = result.data;
         });
     },
-    getRoles() {
+    getRoles(item = null) {
+      if (item != null) {
+        this.rol_id = item.id;
+        this.consulta_rol = item.nombre;
+      }
       let self = this;
       let config = this.configHeader();
       axios
         .get(self.URL_API + "api/v1/roleslista", config)
         .then(function (result) {
           self.roles = result.data;
+        });
+    },
+    getRolesInternos(item = null) {
+      if (item != null) {
+        this.rol_interno_id = item.id;
+        this.consulta_rol_interno = item.nombre;
+      }
+      let self = this;
+      let config = this.configHeader();
+      axios
+        .get(self.URL_API + "api/v1/rolusuariointerno", config)
+        .then(function (result) {
+          self.roles_internos = result.data;
         });
     },
     response(response) {
@@ -307,15 +335,17 @@ export default {
     save() {
       let self = this;
       let config = this.configHeader();
-      let rol = { rol: this.rolId_ };
-      this.check.splice(0, 0, rol);
+      let roles = { rol_id: this.rol_id, rol_interno_id: this.rol_interno_id };
+      this.check.splice(0, 0, roles);
       axios
         .post(self.URL_API + "api/v1/ldapusers", this.check, config)
         .then(function (result) {
           self.showAlert(result.data.message, result.data.status);
           self.check = [];
-          self.rolId_ = "";
-          self.rol_select = "";
+          self.rol_id = "";
+          self.consulta_rol = "";
+          self.consulta_rol_interno = "";
+          self.rol_interno_id = "";
         });
     },
     selectAll() {
@@ -340,32 +370,6 @@ export default {
         });
         this.check = [];
       }
-    },
-    rolId(rol) {
-      let self = this;
-      var cont = 0;
-      this.roles.forEach(function (element) {
-        if (rol == element.nombre) {
-          self.rolId_ = element.id;
-          cont++;
-        }
-      });
-      if (cont <= 0) {
-        self.rolId_ = "";
-      }
-    },
-    getUser(user) {
-      let self = this;
-      let config = this.configHeader();
-      axios
-        .get(self.URL_API + "api/v1/ldapuserfilter/" + user, config)
-        .then(function (result) {
-          // self.users = result.data.data;
-          // self.result = result;
-          // self.totalRegistros = result.data.total
-          // self.paginaActual = result.data.current_page
-          self.boton(result);
-        });
     },
   },
 };

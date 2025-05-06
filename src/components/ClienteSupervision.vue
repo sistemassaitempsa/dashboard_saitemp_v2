@@ -1,14 +1,8 @@
 <template>
   <div class="container">
     <h2>Registro de supervisión</h2>
-    <Tabla
-      :datos="datos"
-      :tabla="tabla"
-      :userlogued="userlogued"
-      :endpoint="endpoint"
-      :listas="listas"
-      :endpointexport="endpointexport"
-    />
+    <Tabla :datos="datos" :tabla="tabla" :userlogued="userlogued" :endpoint="endpoint" :listas="listas"
+      :endpointexport="endpointexport" :filtro_visible="true" :checked="false" :acciones="acciones" @accion="accion" />
   </div>
 </template>
 <script>
@@ -71,11 +65,12 @@ export default {
       ],
       ejecutivos_comerciales: [],
       listas: [],
+      acciones: [{ nombre: "ver registro", }]
     };
   },
   computed: {},
   watch: {},
-  mounted() {},
+  mounted() { },
   created() {
     this.urlExterna();
     this.getItems();
@@ -110,6 +105,9 @@ export default {
           self.listas.splice(4, 0, result.data);
         });
     },
+    accion(item) {
+      this.$router.push({ name: "formulario-supervision", params: { id: item.id }, });
+    }
   },
 };
 </script>

@@ -13,6 +13,11 @@
       :estados_firma="estados_firma"
       @actualizaResponsableDD="actualizaResponsableDD"
       @actualizaEstadoPadre="actualizaEstado"
+      :filtro_visible="true"
+      :acciones="acciones"
+      @accion="accion"
+      :checked="false"
+      :label_accion="true"
     />
   </div>
 </template>
@@ -103,6 +108,11 @@ export default {
       listas: [],
       estados_firma: [],
       first_page_url: "",
+      acciones: [
+        {
+          nombre: "ver registro",
+        },
+      ],
     };
   },
   computed: {},
@@ -116,6 +126,12 @@ export default {
     this.getEjecutivosComerciales();
   },
   methods: {
+    accion(item) {
+      this.$router.push({
+        name: "debida-diligencia/formulario-clientes",
+        params: { id: item.id },
+      });
+    },
     actualizaResponsableDD(
       item_id,
       responsable_id,

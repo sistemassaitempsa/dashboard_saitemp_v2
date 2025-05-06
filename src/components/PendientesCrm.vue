@@ -1,13 +1,8 @@
 <template>
   <div class="container">
     <h2>Tareas pendientes CRM</h2>
-    <Tabla
-      :datos="datos"
-      :tabla="tabla"
-      :userlogued="userlogued"
-      :endpoint="endpoint"
-      :endpointexport="endpointexport"
-    />
+    <Tabla :datos="datos" :tabla="tabla" :userlogued="userlogued" :endpoint="endpoint"
+      :endpointexport="endpointexport" :acciones="acciones" @accion="accion" />
   </div>
 </template>
 <script>
@@ -83,6 +78,7 @@ export default {
       ],
       first_page_url: "",
       cantidad: 10,
+      acciones: [{ nombre: "ver registro", }]
     };
   },
   computed: {},
@@ -104,6 +100,9 @@ export default {
           self.datos = result;
         });
     },
+    accion(item) {
+      this.$router.push({ name: "crm-intreraccion", params: { id: item.id } });
+    }
   },
 };
 </script>

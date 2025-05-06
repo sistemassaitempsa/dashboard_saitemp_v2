@@ -216,9 +216,9 @@ export default {
       axios
         .get(self.URL_API + "api/v1/userbyid/18 ", config)
         .then(function (result) {
-          if (result.data.length > 0) {
-            self.saitemp.Nombre = result.data[0].nombres;
-            self.saitemp.Email = result.data[0].usuario;
+          if (result.data) {
+            self.saitemp.Nombre = result.data.nombres;
+            self.saitemp.Email = result.data.correo;
             self.loading = false;
           }
         });

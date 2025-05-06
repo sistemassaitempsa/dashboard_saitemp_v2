@@ -3,19 +3,18 @@
     <h2>Módulo cliente</h2>
     <div class="card p-3">
       <form class="was-validated" @submit.prevent="save()">
+        <div class="row" v-if="props.userlogued.tipo_usuario_id == 1 && route.path.includes('/cliente')">
+          <div class="col-6 mb-3">
+            <label for="nit" class="form-label">Buscar por Nit/Documento:</label>
+            <input type="text" class="form-control" id="nit" aria-describedby="emailHelp" v-model="consulta_nit" required />
+          </div>
+        </div>
         <div class="row">
           <div class="col">
             <div class="mb-3">
               <label for="nombre" class="form-label">Nombre/Razón social</label>
-              <input
-                type="text"
-                class="form-control"
-                id="nombre"
-                aria-describedby="emailHelp"
-                v-model="razon_social"
-                required
-                disabled="true"
-              />
+              <input type="text" class="form-control" id="nombre" aria-describedby="emailHelp" v-model="razon_social"
+                required disabled="true" />
             </div>
           </div>
         </div>
@@ -23,27 +22,14 @@
           <div class="col">
             <div class="mb-3">
               <label for="nit" class="form-label">Nit</label>
-              <input
-                type="text"
-                class="form-control"
-                id="nit"
-                aria-describedby="emailHelp"
-                v-model="nit"
-                required
-              />
+              <input type="text" class="form-control" id="nit" aria-describedby="emailHelp" v-model="nit" disabled />
             </div>
           </div>
           <div class="col">
             <div class="mb-3">
               <label for="correo" class="form-label">Correo</label>
-              <input
-                type="text"
-                class="form-control"
-                id="correo"
-                aria-describedby="emailHelp"
-                v-model="correo"
-                autocomplete="new-email"
-              />
+              <input type="text" class="form-control" id="correo" aria-describedby="emailHelp" v-model="correo"
+                autocomplete="new-email" />
             </div>
           </div>
         </div>
@@ -51,72 +37,64 @@
           <div class="col">
             <div class="mb-3">
               <label for="usuario" class="form-label">Usuario</label>
-              <input
-                type="text"
-                class="form-control"
-                id="usuario"
-                aria-describedby="emailHelp"
-                v-model="usuario"
-                required
-                disabled="true"
-              />
+              <input type="text" class="form-control" id="usuario" aria-describedby="emailHelp" v-model="usuario"
+                required disabled="true" />
             </div>
           </div>
           <div class="col">
             <div class="mb-3">
               <label for="contrasena" class="form-label">Contraseña</label>
-              <input
-                type="password"
-                class="form-control"
-                id="contrasena"
-                aria-describedby="emailHelp"
-                v-model="contrasena"
-                autocomplete="new-password"
-              />
-              <!-- :disabled="true" -->
-              <!-- :required="$route.params.id == ''" -->
+              <input type="password" class="form-control" id="contrasena" aria-describedby="emailHelp"
+                v-model="contrasena" autocomplete="new-password" />
             </div>
           </div>
         </div>
         <div class="row">
+          <div class="col">
+            <div class="mb-3">
+              <label for="nombre_contacto" class="form-label">Nombre contacto</label>
+              <input type="text" class="form-control" id="nombre_contacto" aria-describedby="emailHelp"
+                v-model="nombre_contacto" />
+            </div>
+          </div>
+          <div class="col">
+            <div class="mb-3">
+              <label for="telefono_contacto" class="form-label">Teléfono contacto</label>
+              <input type="text" class="form-control" id="telefono_contacto" aria-describedby="emailHelp"
+                v-model="telefono_contacto" />
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-6">
+            <div class="mb-3">
+              <label for="cargo_contacto" class="form-label">Cargo contacto</label>
+              <input type="text" class="form-control" id="cargo_contacto" aria-describedby="emailHelp"
+                v-model="cargo_contacto" />
+            </div>
+          </div>
+        </div>
+        <div class="row" v-if="props.userlogued.tipo_usuario_id == 1">
           <div class="col mb-3" id="no-sede" tabindex="0">
-            <SearchList
-              nombreCampo="Rol*"
-              @getRoles="getRoles"
-              eventoCampo="getRoles"
-              nombreItem="nombre"
-              :registros="roles"
-              placeholder="Seleccione una opción"
-              :consulta="consulta_rol"
-            />
+            <SearchList nombreCampo="Rol*" @getRoles="getRoles" eventoCampo="getRoles" nombreItem="nombre"
+              :registros="roles" placeholder="Seleccione una opción" :consulta="consulta_rol" />
           </div>
           <!-- :disabled="$route.params.id != '' && !permisos[32].autorizado" -->
 
           <div class="col mb-3" id="no-proceso" tabindex="0">
-            <SearchList
-              nombreCampo="Estado"
-              @getEstados="getEstados"
-              eventoCampo="getEstados"
-              nombreItem="nombre"
-              :registros="estados"
-              placeholder="Seleccione una opción"
-              :consulta="consulta_estado"
-            />
+            <SearchList nombreCampo="Estado" @getEstados="getEstados" eventoCampo="getEstados" nombreItem="nombre"
+              :registros="estados" placeholder="Seleccione una opción" :consulta="consulta_estado" />
             <!-- :disabled="$route.params.id != '' && !permisos[32].autorizado" -->
           </div>
         </div>
         <div class="row">
-          <div class="col">
-            <button
-              type="button"
-              class="btn btn-success"
-              @click="consultaCliente"
-            >
+          <div class="col" v-if="props.userlogued.tipo_usuario_id == 1 && route.path.includes('/cliente')">
+            <button type="button" class="btn btn-success" @click="consultaCliente">
               Consultar cliente
             </button>
           </div>
           <div class="col">
-            <button type="submit" class="btn btn-success">Guardar</button>
+            <button type="submit" class="btn btn-success" :disabled="habilita_guardado">Guardar</button>
           </div>
         </div>
       </form>
@@ -132,9 +110,16 @@ import { useConfig } from "../composables/token"; // Asegúrate de ajustar la ru
 import SearchList from "./SearchList.vue";
 import { Alerts } from "../composables/Alerts";
 import { useRoute } from "vue-router";
+import { defineProps } from 'vue';
+
+
+const props = defineProps({
+  userlogued: { type: Object, default: () => { } }
+});
 
 const { URL_API, configHeader } = useConfig();
 const { showAlert } = Alerts();
+let usuario_id = ref("");
 let nit = ref("");
 let razon_social = ref("");
 let usuario = ref("");
@@ -148,31 +133,34 @@ let consulta_rol = ref("");
 let consulta_estado = ref("");
 let rol_id = ref("");
 let estado_id = ref("");
+let nombre_contacto = ref("");
+let telefono_contacto = ref("");
+let cargo_contacto = ref("");
+let consulta_nit = ref("");
+let cliente_id = ref("");
+let habilita_guardado = ref(true);
+const route = useRoute();
 
 getRoles();
 getEstados();
 onMounted(() => {
-  const route = useRoute();
   let url;
   if (route.params.id != "") {
-    url = URL_API.value + "api/v1/cliente/" + route.params.id;
-  } else {
-    url = URL_API.value + "api/v1/userloguedcliente";
+    url = URL_API.value + "api/v1/userbyid/" + route.params.id;
+    axios.get(url, configHeader()).then(function (result) {
+      llenarFormulario(result.data);
+    });
   }
-  axios.get(url, configHeader()).then(function (result) {
-    llenarFormulario(result.data);
-  });
 });
 
 function save() {
   let self = this;
   let formulario = crearObjetoFormulario();
-  let accion = "registercliente";
+  let accion = "usuariocliente";
 
-  if (self.$route && self.$route.params && self.$route.params.id != "") {
+  if (route.params.id != "") {
     formulario.estado_id = estado_id.value;
-    formulario.user_id = self.$route.params.id;
-    accion = "cliente";
+    accion = "usuariocliente/" + route.params.id;
   }
   axios
     .post(self.URL_API + "api/v1/" + accion, formulario, configHeader())
@@ -183,11 +171,17 @@ function save() {
 
 function crearObjetoFormulario() {
   let formulario = {
+    usuario_id: usuario_id.value,
     nombres: razon_social.value,
-    email: nit.value,
-    password: nit.value,
+    email: correo.value,
+    password: contrasena.value,
     rol_id: rol_id.value,
-    documento_identidad: nit.value,
+    estado_id: estado_id.value,
+    nit: nit.value,
+    nombre_contacto: nombre_contacto.value,
+    telefono_contacto: telefono_contacto.value,
+    cargo_contacto: cargo_contacto.value,
+    cliente_id : cliente_id.value
   };
   return formulario;
 }
@@ -197,11 +191,15 @@ function llenarFormulario(formulario) {
   usuario.value = formulario.email;
   numero_documento.value = formulario.nit;
   telefono.value = formulario.telefono;
-  correo.value = formulario.correo;
+  correo.value = formulario.email;
   consulta_rol.value = formulario.rol;
   consulta_estado.value = formulario.estado;
-  estado_id.value = formulario.id_estado;
-  rol_id.value = formulario.id_rol;
+  estado_id.value = formulario.estado_id;
+  rol_id.value = formulario.rol_id;
+  nombre_contacto.value = formulario.nombre_contacto
+  telefono_contacto.value = formulario.telefono_contacto
+  cargo_contacto.value = formulario.cargo_contacto
+  habilita_guardado = false
 }
 
 function getRoles(item = null) {
@@ -226,17 +224,31 @@ function getEstados(item = null) {
 }
 
 function consultaCliente() {
-  // let self = this
   axios
     .get(
-      URL_API.value + "api/v1/formularioclientenit/" + nit.value,
+      URL_API.value + "api/v1/formularioclientenit/" + consulta_nit.value,
       configHeader()
     )
     .then(function (result) {
-      razon_social.value = result.data.razon_social;
-      usuario.value = result.data.nit;
-      consulta_rol.value = "Cliente";
-      consulta_estado.value = "Activo";
+      if(Object.keys(result.data).length <= 0){
+        showAlert('No se encontraron registros de cliente.', 'error');
+        usuario_id.value ='';
+        razon_social.value = '';
+        nit.value = '';
+        usuario.value ='';
+        consulta_rol.value = '';
+        consulta_estado.value = '';
+        habilita_guardado.value = true
+      }else{
+        usuario_id.value = result.data.id;
+        razon_social.value = result.data.razon_social;
+        nit.value = result.data.nit;
+        usuario.value = result.data.nit;
+        consulta_rol.value = "Cliente";
+        consulta_estado.value = "Activo";
+        habilita_guardado.value = false
+        cliente_id.value = result.data.id
+      }
     });
 }
 
