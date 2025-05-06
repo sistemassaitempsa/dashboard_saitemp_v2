@@ -69,13 +69,13 @@ let tabla = ref([
   {
     nombre: "Fecha creación",
     orden: "DESC",
-    tipo: "texto",
+    tipo: "fecha",
     calculado: "false",
   },
   {
     nombre: "Fecha correción",
     orden: "DESC",
-    tipo: "texto",
+    tipo: "fecha",
     calculado: "false",
   },
   {

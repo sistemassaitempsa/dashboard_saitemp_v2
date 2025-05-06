@@ -224,7 +224,7 @@
           </button>
         </div>
         <div
-          v-if="ruta == '/navbar/gestion-ingresosl'"
+          v-if="ruta == '/navbar/gestion-ingresosl' || ruta == '/navbar/ordenserviciosnc'"
           class="col-xs-3 col-md-3"
         >
           <button id="exportar" type="button" class="btn btn-success btn-sm">

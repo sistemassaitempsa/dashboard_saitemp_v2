@@ -423,8 +423,8 @@ const routes = [
         component: CargosCliente,
       },
       {
-        path: "exportasnc",
-        name: "exportasnc",
+        path: "ordenserviciosnc",
+        name: "ordenserviciosnc",
         component: ExportaSNCSeiya,
       },
       {
