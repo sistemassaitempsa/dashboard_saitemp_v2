@@ -2813,22 +2813,7 @@
                 aria-describedby="emailHelp"
                 v-model="item.numero_cuenta"
                 @input="item.numero_cuenta = validarNumero(item.numero_cuenta)"
-                :required="
-                  item.numero_cuenta == '' &&
-                  item.banco_id != '' &&
-                  item.banco_id.trim() != '0'
-                "
               />
-              <span
-                id="validate"
-                v-if="
-                  item.numero_cuenta == '' &&
-                  referencias_bancarias[index].banco_id != '' &&
-                  referencias_bancarias[index].banco_id.trim() != '0'
-                "
-                class="error"
-                >{{ validaCamposDinamicos(index) }}</span
-              ><span v-else>{{ validaCamposDinamicos(index, 1) }}</span>
             </div>
             <div class="col">
               <SearchList
@@ -2869,16 +2854,6 @@
                 v-model="item.sucursal"
                 :required="campo_dinamico[index]"
               />
-              <span
-                id="validate"
-                v-if="
-                  item.sucursal == '' &&
-                  referencias_bancarias[index].banco_id != '' &&
-                  referencias_bancarias[index].banco_id.trim() != '0'
-                "
-                class="error"
-                >{{ validaCamposDinamicos(index) }}</span
-              ><span v-else>{{ validaCamposDinamicos(index, 1) }}</span>
             </div>
             <div class="col mb-3">
               <label for="exampleInputEmail1" class="form-label"
@@ -2894,16 +2869,6 @@
                 @input="item.telefono = validarNumero(item.telefono)"
                 :required="campo_dinamico[index]"
               />
-              <span
-                id="validate"
-                v-if="
-                  item.telefono == '' &&
-                  referencias_bancarias[index].banco_id != '' &&
-                  referencias_bancarias[index].banco_id.trim() != '0'
-                "
-                class="error"
-                >{{ validaCamposDinamicos(index) }}</span
-              ><span v-else>{{ validaCamposDinamicos(index, 1) }}</span>
             </div>
             <div class="col mb-3">
               <label for="exampleInputEmail1" class="form-label"
@@ -2921,16 +2886,6 @@
                 v-model="item.contacto"
                 :required="campo_dinamico[index]"
               />
-              <span
-                id="validate"
-                v-if="
-                  item.contacto == '' &&
-                  referencias_bancarias[index].banco_id != '' &&
-                  referencias_bancarias[index].banco_id.trim() != '0'
-                "
-                class="error"
-                >{{ validaCamposDinamicos(index) }}</span
-              ><span v-else>{{ validaCamposDinamicos(index, 1) }}</span>
             </div>
           </div>
         </div>
