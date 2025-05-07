@@ -20,42 +20,28 @@
             multiple
             class="input-files"
           />
-          <input
-            v-if="routePath == '/navbar/lovePDFSeiyaJPG'"
-            type="file"
-            @change="handleImageUpload"
-            accept="image/*"
-            multiple
-            class="input-files"
-          />
-        </div>
-        <div
-          class="optionsContainerOrientation"
-          v-if="routePath == '/navbar/lovePDFSeiyaJPG'"
-        >
-          <div
-            @click="orientationPage = 'horizontal'"
-            class="orientation_option"
-            :class="orientationPage == 'horizontal' ? 'active' : null"
-          >
-            <div class="horizontal">
-              <i class="bi bi-aspect-ratio"></i>
-            </div>
-            <label for="">Horizontal</label>
-          </div>
-          <div
-            @click="orientationPage = 'vertical'"
-            class="orientation_option"
-            :class="orientationPage == 'vertical' ? 'active' : null"
-          >
-            <div class="vertical">
-              <i class="bi bi-aspect-ratio"></i>
-            </div>
-
-            <label for="">Vertical</label>
-          </div>
         </div>
         <div class="files-container">
+          <div
+            class="legend_drop_container files"
+            v-if="multipleFiles.length == 0"
+          >
+            <svg
+              v-if="routePath == '/navbar/lovePDFSeiya'"
+              xmlns="http://www.w3.org/2000/svg"
+              width="32"
+              height="32"
+              fill="currentColor"
+              class="bi bi-filetype-pdf"
+              viewBox="0 0 16 16"
+            >
+              <path
+                fill-rule="evenodd"
+                d="M14 4.5V14a2 2 0 0 1-2 2h-1v-1h1a1 1 0 0 0 1-1V4.5h-2A1.5 1.5 0 0 1 9.5 3V1H4a1 1 0 0 0-1 1v9H2V2a2 2 0 0 1 2-2h5.5zM1.6 11.85H0v3.999h.791v-1.342h.803q.43 0 .732-.173.305-.175.463-.474a1.4 1.4 0 0 0 .161-.677q0-.375-.158-.677a1.2 1.2 0 0 0-.46-.477q-.3-.18-.732-.179m.545 1.333a.8.8 0 0 1-.085.38.57.57 0 0 1-.238.241.8.8 0 0 1-.375.082H.788V12.48h.66q.327 0 .512.181.185.183.185.522m1.217-1.333v3.999h1.46q.602 0 .998-.237a1.45 1.45 0 0 0 .595-.689q.196-.45.196-1.084 0-.63-.196-1.075a1.43 1.43 0 0 0-.589-.68q-.396-.234-1.005-.234zm.791.645h.563q.371 0 .609.152a.9.9 0 0 1 .354.454q.118.302.118.753a2.3 2.3 0 0 1-.068.592 1.1 1.1 0 0 1-.196.422.8.8 0 0 1-.334.252 1.3 1.3 0 0 1-.483.082h-.563zm3.743 1.763v1.591h-.79V11.85h2.548v.653H7.896v1.117h1.606v.638z"
+              />
+            </svg>
+            <label>Ningún archivo seleccionado</label>
+          </div>
           <!--  -->
           <draggable
             v-model="multipleFiles"
@@ -88,16 +74,38 @@
           <button v-if="routePath == '/navbar/lovePDFSeiya'" @click="saveOrder">
             Guardar nuevo orden
           </button>
-          <button
-            v-if="routePath == '/navbar/lovePDFSeiyaJPG'"
-            @click="downloadImagesAsPdf"
-          >
-            Guardar nuevo orden
-          </button>
         </div>
       </div>
       <div class="pages-container">
         <div v-if="loading" class="loading">Cargando PDF...</div>
+        <div class="input_drop_container" v-if="multipleFiles.length == 0">
+          <div class="legend_drop_container">
+            <svg
+              v-if="routePath == '/navbar/lovePDFSeiya'"
+              xmlns="http://www.w3.org/2000/svg"
+              width="32"
+              height="32"
+              fill="currentColor"
+              class="bi bi-filetype-pdf"
+              viewBox="0 0 16 16"
+            >
+              <path
+                fill-rule="evenodd"
+                d="M14 4.5V14a2 2 0 0 1-2 2h-1v-1h1a1 1 0 0 0 1-1V4.5h-2A1.5 1.5 0 0 1 9.5 3V1H4a1 1 0 0 0-1 1v9H2V2a2 2 0 0 1 2-2h5.5zM1.6 11.85H0v3.999h.791v-1.342h.803q.43 0 .732-.173.305-.175.463-.474a1.4 1.4 0 0 0 .161-.677q0-.375-.158-.677a1.2 1.2 0 0 0-.46-.477q-.3-.18-.732-.179m.545 1.333a.8.8 0 0 1-.085.38.57.57 0 0 1-.238.241.8.8 0 0 1-.375.082H.788V12.48h.66q.327 0 .512.181.185.183.185.522m1.217-1.333v3.999h1.46q.602 0 .998-.237a1.45 1.45 0 0 0 .595-.689q.196-.45.196-1.084 0-.63-.196-1.075a1.43 1.43 0 0 0-.589-.68q-.396-.234-1.005-.234zm.791.645h.563q.371 0 .609.152a.9.9 0 0 1 .354.454q.118.302.118.753a2.3 2.3 0 0 1-.068.592 1.1 1.1 0 0 1-.196.422.8.8 0 0 1-.334.252 1.3 1.3 0 0 1-.483.082h-.563zm3.743 1.763v1.591h-.79V11.85h2.548v.653H7.896v1.117h1.606v.638z"
+              />
+            </svg>
+
+            <label>Seleccione o arrastre los archivos a editar</label>
+          </div>
+          <input
+            v-if="routePath == '/navbar/lovePDFSeiya'"
+            type="file"
+            @change="handleFileUpload"
+            accept="application/pdf"
+            multiple
+            class="input_files_drop"
+          />
+        </div>
         <draggable
           v-model="pages"
           item-key="index"
@@ -155,59 +163,6 @@ const files = ref([]);
 const multipleFiles = ref([]);
 const numberPagesByFiles = ref([]);
 const routePath = route.path;
-const thumbnails = ref([]);
-const orientationPage = ref("horizontal");
-
-const downloadImagesAsPdf = async () => {
-  if (!pages.value?.length) return;
-
-  const pdfDoc = await PDFDocument.create();
-  const A4_PORTRAIT = [595.28, 841.89];
-  const A4_LANDSCAPE = [841.89, 595.28];
-
-  for (let i = 0; i < pages.value.length; i++) {
-    const pageInfo = pages.value[i];
-    const fileIndex = pageInfo.documentFileIndex;
-    const file = multipleFiles.value[fileIndex];
-    if (!file) continue;
-
-    const bytes = await file.arrayBuffer();
-    let image;
-    if (file.type.startsWith("image/jpeg")) {
-      image = await pdfDoc.embedJpg(bytes);
-    } else if (file.type.startsWith("image/png")) {
-      image = await pdfDoc.embedPng(bytes);
-    } else {
-      console.warn(`Tipo no soportado: ${file.type}`);
-      continue;
-    }
-    const { width: w0, height: h0 } = image.size();
-    const pageSize =
-      orientationPage.value === "horizontal" ? A4_LANDSCAPE : A4_PORTRAIT;
-    const [PW, PH] = pageSize;
-    const scale = Math.min(PW / w0, PH / h0);
-    const w = w0 * scale;
-    const h = h0 * scale;
-    const x = (PW - w) / 2;
-    const y = (PH - h) / 2;
-    const page = pdfDoc.addPage(pageSize);
-    page.drawImage(image, { x, y, width: w, height: h });
-
-    const rot = pageInfo.rotate || 0;
-    if (rot !== 0) {
-      page.setRotation(degrees(rot));
-    }
-  }
-
-  const pdfBytes = await pdfDoc.save();
-  const blob = new Blob([pdfBytes], { type: "application/pdf" });
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement("a");
-  a.href = url;
-  a.download = `imagenes_ordenadas_${Date.now()}.pdf`;
-  a.click();
-  URL.revokeObjectURL(url);
-};
 
 const deletePageHandle = (index) => {
   const fileIndex = pages.value[index].documentFileIndex;
@@ -231,61 +186,28 @@ const reOrderFilesHandle = async () => {
   const thumbnails = [];
   numberPagesByFiles.value = [];
   for (let j = 1; j <= multipleFiles.value.length; j++) {
-    if (routePath == "/navbar/lovePDFSeiya") {
-      const arrayBuffer = await multipleFiles.value[j - 1].arrayBuffer();
-      const pdf = await pdfjs.getDocument(arrayBuffer).promise;
-      originalPdf.value = arrayBuffer;
-      numberPagesByFiles.value.push(pdf.numPages);
-      for (let i = 1; i <= pdf.numPages; i++) {
-        pageControl++;
-        const page = await pdf.getPage(i);
-        const viewport = page.getViewport({ scale: 0.2 });
-        const canvas = document.createElement("canvas");
-        const context = canvas.getContext("2d");
-        canvas.height = viewport.height;
-        canvas.width = viewport.width;
-        await page.render({
-          canvasContext: context,
-          viewport: viewport,
-        }).promise;
-        thumbnails.push({
-          thumbnail: canvas.toDataURL(),
-          pageNumber: pageControl,
-          rotate: 0,
-          documentFileIndex: j - 1,
-          viewport: viewport,
-        });
-      }
-    } else if (routePath == "/navbar/lovePDFSeiyaJPG") {
-      const file = multipleFiles.value[j - 1];
-      numberPagesByFiles.value.push(1);
-      if (!file.type.startsWith("image/")) continue;
-
-      const imageUrl = URL.createObjectURL(file);
-      const img = new Image();
-      img.src = imageUrl;
-
-      await new Promise((resolve) => {
-        img.onload = () => {
-          const canvas = document.createElement("canvas");
-          const context = canvas.getContext("2d");
-
-          const scale = 0.5;
-          canvas.width = img.width * scale;
-          canvas.height = img.height * scale;
-
-          context?.drawImage(img, 0, 0, canvas.width, canvas.height);
-
-          thumbnails.push({
-            thumbnail: canvas.toDataURL(),
-            pageNumber: thumbnails.length + 1,
-            rotate: 0,
-            documentFileIndex: j - 1,
-          });
-
-          URL.revokeObjectURL(imageUrl);
-          resolve(true);
-        };
+    const arrayBuffer = await multipleFiles.value[j - 1].arrayBuffer();
+    const pdf = await pdfjs.getDocument(arrayBuffer).promise;
+    originalPdf.value = arrayBuffer;
+    numberPagesByFiles.value.push(pdf.numPages);
+    for (let i = 1; i <= pdf.numPages; i++) {
+      pageControl++;
+      const page = await pdf.getPage(i);
+      const viewport = page.getViewport({ scale: 0.2 });
+      const canvas = document.createElement("canvas");
+      const context = canvas.getContext("2d");
+      canvas.height = viewport.height;
+      canvas.width = viewport.width;
+      await page.render({
+        canvasContext: context,
+        viewport: viewport,
+      }).promise;
+      thumbnails.push({
+        thumbnail: canvas.toDataURL(),
+        pageNumber: pageControl,
+        rotate: 0,
+        documentFileIndex: j - 1,
+        viewport: viewport,
       });
     }
   }
@@ -364,59 +286,6 @@ const handleFileUpload = async (event) => {
     pages.value = thumbnails;
   } catch (error) {
     console.error("Error al procesar PDF:", error);
-  } finally {
-    loading.value = false;
-  }
-};
-
-const handleImageUpload = async (event) => {
-  const input = event.target;
-  if (!input.files || input.files.length === 0) return;
-  pages.value = [];
-  thumbnails.value = [];
-  loading.value = true;
-  numberPagesByFiles.value = [];
-  files.value = event.target.files;
-  try {
-    for (let j = 1; j <= files.value.length; j++) {
-      const file = files.value[j - 1];
-      multipleFiles.value.push(file);
-    }
-    for (let i = 0; i < multipleFiles.value.length; i++) {
-      const file = multipleFiles.value[i];
-      numberPagesByFiles.value.push(1);
-      if (!file.type.startsWith("image/")) continue;
-
-      const imageUrl = URL.createObjectURL(file);
-      const img = new Image();
-      img.src = imageUrl;
-
-      await new Promise((resolve) => {
-        img.onload = () => {
-          const canvas = document.createElement("canvas");
-          const context = canvas.getContext("2d");
-
-          const scale = 0.5;
-          canvas.width = img.width * scale;
-          canvas.height = img.height * scale;
-
-          context?.drawImage(img, 0, 0, canvas.width, canvas.height);
-
-          thumbnails.value.push({
-            thumbnail: canvas.toDataURL(),
-            pageNumber: thumbnails.value.length + 1,
-            rotate: 0,
-            documentFileIndex: i,
-          });
-
-          URL.revokeObjectURL(imageUrl);
-          resolve(true);
-        };
-      });
-    }
-    pages.value = thumbnails.value;
-  } catch (error) {
-    console.error("Error al procesar imágenes:", error);
   } finally {
     loading.value = false;
   }
@@ -531,7 +400,7 @@ input[type="file"]::file-selector-button:hover {
   width: 100%;
 }
 .pages-container {
-  margin-top: 20px;
+  /* margin-top: 20px; */
   justify-content: space-evenly;
   flex-wrap: wrap;
   display: flex;
@@ -804,5 +673,50 @@ button:hover {
   color: #2c7081;
   border: #2c7081 solid 1px;
   border-radius: 5px;
+}
+.input_drop_container {
+  width: 95%;
+  height: 100%;
+  border: #d3d3d3 solid 1px;
+  box-shadow: 0 4px 8px rgba(192, 192, 192, 0.5);
+  border-radius: 5px;
+  position: relative;
+  transition: 0.5s;
+  color: rgba(192, 192, 192, 0.637);
+  margin: auto;
+}
+
+.input_drop_container:hover {
+  /*  transform: translateY(-5px); */
+  box-shadow: rgba(50, 50, 93, 0.25) 0px 50px 100px -20px,
+    rgba(0, 0, 0, 0.3) 0px 30px 60px -30px,
+    rgba(10, 37, 64, 0.35) 0px -2px 6px 0px inset;
+  color: #666;
+  /*  height: 98%; */
+}
+.input_files_drop {
+  position: absolute;
+  opacity: 0;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 2;
+  cursor: pointer;
+}
+.legend_drop_container {
+  margin: auto;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 1.5em;
+  flex-direction: column;
+}
+.files {
+  height: 76%;
+  margin-top: 0;
+  color: rgba(192, 192, 192, 0.637);
 }
 </style>

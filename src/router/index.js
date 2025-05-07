@@ -74,6 +74,7 @@ import EstadosSeiya from "@/components/EstadosSeiya.vue";
 import EstadosResponsable from "@/components/EstadosResponsable.vue";
 import EstadosSeiyaSolicitudServicio from "@/components/EstadosSeiyaSolicitudServicio.vue";
 import LovePdf from "@/components/LovePdf.vue";
+import LovePdfToJpg from "@/components/LovePdfToJpg.vue";
 
 // Configuración de rutas
 const routes = [
@@ -126,7 +127,7 @@ const routes = [
       {
         path: "lovePDFSeiyaJPG",
         name: "lovePDFSeiyaJPG",
-        component: LovePdf,
+        component: LovePdfToJpg,
       },
       {
         path: "ingresarUsuario",
