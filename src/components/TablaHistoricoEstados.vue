@@ -1,10 +1,18 @@
 <template>
   <div class="table-container">
     <div class="col-xs-3 col-md-3">
-      <label for="exampleFormControlInput1" class="form-label" style="float: left">Cantidad de registros a
-        listar</label>
-      <select class="form-select form-select-sm" @change="verificarConsultaFiltro()" v-model="cantidad_registros"
-        aria-label="Default select example">
+      <label
+        for="exampleFormControlInput1"
+        class="form-label"
+        style="float: left"
+        >Cantidad de registros a listar</label
+      >
+      <select
+        class="form-select form-select-sm"
+        @change="verificarConsultaFiltro()"
+        v-model="cantidad_registros"
+        aria-label="Default select example"
+      >
         <option>10</option>
         <option v-if="total_registros > 10">20</option>
         <option v-if="total_registros > 50">50</option>
@@ -24,23 +32,41 @@
         </tr>
       </thead>
       <tbody>
-        <tr v-for="(dato, index) in datosformateados" :key="index" :class="{ 'bg-light-gray': index % 2 === 1 }">
+        <tr
+          v-for="(dato, index) in datosformateados"
+          :key="index"
+          :class="{ 'bg-light-gray': index % 2 === 1 }"
+        >
           <td>
             {{ index + 1 }}
           </td>
-          <td v-for="(valor, key) in dato" :key="key" :class="{ 'text-danger': key === 'oportuno' && valor === 'No' }">
-            <RouterLink v-if="key == 'radicado'" :to="`${linkRegistro}${columnasocultas[index].id}`"
-              class="link-offset-2 link-underline link-underline-opacity-0">
+          <td
+            v-for="(valor, key) in dato"
+            :key="key"
+            :class="{ 'text-danger': key === 'oportuno' && valor === 'No' }"
+          >
+            <RouterLink
+              v-if="key == 'radicado'"
+              :to="`${linkRegistro}${columnasocultas[index].id}`"
+              class="link-offset-2 link-underline link-underline-opacity-0"
+            >
               {{ valor }}
             </RouterLink>
             <label for="" v-else>
               {{ valor }}
             </label>
           </td>
-          <td>
-            <div style="display: flex; gap:1em; align-content: center;">
-              <button type="button" class="btn btn-success" v-for="item in acciones" :key="item"
-                @click="accion(item, columnasocultas[index].id)">{{ item.nombre }}</button>
+          <td v-if="mostrar_acciones">
+            <div style="display: flex; gap: 1em; align-content: center">
+              <button
+                type="button"
+                class="btn btn-success"
+                v-for="item in acciones"
+                :key="item"
+                @click="accion(item, columnasocultas[index].id)"
+              >
+                {{ item.nombre }}
+              </button>
             </div>
           </td>
         </tr>
@@ -55,7 +81,11 @@ export default {
   props: {
     datosformateados: {
       type: Array,
-      required: true
+      required: true,
+    },
+    mostrar_acciones: {
+      type: Boolean,
+      required: true,
     },
     total_registros: {
       type: Number,
@@ -83,16 +113,14 @@ export default {
       cantidad_registros: 10,
     };
   },
-  computed: {
-
-  },
+  computed: {},
   methods: {
     verificarConsultaFiltro() {
       this.$emit("cantidadRegistros", this.cantidad_registros);
     },
     accion(item, id) {
       this.$router.push(item.url + id);
-    }
+    },
   },
 };
 </script>

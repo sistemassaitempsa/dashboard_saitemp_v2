@@ -3,7 +3,7 @@
     <div class="pdfs-container">
       <div class="view-files">
         <div class="title-container">
-          <h3>"Ordenar PDF"</h3>
+          <h3>Ordenar PDF</h3>
         </div>
         <div class="input-container">
           <input
@@ -134,6 +134,7 @@ import { PDFDocument, degrees } from "pdf-lib";
 import draggable from "vuedraggable";
 import * as pdfjs from "pdfjs-dist/build/pdf";
 import pdfjsWorker from "pdfjs-dist/build/pdf.worker.entry";
+
 import { useAlerts } from "@/composables/useAlerts";
 
 pdfjs.GlobalWorkerOptions.workerSrc = pdfjsWorker;

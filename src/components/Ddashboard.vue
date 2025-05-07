@@ -105,6 +105,7 @@
               :total_registros="total_registros_pie"
               :columnas="columnas"
               :acciones="acciones"
+              :mostrar_acciones="true"
               :linkRegistro="'/navbar/debida-diligencia/formulario-clientes/'"
               @cantidadRegistros="cantidadRegistrosLista"
             ></TablaHistoricoEstados>
