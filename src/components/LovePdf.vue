@@ -3,7 +3,7 @@
     <div class="pdfs-container">
       <div class="view-files">
         <div class="title-container">
-          <h3>"Ordenar PDF"</h3>
+          <h3>Ordenar PDF</h3>
         </div>
         <div class="input-container">
           <input
