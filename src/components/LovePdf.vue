@@ -3,17 +3,10 @@
     <div class="pdfs-container">
       <div class="view-files">
         <div class="title-container">
-          <h3>
-            {{
-              routePath == "/navbar/lovePDFSeiya"
-                ? "Ordenar PDF"
-                : "Imágenes a PDF"
-            }}
-          </h3>
+          <h3>"Ordenar PDF"</h3>
         </div>
         <div class="input-container">
           <input
-            v-if="routePath == '/navbar/lovePDFSeiya'"
             type="file"
             @change="handleFileUpload"
             accept="application/pdf"
@@ -27,7 +20,6 @@
             v-if="multipleFiles.length == 0"
           >
             <svg
-              v-if="routePath == '/navbar/lovePDFSeiya'"
               xmlns="http://www.w3.org/2000/svg"
               width="32"
               height="32"
@@ -71,9 +63,7 @@
           </draggable>
         </div>
         <div v-if="pages.length" class="controls">
-          <button v-if="routePath == '/navbar/lovePDFSeiya'" @click="saveOrder">
-            Guardar nuevo orden
-          </button>
+          <button @click="saveOrder">Guardar nuevo orden</button>
         </div>
       </div>
       <div class="pages-container">
@@ -81,7 +71,6 @@
         <div class="input_drop_container" v-if="multipleFiles.length == 0">
           <div class="legend_drop_container">
             <svg
-              v-if="routePath == '/navbar/lovePDFSeiya'"
               xmlns="http://www.w3.org/2000/svg"
               width="32"
               height="32"
@@ -98,7 +87,6 @@
             <label>Seleccione o arrastre los archivos a editar</label>
           </div>
           <input
-            v-if="routePath == '/navbar/lovePDFSeiya'"
             type="file"
             @change="handleFileUpload"
             accept="application/pdf"
@@ -146,10 +134,8 @@ import { PDFDocument, degrees } from "pdf-lib";
 import draggable from "vuedraggable";
 import * as pdfjs from "pdfjs-dist/build/pdf";
 import pdfjsWorker from "pdfjs-dist/build/pdf.worker.entry";
-import { useRoute } from "vue-router";
-import { useAlerts } from "@/composables/useAlerts";
 
-const route = useRoute();
+import { useAlerts } from "@/composables/useAlerts";
 
 pdfjs.GlobalWorkerOptions.workerSrc = pdfjsWorker;
 
@@ -162,7 +148,6 @@ const originalPdf = ref(null);
 const files = ref([]);
 const multipleFiles = ref([]);
 const numberPagesByFiles = ref([]);
-const routePath = route.path;
 
 const deletePageHandle = (index) => {
   const fileIndex = pages.value[index].documentFileIndex;
