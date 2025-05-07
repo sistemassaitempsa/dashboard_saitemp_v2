@@ -7,7 +7,6 @@
         </div>
         <div class="input-container">
           <input
-            v-if="routePath == '/navbar/lovePDFSeiyaJPG'"
             type="file"
             @change="handleImageUpload"
             accept="image/*"
@@ -15,10 +14,7 @@
             class="input-files"
           />
         </div>
-        <div
-          class="optionsContainerOrientation"
-          v-if="routePath == '/navbar/lovePDFSeiyaJPG'"
-        >
+        <div class="optionsContainerOrientation">
           <div
             @click="orientationPage = 'horizontal'"
             class="orientation_option"
@@ -47,7 +43,6 @@
             v-if="multipleFiles.length == 0"
           >
             <svg
-              v-if="routePath == '/navbar/lovePDFSeiyaJPG'"
               xmlns="http://www.w3.org/2000/svg"
               width="32"
               height="32"
@@ -91,12 +86,7 @@
           </draggable>
         </div>
         <div v-if="pages.length" class="controls">
-          <button
-            v-if="routePath == '/navbar/lovePDFSeiyaJPG'"
-            @click="downloadImagesAsPdf"
-          >
-            Guardar nuevo orden
-          </button>
+          <button @click="downloadImagesAsPdf">Guardar nuevo orden</button>
         </div>
       </div>
       <div class="pages-container">
@@ -104,7 +94,6 @@
         <div class="input_drop_container" v-if="multipleFiles.length == 0">
           <div class="legend_drop_container">
             <svg
-              v-if="routePath == '/navbar/lovePDFSeiyaJPG'"
               xmlns="http://www.w3.org/2000/svg"
               width="32"
               height="32"
@@ -120,7 +109,6 @@
             <label>Seleccione o arrastre los archivos a editar</label>
           </div>
           <input
-            v-if="routePath == '/navbar/lovePDFSeiyaJPG'"
             type="file"
             @change="handleImageUpload"
             accept="image/*"
@@ -168,9 +156,6 @@ import { PDFDocument, degrees } from "pdf-lib";
 import draggable from "vuedraggable";
 import * as pdfjs from "pdfjs-dist/build/pdf";
 import pdfjsWorker from "pdfjs-dist/build/pdf.worker.entry";
-import { useRoute } from "vue-router";
-
-const route = useRoute();
 
 pdfjs.GlobalWorkerOptions.workerSrc = pdfjsWorker;
 
@@ -181,7 +166,7 @@ const draggingFiles = ref(false);
 const files = ref([]);
 const multipleFiles = ref([]);
 const numberPagesByFiles = ref([]);
-const routePath = route.path;
+
 const thumbnails = ref([]);
 const orientationPage = ref("horizontal");
 
