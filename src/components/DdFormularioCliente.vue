@@ -2021,22 +2021,7 @@
                 @input="
                   item.identificacion = validarNumero(item.identificacion)
                 "
-                :required="
-                  item.identificacion == '' &&
-                  item.tipo_identificacion_id.trim() != '' &&
-                  item.tipo_identificacion_id.trim() != '0'
-                "
               />
-              <span
-                id="validate"
-                v-if="
-                  item.identificacion == '' &&
-                  item.tipo_identificacion_id.trim() != '' &&
-                  item.tipo_identificacion_id.trim() != '0'
-                "
-                class="error"
-                >{{ validaCamposDinamicos(index) }}</span
-              ><span v-else>{{ validaCamposDinamicos(index, 1) }}</span>
             </div>
             <div class="col">
               <label for="exampleInputEmail1" class="form-label"
@@ -2050,18 +2035,7 @@
                 @input="item.socio = formatInputUpperCase($event.target.value)"
                 aria-describedby="emailHelp"
                 v-model="item.socio"
-                :required="campo_dinamico[index]"
               />
-              <span
-                id="validate"
-                v-if="
-                  item.socio == '' &&
-                  item.tipo_identificacion_id.trim() != '0' &&
-                  item.tipo_identificacion_id.trim() != ''
-                "
-                class="error"
-                >{{ validaCamposDinamicos(index) }}</span
-              ><span v-else>{{ validaCamposDinamicos(index, 1) }}</span>
             </div>
             <div class="col">
               <label for="exampleInputEmail1" class="form-label"
@@ -2074,18 +2048,7 @@
                 aria-describedby="emailHelp"
                 maxlength="10"
                 v-model="item.participacion"
-                :required="campo_dinamico[index]"
               />
-              <span
-                id="validate"
-                v-if="
-                  item.participacion == '' &&
-                  item.tipo_identificacion_id.trim() != '0' &&
-                  item.tipo_identificacion_id.trim() != ''
-                "
-                class="error"
-                >{{ validaCamposDinamicos(index) }}</span
-              ><span v-else>{{ validaCamposDinamicos(index, 1) }}</span>
             </div>
             <div class="col-1 trash">
               <i
@@ -2124,22 +2087,7 @@
                 @input="item.nombre = formatInputUpperCase($event.target.value)"
                 aria-describedby="emailHelp"
                 v-model="item.nombre"
-                :required="
-                  item.nombre == '' &&
-                  item.tipo_identificacion != '' &&
-                  item.tipo_identificacion.trim() != '0'
-                "
               />
-              <span
-                id="validate"
-                v-if="
-                  item.nombre == '' &&
-                  item.tipo_identificacion != '' &&
-                  item.tipo_identificacion.trim() != '0'
-                "
-                class="error"
-                >{{ validaCamposDinamicos(index) }}</span
-              ><span v-else>{{ validaCamposDinamicos(index, 1) }}</span>
             </div>
             <div class="col">
               <SearchList
@@ -2172,16 +2120,6 @@
                 "
                 :required="campo_dinamico[index]"
               />
-              <span
-                id="validate"
-                v-if="
-                  item.identificacion == '' &&
-                  item.tipo_identificacion != '' &&
-                  item.tipo_identificacion.trim() != '0'
-                "
-                class="error"
-                >{{ validaCamposDinamicos(index) }}</span
-              ><span v-else>{{ validaCamposDinamicos(index, 1) }}</span>
             </div>
             <div class="col mb-3">
               <label for="exampleInputEmail1" class="form-label"
@@ -2196,16 +2134,6 @@
                 @input="item.telefono = validarNumero(item.telefono)"
                 :required="campo_dinamico[index]"
               />
-              <span
-                id="validate"
-                v-if="
-                  item.telefono === '' &&
-                  item.tipo_identificacion != '' &&
-                  item.tipo_identificacion.trim() != '0'
-                "
-                class="error"
-                >{{ validaCamposDinamicos(index) }}</span
-              ><span v-else>{{ validaCamposDinamicos(index, 1) }}</span>
             </div>
             <div class="col-1 trash">
               <i
@@ -2230,16 +2158,6 @@
                 v-model="item.correo"
                 :required="campo_dinamico[index]"
               />
-              <span
-                id="validate"
-                v-if="
-                  item.correo === '' &&
-                  item.tipo_identificacion != '' &&
-                  item.tipo_identificacion.trim() != '0'
-                "
-                class="error"
-                >{{ validaCamposDinamicos(index) }}</span
-              ><span v-else>{{ validaCamposDinamicos(index, 1) }}</span>
             </div>
             <div class="col">
               <SearchList
@@ -2280,16 +2198,6 @@
                 placeholder="Seleccione una opción"
                 :consulta="consulta_municipio_rl[index]"
               />
-              <span
-                id="validate"
-                v-if="
-                  item.municipio_id === '' &&
-                  item.tipo_identificacion != '' &&
-                  item.tipo_identificacion.trim() != '0'
-                "
-                class="error"
-                >{{ mensaje_error }}</span
-              >
             </div>
           </div>
         </div>
@@ -3172,22 +3080,7 @@
               @input="item.nombre = formatInputUpperCase($event.target.value)"
               aria-describedby="emailHelp"
               v-model="item.nombre"
-              :required="
-                item.nombre == '' &&
-                item.tipo_identificacion_id != '' &&
-                item.tipo_identificacion_id.trim() != '0'
-              "
             />
-            <span
-              id="validate"
-              v-if="
-                item.nombre == '' &&
-                personas_expuestas[index].tipo_identificacion_id != '' &&
-                personas_expuestas[index].tipo_identificacion_id.trim() != '0'
-              "
-              class="error"
-              >{{ validaCamposDinamicos(index) }}</span
-            ><span v-else>{{ validaCamposDinamicos(index, 1) }}</span>
           </div>
           <div class="col">
             <SearchList
@@ -3217,16 +3110,6 @@
               @input="item.identificacion = validarNumero(item.identificacion)"
               :required="campo_dinamico[index]"
             />
-            <span
-              id="validate"
-              v-if="
-                item.identificacion == '' &&
-                personas_expuestas[index].tipo_identificacion_id != '' &&
-                personas_expuestas[index].tipo_identificacion_id.trim() != '0'
-              "
-              class="error"
-              >{{ validaCamposDinamicos(index) }}</span
-            ><span v-else>{{ validaCamposDinamicos(index, 1) }}</span>
           </div>
           <div class="col">
             <label for="exampleInputEmail1" class="form-label"
@@ -3244,16 +3127,6 @@
               v-model="item.parentesco"
               :required="campo_dinamico[index]"
             />
-            <span
-              id="validate"
-              v-if="
-                item.parentesco == '' &&
-                personas_expuestas[index].tipo_identificacion_id != '' &&
-                personas_expuestas[index].tipo_identificacion_id.trim() != '0'
-              "
-              class="error"
-              >{{ validaCamposDinamicos(index) }}</span
-            ><span v-else>{{ validaCamposDinamicos(index, 1) }}</span>
           </div>
           <div class="col-1 trash">
             <i
