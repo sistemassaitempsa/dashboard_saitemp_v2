@@ -3490,7 +3490,7 @@
         </div>
       </div>
       <h6 v-if="$route.params.id != ''" class="tituloseccion">
-        Centros de trabajo.
+        Centros de trabajo
       </h6>
       <div id="seccion" v-if="$route.params.id != ''">
         <div class="row">
@@ -3516,6 +3516,7 @@
               :datosformateados="datosformateados()"
               :total_registros="total_registros_pie"
               :columnas="columnas"
+              :mostrar_acciones="false"
             ></TablaHistoricoEstados>
           </div>
         </div>
@@ -6916,7 +6917,7 @@ export default {
       let self = this;
       let config = this.configHeader();
       axios
-        .get(self.URL_API + "api/v1/observacionestado", config)
+        .get(self.URL_API + "api/v1/observacionestadoDD", config)
         .then(function (result) {
           self.observaciones_estado = result.data;
         });
