@@ -45,7 +45,7 @@
               <div class="row p-3">
                 <div class="col">
                   <label class="form-label" style="color: black"
-                    >Otro motivo:
+                    >Descripción:
                   </label>
                   <textarea
                     class="form-control"

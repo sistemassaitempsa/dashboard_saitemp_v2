@@ -73,7 +73,7 @@ let nombre = ref("");
 let descripcion = ref("");
 let id = ref("");
 let accion = ref("");
-let endpoint = ref("estadocandidatoserviciotabla");
+let endpoint = ref("estadocandidatoservicio");
 let actualizar = ref(false);
 let datos = ref([]);
 let tabla = ref([
@@ -117,7 +117,7 @@ function save() {
 }
 function getItems() {
   axios
-    .get(URL_API.value + "api/v1/estadocandidatoserviciotabla", configHeader())
+    .get(URL_API.value + "api/v1/estadocandidatoservicio/10", configHeader())
     .then(function (result) {
       datos.value = result;
       accion.value = "Insertar estado";

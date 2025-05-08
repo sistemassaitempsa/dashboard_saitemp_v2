@@ -74,6 +74,7 @@ import EstadosSeiya from "@/components/EstadosSeiya.vue";
 import EstadosResponsable from "@/components/EstadosResponsable.vue";
 import EstadosSeiyaSolicitudServicio from "@/components/EstadosSeiyaSolicitudServicio.vue";
 import LovePdf from "@/components/LovePdf.vue";
+import CancelaServicioCandidato from "@/components/CancelaServicioCandidato.vue";
 
 // Configuración de rutas
 const routes = [
@@ -457,6 +458,11 @@ const routes = [
         path: "estadosseiyaservicio",
         name: "estadosseiyaservicio",
         component: EstadosSeiyaSolicitudServicio,
+      },
+      {
+        path: "cancelaserviciocandidato",
+        name: "cancelaserviciocandidato",
+        component: CancelaServicioCandidato,
       },
     ],
   },
