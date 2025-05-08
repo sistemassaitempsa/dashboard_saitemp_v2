@@ -7999,7 +7999,7 @@ export default {
       let self = this;
       let config = this.configHeader();
       axios
-        .get(self.URL_API + "api/v1/usersbyrolinterno/5", config)
+        .get(self.URL_API + "api/v1/usersbyrolinternosst", config)
         .then((result) => {
           self.profesionales_sst = result.data;
         });
@@ -8012,7 +8012,7 @@ export default {
       let self = this;
       let config = this.configHeader();
       axios
-        .get(self.URL_API + "api/v1/usersbyrolinterno/8", config)
+        .get(self.URL_API + "api/v1/usersbyrolinternonomina", config)
         .then((result) => {
           self.profesionales_nomina = result.data;
         });
@@ -8025,7 +8025,7 @@ export default {
       let self = this;
       let config = this.configHeader();
       axios
-        .get(self.URL_API + "api/v1/usersbyrolinterno/6", config)
+        .get(self.URL_API + "api/v1/usersbyrolinternocartera", config)
         .then((result) => {
           self.profesionales_cartera = result.data;
         });
