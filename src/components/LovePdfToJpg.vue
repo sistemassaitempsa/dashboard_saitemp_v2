@@ -3,16 +3,39 @@
     <div class="pdfs-container">
       <div class="view-files">
         <div class="title-container">
-          <h3>Ordenar PDF</h3>
+          <h3>Imágenes a PDF</h3>
         </div>
         <div class="input-container">
           <input
             type="file"
-            @change="handleFileUpload"
-            accept="application/pdf"
+            @change="handleImageUpload"
+            accept="image/*"
             multiple
             class="input-files"
           />
+        </div>
+        <div class="optionsContainerOrientation">
+          <div
+            @click="orientationPage = 'horizontal'"
+            class="orientation_option"
+            :class="orientationPage == 'horizontal' ? 'active' : null"
+          >
+            <div class="horizontal">
+              <i class="bi bi-aspect-ratio"></i>
+            </div>
+            <label for="">Horizontal</label>
+          </div>
+          <div
+            @click="orientationPage = 'vertical'"
+            class="orientation_option"
+            :class="orientationPage == 'vertical' ? 'active' : null"
+          >
+            <div class="vertical">
+              <i class="bi bi-aspect-ratio"></i>
+            </div>
+
+            <label for="">Vertical</label>
+          </div>
         </div>
         <div class="files-container">
           <div
@@ -24,12 +47,12 @@
               width="32"
               height="32"
               fill="currentColor"
-              class="bi bi-filetype-pdf"
+              class="bi bi-filetype-jpg"
               viewBox="0 0 16 16"
             >
               <path
                 fill-rule="evenodd"
-                d="M14 4.5V14a2 2 0 0 1-2 2h-1v-1h1a1 1 0 0 0 1-1V4.5h-2A1.5 1.5 0 0 1 9.5 3V1H4a1 1 0 0 0-1 1v9H2V2a2 2 0 0 1 2-2h5.5zM1.6 11.85H0v3.999h.791v-1.342h.803q.43 0 .732-.173.305-.175.463-.474a1.4 1.4 0 0 0 .161-.677q0-.375-.158-.677a1.2 1.2 0 0 0-.46-.477q-.3-.18-.732-.179m.545 1.333a.8.8 0 0 1-.085.38.57.57 0 0 1-.238.241.8.8 0 0 1-.375.082H.788V12.48h.66q.327 0 .512.181.185.183.185.522m1.217-1.333v3.999h1.46q.602 0 .998-.237a1.45 1.45 0 0 0 .595-.689q.196-.45.196-1.084 0-.63-.196-1.075a1.43 1.43 0 0 0-.589-.68q-.396-.234-1.005-.234zm.791.645h.563q.371 0 .609.152a.9.9 0 0 1 .354.454q.118.302.118.753a2.3 2.3 0 0 1-.068.592 1.1 1.1 0 0 1-.196.422.8.8 0 0 1-.334.252 1.3 1.3 0 0 1-.483.082h-.563zm3.743 1.763v1.591h-.79V11.85h2.548v.653H7.896v1.117h1.606v.638z"
+                d="M14 4.5V14a2 2 0 0 1-2 2h-1v-1h1a1 1 0 0 0 1-1V4.5h-2A1.5 1.5 0 0 1 9.5 3V1H4a1 1 0 0 0-1 1v9H2V2a2 2 0 0 1 2-2h5.5zm-4.34 8.132q.114.23.14.492h-.776a.8.8 0 0 0-.097-.249.7.7 0 0 0-.17-.19.7.7 0 0 0-.237-.126 1 1 0 0 0-.299-.044q-.428 0-.665.302-.234.301-.234.85v.498q0 .351.097.615a.9.9 0 0 0 .304.413.87.87 0 0 0 .519.146 1 1 0 0 0 .457-.096.67.67 0 0 0 .272-.264q.09-.164.091-.363v-.255H8.24v-.59h1.576v.798q0 .29-.097.55a1.3 1.3 0 0 1-.293.458 1.4 1.4 0 0 1-.495.313q-.296.111-.697.111a2 2 0 0 1-.753-.132 1.45 1.45 0 0 1-.533-.377 1.6 1.6 0 0 1-.32-.58 2.5 2.5 0 0 1-.105-.745v-.506q0-.543.2-.95.201-.406.582-.633.384-.228.926-.228.357 0 .636.1.28.1.48.275t.314.407ZM0 14.786q0 .246.082.465.083.22.243.39.165.17.407.267.246.093.569.093.63 0 .984-.345.357-.346.358-1.005v-2.725h-.791v2.745q0 .303-.138.466t-.422.164a.5.5 0 0 1-.454-.246.6.6 0 0 1-.073-.27H0Zm4.92-2.86H3.322v4h.791v-1.343h.803q.43 0 .732-.172.305-.177.463-.475.162-.302.161-.677 0-.374-.158-.677a1.2 1.2 0 0 0-.46-.477q-.3-.18-.732-.179Zm.546 1.333a.8.8 0 0 1-.085.381.57.57 0 0 1-.238.24.8.8 0 0 1-.375.082H4.11v-1.406h.66q.327 0 .512.182.185.181.185.521Z"
               />
             </svg>
             <label>Ningún archivo seleccionado</label>
@@ -63,7 +86,7 @@
           </draggable>
         </div>
         <div v-if="pages.length" class="controls">
-          <button @click="saveOrder">Guardar nuevo orden</button>
+          <button @click="downloadImagesAsPdf">Guardar nuevo orden</button>
         </div>
       </div>
       <div class="pages-container">
@@ -75,21 +98,20 @@
               width="32"
               height="32"
               fill="currentColor"
-              class="bi bi-filetype-pdf"
+              class="bi bi-filetype-jpg"
               viewBox="0 0 16 16"
             >
               <path
                 fill-rule="evenodd"
-                d="M14 4.5V14a2 2 0 0 1-2 2h-1v-1h1a1 1 0 0 0 1-1V4.5h-2A1.5 1.5 0 0 1 9.5 3V1H4a1 1 0 0 0-1 1v9H2V2a2 2 0 0 1 2-2h5.5zM1.6 11.85H0v3.999h.791v-1.342h.803q.43 0 .732-.173.305-.175.463-.474a1.4 1.4 0 0 0 .161-.677q0-.375-.158-.677a1.2 1.2 0 0 0-.46-.477q-.3-.18-.732-.179m.545 1.333a.8.8 0 0 1-.085.38.57.57 0 0 1-.238.241.8.8 0 0 1-.375.082H.788V12.48h.66q.327 0 .512.181.185.183.185.522m1.217-1.333v3.999h1.46q.602 0 .998-.237a1.45 1.45 0 0 0 .595-.689q.196-.45.196-1.084 0-.63-.196-1.075a1.43 1.43 0 0 0-.589-.68q-.396-.234-1.005-.234zm.791.645h.563q.371 0 .609.152a.9.9 0 0 1 .354.454q.118.302.118.753a2.3 2.3 0 0 1-.068.592 1.1 1.1 0 0 1-.196.422.8.8 0 0 1-.334.252 1.3 1.3 0 0 1-.483.082h-.563zm3.743 1.763v1.591h-.79V11.85h2.548v.653H7.896v1.117h1.606v.638z"
+                d="M14 4.5V14a2 2 0 0 1-2 2h-1v-1h1a1 1 0 0 0 1-1V4.5h-2A1.5 1.5 0 0 1 9.5 3V1H4a1 1 0 0 0-1 1v9H2V2a2 2 0 0 1 2-2h5.5zm-4.34 8.132q.114.23.14.492h-.776a.8.8 0 0 0-.097-.249.7.7 0 0 0-.17-.19.7.7 0 0 0-.237-.126 1 1 0 0 0-.299-.044q-.428 0-.665.302-.234.301-.234.85v.498q0 .351.097.615a.9.9 0 0 0 .304.413.87.87 0 0 0 .519.146 1 1 0 0 0 .457-.096.67.67 0 0 0 .272-.264q.09-.164.091-.363v-.255H8.24v-.59h1.576v.798q0 .29-.097.55a1.3 1.3 0 0 1-.293.458 1.4 1.4 0 0 1-.495.313q-.296.111-.697.111a2 2 0 0 1-.753-.132 1.45 1.45 0 0 1-.533-.377 1.6 1.6 0 0 1-.32-.58 2.5 2.5 0 0 1-.105-.745v-.506q0-.543.2-.95.201-.406.582-.633.384-.228.926-.228.357 0 .636.1.28.1.48.275t.314.407ZM0 14.786q0 .246.082.465.083.22.243.39.165.17.407.267.246.093.569.093.63 0 .984-.345.357-.346.358-1.005v-2.725h-.791v2.745q0 .303-.138.466t-.422.164a.5.5 0 0 1-.454-.246.6.6 0 0 1-.073-.27H0Zm4.92-2.86H3.322v4h.791v-1.343h.803q.43 0 .732-.172.305-.177.463-.475.162-.302.161-.677 0-.374-.158-.677a1.2 1.2 0 0 0-.46-.477q-.3-.18-.732-.179Zm.546 1.333a.8.8 0 0 1-.085.381.57.57 0 0 1-.238.24.8.8 0 0 1-.375.082H4.11v-1.406h.66q.327 0 .512.182.185.181.185.521Z"
               />
             </svg>
-
             <label>Seleccione o arrastre los archivos a editar</label>
           </div>
           <input
             type="file"
-            @change="handleFileUpload"
-            accept="application/pdf"
+            @change="handleImageUpload"
+            accept="image/*"
             multiple
             class="input_files_drop"
           />
@@ -135,19 +157,69 @@ import draggable from "vuedraggable";
 import * as pdfjs from "pdfjs-dist/build/pdf";
 import pdfjsWorker from "pdfjs-dist/build/pdf.worker.entry";
 
-import { useAlerts } from "@/composables/useAlerts";
-
 pdfjs.GlobalWorkerOptions.workerSrc = pdfjsWorker;
 
-const { showAlert } = useAlerts();
 const loading = ref(false);
 const pages = ref([]);
 const dragging = ref(false);
 const draggingFiles = ref(false);
-const originalPdf = ref(null);
 const files = ref([]);
 const multipleFiles = ref([]);
 const numberPagesByFiles = ref([]);
+
+const thumbnails = ref([]);
+const orientationPage = ref("horizontal");
+
+const downloadImagesAsPdf = async () => {
+  if (!pages.value?.length) return;
+
+  const pdfDoc = await PDFDocument.create();
+  const A4_PORTRAIT = [595.28, 841.89];
+  const A4_LANDSCAPE = [841.89, 595.28];
+
+  for (let i = 0; i < pages.value.length; i++) {
+    const pageInfo = pages.value[i];
+    const fileIndex = pageInfo.documentFileIndex;
+    const file = multipleFiles.value[fileIndex];
+    if (!file) continue;
+
+    const bytes = await file.arrayBuffer();
+    let image;
+    if (file.type.startsWith("image/jpeg")) {
+      image = await pdfDoc.embedJpg(bytes);
+    } else if (file.type.startsWith("image/png")) {
+      image = await pdfDoc.embedPng(bytes);
+    } else {
+      console.warn(`Tipo no soportado: ${file.type}`);
+      continue;
+    }
+    const { width: w0, height: h0 } = image.size();
+    const pageSize =
+      orientationPage.value === "horizontal" ? A4_LANDSCAPE : A4_PORTRAIT;
+    const [PW, PH] = pageSize;
+    const scale = Math.min(PW / w0, PH / h0);
+    const w = w0 * scale;
+    const h = h0 * scale;
+    const x = (PW - w) / 2;
+    const y = (PH - h) / 2;
+    const page = pdfDoc.addPage(pageSize);
+    page.drawImage(image, { x, y, width: w, height: h });
+
+    const rot = pageInfo.rotate || 0;
+    if (rot !== 0) {
+      page.setRotation(degrees(rot));
+    }
+  }
+
+  const pdfBytes = await pdfDoc.save();
+  const blob = new Blob([pdfBytes], { type: "application/pdf" });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = `imagenes_ordenadas_${Date.now()}.pdf`;
+  a.click();
+  URL.revokeObjectURL(url);
+};
 
 const deletePageHandle = (index) => {
   const fileIndex = pages.value[index].documentFileIndex;
@@ -167,34 +239,39 @@ const deletePageHandle = (index) => {
 const reOrderFilesHandle = async () => {
   pages.value = [];
   loading.value = true;
-  let pageControl = 0;
   const thumbnails = [];
   numberPagesByFiles.value = [];
   for (let j = 1; j <= multipleFiles.value.length; j++) {
-    const arrayBuffer = await multipleFiles.value[j - 1].arrayBuffer();
-    const pdf = await pdfjs.getDocument(arrayBuffer).promise;
-    originalPdf.value = arrayBuffer;
-    numberPagesByFiles.value.push(pdf.numPages);
-    for (let i = 1; i <= pdf.numPages; i++) {
-      pageControl++;
-      const page = await pdf.getPage(i);
-      const viewport = page.getViewport({ scale: 0.2 });
-      const canvas = document.createElement("canvas");
-      const context = canvas.getContext("2d");
-      canvas.height = viewport.height;
-      canvas.width = viewport.width;
-      await page.render({
-        canvasContext: context,
-        viewport: viewport,
-      }).promise;
-      thumbnails.push({
-        thumbnail: canvas.toDataURL(),
-        pageNumber: pageControl,
-        rotate: 0,
-        documentFileIndex: j - 1,
-        viewport: viewport,
-      });
-    }
+    const file = multipleFiles.value[j - 1];
+    numberPagesByFiles.value.push(1);
+    if (!file.type.startsWith("image/")) continue;
+
+    const imageUrl = URL.createObjectURL(file);
+    const img = new Image();
+    img.src = imageUrl;
+
+    await new Promise((resolve) => {
+      img.onload = () => {
+        const canvas = document.createElement("canvas");
+        const context = canvas.getContext("2d");
+
+        const scale = 0.5;
+        canvas.width = img.width * scale;
+        canvas.height = img.height * scale;
+
+        context?.drawImage(img, 0, 0, canvas.width, canvas.height);
+
+        thumbnails.push({
+          thumbnail: canvas.toDataURL(),
+          pageNumber: thumbnails.length + 1,
+          rotate: 0,
+          documentFileIndex: j - 1,
+        });
+
+        URL.revokeObjectURL(imageUrl);
+        resolve(true);
+      };
+    });
   }
 
   pages.value = thumbnails;
@@ -227,114 +304,56 @@ const rotatePageHandle = async (index) => {
   }
 };
 
-const handleFileUpload = async (event) => {
-  /* const file = event.target.files[0]; */
-  files.value = event.target.files;
-  if (files.value.length < 1) return;
-  loading.value = true;
+const handleImageUpload = async (event) => {
+  const input = event.target;
+  if (!input.files || input.files.length === 0) return;
   pages.value = [];
-  const thumbnails = [];
+  thumbnails.value = [];
+  loading.value = true;
   numberPagesByFiles.value = [];
+  files.value = event.target.files;
   try {
-    let pageControl = 0;
     for (let j = 1; j <= files.value.length; j++) {
       const file = files.value[j - 1];
       multipleFiles.value.push(file);
     }
-    for (let j = 1; j <= multipleFiles.value.length; j++) {
-      const arrayBuffer = await multipleFiles.value[j - 1].arrayBuffer();
-      const pdf = await pdfjs.getDocument(arrayBuffer).promise;
-      originalPdf.value = arrayBuffer;
-      numberPagesByFiles.value.push(pdf.numPages);
-      for (let i = 1; i <= pdf.numPages; i++) {
-        pageControl++;
-        const page = await pdf.getPage(i);
-        const viewport = page.getViewport({ scale: 0.2 });
-        const canvas = document.createElement("canvas");
-        const context = canvas.getContext("2d");
-        canvas.height = viewport.height;
-        canvas.width = viewport.width;
-        await page.render({
-          canvasContext: context,
-          viewport: viewport,
-        }).promise;
-        thumbnails.push({
-          thumbnail: canvas.toDataURL(),
-          pageNumber: pageControl,
-          rotate: 0,
-          documentFileIndex: j - 1,
-          viewport: viewport,
-        });
-      }
-    }
+    for (let i = 0; i < multipleFiles.value.length; i++) {
+      const file = multipleFiles.value[i];
+      numberPagesByFiles.value.push(1);
+      if (!file.type.startsWith("image/")) continue;
 
-    pages.value = thumbnails;
+      const imageUrl = URL.createObjectURL(file);
+      const img = new Image();
+      img.src = imageUrl;
+
+      await new Promise((resolve) => {
+        img.onload = () => {
+          const canvas = document.createElement("canvas");
+          const context = canvas.getContext("2d");
+
+          const scale = 0.5;
+          canvas.width = img.width * scale;
+          canvas.height = img.height * scale;
+
+          context?.drawImage(img, 0, 0, canvas.width, canvas.height);
+
+          thumbnails.value.push({
+            thumbnail: canvas.toDataURL(),
+            pageNumber: thumbnails.value.length + 1,
+            rotate: 0,
+            documentFileIndex: i,
+          });
+
+          URL.revokeObjectURL(imageUrl);
+          resolve(true);
+        };
+      });
+    }
+    pages.value = thumbnails.value;
   } catch (error) {
-    console.error("Error al procesar PDF:", error);
+    console.error("Error al procesar imágenes:", error);
   } finally {
     loading.value = false;
-  }
-};
-
-const saveOrder = async () => {
-  try {
-    const A4_PORTRAIT = [595.28, 841.89];
-    /*    const A4_LANDSCAPE = [841.89, 595.28]; // 297×210 mm */
-
-    const combinedPdfDoc = await PDFDocument.create();
-    for (const file of multipleFiles.value) {
-      const buf = await file.arrayBuffer();
-      const src = await PDFDocument.load(buf);
-      const copied = await combinedPdfDoc.copyPages(src, src.getPageIndices());
-      copied.forEach((p) => combinedPdfDoc.addPage(p));
-    }
-    const combinedBytes = await combinedPdfDoc.save();
-
-    const newPdfDoc = await PDFDocument.create();
-    const order = pages.value.map((p) => p.pageNumber - 1);
-
-    for (let i = 0; i < order.length; i++) {
-      const origIdx = order[i];
-      let rotateDeg = pages.value[i].rotate || 0;
-      if (pages.value[i].viewport.rotation == 90) {
-        rotateDeg = rotateDeg + 90;
-      } else if (pages.value[i].viewport.rotation == 180) {
-        rotateDeg = rotateDeg + 180;
-      } else if (pages.value[i].viewport.rotation == 270) {
-        rotateDeg = rotateDeg + 180;
-      }
-      const pageSize = A4_PORTRAIT;
-      const [embedded] = await newPdfDoc.embedPdf(combinedBytes, [origIdx]);
-      const page = newPdfDoc.addPage(pageSize);
-      const { width: w0, height: h0 } = embedded.size();
-      const scale = Math.min(pageSize[0] / w0, pageSize[1] / h0);
-      const x = (pageSize[0] - w0 * scale) / 2;
-      const y = (pageSize[1] - h0 * scale) / 2;
-      page.drawPage(embedded, {
-        x,
-        y,
-        xScale: scale,
-        yScale: scale,
-      });
-      if (rotateDeg !== 0) {
-        page.setRotation(degrees(rotateDeg));
-      }
-    }
-    const outBytes = await newPdfDoc.save();
-    const blob = new Blob([outBytes], { type: "application/pdf" });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = `documento_A4_reordenado_${Date.now()}.pdf`;
-    a.click();
-    URL.revokeObjectURL(url);
-    a.remove();
-  } catch (err) {
-    console.error("Error al generar el PDF A4:", err);
-    showAlert(
-      "Error al generar el PDF, intente cargar nuevamente los documentos",
-      "error"
-    );
   }
 };
 </script>
