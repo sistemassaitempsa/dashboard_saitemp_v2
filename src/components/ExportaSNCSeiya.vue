@@ -41,11 +41,15 @@ let first_page_url = ref("");
 let endpoint = ref("sncseiya");
 let endpointexport = ref("exportsncseiya");
 
-
 let tabla = ref([
   { nombre: "#", orden: "DESC" },
   { nombre: "Cliente", orden: "DESC", tipo: "texto", calculado: "false" },
-  { nombre: "Radicado seiya", orden: "DESC", tipo: "texto", calculado: "false" },
+  {
+    nombre: "Radicado seiya",
+    orden: "DESC",
+    tipo: "texto",
+    calculado: "false",
+  },
   { nombre: "Responsable", orden: "DESC", tipo: "texto", calculado: "false" },
   {
     nombre: "Descripción novedad",
@@ -93,7 +97,6 @@ let tabla = ref([
 ]);
 let acciones = ref([]);
 
-
 getItems();
 
 function accion() {
@@ -106,6 +109,7 @@ function getItems() {
     .then(function (result) {
       first_page_url.value = result.data.first_page_url.replace('"');
       datos.value = result;
+      console.log(datos.value);
     });
 }
 </script>

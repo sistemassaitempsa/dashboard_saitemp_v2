@@ -75,6 +75,7 @@ import EstadosResponsable from "@/components/EstadosResponsable.vue";
 import EstadosSeiyaSolicitudServicio from "@/components/EstadosSeiyaSolicitudServicio.vue";
 import LovePdf from "@/components/LovePdf.vue";
 import LovePdfToJpg from "@/components/LovePdfToJpg.vue";
+import TablaNoConformesDD from "@/components/TablaNoConformesDD.vue";
 
 // Configuración de rutas
 const routes = [
@@ -114,6 +115,11 @@ const routes = [
     name: "navbar",
     component: NavBar,
     children: [
+      {
+        path: "exportarsncdd",
+        name: "exportarsncdd",
+        component: TablaNoConformesDD,
+      },
       {
         path: "editarUsuario/:tipo?/:id",
         name: "editarUsuario",

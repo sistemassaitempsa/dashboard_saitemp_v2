@@ -152,7 +152,7 @@ const crearObjetoDatos = () => {
     id_candidato: candidato_id,
     id_servicio: servicio_id.value,
     estado_id: estado_ingreso_id.value,
-    responsable_id: encargado_id.value,
+    responsable_id: Number(encargado_id.value),
     nombre_responsable: consulta_encargado.value,
   };
   return objetoEnviar;

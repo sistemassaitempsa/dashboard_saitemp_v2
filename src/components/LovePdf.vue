@@ -337,6 +337,7 @@ const saveOrder = async () => {
     a.click();
     URL.revokeObjectURL(url);
     a.remove();
+    limpiarFromulario();
   } catch (err) {
     console.error("Error al generar el PDF A4:", err);
     showAlert(
@@ -344,6 +345,12 @@ const saveOrder = async () => {
       "error"
     );
   }
+};
+const limpiarFromulario = () => {
+  pages.value = [];
+  multipleFiles.value = [];
+  numberPagesByFiles.value = [];
+  files.value = [];
 };
 </script>
 

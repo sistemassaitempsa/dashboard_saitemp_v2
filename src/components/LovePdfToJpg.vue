@@ -176,7 +176,7 @@ const multipleFiles = ref([]);
 const numberPagesByFiles = ref([]);
 
 const thumbnails = ref([]);
-const orientationPage = ref("horizontal");
+const orientationPage = ref("vertical");
 
 const downloadImagesAsPdf = async () => {
   if (!pages.value?.length) return;
@@ -227,6 +227,7 @@ const downloadImagesAsPdf = async () => {
   a.download = `imagenes_ordenadas_${Date.now()}.pdf`;
   a.click();
   URL.revokeObjectURL(url);
+  limpiarFromulario();
 };
 
 const deletePageHandle = (index) => {
@@ -363,6 +364,12 @@ const handleImageUpload = async (event) => {
   } finally {
     loading.value = false;
   }
+};
+const limpiarFromulario = () => {
+  pages.value = [];
+  multipleFiles.value = [];
+  numberPagesByFiles.value = [];
+  files.value = [];
 };
 </script>
 

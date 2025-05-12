@@ -88,7 +88,7 @@
         </div>
       </div>
     </nav>
-    <div class="aside" :style="{ top: this.scrolled ? '0px' : '85px' }">
+    <div class="aside" :style="{ top: this.scrolled ? '0px' : '82px' }">
       <div class="accordion-item" v-for="(item, index) in menu" :key="index">
         <h2 class="accordion-header" :id="'flush-heading' + option[index]">
           <button
@@ -358,6 +358,7 @@ export default {
 <style scoped>
 .navbar {
   box-shadow: 3px 3px 4px 2px rgba(26, 25, 25, 0.338);
+  z-index: 999;
 }
 
 .navbar-brand {
@@ -372,7 +373,7 @@ export default {
   top: 0;
   bottom: 0;
   left: 0;
-  z-index: 2000;
+  z-index: 998;
   color: white;
   transition: width 1s, top 0.3s ease;
   overflow-x: hidden;

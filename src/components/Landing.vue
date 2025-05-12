@@ -2,7 +2,6 @@
   <div>
     <div class="fondo">
       <video src="@/assets/LandingSEIYA1.mp4" loop autoplay></video>
-      <video src="@/assets/LandingSEIYA1.mp4" loop autoplay></video>
       <h2 class="texto"></h2>
     </div>
   </div>
@@ -23,10 +22,10 @@ export default {
 </script>
 <style scoped>
 video {
-  object-fit: fill;
+  object-fit: cover;
   /*   filter: brightness(1.3);
   filter: contrast(-1); */
-
+  height: 100%;
   width: 100%;
 }
 .fondo {
