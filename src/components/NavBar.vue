@@ -367,7 +367,7 @@ export default {
 
 .aside {
   width: 50px;
-  height: 100vh;
+  height: calc(100vh- 76px);
   background-color: rgba(22, 119, 115, 1);
   position: fixed;
   top: 0;
