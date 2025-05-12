@@ -28,8 +28,8 @@ import NotificacionesSocket from "./NotificacionSocket.vue";
 
 const loading = ref(false);
 const datos = ref([]);
-const endpoint = "clientes";
-const endpointexport = "novedadesddexport";
+const endpoint = ref("sncdd");
+const endpointexport = ref("exportsncdd");
 const { URL_API, configHeader } = useConfig();
 const props = defineProps({
   userlogued: { type: Object, default: () => {} },
@@ -57,7 +57,7 @@ const tabla = [
     calculado: "false",
   },
   {
-    nombre: "Descripción  ",
+    nombre: "Descripción",
     orden: "DESC",
     tipo: "texto",
     calculado: "false",
@@ -65,7 +65,7 @@ const tabla = [
   {
     nombre: "Usuario generó",
     orden: "DESC",
-    tipo: "fecha",
+    tipo: "texto",
     calculado: "false",
   },
   {

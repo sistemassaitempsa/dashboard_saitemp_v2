@@ -224,7 +224,11 @@
           </button>
         </div>
         <div
-          v-if="ruta == '/navbar/gestion-ingresosl' || ruta == '/navbar/ordenserviciosnc'"
+          v-if="
+            ruta == '/navbar/gestion-ingresosl' ||
+            ruta == '/navbar/ordenserviciosnc' ||
+            ruta == '/navbar/exportarsncdd'
+          "
           class="col-xs-3 col-md-3"
         >
           <button id="exportar" type="button" class="btn btn-success btn-sm">
@@ -1662,7 +1666,7 @@ export default {
       }
       this.tabla2 = this.tabla; // Encabezados de la tabla
       this.tabla3 = [...this.tabla2];
-      this.columnas_adicionales.forEach(element => {
+      this.columnas_adicionales.forEach((element) => {
         this.tabla3.push(element);
       });
       this.items_tabla2 = Object.values(datos.data.data); // lista de registros
