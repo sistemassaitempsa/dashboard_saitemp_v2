@@ -88,7 +88,7 @@
         </div>
       </div>
     </nav>
-    <div class="aside" :style="{ top: this.scrolled ? '0px' : '82px' }">
+    <div class="aside" :style="{ top: this.scrolled ? '0px' : '76px' }">
       <div class="accordion-item" v-for="(item, index) in menu" :key="index">
         <h2 class="accordion-header" :id="'flush-heading' + option[index]">
           <button
