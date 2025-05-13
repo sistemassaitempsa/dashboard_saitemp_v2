@@ -238,7 +238,10 @@
                 una seccion debe hacer clic en ella.
               </p>
             </div>
-            <div class="col">
+            <div
+              class="col"
+              v-if="userlogued.tipo_usuario_id == 1 && userlogued.rol_id == 1"
+            >
               <ModalCancelaServicio
                 @motivoCancelacion="motivoCancelacion"
                 @getMotivosCancelacionServicio="getMotivosCancelacionServicio"
