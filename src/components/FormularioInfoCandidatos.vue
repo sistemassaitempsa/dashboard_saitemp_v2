@@ -232,11 +232,23 @@
       <div id="seccion">
         <form @submit.prevent="" class="row g-3">
           <div class="row">
-            <div class="col-9 mt-4">
+            <div class="col-6 mt-4">
               <p>
                 Ingrese la información requerida en cada sección, para desplegar
                 una seccion debe hacer clic en ella.
               </p>
+            </div>
+            <div class="col">
+              <ModalCancelaServicio
+                @motivoCancelacion="motivoCancelacion"
+                @getMotivosCancelacionServicio="getMotivosCancelacionServicio"
+                :motivo_cancelacion_id="motivo_cancelacion_id"
+                titulo_encabezado="Bloquear candidato"
+                titulo_boton="Bloquear candidato"
+                :modal_id="'#mi-modal2' + index + 1 * 5"
+                :tipo="3"
+                :candidato="form"
+              />
             </div>
             <div class="col" v-if="userlogued.tipo_usuario_id == 1">
               <button
@@ -2078,10 +2090,12 @@ import axios from "axios";
 import { useAlerts } from "@/composables/useAlerts";
 import { useRoute, useRouter } from "vue-router";
 import ModalAgregarCandidatoServicio from "./ModalAgregarCandidatoServicio.vue";
+import ModalCancelaServicio from "./ModalCancelaServicio.vue";
 
 const { userlogued } = defineProps(["userlogued"]); //props
 
 // Variables reactivas
+const motivo_cancelacion_id = ref("");
 const router = useRouter();
 const lista_historico_servicios_generales = ref([]);
 const historico_conceptos_servicios_generales = ref(false);
@@ -2089,7 +2103,7 @@ const lista_historico_servicios = ref([]);
 const toogleModalAddServicio = ref(false);
 const activeSeccion = ref(0);
 const route = useRoute();
-const { showAlert } = useAlerts();
+const { showAlert, confirmSaveAlert } = useAlerts();
 const { configHeader } = useToken();
 const loading = ref(false);
 const mensaje_error = "¡Este campo debe ser diligenciado!";
@@ -3101,6 +3115,56 @@ const maxDate = computed(() => {
 onMounted(() => {
   llenarFormulario();
 });
+function motivoCancelacion(motivo, tipo, candidato) {
+  let form = {
+    motivo_cancelacion_id: motivo_cancelacion_id.value,
+    descripcion_cancelacion: motivo,
+  };
+  if (tipo == 1) {
+    confirmSaveAlert("¿Esta seguro de cancelar el servicio?", () => {
+      axios
+        .post(
+          URL_API + "api/v1/cancelaservicio/" + route.params.id,
+          form,
+          configHeader()
+        )
+        .then(function (result) {
+          showAlert(result.data.message, result.data.status);
+        });
+    });
+  } else if (tipo == 2) {
+    confirmSaveAlert("¿Esta seguro de cancelar el candidato?", () => {
+      axios
+        .post(
+          URL_API +
+            "api/v1/cancelacandidatoservicio/" +
+            route.params.id +
+            "/" +
+            candidato.usuario_id,
+          form,
+          configHeader()
+        )
+        .then(function (result) {
+          showAlert(result.data.message, result.data.status);
+        });
+    });
+  } else if (tipo == 3) {
+    const request = {
+      numero_documento_candidato: candidato.cod_emp,
+      nombre_candidato: candidato.nom1_emp + candidato.nom2_emp,
+      apellido_candidato: candidato.ap1_emp + candidato.ap2_emp,
+      motivo: motivo,
+    };
+    console.log(candidato);
+    candidato.motivo = motivo;
+    console.log(motivo);
+    axios
+      .post(URL_API + "api/v1/listatrump", request, configHeader())
+      .then(function (result) {
+        showAlert(result.data.message, result.data.status);
+      });
+  }
+}
 </script>
 
 <style scoped>
