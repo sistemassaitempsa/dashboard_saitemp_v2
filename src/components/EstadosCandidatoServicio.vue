@@ -26,6 +26,16 @@
             ></textarea>
           </div>
         </div>
+        <div class="mb-3">
+          <label for="exampleInputEmail1" class="form-label">Clave</label>
+          <input
+            type="text"
+            class="form-control"
+            id="exampleInputEmail1"
+            aria-describedby="emailHelp"
+            v-model="clave"
+          />
+        </div>
         <button type="submit" class="btn btn-success">
           {{ !actualizar ? "Guardar" : "Actualizar" }}
         </button>
@@ -76,6 +86,7 @@ let accion = ref("");
 let endpoint = ref("estadocandidatoservicio");
 let actualizar = ref(false);
 let datos = ref([]);
+let clave = ref('');
 let tabla = ref([
   { nombre: "#", orden: "DESC" },
   {
@@ -90,18 +101,26 @@ let tabla = ref([
     tipo: "texto",
     calculado: "false",
   },
+  {
+    nombre: "Clave",
+    orden: "DESC",
+    tipo: "texto",
+    calculado: "false",
+  },
 ]);
 
 getItems();
 function clear() {
   nombre.value = "";
   descripcion.value = "";
+  clave.value = "";
   id.value = "";
 }
 function save() {
   let estado = {
     nombre: nombre.value,
     descripcion: descripcion.value,
+    clave: clave.value,
   };
   let url;
   if (id.value != "") {
@@ -128,6 +147,7 @@ function response(item) {
   nombre.value = item.nombre;
   descripcion.value = item.descripcion;
   id.value = item.id;
+  clave.value = item.clave;
   accion.value = "Actualizar estado";
 }
 </script>

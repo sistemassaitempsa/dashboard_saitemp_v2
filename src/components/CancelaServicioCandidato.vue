@@ -42,19 +42,13 @@
 import { ref } from "vue";
 import SearchList from "./SearchList.vue";
 import axios from "axios";
-//import { defineProps } from 'vue'
 import { useConfig } from "../composables/token";
 import { Alerts } from "../composables/Alerts";
-//import { useRoute, useRouter } from 'vue-router'
 
 const { URL_API, configHeader } = useConfig();
-//const route = useRoute();
-//const router = useRouter();
 const { showAlert } = Alerts();
 
-// const props = defineProps({
-// userlogued: { type: Object, default: () => {} },
-// });
+
 
 let titulo = ref("Asignación de estados");
 let mensaje_error = ref("¡Este campo debe ser diligenciado!");

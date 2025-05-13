@@ -4,9 +4,14 @@
     <div class="card p-3">
       <form class="was-validated" @submit.prevent="save()">
         <div class="row">
+          <!-- valida si el estado servicio es 2 (cancelado) para mostrar el botón de cancelado estado_servicio_id == '2' -->
+          <div  class="col-6 mb-3 text-start"
+          style="margin-top: 50px; left: 0px" v-if="estado_servicio_id == '2'">
+          <button type="button" class="btn btn-warning btn-sm">Servicio cancelado</button>
+          </div>
           <div
             class="col-6 mb-3 text-start"
-            style="margin-top: 50px; left: 0px"
+            style="margin-top: 50px; left: 0px" v-else
           >
             <ModalCancelaServicio
               @motivoCancelacion="motivoCancelacion"
@@ -972,11 +977,7 @@ function motivoCancelacion(motivo, tipo, candidato) {
         });
     });
   } else if (tipo == 3) {
-    console.log(candidato.numero_documento_candidato);
-    console.log(candidato.nombre_candidato);
-    console.log(candidato.apellido_candidato);
     candidato.motivo = motivo;
-    console.log(motivo);
     axios
       .post(URL_API.value + "api/v1/listatrump", candidato, configHeader())
       .then(function (result) {
@@ -1471,7 +1472,6 @@ function limpiarFormulario() {
 
 function getMotivosCancelacionServicio(item = null, index) {
   if (item != null) {
-    console.log(index);
     if (index > 0) {
       index = index - 1;
       candidatos.value[index].candidato_cancelado = item.id;
