@@ -76,6 +76,7 @@ import EstadosSeiyaSolicitudServicio from "@/components/EstadosSeiyaSolicitudSer
 import LovePdf from "@/components/LovePdf.vue";
 import LovePdfToJpg from "@/components/LovePdfToJpg.vue";
 import TablaNoConformesDD from "@/components/TablaNoConformesDD.vue";
+import ExcelToPdf from "@/components/ExcelToPdf.vue";
 
 // Configuración de rutas
 const routes = [
@@ -115,6 +116,11 @@ const routes = [
     name: "navbar",
     component: NavBar,
     children: [
+      {
+        path: "exceltopdf",
+        name: "exceltopdf",
+        component: ExcelToPdf,
+      },
       {
         path: "exportarsncdd",
         name: "exportarsncdd",

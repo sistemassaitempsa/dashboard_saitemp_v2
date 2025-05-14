@@ -754,24 +754,6 @@
               </div>
               <div class="row">
                 <div class="col">
-                  <!-- <label for="" class="form-label"> Cargo:* </label> -->
-                  <!--       <input
-                    type="text"
-                    class="form-control"
-                    v-model="experiencia.cargo"
-                  /> -->
-                  <SearchList
-                    nombreCampo="Cargo:*"
-                    @getCargos="getCargos"
-                    eventoCampo="getCargos"
-                    nombreItem="nombre"
-                    :index="index"
-                    :consulta="form.experiencias_laborales[index].cargo"
-                    :registros="lista_cargos"
-                    placeholder="Seleccione una opción"
-                  />
-                </div>
-                <div class="col">
                   <label for="" class="form-label"> Empresa:* </label>
                   <input
                     type="text"
@@ -779,11 +761,9 @@
                     v-model="experiencia.empresa"
                   />
                 </div>
-              </div>
-              <div class="row">
                 <div class="col">
                   <SearchList
-                    nombreCampo="Sector:*"
+                    nombreCampo="Sector de la empresa:*"
                     @getSectorEconomico="getSectorEconomico"
                     eventoCampo="getSectorEconomico"
                     nombreItem="nombre"
@@ -796,12 +776,48 @@
                     placeholder="Seleccione una opción"
                   />
                 </div>
+              </div>
+              <div class="row">
                 <div class="col">
-                  <label for="" class="form-label"> Motivo del retiro:* </label>
+                  <SearchList
+                    nombreCampo="Cargo:*"
+                    @getCargos="getCargos"
+                    eventoCampo="getCargos"
+                    nombreItem="nombre"
+                    :index="index"
+                    :consulta="form.experiencias_laborales[index].cargo"
+                    :registros="lista_cargos"
+                    placeholder="Seleccione una opción"
+                  />
+                </div>
+                <div class="col">
+                  <label for="" class="form-label"
+                    >Detalle del cargo (operario plástico):*
+                  </label>
                   <input
                     type="text"
                     class="form-control"
-                    v-model="experiencia.motivo_retiro"
+                    v-model="experiencia.detalle_cargo"
+                  />
+                </div>
+              </div>
+              <div class="row">
+                <div class="col">
+                  <label for="" class="form-label">
+                    Teléfono de contacto:*
+                  </label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    v-model="experiencia.tel_contacto"
+                  />
+                </div>
+                <div class="col">
+                  <label for="" class="form-label"> Salario devengado: </label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    v-model="experiencia.salario"
                   />
                 </div>
               </div>
@@ -822,6 +838,17 @@
                   </div>
                 </div>
               </div>
+              <div class="row">
+                <div class="col">
+                  <label for="" class="form-label"> Motivo del retiro:* </label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    v-model="experiencia.motivo_retiro"
+                  />
+                </div>
+              </div>
+
               <div class="row">
                 <div class="col">
                   <label for="" class="form-label">Fecha inicio:</label>
@@ -2753,6 +2780,9 @@ const deleteExperiencia = async (index) => {
 const addExperienciaLaboral = () => {
   form.experiencias_laborales.push({
     funciones: "",
+    detalle_cargo: "",
+    salario: "",
+    tel_contacto: "",
     empresa: "",
     cargo: "",
     sector_econimico_id: "",

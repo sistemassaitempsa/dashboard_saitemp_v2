@@ -295,7 +295,7 @@ let cargos_cliente = ref([]);
 let cliente_id = ref("");
 let ver_cargos = ref(false);
 let actualiza_cargo = ref(false);
-let index_cargo = ref('');
+let index_cargo = ref("");
 let cargos2 = ref([
   {
     cargo: "",
@@ -312,8 +312,8 @@ let consulta_cliente = ref("");
 getCategoriaCargo();
 getRiesgosLaborales();
 
-function verCargo(item,index) {
-  index_cargo.value = index
+function verCargo(item, index) {
+  index_cargo.value = index;
   actualiza_cargo.value = true;
   this.tipo_cargo[0] = item.tipo_cargo_id;
   this.categoria_cargo_id = item.categoria_cargo_id;
@@ -340,7 +340,7 @@ function agregarCargo() {
 
 function actualizarCargo() {
   const index = cargos_cliente.value.findIndex(
-  (item) => item.id_cargo === cargos2.value[0].id_cargo
+    (item) => item.id_cargo === cargos2.value[0].id_cargo
   );
 
   if (index !== -1) {
@@ -422,7 +422,7 @@ function getExamenesRecomendaciones(item = null, index = null) {
 }
 
 function getSubCategoriaCargo(id, index = null) {
-  actualiza_cargo.value = false
+  actualiza_cargo.value = false;
   if (index != null) {
     if (cargos2.value[index].cargo_id != "") {
       consulta_subcategoria_cargos.value[index] = " ";
@@ -510,7 +510,7 @@ function getRiesgosLaborales(item = null, index = null) {
 }
 
 function getRiesgosLaborales2(item = null, index = null) {
-  if (item != null) {
+  if (item != null && index != null) {
     cargos2.value[index].riesgo_laboral_id = item.id;
     consulta_riesgo_laboral.value[index] = item.nombre;
   }
