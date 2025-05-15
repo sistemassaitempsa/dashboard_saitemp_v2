@@ -1177,12 +1177,13 @@
                       id="inlineRadio2"
                       value="2"
                       v-model="form.tipo_transporte"
+                      @click="form.otro_transporte = ''"
                     />
                     <label class="form-check-label" for="inlineRadio2"
                       >Transporte publico</label
                     >
                   </div>
-                  <div class="form-check form-check-inline">
+                  <!--          <div class="form-check form-check-inline">
                     <input
                       class="form-check-input"
                       type="radio"
@@ -1194,7 +1195,7 @@
                     <label class="form-check-label" for="inlineRadio3"
                       >Otro</label
                     >
-                  </div>
+                  </div> -->
                 </div>
               </div>
               <div class="col">
@@ -1204,18 +1205,12 @@
                   id=""
                   class="form-select"
                   v-model="form.otro_transporte"
-                  :disabled="form.tipo_transporte == 3 ? false : true"
+                  :disabled="form.tipo_transporte == 1 ? false : true"
                 >
+                  <option value=""></option>
+                  <option value="Automovil">Automóvil</option>
+                  <option value="Moto">Moto</option>
                   <option value="Bicicleta">Bicicleta</option>
-                  <option value="Moto compartida">Moto compartida</option>
-                  <option value="Vehiculo compartido">
-                    Vehiculo compartido
-                  </option>
-                  <option value="Patineta eléctrica">Patineta eléctrica</option>
-                  <option value="A pie">A pie</option>
-                  <option value="Transporte de la empresa">
-                    Transporte de la empresa
-                  </option>
                 </select>
                 <!--   <input
                   type="text"
@@ -1688,6 +1683,46 @@
                   min="0"
                   @input="forceIntegerPeso"
                 />
+              </div>
+            </div>
+            <div class="row">
+              <div class="col">
+                <label for="" class="form-label">Talla de camisa</label>
+                <select
+                  name=""
+                  id=""
+                  class="form-select"
+                  v-model="form.talla_camisa"
+                >
+                  <option value=""></option>
+                  <option value="xs">XS</option>
+                  <option value="s">S</option>
+                  <option value="m">M</option>
+                  <option value="l">L</option>
+                  <option value="xl">XL</option>
+                  <option value="B3">XXL</option>
+                </select>
+              </div>
+              <div class="col">
+                <label for="" class="form-label">Talla de pantalon</label>
+                <input
+                  type="number"
+                  name=""
+                  id=""
+                  class="form-control"
+                  v-model="form.talla_pantalon"
+                />
+              </div>
+              <div class="row">
+                <div class="col">
+                  <label for="" class="form-label">Talla de calzado</label>
+                  <input
+                    type="number"
+                    class="form-control"
+                    v-model="form.talla_calzado"
+                  />
+                </div>
+                <div class="col"></div>
               </div>
             </div>
             <div class="row">
@@ -2251,6 +2286,9 @@ const consulta_afp = ref("");
 const consulta_eps = ref("");
 const progress = ref(0);
 const form = reactive({
+  talla_calzado: "",
+  talla_pantalon: "",
+  talla_camisa: "",
   requisitos_asignados: [],
   curso_confinados: "",
   manipulacion_alimentos: "",
@@ -2467,6 +2505,9 @@ const llenarFormulario = async () => {
   form.requisitos_asignados = response.data.cumple_requisitos;
   form.curso_alturas = response.data.curso_alturas;
   form.curso_confinados = response.data.curso_confinados;
+  form.talla_calzado = response.data.talla_calzado;
+  form.talla_camisa = response.data.talla_camisa;
+  form.talla_pantalon = response.data.talla_pantalon;
   form.manipulacion_alimentos = response.data.manipulacion_alimentos;
   form.licencia_conduccion = response.data.licencia_conduccion;
   form.descripcion_salud = response.data.descripcion_salud;
@@ -2643,7 +2684,7 @@ const llenarFormulario = async () => {
     getDepartamentos({ cod_pai: form.pai_res }, 3);
   }
   form.otro_transporte =
-    response.data.otro_transporte && form.tipo_transporte == "3"
+    response.data.otro_transporte && form.tipo_transporte == "1"
       ? response.data.otro_transporte
       : "";
   loading.value = false;
