@@ -1074,6 +1074,53 @@
                 </div>
               </div> -->
             </div>
+            <div class="row mb-5">
+              <h5>Habilidades:</h5>
+              <div class="col">
+                <input
+                  type="text"
+                  autocomplete="off"
+                  class="form-control"
+                  id="focus"
+                  v-model="habilidad"
+                />
+                <div
+                  class="valida-carreo"
+                  @click="agregaHabilidad(habilidad)"
+                  :class="habilidad != '' ? 'valida-correo-deployed' : null"
+                >
+                  {{ habilidad }}
+                </div>
+              </div>
+              <div class="col">
+                <div
+                  class="mb-3"
+                  style="
+                    padding: 10px;
+                    border: solid #d5dbdb 0.5px;
+                    border-radius: 10px;
+                  "
+                >
+                  <button
+                    type="button"
+                    style="margin: 10px 10px 5px 10px"
+                    id="btnMenu"
+                    class="btn btn-sm"
+                    data-bs-toggle="button"
+                    v-for="(item, index) in form.habilidades"
+                    :key="index"
+                  >
+                    <div class="cardRequisito">
+                      <i
+                        class="bi bi-x"
+                        @click="deleteRequisitoHandler(index)"
+                      ></i>
+                      {{ item.nombre }}
+                    </div>
+                  </button>
+                </div>
+              </div>
+            </div>
             <div class="row">
               <h5>Idiomas:</h5>
             </div>
@@ -2285,7 +2332,9 @@ const consulta_estado_civil = ref("");
 const consulta_afp = ref("");
 const consulta_eps = ref("");
 const progress = ref(0);
+const habilidad = ref("");
 const form = reactive({
+  habilidades: [],
   talla_calzado: "",
   talla_pantalon: "",
   talla_camisa: "",
@@ -2468,6 +2517,15 @@ const verRegistroSeiya = (item) => {
   router.push({
     path: `/navbar/orden-servicio/${item.servicio_id}`,
   });
+};
+
+const agregaHabilidad = () => {
+  form.habilidades.push({
+    nombre: habilidad.value,
+  });
+  habilidad.value = "";
+  const focus = document.getElementById("focus");
+  focus.focus();
 };
 
 const reformatearFecha = (fechaOriginal) => {
@@ -3497,5 +3555,16 @@ h5 {
 .candidato_bloqueado_container:hover .tooltip-text {
   visibility: visible;
   opacity: 1;
+}
+.valida-carreo {
+  background-color: rgb(255, 255, 255);
+  position: relative;
+  border: none;
+  border-radius: 5px;
+  top: 0px;
+  cursor: pointer;
+}
+.valida-correo-deployed {
+  border: solid #d5dbdb 0.5px;
 }
 </style>
