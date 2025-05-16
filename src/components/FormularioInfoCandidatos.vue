@@ -1113,7 +1113,7 @@
                     <div class="cardRequisito">
                       <i
                         class="bi bi-x"
-                        @click="deleteRequisitoHandler(index)"
+                        @click="deleteHabilidadHandler(index)"
                       ></i>
                       {{ item.nombre }}
                     </div>
@@ -2429,7 +2429,18 @@ watch(
   { deep: true }
 );
 
+const deleteHabilidadHandler = async (index) => {
+  if (form.habilidades[index].id) {
+    loading.value = true;
+    await axios.delete(
+      `${URL_API}api/v1/habilidadescandidato/${form.habilidades[index].id}`
+    );
+    loading.value = false;
+  }
+  form.habilidades.splice(index, 1);
+};
 //funciones para calcular el porcentaje de la progress bar
+
 const calculateProgress = () => {
   let completedInfoPersonal = 0;
   let completedExperience = 0;
@@ -2556,6 +2567,7 @@ const llenarFormulario = async () => {
   if (userlogued.tipo_usuario_id == 1) {
     validarCandidato(response.data.num_doc, response.data.tip_doc_id);
   }
+  form.habilidades = response.data.habilidades;
   lista_historico_servicios_generales.value =
     response.data.historico_conceptos_servicios_generales;
   lista_historico_servicios.value = response.data.historico_conceptos_servicios;
