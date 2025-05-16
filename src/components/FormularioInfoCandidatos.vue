@@ -441,7 +441,6 @@
                 />
               </div>
             </div>
-            <!-- Ciudad de Nacimiento y Dirección Residencia -->
             <div class="row mb-4">
               <div class="col-12 was-validated col-lg-6">
                 <SearchList
@@ -457,21 +456,6 @@
                 />
               </div>
               <div class="col-12 was-validated col-lg-6">
-                <label class="form-label" for="direccion"
-                  >Direccion residencia:*</label
-                >
-                <input
-                  class="form-control"
-                  type="text"
-                  v-model="form.dir_res"
-                  id="direccion"
-                  required
-                />
-              </div>
-            </div>
-            <!-- Fecha de Nacimiento y Teléfonos -->
-            <div class="row mb-4">
-              <div class="col-12 was-validated col-lg-6">
                 <label class="form-label" for="fecha_nac"
                   >Fecha de nacimiento:*</label
                 >
@@ -486,47 +470,7 @@
                   required
                 />
               </div>
-              <div class="col-12 col-lg-6">
-                <label class="form-label" for="fijo">Teléfono fijo:</label>
-                <input
-                  class="form-control"
-                  type="text"
-                  v-model="form.tel_res"
-                  id="fijo"
-                  maxlength="7"
-                />
-              </div>
             </div>
-            <!-- Teléfono Celular y Correo Electrónico -->
-            <div class="row mb-4">
-              <div class="col-12 was-validated col-lg-6">
-                <label class="form-label" for="celular"
-                  >Teléfono celular:*</label
-                >
-                <input
-                  class="form-control"
-                  type="text"
-                  v-model="form.tel_cel"
-                  id="celular"
-                  required
-                  maxlength="10"
-                />
-              </div>
-              <div class="col-12 was-validated col-lg-6">
-                <label class="form-label" for="email"
-                  >Correo electrónico:*</label
-                >
-                <input
-                  disabled
-                  class="form-control"
-                  type="email"
-                  v-model="form.e_mail"
-                  id="email"
-                  required
-                />
-              </div>
-            </div>
-            <!-- Pais de Residencia y Departamento de Residencia -->
             <div class="row">
               <div class="col-12 col-lg-6">
                 <SearchList
@@ -554,7 +498,6 @@
                 />
               </div>
             </div>
-            <!-- Ciudad de Residencia y Banco -->
             <div class="row">
               <div class="col-12 col-lg-6">
                 <SearchList
@@ -569,6 +512,92 @@
                   placeholder="Seleccione una opción"
                 />
               </div>
+              <div class="col-12 was-validated col-lg-6">
+                <label class="form-label" for="direccion"
+                  >Direccion residencia:*</label
+                >
+                <input
+                  class="form-control"
+                  type="text"
+                  v-model="form.dir_res"
+                  id="direccion"
+                  required
+                />
+              </div>
+            </div>
+            <div class="row mb-4">
+              <div class="col-12 was-validated col-lg-6">
+                <label class="form-label" for="barrio">Barrio:*</label>
+                <input
+                  class="form-control"
+                  type="text"
+                  v-model="form.barrio"
+                  id="barrio"
+                  required
+                />
+              </div>
+              <div class="col-12 col-lg-6 was-validated">
+                <label class="form-label" for="estrato"
+                  >Estrato socioeconomico:*</label
+                >
+                <select
+                  class="form-select"
+                  id="estrato"
+                  v-model="form.est_soc"
+                  required
+                >
+                  <option :value="n" :key="n" v-for="n in 6">{{ n }}</option>
+                </select>
+                <div class="invalid-feedback errorCheck">
+                  {{ mensaje_error }}
+                </div>
+              </div>
+            </div>
+            <div class="row mb-4">
+              <div class="col-12 col-lg-6">
+                <label class="form-label" for="fijo">Teléfono fijo:</label>
+                <input
+                  class="form-control"
+                  type="text"
+                  v-model="form.tel_res"
+                  id="fijo"
+                  maxlength="7"
+                />
+              </div>
+              <div class="col-12 was-validated col-lg-6">
+                <label class="form-label" for="celular"
+                  >Teléfono celular:*</label
+                >
+                <input
+                  class="form-control"
+                  type="text"
+                  v-model="form.tel_cel"
+                  id="celular"
+                  required
+                  maxlength="10"
+                />
+              </div>
+            </div>
+            <div class="row mb-4">
+              <div class="col-12 col-lg-6">
+                <label for="" class="form-label">WhatsApp:</label>
+                <input type="number" class="form-control" v-model="form.wapp" />
+              </div>
+              <div class="col-12 was-validated col-lg-6">
+                <label class="form-label" for="email"
+                  >Correo electrónico:*</label
+                >
+                <input
+                  disabled
+                  class="form-control"
+                  type="email"
+                  v-model="form.e_mail"
+                  id="email"
+                  required
+                />
+              </div>
+            </div>
+            <div class="row">
               <div class="col-12 col-lg-6">
                 <SearchList
                   nombreCampo="Banco:*"
@@ -580,9 +609,7 @@
                   placeholder="Seleccione una opción"
                 />
               </div>
-            </div>
-            <!-- Número de Cuenta y Barrio -->
-            <div class="row mb-4">
+
               <div class="col-12 col-lg-6">
                 <label class="form-label" for="cuenta">Número de cuenta:</label>
                 <input
@@ -593,15 +620,62 @@
                   :disabled="form.cod_ban === '' || form.cod_ban == '0 '"
                 />
               </div>
-              <div class="col-12 was-validated col-lg-6">
-                <label class="form-label" for="barrio">Barrio:*</label>
+            </div>
+            <div class="row mb-4">
+              <div class="col-12 col-lg-6 mt-3">
+                <SearchList
+                  nombreCampo="Estado civil:*"
+                  @selectEstadoCivil="selectEstadoCivil"
+                  eventoCampo="selectEstadoCivil"
+                  nombreItem="des_est"
+                  :consulta="consulta_estado_civil"
+                  :registros="lista_estado_civil"
+                  placeholder="Seleccione una opción"
+                />
+              </div>
+              <div class="col-12 was-validated col-lg-6 mt-3">
+                <label class="form-label" for="personas_cargo"
+                  >Hijos a cargo(cantidad):*</label
+                >
                 <input
                   class="form-control"
-                  type="text"
-                  v-model="form.barrio"
-                  id="barrio"
+                  type="number"
+                  v-model="form.per_car"
+                  id="personas_cargo"
                   required
+                  min="0"
                 />
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-12 was-validated col-lg-6">
+                <label class="form-label" for="sangre">Grupo sanguíneo:*</label>
+                <select
+                  class="form-select"
+                  id="sangre"
+                  v-model="form.gru_san"
+                  required
+                >
+                  <option value="A">A</option>
+                  <option value="AB">AB</option>
+                  <option value="B">B</option>
+                  <option value="O">O</option>
+                </select>
+              </div>
+              <div class="col-12 was-validated col-lg-6">
+                <label class="form-label" for="rh">Factor RH:*</label>
+                <select
+                  class="form-select"
+                  id="rh"
+                  v-model="form.fac_rhh"
+                  required
+                >
+                  <option value="+">+</option>
+                  <option value="-">-</option>
+                </select>
+                <div class="invalid-feedback errorCheck">
+                  {{ mensaje_error }}
+                </div>
               </div>
             </div>
             <div class="row">
@@ -625,84 +699,6 @@
               </div>
               <div class="col-12 col-lg-6 mt-3">
                 <SearchList
-                  nombreCampo="Estado civil:*"
-                  @selectEstadoCivil="selectEstadoCivil"
-                  eventoCampo="selectEstadoCivil"
-                  nombreItem="des_est"
-                  :consulta="consulta_estado_civil"
-                  :registros="lista_estado_civil"
-                  placeholder="Seleccione una opción"
-                />
-              </div>
-            </div>
-            <!-- Personas a Cargo y Grupo Sanguíneo -->
-            <div class="row mb-4">
-              <div class="col-12 was-validated col-lg-6">
-                <label class="form-label" for="personas_cargo"
-                  >Personas a cargo(cantidad):*</label
-                >
-                <input
-                  class="form-control"
-                  type="number"
-                  v-model="form.per_car"
-                  id="personas_cargo"
-                  required
-                  min="0"
-                />
-              </div>
-              <div class="col-12 was-validated col-lg-6">
-                <label class="form-label" for="sangre">Grupo sanguíneo:*</label>
-                <select
-                  class="form-select"
-                  id="sangre"
-                  v-model="form.gru_san"
-                  required
-                >
-                  <option value="A">A</option>
-                  <option value="AB">AB</option>
-                  <option value="B">B</option>
-                  <option value="O">O</option>
-                </select>
-              </div>
-            </div>
-            <!-- Factor RH y Estado Civil -->
-            <div class="row">
-              <div class="col-12 mt-2 was-validated p-2 col-lg-6">
-                <label class="form-label" for="rh">Factor RH:*</label>
-                <select
-                  class="form-select"
-                  id="rh"
-                  v-model="form.fac_rhh"
-                  required
-                >
-                  <option value="+">+</option>
-                  <option value="-">-</option>
-                </select>
-                <div class="invalid-feedback errorCheck">
-                  {{ mensaje_error }}
-                </div>
-              </div>
-              <div class="col-12 col-lg-6 mt-2 was-validated p-2">
-                <label class="form-label" for="estrato"
-                  >Estrato socioeconomico:*</label
-                >
-                <select
-                  class="form-select"
-                  id="estrato"
-                  v-model="form.est_soc"
-                  required
-                >
-                  <option :value="n" :key="n" v-for="n in 6">{{ n }}</option>
-                </select>
-                <div class="invalid-feedback errorCheck">
-                  {{ mensaje_error }}
-                </div>
-              </div>
-            </div>
-            <!-- Grupo Étnico y Estrato Socioeconómico -->
-            <div class="row">
-              <div class="col-12 col-lg-6">
-                <SearchList
                   nombreCampo="Grupo étnico:*"
                   @selectEtnia="selectEtnia"
                   eventoCampo="selectEtnia"
@@ -714,22 +710,6 @@
               </div>
             </div>
           </div>
-          <!-- <div class="row">
-            <div class="col">
-              <h5
-                @click="experiencia_laboral = !experiencia_laboral"
-                style="cursor: pointer"
-                ref="experienciaLaboralRef"
-              >
-                2. Experiencia laboral
-                <i
-                  v-if="experiencia_laboral"
-                  class="bi bi-chevron-compact-up"
-                ></i
-                ><i v-if="!experiencia_laboral" class="bi bi-chevron-down"></i>
-              </h5>
-            </div>
-          </div> -->
           <div class="info_container pt-0" v-if="experiencia_laboral">
             <div
               v-for="(experiencia, index) in form.experiencias_laborales"
@@ -884,19 +864,6 @@
               </label>
             </div>
           </div>
-          <!--  <div class="row">
-            <div class="col">
-              <h5
-                @click="info_academica = !info_academica"
-                style="cursor: pointer"
-                ref="informacionAcademicaRef"
-              >
-                3. Información académica
-                <i v-if="info_academica" class="bi bi-chevron-compact-up"></i
-                ><i v-if="!info_academica" class="bi bi-chevron-down"></i>
-              </h5>
-            </div>
-          </div> -->
           <div class="info_container" v-if="info_academica">
             <div class="row mb-5">
               <div class="col-12 col-lg-6">
@@ -968,111 +935,6 @@
                   </div>
                 </div>
               </div>
-              <!--   <div class="col flex">
-                <label for="" class="form-label">Curso de alturas:</label>
-                <div>
-                  <div class="form-check form-check-inline">
-                    <input  
-                      class="form-check-input"
-                      type="radio"
-                      name="cursoAlturasOptions"
-                      id="cursoAlturasOptions1"
-                      v-model="form.curso_alturas"
-                      value="1"
-                    />
-                    <label class="form-check-label" for="cursoAlturasOptions1"
-                      >Si</label
-                    >
-                  </div>
-                  <div class="form-check form-check-inline">
-                    <input
-                      class="form-check-input"
-                      type="radio"
-                      name="cursoAlturasOptions"
-                      id="cursoAlturasOptions2"
-                      v-model="form.curso_alturas"
-                      value="0"
-                    />
-                    <label class="form-check-label" for="cursoAlturasOptions2"
-                      >No</label
-                    >
-                  </div>
-                </div>
-              </div> -->
-              <!--     <div class="col flex">
-                <label for="" class="form-label"
-                  >Curso de manipulación de alimentos:</label
-                >
-                <div>
-                  <div class="form-check form-check-inline">
-                    <input
-                      class="form-check-input"
-                      type="radio"
-                      name="manipulacionAlimentosOptions"
-                      id="manipulacionAlimentosOptions1"
-                      v-model="form.manipulacion_alimentos"
-                      value="1"
-                    />
-                    <label
-                      class="form-check-label"
-                      for="manipulacionAlimentosOptions1"
-                      >Si</label
-                    >
-                  </div>
-                  <div class="form-check form-check-inline">
-                    <input
-                      class="form-check-input"
-                      type="radio"
-                      name="manipulacionAlimentosOptions"
-                      id="manipulacionAlimentosOptions2"
-                      v-model="form.manipulacion_alimentos"
-                      value="0"
-                    />
-                    <label
-                      class="form-check-label"
-                      for="manipulacionAlimentosOptions2"
-                      >No</label
-                    >
-                  </div>
-                </div>
-              </div> -->
-              <!--      <div class="col flex">
-                <label for="" class="form-label"
-                  >Curso de espacios confinados:</label
-                >
-                <div>
-                  <div class="form-check form-check-inline">
-                    <input
-                      class="form-check-input"
-                      type="radio"
-                      name="cursoConfinadosOptions"
-                      id="cursoConfinadosOptions1"
-                      v-model="form.curso_confinados"
-                      value="1"
-                    />
-                    <label
-                      class="form-check-label"
-                      for="cursoConfinadosOptions1"
-                      >Si</label
-                    >
-                  </div>
-                  <div class="form-check form-check-inline">
-                    <input
-                      class="form-check-input"
-                      type="radio"
-                      name="cursoConfinadosOptions"
-                      id="cursoConfinadosOptions2"
-                      v-model="form.curso_confinados"
-                      value="0"
-                    />
-                    <label
-                      class="form-check-label"
-                      for="cursoConfinadosOptions2"
-                      >No</label
-                    >
-                  </div>
-                </div>
-              </div> -->
             </div>
             <div class="row mb-5">
               <h5>Habilidades:</h5>
@@ -1818,25 +1680,6 @@
               </div>
             </div>
           </div>
-          <!--  <div class="row">
-            <div class="col">
-              <h5
-                @click="referencias_personales = !referencias_personales"
-                style="cursor: pointer"
-                ref="referenciasPersonalesRef"
-              >
-                6. Referencias personales
-                <i
-                  v-if="referencias_personales"
-                  class="bi bi-chevron-compact-up"
-                ></i
-                ><i
-                  v-if="!referencias_personales"
-                  class="bi bi-chevron-down"
-                ></i>
-              </h5>
-            </div>
-          </div> -->
           <div class="info_container" v-if="referencias_personales">
             <div
               class="row"
@@ -1905,7 +1748,7 @@
                   </div>
                   <div class="col-12 col-lg-3">
                     <label class="form-label" for="celular_ref"
-                      >Número celular:</label
+                      >Número de contacto:</label
                     >
                     <input
                       class="form-control"
@@ -1930,108 +1773,6 @@
               </label>
             </div>
           </div>
-
-          <!-- Hijos -->
-          <!--   <div class="row">
-            <div class="col">
-              <h5
-                @click="hijos_info = !hijos_info"
-                style="cursor: pointer"
-                ref="hijosRef"
-              >
-                7. Hijos
-                <i v-if="hijos_info" class="bi bi-chevron-compact-up"></i
-                ><i v-if="!hijos_info" class="bi bi-chevron-down"></i>
-              </h5>
-            </div>
-          </div> -->
-          <!--  <div class="info_container" v-if="hijos_info">
-            <div
-              class="row"
-              v-for="(familiar, index) in form.familiares"
-              :key="index"
-            >
-              <div class="info_container">
-                <div class="row">
-                  <div class="col">
-                    <h6>{{ "Hijo " + (index + 1) }}</h6>
-                  </div>
-
-                  <div class="col-sm-12 col-md-6 mb-3">
-                    <div
-                      class="d-flex justify-content-end align-items-end w-100 h-100"
-                    >
-                      <label
-                        v-if="!familiar.cod_emp"
-                        class="bi bi-trash-fill labelOption"
-                        @click="deleteHijo(index)"
-                      >
-                        Eliminar</label
-                      >
-                    </div>
-                  </div>
-                </div>
-
-                <div class="row">
-                  <div class="col-12 col-lg-3">
-                    <label class="form-label" for="primer_apellido_hijo"
-                      >Primer apellido:</label
-                    >
-                    <input
-                      class="form-control"
-                      type="text"
-                      v-model="familiar.ap1_fam"
-                      id="primer_apellido_hijo"
-                    />
-                  </div>
-                  <div class="col-12 col-lg-3">
-                    <label class="form-label" for="segundo_apellido_hijo"
-                      >Segundo apellido:</label
-                    >
-                    <input
-                      class="form-control"
-                      type="text"
-                      v-model="familiar.ap2_fam"
-                      id="segundo_apellido_hijo"
-                    />
-                  </div>
-                  <div class="col-12 col-lg-3">
-                    <label class="form-label" for="nombre_hijo">Nombre:</label>
-                    <input
-                      class="form-control"
-                      type="text"
-                      v-model="familiar.nom_fam"
-                      id="nombre_hijo"
-                    />
-                  </div>
-                  <div class="col-12 col-lg-3">
-                    <label class="form-label" for="fecha_nac_hijo"
-                      >Fecha de nacimiento:</label
-                    >
-                    <input
-                      class="form-control"
-                      type="date"
-                      @input="updateFecha($event, familiar)"
-                      :value="formattedDate(familiar.fec_nac)"
-                      :max="new Date().toISOString().split('T')[0]"
-                      id="fecha_nac_hijo"
-                    />
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div
-              class="row mt-5 trash justify-content-center align-items-center padding-1"
-            >
-              <label
-                id="clasificador"
-                @click="addHijo()"
-                style="cursor: pointer"
-                ><i class="bi bi-plus-circle-fill"></i>
-                Agregar hijo
-              </label>
-            </div>
-          </div> -->
           <div class="row" v-if="userlogued.tipo_usuario_id == 1">
             <div class="col">
               <h5
@@ -2334,6 +2075,7 @@ const consulta_eps = ref("");
 const progress = ref(0);
 const habilidad = ref("");
 const form = reactive({
+  wapp: "",
   habilidades: [],
   talla_calzado: "",
   talla_pantalon: "",
@@ -2567,6 +2309,7 @@ const llenarFormulario = async () => {
   if (userlogued.tipo_usuario_id == 1) {
     validarCandidato(response.data.num_doc, response.data.tip_doc_id);
   }
+  form.wapp = response.data.wapp;
   form.habilidades = response.data.habilidades;
   lista_historico_servicios_generales.value =
     response.data.historico_conceptos_servicios_generales;
