@@ -733,7 +733,7 @@
                 </div>
               </div>
               <div class="row">
-                <div class="col">
+                <div class="col-12 col-lg-6">
                   <label for="" class="form-label"> Empresa:* </label>
                   <input
                     type="text"
@@ -741,7 +741,7 @@
                     v-model="experiencia.empresa"
                   />
                 </div>
-                <div class="col">
+                <div class="col-12 col-lg-6">
                   <SearchList
                     nombreCampo="Sector de la empresa:*"
                     @getSectorEconomico="getSectorEconomico"
@@ -758,7 +758,7 @@
                 </div>
               </div>
               <div class="row">
-                <div class="col">
+                <div class="col-12 col-lg-6">
                   <SearchList
                     nombreCampo="Cargo:*"
                     @getCargos="getCargos"
@@ -770,7 +770,7 @@
                     placeholder="Seleccione una opción"
                   />
                 </div>
-                <div class="col">
+                <div class="col-12 col-lg-6">
                   <label for="" class="form-label"
                     >Detalle del cargo (operario plástico):*
                   </label>
@@ -782,7 +782,7 @@
                 </div>
               </div>
               <div class="row">
-                <div class="col">
+                <div class="col-12 col-lg-6">
                   <label for="" class="form-label">
                     Teléfono de contacto:*
                   </label>
@@ -792,7 +792,7 @@
                     v-model="experiencia.tel_contacto"
                   />
                 </div>
-                <div class="col">
+                <div class="col-12 col-lg-6">
                   <label for="" class="form-label"> Salario devengado: </label>
                   <input
                     type="text"
@@ -894,7 +894,7 @@
                 <h5>Cursos y certificaciones:</h5>
               </div>
               <div class="row">
-                <div class="col">
+                <div class="col-12 col-lg-6">
                   <SearchList
                     nombreCampo=""
                     :valida_campo="false"
@@ -906,7 +906,7 @@
                     placeholder="Seleccione una opción"
                   />
                 </div>
-                <div class="col">
+                <div class="col-12 col-lg-6">
                   <div
                     class="mb-3"
                     style="
@@ -938,7 +938,7 @@
             </div>
             <div class="row mb-5">
               <h5>Habilidades:</h5>
-              <div class="col">
+              <div class="col-12 col-lg-6">
                 <input
                   type="text"
                   autocomplete="off"
@@ -954,7 +954,7 @@
                   {{ habilidad }}
                 </div>
               </div>
-              <div class="col">
+              <div class="col-12 col-lg-6">
                 <div
                   class="mb-3"
                   style="
@@ -1007,7 +1007,7 @@
                 </div>
               </div>
               <div class="row">
-                <div class="col">
+                <div class="col-12 col-lg-6">
                   <SearchList
                     nombreCampo="Idioma:*"
                     @getIdioma="getIdioma"
@@ -1019,7 +1019,7 @@
                     placeholder="Seleccione una opción"
                   />
                 </div>
-                <div class="col">
+                <div class="col-12 col-lg-6">
                   <label for="" class="form-label">Nivel:</label>
                   <select
                     name=""
@@ -1062,7 +1062,7 @@
           </div> -->
           <div class="info_container" v-if="medio_transporte">
             <div class="row">
-              <div class="col flex">
+              <div class="col-12 col-lg-6 flex">
                 <label for="" class="form-label">Tipo de transporte:</label>
                 <div>
                   <div class="form-check form-check-inline">
@@ -1107,7 +1107,7 @@
                   </div> -->
                 </div>
               </div>
-              <div class="col">
+              <div class="col-12 col-lg-6">
                 <label for="" class="form-label"> Cuál?</label>
                 <select
                   name=""
@@ -1130,7 +1130,7 @@
               </div>
             </div>
             <div class="row">
-              <div class="col flex">
+              <div class="col-12 col-lg-6 flex">
                 <label for="" class="form-label">Licencia de conducción:</label>
                 <div>
                   <div class="form-check form-check-inline">
@@ -1162,7 +1162,7 @@
                   </div>
                 </div>
               </div>
-              <div class="col">
+              <div class="col-12 col-lg-6">
                 <label for="" class="form-label">Categoría</label>
                 <select
                   name=""
@@ -1573,7 +1573,7 @@
               <div class="col flex"></div>
             </div>
             <div class="row">
-              <div class="col">
+              <div class="col-12 col-lg-6">
                 <label for="" class="form-label">Estatura(cm):</label>
                 <input
                   type="number"
@@ -1583,7 +1583,7 @@
                   @input="forceIntegerEstatura"
                 />
               </div>
-              <div class="col">
+              <div class="col-12 col-lg-6">
                 <label for="" class="form-label">Peso(kg):</label>
                 <input
                   type="number"
@@ -1595,7 +1595,7 @@
               </div>
             </div>
             <div class="row">
-              <div class="col">
+              <div class="col-12 col-lg-6">
                 <label for="" class="form-label">Talla de camisa</label>
                 <select
                   name=""
@@ -1612,7 +1612,7 @@
                   <option value="B3">XXL</option>
                 </select>
               </div>
-              <div class="col">
+              <div class="col-12 col-lg-6">
                 <label for="" class="form-label">Talla de pantalon</label>
                 <input
                   type="number"
@@ -1623,7 +1623,7 @@
                 />
               </div>
               <div class="row">
-                <div class="col">
+                <div class="col-12 col-lg-6">
                   <label for="" class="form-label">Talla de calzado</label>
                   <input
                     type="number"
@@ -1635,7 +1635,7 @@
               </div>
             </div>
             <div class="row">
-              <div class="col">
+              <div class="col-12 col-lg-6">
                 <SearchList
                   nombreCampo="EPS a la que se encuentra afiliado:*"
                   @selectEps="selectEps"
@@ -1648,7 +1648,7 @@
                   placeholder="Seleccione una opción"
                 />
               </div>
-              <div class="col">
+              <div class="col-12 col-lg-6">
                 <SearchList
                   nombreCampo="AFP: *"
                   @getAFP="getAFP"
@@ -1661,6 +1661,13 @@
                   placeholder="Seleccione una opción"
                 />
               </div>
+            </div>
+            <div class="row mt-4">
+              <p>
+                *La información sobre la talla de la vestimenta solo será usada
+                en caso de que la empresa para la cual fue seleccionado así lo
+                requiera.
+              </p>
             </div>
             <div class="row" v-if="userlogued.tipo_usuario_id == 1">
               <div class="col">
@@ -1913,8 +1920,8 @@
             </table>
           </div>
           <div class="row">
-            <div class="col">
-              <button type="button" @click="submitForm">
+            <div class="col-12">
+              <button class="btn-submit" type="button" @click="submitForm">
                 {{ activeSeccion == 5 ? "Guardar" : "Siguiente" }}
               </button>
             </div>
@@ -3321,5 +3328,15 @@ h5 {
 }
 .valida-correo-deployed {
   border: solid #d5dbdb 0.5px;
+}
+.btn-submit {
+  width: 20%;
+  margin: auto;
+}
+
+@media (width <= 1100px) {
+  .btn-submit {
+    width: 100%;
+  }
 }
 </style>

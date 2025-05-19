@@ -5839,6 +5839,7 @@ export default {
       });
     },
     limpiarformulario() {
+      this.elementos_epp = [];
       this.novedades = [];
       this.tamano_texto_version = "";
       this.toogleModalEstadoContrato = false;
@@ -7390,7 +7391,7 @@ export default {
       this.otros_si_agregados = item.otros_si_agregados;
       this.bancos_agregados = item.bancos_agregados;
       this.tipos_contratos_agregados = item.tipos_contratos_agregados;
-
+      this.entrega_epp_id = item.entrega_epp_id;
       item.elementos_epp.forEach(function (item) {
         if (item == true) {
           self.elementos_epp.push(true);
