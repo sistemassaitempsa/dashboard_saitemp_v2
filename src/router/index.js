@@ -77,6 +77,7 @@ import LovePdf from "@/components/LovePdf.vue";
 import LovePdfToJpg from "@/components/LovePdfToJpg.vue";
 import TablaNoConformesDD from "@/components/TablaNoConformesDD.vue";
 import ExcelToPdf from "@/components/ExcelToPdf.vue";
+import AdminEmpresasProfeView from "@/views/AdminEmpresasProfeView.vue";
 
 // Configuración de rutas
 const routes = [
@@ -420,6 +421,11 @@ const routes = [
         path: "profesional-sector",
         name: "profesional-sector",
         component: ProfesionalSector,
+      },
+      {
+        path: "profesional-empresa",
+        name: "profesional-empresa",
+        component: AdminEmpresasProfeView,
       },
       {
         path: "asignacion-servicio",
