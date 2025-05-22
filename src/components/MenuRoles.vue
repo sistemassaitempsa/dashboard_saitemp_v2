@@ -5,37 +5,70 @@
       <h2>Roles y menús</h2>
       <div class="row">
         <div class="col-xs-12 col-md-3">
-          <label style="width: 250px; margin-top: 10px; text-align: left">Roles</label>
-          <select id="inputState1" class="form-select" v-model="rol_select" @change="rolId(rol_select)">
+          <label style="width: 250px; margin-top: 10px; text-align: left"
+            >Roles</label
+          >
+          <select
+            id="inputState1"
+            class="form-select"
+            v-model="rol_select"
+            @change="rolId(rol_select)"
+          >
             <option v-for="(item, index) in roles" :key="index">
               {{ item.nombre }}
             </option>
           </select>
         </div>
         <div class="col-xs-12 col-md-3">
-          <label style="width: 250px; margin-top: 10px; text-align: left">Menús</label>
-          <select id="inputState1" class="form-select" :disabled="checks.length > 1" v-model="menu_select"
-            @change="menuId(menu_select)">
-            <option ref="item_select" v-for="(item, index) in menus" :key="index">
+          <label style="width: 250px; margin-top: 10px; text-align: left"
+            >Menús</label
+          >
+          <select
+            id="inputState1"
+            class="form-select"
+            :disabled="checks.length > 1"
+            v-model="menu_select"
+            @change="menuId(menu_select)"
+          >
+            <option
+              ref="item_select"
+              v-for="(item, index) in menus"
+              :key="index"
+            >
               {{ item.nombre }}
             </option>
           </select>
         </div>
-        <button type="button" id="newNews" class="col-xs-12 col-md-2 btn btn-success" @click="asignarMenu()"
-          style="margin-top: 33px">
+        <button
+          type="button"
+          id="newNews"
+          class="col-xs-12 col-md-2 btn btn-success"
+          @click="asignarMenu()"
+          style="margin-top: 33px"
+        >
           <i class="bi bi-file-earmark-plus"></i> Asignar menú
         </button>
       </div>
       <div class="row">
         <div class="mb-3" v-if="asignar_roles.length > 0">
           <span>Roles a asignar</span>
-          <div class="mb-3" style="
+          <div
+            class="mb-3"
+            style="
               padding: 10px;
               border: solid #d5dbdb 0.5px;
               border-radius: 10px;
-            ">
-            <button type="button" style="margin: 10px 10px 5px 10px" id="btnMenu" class="btn btn-sm"
-              data-bs-toggle="button" v-for="(item, index) in asignar_roles" :key="index">
+            "
+          >
+            <button
+              type="button"
+              style="margin: 10px 10px 5px 10px"
+              id="btnMenu"
+              class="btn btn-sm"
+              data-bs-toggle="button"
+              v-for="(item, index) in asignar_roles"
+              :key="index"
+            >
               {{ item.nombre }}
               <i class="bi bi-x" @click="asignar_roles.splice(index, 1)"></i>
             </button>
@@ -45,13 +78,23 @@
       <div class="row">
         <div class="mb-3" v-if="asignar_menus.length > 0">
           <span>Menús a asignar</span>
-          <div class="mb-3" style="
+          <div
+            class="mb-3"
+            style="
               padding: 10px;
               border: solid #d5dbdb 0.5px;
               border-radius: 10px;
-            ">
-            <button type="button" style="margin: 10px 10px 5px 10px" id="btnMenu" class="btn btn-sm"
-              data-bs-toggle="button" v-for="(item, index) in asignar_menus" :key="index">
+            "
+          >
+            <button
+              type="button"
+              style="margin: 10px 10px 5px 10px"
+              id="btnMenu"
+              class="btn btn-sm"
+              data-bs-toggle="button"
+              v-for="(item, index) in asignar_menus"
+              :key="index"
+            >
               {{ item.nombre }}
               <i class="bi bi-x" @click="asignar_menus.splice(index, 1)"></i>
             </button>
@@ -60,21 +103,42 @@
       </div>
       <div class="row">
         <div class="col-xs-12 col-md-3">
-          <label style="width: 250px; margin-top: 10px; text-align: left">filtrar por rol</label>
-          <select id="inputState1" class="form-select" v-model="rol" @change="filtroRol(rol)">
+          <label style="width: 250px; margin-top: 10px; text-align: left"
+            >filtrar por rol</label
+          >
+          <select
+            id="inputState1"
+            class="form-select"
+            v-model="rol"
+            @change="filtroRol(rol)"
+          >
             <option v-for="(item, index) in rolesunicos" :key="index">
               {{ item.rol }}
             </option>
           </select>
         </div>
-        <button type="button" id="reset" class="col-xs-12 col-md-2 btn btn-success" style="margin-top: 33px"
-          @click="getItems(), (rol = '')">
+        <button
+          type="button"
+          id="reset"
+          class="col-xs-12 col-md-2 btn btn-success"
+          style="margin-top: 33px"
+          @click="getItems(), (rol = '')"
+        >
           <i class="bi bi-arrow-counterclockwise"></i> Borrar busqueda
         </button>
       </div>
-      <Tabla :datos="datos" :tabla="tabla" :endpoint="endpoint" :massiveUpdate="massiveUpdate" :campos="campos"
-        :eliminar="permisos[10].autorizado" @response="response" @clear="clear" @check="check"
-        @getMenuNavbar="getMenuNavbar" />
+      <Tabla
+        :datos="datos"
+        :tabla="tabla"
+        :endpoint="endpoint"
+        :massiveUpdate="massiveUpdate"
+        :campos="campos"
+        :eliminar="permisos[10].autorizado"
+        @response="response"
+        @clear="clear"
+        @check="check"
+        @getMenuNavbar="getMenuNavbar"
+      />
     </div>
   </div>
 </template>
@@ -220,7 +284,7 @@ export default {
       let self = this;
       this.$swal
         .fire({
-          title: "Estas seguro de elimiar el resgistro?",
+          title: "Estas seguro de eliminar el resgistro?",
           text: "Esta operación no se puede revertir!",
           icon: "warning",
           showCancelButton: true,

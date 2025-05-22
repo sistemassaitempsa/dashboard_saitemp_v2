@@ -1729,10 +1729,10 @@ export default {
     },
     messageDelete(id) {
       let self = this;
-      var title = "Estas seguro de elimiar el resgistro?";
+      var title = "Estas seguro de eliminar el resgistro?";
       if (self.$route.fullPath.includes("menus")) {
         title =
-          "Estas seguro de elimiar el resgistro? si elimina esta categoria de menú eliminará también las subcategorias de menú asociadas.";
+          "Estas seguro de eliminar el resgistro? si elimina esta categoria de menú eliminará también las subcategorias de menú asociadas.";
       }
       this.$swal
         .fire({
@@ -1788,7 +1788,7 @@ export default {
       let self = this;
       this.$swal
         .fire({
-          title: "Estas seguro de elimiar los resgistros selccionados?",
+          title: "Estas seguro de eliminar los resgistros selccionados?",
           text: "Esta operación no se puede revertir!",
           icon: "warning",
           showCancelButton: true,

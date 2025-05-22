@@ -1,21 +1,21 @@
 <template>
   <AdminProfesionalEmpresa
-    :endpoint="'profesionalempresa'"
-    :idConsultaRol="rolPiscologaId"
+    :endpoint="'analistaempresa'"
+    :idConsultaRol="rolAnalistaId"
     :tabla="tabla"
-    :titulo="'Profesionales por empresas'"
-    :search-list-title="'Profesionales de selección'"
+    :titulo="'Analista por empresas'"
+    :search-list-title="'Analistas de contratación'"
   />
 </template>
 <script setup>
 import AdminProfesionalEmpresa from "@/components/AdminProfesionalEmpresa.vue";
 import { ref } from "vue";
-const rolPiscologaId = process.env.VUE_APP_ROL_ID_PSICOLOGA;
+const rolAnalistaId = process.env.VUE_APP_ROL_ID_ANALISTA;
 
 const tabla = ref([
   { nombre: "#", orden: "DESC" },
   {
-    nombre: "Profesional",
+    nombre: "Analista",
     orden: "DESC",
     tipo: "texto",
     calculado: "false",

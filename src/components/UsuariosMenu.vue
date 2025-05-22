@@ -306,7 +306,7 @@ export default {
       let self = this;
       this.$swal
         .fire({
-          title: "Estas seguro de elimiar el resgistro?",
+          title: "Estas seguro de eliminar el resgistro?",
           text: "Esta operación no se puede revertir!",
           icon: "warning",
           showCancelButton: true,

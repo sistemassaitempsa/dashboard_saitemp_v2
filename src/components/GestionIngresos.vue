@@ -810,7 +810,10 @@
               :disabled="bloquea_campos && !permisos[26].autorizado"
             />
           </div>
-          <div class="col-6" v-if="no_conformidad != null && no_conformidad != ''">
+          <div
+            class="col-6"
+            v-if="no_conformidad != null && no_conformidad != ''"
+          >
             <label class="form-label">No conformidad hora limite:</label>
             <div class="input-group">
               <input
@@ -1334,7 +1337,6 @@ export default {
       inhabilita_campo: false,
       inhabilita_campo_contratacion: false,
       salidas_no_conforme: [],
-    
     };
   },
   computed: {},
@@ -1428,7 +1430,7 @@ export default {
     },
     messageDelete(item) {
       let self = this;
-      var title = "Estas seguro de elimiar el resgistro?";
+      var title = "Estas seguro de eliminar el resgistro?";
       this.$swal
         .fire({
           title: title,

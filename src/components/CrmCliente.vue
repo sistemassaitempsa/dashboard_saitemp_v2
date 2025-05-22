@@ -2674,7 +2674,7 @@ export default {
     },
     messageDelete(item) {
       let self = this;
-      var title = "Estas seguro de elimiar el resgistro?";
+      var title = "Estas seguro de eliminar el resgistro?";
       this.$swal
         .fire({
           title: title,

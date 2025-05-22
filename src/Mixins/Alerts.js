@@ -33,7 +33,7 @@ export const Alerts = {
     },
     messageDelete(titulo = null, funcion, id) {
       var title =
-        titulo == null ? "Estas seguro de elimiar el resgistro?" : titulo;
+        titulo == null ? "Estas seguro de eliminar el resgistro?" : titulo;
       this.$swal
         .fire({
           title: title,

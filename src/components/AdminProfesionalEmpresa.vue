@@ -6,7 +6,7 @@
       <div class="row">
         <div class="col-xs-12 col-md-3">
           <SearchList
-            nombreCampo="Profesionales de psicología"
+            :nombreCampo="searchListTitle"
             :valida_campo="false"
             nombreItem="nombres"
             eventoCampo="getProfesionalsector"
@@ -99,7 +99,7 @@
       <div class="row">
         <div class="col-xs-12 col-md-3">
           <SearchList
-            nombreCampo="Profesionales de psicología"
+            :nombreCampo="searchListTitle"
             :valida_campo="false"
             nombreItem="nombres"
             eventoCampo="getProfesionalsector"
@@ -153,13 +153,16 @@ import SearchList from "./SearchList.vue";
 import Tabla from "./Tabla.vue";
 import Loading from "./Loading.vue";
 
-const { endpoint, tabla, titulo, idConsultaRol } = defineProps([
-  "endpoint",
-  "tabla",
-  "tipo_consulta",
-  "titulo",
-  "idConsultaRol",
-]);
+const { endpoint, tabla, titulo, idConsultaRol, searchListTitle } = defineProps(
+  [
+    "endpoint",
+    "tabla",
+    "tipo_consulta",
+    "titulo",
+    "idConsultaRol",
+    "searchListTitle",
+  ]
+);
 const { URL_API, configHeader } = useConfig();
 const { showAlert } = Alerts();
 /* const sectores_economicos = ref([]); */
@@ -247,10 +250,22 @@ const setProfesionalSector = (item = null, campo = null) => {
 };
 
 const asignar = async () => {
+  loading.value = true;
   let cliente = {
     cliente: asignar_clientes.value,
     profesionales: asignar_profesionales.value[0],
   };
+  if (
+    asignar_clientes.value.length <= 0 ||
+    asignar_profesionales.value.length <= 0
+  ) {
+    showAlert(
+      "Debe seleccionar por lo menos una empresa y un usuario",
+      "error"
+    );
+    loading.value = false;
+    return;
+  }
   const response = await axios.post(
     URL_API.value + `api/v1/${endpoint}`,
     cliente,

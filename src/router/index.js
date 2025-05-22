@@ -78,6 +78,7 @@ import LovePdfToJpg from "@/components/LovePdfToJpg.vue";
 import TablaNoConformesDD from "@/components/TablaNoConformesDD.vue";
 import ExcelToPdf from "@/components/ExcelToPdf.vue";
 import AdminEmpresasProfeView from "@/views/AdminEmpresasProfeView.vue";
+import AdminEmpresasAnaliView from "@/views/AdminEmpresasAnaliView.vue";
 
 // Configuración de rutas
 const routes = [
@@ -426,6 +427,11 @@ const routes = [
         path: "profesional-empresa",
         name: "profesional-empresa",
         component: AdminEmpresasProfeView,
+      },
+      {
+        path: "analista-empresa",
+        name: "analista-empresa",
+        component: AdminEmpresasAnaliView,
       },
       {
         path: "asignacion-servicio",
